@@ -1,22 +1,142 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red2\green2\blue2;}
-{\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c784\c784\c784;}
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;}
+{\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red170\green13\blue145;\red0\green0\blue0;
+\red63\green110\blue116;\red92\green38\blue153;}
+{\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;
+\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c35900\c14900\c60100;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/126365/ios-frameworks-tutorial"}}{\fldrslt 
 \f0\fs48 \cf2 https://www.raywenderlich.com/126365/ios-frameworks-tutorial}}
 \f0\fs48 \cf2 \
-{\field{\*\fldinst{HYPERLINK "https://theswiftdev.com/2017/10/23/how-to-make-a-swift-framework/"}}{\fldrslt https://theswiftdev.com/2017/10/23/how-to-make-a-swift-framework/}}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://theswiftdev.com/2017/10/23/how-to-make-a-swift-framework/"}}{\fldrslt \cf2 https://theswiftdev.com/2017/10/23/how-to-make-a-swift-framework/}}\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\b \cf2 design
+\b0 \
+	no settings, instead users edit programs	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\b \cf2 Heavy 
+\i\b0 struggle to do all reps
+\i0 \
+Squat 4x5			Bench 4x3-5 \
+Bench 4x5		Deadlift 3x3-5 (8% back-off)\
+Deadlift 1x5		Abductions\
+\
+
+\b Light  
+\i\b0 fairly easy, all reps are smooth
+\i0 \
+Squat 2x5			OHP 3x5 \
+OHP 3x5			Planks/Abductions/static hold\
+Static Hold\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\i \cf2 12% of last heavy set of 5
+\i0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\b \cf2 Medium   
+\i\b0 feels like you\'92re working hard but no danger of missing a rep, have energy left after each set
+\i0 \
+Squat 1-3x5		Bench 3x5\
+Bench 1-3x5		Deadlift 3x5\
+Pullups 3x8-10	Pullups 15 (add weight once hit 50)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\i \cf2 6% of last heavy set of 5\
+\
+barbell\
+	[plates], [bumpers], [magnets?]\
+	\
+dumbbells\
+	[weights], [magnets]\
+	\
+machine\
+	[plates], [optional]\
+\
+should there be a Weight class?\
+	to_lower/closest/upper\
+	to_string\
+	maybe plates (or details)\
+need to do better when there is no weight\
+	maybe this should be required?\
+need a stub or something to save result\
+need to handle progression\
+what about settings?\
+program a deload?\
+how can we unit test? should we unit test?\
 \
 \
-can we make an app with multiple modules?\
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\i0\fs36 \cf3 class\cf4  Result \{
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf4     \cf3 init\cf4 () \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4         \cf5 date\cf4  = \cf6 Date\cf4 ()
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4     \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4     
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4     \cf3 let\cf4  date: \cf6 Date
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4 \}
+\f0\fs24 \cf0 \
 \
-planner\
-advisroe\
-guide\
-helper\
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf3 class\cf4  MastersBasicCycleResult : \cf5 Result\cf4  \{
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf4     \cf3 init\cf4 (reps: \cf6 Int\cf4 , weight: \cf6 Double\cf4 , success: \cf6 Bool\cf4 ) \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4         \cf3 self\cf4 .\cf5 reps\cf4  = reps
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4         \cf3 self\cf4 .\cf5 weight\cf4  = weight
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4         \cf3 self\cf4 .\cf5 success\cf4  = success
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4     \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4     
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4     \cf3 let\cf4  reps: \cf6 Int
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4     \cf3 let\cf4  weight: \cf6 Double
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4     \cf3 let\cf4  success: \cf6 Bool
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4 \}
+\f0\fs24 \cf0 \
 \
-\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\i\fs48 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\i0 \cf2 \
 carthage\
 	install with homebrew\
 	pretty simple\
@@ -25,29 +145,19 @@ cocoapods\
 	changes project configs\
 	adds new build phase\
 	\
-* Swift package manager has no support for ios...\
-	{\field{\*\fldinst{HYPERLINK "https://stackoverflow.com/questions/42020687/using-swift-package-manager-spm-for-exisitng-iphone-app-xcode-project-havin"}}{\fldrslt https://stackoverflow.com/questions/42020687/using-swift-package-manager-spm-for-exisitng-iphone-app-xcode-project-havin}}\
-* \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Look at whats involved in defining some popular programs\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf3 \strokec3 	- eg from my book and from reddit\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 * \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Name? Lift Well and lift-planner\
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 *M\cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 ake it a public repo\
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 * \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Use package manager from the start\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf3 \strokec3 	- https://swiftmodules.com/\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 * \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Require ios 11\
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 * \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Maybe use state restoration\
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 * \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Save state as it is changed, not on entering the background\
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 * \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Dont load everything into memory\
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 * \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Export to csv\
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 * \cf3 \up0 \ulnone \outl0\strokewidth0 \strokec3 \obliqueness0 \expansion0 Instead of meso cycle, rpe cycle, etc have style/method/type/plan\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf3 \strokec3 	- have code to handle stuff like progression, deloads, sets and reps\
+\
+* \cf2 Look at whats involved in defining some popular programs\
+	- eg from my book and from reddit\
+* Maybe use state restoration\
+* Save state as it is changed, not on entering the background\
+* Dont load everything into memory\
+* Export to csv\
+* Instead of meso cycle, rpe cycle, etc have style/method/type/plan\
+	- have code to handle stuff like progression, deloads, sets and reps\
 	- with some tuneable parameters\
+* Move the backend to a separate library (or maybe framework)\
+	- once the swift package manager supports ios\
 \
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf2 \up0 \ulnone \outl0\strokewidth0 \obliqueness0 \expansion0 \
+\
 	}

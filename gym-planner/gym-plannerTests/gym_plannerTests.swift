@@ -25,12 +25,7 @@ class gym_plannerTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
-        
-    func testClassic() {
-        let instance = ClassicInstance()
-        XCTAssertTrue(instance.label().contains("label"))
-    }
-    
+            
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
