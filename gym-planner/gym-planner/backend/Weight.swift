@@ -53,7 +53,7 @@ internal struct Weight: CustomStringConvertible {
     }
     
     // This is for unit testing
-    internal func weights(_ exercise: Exercise) -> String {
+    internal func _weights(_ exercise: Exercise) -> String {
         var result = ""
         
         let g = createGenerator(exercise)
@@ -72,7 +72,7 @@ internal struct Weight: CustomStringConvertible {
     }
     
     // This is for unit testing
-    internal func labels(_ exercise: Exercise) -> String {
+    internal func _labels(_ exercise: Exercise) -> String {
         var result = ""
         
         let g = createGenerator(exercise)
