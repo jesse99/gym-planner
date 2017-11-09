@@ -91,7 +91,7 @@ public protocol Plan {
 
 /// Used to store results for executing a plan as well as settings used to configure a plan.
 /// For results the only common field is "date" which is when the plan was executed.
-private class Data {
+private class Data {    // TODO: try and get rid of this
     enum Value {
         case date(Date)
         case double(Double)
