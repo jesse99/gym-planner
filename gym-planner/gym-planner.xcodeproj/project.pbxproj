@@ -14,7 +14,7 @@
 		37CED4751FAE289100244ADD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CED4741FAE289100244ADD /* Assets.xcassets */; };
 		37CED4781FAE289100244ADD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37CED4761FAE289100244ADD /* LaunchScreen.storyboard */; };
 		37CED4831FAE289100244ADD /* gym_plannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4821FAE289100244ADD /* gym_plannerTests.swift */; };
-		37CED48F1FAE29E000244ADD /* Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED48E1FAE29E000244ADD /* Instance.swift */; };
+		37CED48F1FAE29E000244ADD /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED48E1FAE29E000244ADD /* Plan.swift */; };
 		37CED4A61FB15E7300244ADD /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4A51FB15E7300244ADD /* Weight.swift */; };
 		37CED4A81FB1612900244ADD /* weightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4A71FB1612900244ADD /* weightTests.swift */; };
 		37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4A91FB1625700244ADD /* Exercise.swift */; };
@@ -43,7 +43,7 @@
 		37CED47E1FAE289100244ADD /* gym-plannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "gym-plannerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CED4821FAE289100244ADD /* gym_plannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gym_plannerTests.swift; sourceTree = "<group>"; };
 		37CED4841FAE289100244ADD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		37CED48E1FAE29E000244ADD /* Instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instance.swift; sourceTree = "<group>"; };
+		37CED48E1FAE29E000244ADD /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
 		37CED4A51FB15E7300244ADD /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
 		37CED4A71FB1612900244ADD /* weightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weightTests.swift; sourceTree = "<group>"; };
 		37CED4A91FB1625700244ADD /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
@@ -116,7 +116,7 @@
 			children = (
 				37CED4AB1FB3FCD000244ADD /* extensions */,
 				37CED4A91FB1625700244ADD /* Exercise.swift */,
-				37CED48E1FAE29E000244ADD /* Instance.swift */,
+				37CED48E1FAE29E000244ADD /* Plan.swift */,
 				37CED4A51FB15E7300244ADD /* Weight.swift */,
 			);
 			path = backend;
@@ -237,7 +237,7 @@
 				37CED4701FAE289100244ADD /* SecondViewController.swift in Sources */,
 				37CED4AD1FB3FCED00244ADD /* SequenceExtensions.swift in Sources */,
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,
-				37CED48F1FAE29E000244ADD /* Instance.swift in Sources */,
+				37CED48F1FAE29E000244ADD /* Plan.swift in Sources */,
 				37CED46E1FAE289100244ADD /* FirstViewController.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
 			);

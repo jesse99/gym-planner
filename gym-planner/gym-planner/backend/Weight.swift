@@ -23,7 +23,6 @@ internal struct Weight: CustomStringConvertible {
         self.weight = weight
     }
     
-    // TODO: think we need settings after all
     func canFind(_ exercise: Exercise) -> Bool {
         switch exercise.apparatus! {
         case .barbell(bar: _, collar: _, plates: let plates, bumpers: let bumpers, magnets: _):
