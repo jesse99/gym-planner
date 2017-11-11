@@ -19,31 +19,45 @@ internal struct Weight: CustomStringConvertible {
         case upper
     }
     
+    struct Info {
+        // 145.0
+        let weight: Double
+        
+        // "145 lbs"
+        let text: String
+        
+        // "45 + 5"
+        let plates: String
+    }
+    
     init(_ weight: Double) {
         self.weight = weight
     }
     
     func canFind(_ exercise: Exercise) -> Bool {
-        switch exercise.apparatus! {
-        case .barbell(bar: _, collar: _, plates: let plates, bumpers: let bumpers, magnets: _):
-            return !plates.isEmpty || !bumpers.isEmpty
-        case .bodyWeight(_):
-            assert(false)
+        switch exercise.modality {
+        case .weights(apparatus: let apparatus, restSecs: _, weight: _):
+            switch apparatus {
+            case .barbell(bar: _, collar: _, plates: let plates, bumpers: let bumpers, magnets: _):
+                return !plates.isEmpty || !bumpers.isEmpty
+            case .bodyWeight(_):
+                assert(false)
+            }
+        default: return false
         }
     }
     
-    /// Returns something like (145.0, "145 lbs", "45 + 5". Note that if the direction constraint
+    /// Note that if the direction constraint
     /// can't be satisfied this will return something as close as possible, e.g. doing a find using
     /// a weight below the smallest dumbbell will return the smallest dumbbell.
-    func find(_ to: Direction, _ exercise: Exercise) -> (weight: Double, text: String, plates: String) {
-        assert(exercise.apparatus != nil, "need an apparatus to infer a weight")
+    func find(_ to: Direction, _ exercise: Exercise) -> Info {
         assert(canFind(exercise))
         
         let (lowerWeight, lowerPlates, closestWeight, closestPlates, upperWeight, upperPlates) = findRange(exercise)
         switch to {
-        case .lower: return (weight: lowerWeight, text: "\(Weight.friendlyStr(lowerWeight)) lbs", plates: lowerPlates)
-        case .closest: return (weight: closestWeight, text: "\(Weight.friendlyStr(closestWeight)) lbs", plates: closestPlates)
-        case .upper: return (weight: upperWeight, text: "\(Weight.friendlyStr(upperWeight)) lbs", plates: upperPlates)
+        case .lower: return Info(weight: lowerWeight, text: "\(Weight.friendlyStr(lowerWeight)) lbs", plates: lowerPlates)
+        case .closest: return Info(weight: closestWeight, text: "\(Weight.friendlyStr(closestWeight)) lbs", plates: closestPlates)
+        case .upper: return Info(weight: upperWeight, text: "\(Weight.friendlyStr(upperWeight)) lbs", plates: upperPlates)
         }
     }
     

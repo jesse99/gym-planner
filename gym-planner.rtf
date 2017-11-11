@@ -1,9 +1,11 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;}
-{\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red170\green13\blue145;\red0\green0\blue0;
-\red63\green110\blue116;\red92\green38\blue153;}
-{\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;
-\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c35900\c14900\c60100;}
+{\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red162\green91\blue55;\red170\green13\blue145;
+\red0\green0\blue0;\red0\green116\blue0;\red92\green38\blue153;\red196\green26\blue22;\red233\green233\blue233;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\cssrgb\c70110\c43655\c27585;\csgenericrgb\c66500\c5200\c56900;
+\csgenericrgb\c0\c0\c0;\csgenericrgb\c0\c45600\c0;\csgenericrgb\c35900\c14900\c60100;\csgenericrgb\c77000\c10200\c8600;\csgenericrgb\c91180\c91178\c91179;
+}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/126365/ios-frameworks-tutorial"}}{\fldrslt 
 \f0\fs48 \cf2 https://www.raywenderlich.com/126365/ios-frameworks-tutorial}}
@@ -16,11 +18,6 @@
 {\field{\*\fldinst{HYPERLINK "https://www.reddit.com/r/slowcooking/top/"}}{\fldrslt \cf2 https://www.reddit.com/r/slowcooking/top/}}\
 {\field{\*\fldinst{HYPERLINK "https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/"}}{\fldrslt https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/}}\
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-
-\b \cf2 design
-\b0 \
-	no settings, instead users edit programs	\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
 \b \cf2 Heavy 
@@ -53,10 +50,23 @@ Pullups 3x8-10	Pullups 15 (add weight once hit 50)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
 \i \cf2 6% of last heavy set of 5\
+
+\i0 \
+squat	5 11.5\
+bench	5	10\
+dead		5	12\
+ohp		5.7\
+
+\i \
 \
-\
-should there be a Weight class?\
-	probably need some sort of apply percent function\
+do a commitadd settings\
+for unit tests could just test results\
+	maybe with an option to log activities\
+how do we handle light and medium?\
+	maybe it just falls out if exercise weight is set?\
+review config for the younger crowd\
+how to handle plan configuration?\
+	eg num warmup sets, maybe they can\'92t configure that?\
 need to do better when there is no weight\
 	maybe this should be required?\
 need a stub or something to save result\
@@ -66,70 +76,157 @@ program a deload?\
 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\f1\i0\fs36 \cf3 class\cf4  Result \{
+\f1\i0\fs36 \cf3 /// Used to store results for executing a plan as well as settings used to configure a plan.
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3 /// For results the only common field is "date" which is when the plan was executed.
 \f0\fs24 \cf0 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\f1\fs36 \cf4     \cf3 init\cf4 () \{
+\f1\fs36 \cf4 private\cf5  \cf4 class\cf5  Data \{    \cf6 // TODO: try and get rid of this
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf5     \cf4 enum\cf5  Value \{
 \f0\fs24 \cf0 \
 
-\f1\fs36 \cf4         \cf5 date\cf4  = \cf6 Date\cf4 ()
+\f1\fs36 \cf5         \cf4 case\cf5  date(Date)
 \f0\fs24 \cf0 \
 
-\f1\fs36 \cf4     \}
+\f1\fs36 \cf5         \cf4 case\cf5  double(Double)
 \f0\fs24 \cf0 \
 
-\f1\fs36 \cf4     
+\f1\fs36 \cf5         \cf4 case\cf5  int(Int)
 \f0\fs24 \cf0 \
 
-\f1\fs36 \cf4     \cf3 let\cf4  date: \cf6 Date
+\f1\fs36 \cf5     \}
 \f0\fs24 \cf0 \
 
-\f1\fs36 \cf4 \}
+\f1\fs36 \cf5     
 \f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf4 func\cf5  set(\cf4 _\cf5  name: \cf7 String\cf5 , \cf4 _\cf5  value: \cf7 Value\cf5 ) \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         data[name] = value
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf4 func\cf5  getDate(\cf4 _\cf5  name: \cf7 String\cf5 ) -> \cf7 Date\cf5 ? \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \cf4 if\cf5  \cf4 let\cf5  v = data[name] \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 switch\cf5  v \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 case\cf5  .date(\cf4 let\cf5  value): \cf4 return\cf5  value
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 default\cf5 : \cf4 return\cf5  \cf4 nil
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \cf4 return\cf5  \cf4 nil
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf4 func\cf5  getDouble(\cf4 _\cf5  name: \cf7 String\cf5 ) -> \cf7 Double\cf5 ? \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \cf4 if\cf5  \cf4 let\cf5  v = data[name] \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 switch\cf5  v \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 case\cf5  .double(\cf4 let\cf5  value): \cf4 return\cf5  value
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 default\cf5 : \cf4 return\cf5  \cf4 nil
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \cf4 return\cf5  \cf4 nil
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf4 func\cf5  getInt(\cf4 _\cf5  name: \cf7 String\cf5 ) -> \cf7 Int\cf5 ? \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \cf4 if\cf5  \cf4 let\cf5  v = data[name] \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 switch\cf5  v \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 case\cf5  .int(\cf4 let\cf5  value): \cf4 return\cf5  value
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \cf4 default\cf5 : \cf4 return\cf5  \cf4 nil
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5             \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5         \cf4 return\cf5  \cf4 nil
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf4 var\cf5  data: [\cf7 String\cf5 : \cf7 Value\cf5 ] = [:]
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5 \}
+\f0\fs24 \cf0 \
+\
 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\f1\fs36 \cf3 class\cf4  MastersBasicCycleResult : \cf5 Result\cf4  \{
-\f0\fs24 \cf0 \
+\f1\fs36 \cf8 setsWithBar		could be part of barbell case\cf8 \cb9 \
+\cf8 \cb1 weight			optional part of exercise?\cf8 \cb9 \
+\cf8 \cb1 rest			part of exercise?
+\f0\i\fs48 \cf2 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\f1\fs36 \cf4     \cf3 init\cf4 (reps: \cf6 Int\cf4 , weight: \cf6 Double\cf4 , success: \cf6 Bool\cf4 ) \{
+\f1\i0\fs36 \cf5     \cf4 init\cf5 (daysPerWeek: \cf7 Int\cf5 , minsPerDay: \cf7 Int\cf5 , rolloverMins: \cf7 Int\cf5 , formalName: \cf7 String\cf5 )
 \f0\fs24 \cf0 \
-
-\f1\fs36 \cf4         \cf3 self\cf4 .\cf5 reps\cf4  = reps
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf4         \cf3 self\cf4 .\cf5 weight\cf4  = weight
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf4         \cf3 self\cf4 .\cf5 success\cf4  = success
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf4     \}
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf4     
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf4     \cf3 let\cf4  reps: \cf6 Int
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf4     \cf3 let\cf4  weight: \cf6 Double
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf4     \cf3 let\cf4  success: \cf6 Bool
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf4 \}
-\f0\fs24 \cf0 \
-\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
-
-\i\fs48 \cf2 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
-\i0 \cf2 \
+\fs48 \cf2 \
 carthage\
 	install with homebrew\
 	pretty simple\
@@ -139,6 +236,7 @@ cocoapods\
 	adds new build phase\
 	\
 \
+* Make sure xcode is installing a debug version (with asserts enabled)\
 * \cf2 Look at whats involved in defining some popular programs\
 	- eg from my book and from reddit\
 * Maybe use state restoration\

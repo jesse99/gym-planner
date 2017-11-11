@@ -20,12 +20,20 @@ public enum Apparatus
     //    case singlePlates(plates: [(Int, Double)])
 }
 
+public enum Modality {
+    case weights(apparatus: Apparatus, restSecs: Int, weight: Double)
+//    case cardio(daysPerWeek: Int, minsPerDay: Int, rolloverMins: Int)
+    case timed(numSets: Int, secs: Int, restSecs: Int)
+}
+
 public class Exercise {
-    init(_ name: String, _ apparatus: Apparatus) {
+    init(_ name: String, _ formalName: String, _ modality: Modality) {
         self.name = name
-        self.apparatus = apparatus
+        self.formalName = formalName
+        self.modality = modality
     }
     
-    public let name: String
-    public let apparatus: Apparatus?    // most exercises have an apparatus, but stuff like cardio doesn't
+    public let name: String             // "Heavy Bench"
+    public let formalName: String       // "Bench Press"
+    public let modality: Modality
 }

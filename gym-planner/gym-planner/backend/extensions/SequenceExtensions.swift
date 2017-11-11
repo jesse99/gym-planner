@@ -24,6 +24,16 @@ extension Sequence {
         return false
     }
     
+    /// Returns the last element that satisfies predicate.
+    func findLast(_ predicate: (Iterator.Element) -> Bool) -> Element? {
+        for x in self.reversed() {
+            if predicate(x) {
+                return x
+            }
+        }
+        return nil
+    }
+    
     func mapi<T>(_ mapping: (Int, Iterator.Element) -> T) -> [T] {
         var result: [T] = []
         
