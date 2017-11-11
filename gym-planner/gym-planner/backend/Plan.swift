@@ -89,4 +89,6 @@ public protocol Plan {
 // if can't hit 15 sets across all sets then deload that lift by 10%
 // deload by time
 
+// 531      https://www.t-nation.com/workouts/531-how-to-build-pure-strength
+
 

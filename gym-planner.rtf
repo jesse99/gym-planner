@@ -13,53 +13,61 @@
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://theswiftdev.com/2017/10/23/how-to-make-a-swift-framework/"}}{\fldrslt \cf2 https://theswiftdev.com/2017/10/23/how-to-make-a-swift-framework/}}\
 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.amazon.com/Hamilton-Beach-33467-Programmable-6-Quart/dp/B00JR5AAWM/ref=cm_cr_arp_d_product_top?ie=UTF8"}}{\fldrslt \cf2 https://www.amazon.com/Hamilton-Beach-33467-Programmable-6-Quart/dp/B00JR5AAWM/ref=cm_cr_arp_d_product_top?ie=UTF8}}\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.reddit.com/r/slowcooking/top/"}}{\fldrslt \cf2 https://www.reddit.com/r/slowcooking/top/}}\
-{\field{\*\fldinst{HYPERLINK "https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/"}}{\fldrslt https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/}}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/"}}{\fldrslt \cf2 https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/}}\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
 \b \cf2 Heavy 
 \i\b0 struggle to do all reps
-\i0 \
+\i0 \cf2 \
 Squat 4x5			Bench 4x3-5 \
 Bench 4x5		Deadlift 3x3-5 (8% back-off)\
 Deadlift 1x5		Abductions\
 \
 
-\b Light  
+\b \cf2 Light  
 \i\b0 fairly easy, all reps are smooth
-\i0 \
+\i0 \cf2 \
 Squat 2x5			OHP 3x5 \
 OHP 3x5			Planks/Abductions/static hold\
 Static Hold\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
 \i \cf2 12% of last heavy set of 5
-\i0 \
+\i0 \cf2 \
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
 \b \cf2 Medium   
 \i\b0 feels like you\'92re working hard but no danger of missing a rep, have energy left after each set
-\i0 \
+\i0 \cf2 \
 Squat 1-3x5		Bench 3x5\
 Bench 1-3x5		Deadlift 3x5\
 Pullups 3x8-10	Pullups 15 (add weight once hit 50)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
 \i \cf2 6% of last heavy set of 5\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
-\i0 \
+\i0 \cf2 \
 squat	5 11.5\
 bench	5	10\
 dead		5	12\
 ohp		5.7\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
-\i \
-\
-do a commitadd settings\
+\i \cf2 \
+make sure Weight works with no plates\
+need a way to get results\
+	array of protocol?\
+need a way to delete a result\
+need a way to get warmup and working set weight\
+531 has a deload every 4th week\
 for unit tests could just test results\
 	maybe with an option to log activities\
 how do we handle light and medium?\
@@ -85,7 +93,6 @@ program a deload?\
 
 \f1\fs36 \cf4 private\cf5  \cf4 class\cf5  Data \{    \cf6 // TODO: try and get rid of this
 \f0\fs24 \cf0 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
 \f1\fs36 \cf5     \cf4 enum\cf5  Value \{
 \f0\fs24 \cf0 \
@@ -216,9 +223,9 @@ program a deload?\
 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\f1\fs36 \cf8 setsWithBar		could be part of barbell case\cf8 \cb9 \
-\cf8 \cb1 weight			optional part of exercise?\cf8 \cb9 \
-\cf8 \cb1 rest			part of exercise?
+\f1\fs36 \cf8 setsWithBar		could be part of barbell case\cb9 \
+\cb1 weight			optional part of exercise?\cb9 \
+\cb1 rest			part of exercise?
 \f0\i\fs48 \cf2 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
@@ -237,7 +244,7 @@ cocoapods\
 	\
 \
 * Make sure xcode is installing a debug version (with asserts enabled)\
-* \cf2 Look at whats involved in defining some popular programs\
+* Look at whats involved in defining some popular programs\
 	- eg from my book and from reddit\
 * Maybe use state restoration\
 * Save state as it is changed, not on entering the background\

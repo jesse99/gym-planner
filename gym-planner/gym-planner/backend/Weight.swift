@@ -10,7 +10,6 @@ protocol WeightGenerator
 }
 
 // TODO:
-// apply percent
 // units
 internal struct Weight: CustomStringConvertible {
     enum Direction {
@@ -30,30 +29,16 @@ internal struct Weight: CustomStringConvertible {
         let plates: String
     }
     
-    init(_ weight: Double) {
+    init(_ weight: Double, _ apparatus: Apparatus) {
         self.weight = weight
-    }
-    
-    func canFind(_ exercise: Exercise) -> Bool {
-        switch exercise.modality {
-        case .weights(apparatus: let apparatus, restSecs: _, weight: _):
-            switch apparatus {
-            case .barbell(bar: _, collar: _, plates: let plates, bumpers: let bumpers, magnets: _):
-                return !plates.isEmpty || !bumpers.isEmpty
-            case .bodyWeight(_):
-                assert(false)
-            }
-        default: return false
-        }
+        self.apparatus = apparatus
     }
     
     /// Note that if the direction constraint
     /// can't be satisfied this will return something as close as possible, e.g. doing a find using
     /// a weight below the smallest dumbbell will return the smallest dumbbell.
-    func find(_ to: Direction, _ exercise: Exercise) -> Info {
-        assert(canFind(exercise))
-        
-        let (lowerWeight, lowerPlates, closestWeight, closestPlates, upperWeight, upperPlates) = findRange(exercise)
+    func find(_ to: Direction) -> Info {
+        let (lowerWeight, lowerPlates, closestWeight, closestPlates, upperWeight, upperPlates) = findRange()
         switch to {
         case .lower: return Info(weight: lowerWeight, text: "\(Weight.friendlyStr(lowerWeight)) lbs", plates: lowerPlates)
         case .closest: return Info(weight: closestWeight, text: "\(Weight.friendlyStr(closestWeight)) lbs", plates: closestPlates)
@@ -66,10 +51,10 @@ internal struct Weight: CustomStringConvertible {
     }
     
     // This is for unit testing
-    internal func _weights(_ exercise: Exercise) -> String {
+    internal func _weights() -> String {
         var result = ""
         
-        let g = createGenerator(exercise)
+        let g = createGenerator()
         result += Weight.friendlyStr(g.first().0)
         while true {
             if let candidate = g.next() {
@@ -85,10 +70,10 @@ internal struct Weight: CustomStringConvertible {
     }
     
     // This is for unit testing
-    internal func _labels(_ exercise: Exercise) -> String {
+    internal func _labels() -> String {
         var result = ""
         
-        let g = createGenerator(exercise)
+        let g = createGenerator()
         result += g.first().1
         while true {
             if let candidate = g.next() {
@@ -103,8 +88,8 @@ internal struct Weight: CustomStringConvertible {
         return result
     }
     
-    private func findRange(_ exercise: Exercise) -> (Double, String, Double, String, Double, String) {
-        let g = createGenerator(exercise)
+    private func findRange() -> (Double, String, Double, String, Double, String) {
+        let g = createGenerator()
         
         let first = g.first()
         var lowerWeight = first.0
@@ -143,11 +128,11 @@ internal struct Weight: CustomStringConvertible {
         return (lowerWeight, lowerPlates, closestWeight, closestPlates, upperWeight, upperPlates)
     }
     
-    private func createGenerator(_ exercise: Exercise) -> WeightGenerator {
-        switch exercise.apparatus! {
-        case .barbell(bar: let barWeight, collar: let collarWeight, plates: let plates, bumpers: let bumpers, magnets: let magnets):
+    private func createGenerator() -> WeightGenerator {
+        switch apparatus {
+        case .barbell(bar: let barWeight, collar: let collarWeight, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: _):
             return PlatesGenerator(barWeight, collarWeight, plates, bumpers, magnets, pairedPlates: true)
-        case .bodyWeight(_):
+        case .dumbbells(_, _):
             assert(false)
         }
     }
@@ -187,9 +172,7 @@ internal struct Weight: CustomStringConvertible {
     
     private class PlatesGenerator: WeightGenerator
     {
-        init(_ barWeight: Double, _ collarWeight: Double, _ plates: [(Int, Double)], _ bumpers: [(Int, Double)], _ magnets: [Double], pairedPlates: Bool) {
-            assert(!plates.isEmpty)
-            
+        init(_ barWeight: Double, _ collarWeight: Double, _ plates: [(Int, Double)], _ bumpers: [(Int, Double)], _ magnets: [Double], pairedPlates: Bool) {            
             var p: [(Double, String)] = []
             
             // For an apparatus that takes two plates (like a barbell) we want to return info about one end
@@ -216,7 +199,12 @@ internal struct Weight: CustomStringConvertible {
             self.plates = p
             self.fixedWeight = barWeight + Double(scaling)*collarWeight
             self.hasBumper = !bumpers.isEmpty
-            add1()
+            
+            if !p.isEmpty {
+                add1()
+            } else {
+                self.entries.append((0.0, ""))
+            }
         }
         
         func first() -> (Double, String) {
@@ -375,4 +363,5 @@ internal struct Weight: CustomStringConvertible {
     }
 
     private let weight: Double
+    private let apparatus: Apparatus
 }

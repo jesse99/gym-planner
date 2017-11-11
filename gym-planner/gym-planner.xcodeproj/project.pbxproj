@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9C1FB7923F006EEAC3 /* Settings.swift */; };
 		37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46B1FAE289100244ADD /* AppDelegate.swift */; };
 		37CED46E1FAE289100244ADD /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46D1FAE289100244ADD /* FirstViewController.swift */; };
 		37CED4701FAE289100244ADD /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46F1FAE289100244ADD /* SecondViewController.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		376E3C9C1FB7923F006EEAC3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		37CED4681FAE289100244ADD /* gym-planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gym-planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CED46B1FAE289100244ADD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		37CED46D1FAE289100244ADD /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				37CED4AB1FB3FCD000244ADD /* extensions */,
 				37CED4A91FB1625700244ADD /* Exercise.swift */,
 				37CED48E1FAE29E000244ADD /* Plan.swift */,
+				376E3C9C1FB7923F006EEAC3 /* Settings.swift */,
 				37CED4A51FB15E7300244ADD /* Weight.swift */,
 			);
 			path = backend;
@@ -250,6 +253,7 @@
 				37CED4B01FB52E2F00244ADD /* MastersBasicCycle.swift in Sources */,
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,
 				37CED48F1FAE29E000244ADD /* Plan.swift in Sources */,
+				376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */,
 				37CED46E1FAE289100244ADD /* FirstViewController.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
 			);
