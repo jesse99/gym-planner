@@ -41,6 +41,12 @@ public protocol Plan {
     /// "200 lbs (80% of Heavy Squat)"
     func sublabel() -> String
     
+    /// "Previous was 125 lbs"
+    func prevLabel() -> String
+    
+    /// "+5 lbs, same x3, +5 lbs x4"
+    func historyLabel() -> String
+    
     /// Returns a struct outlining what the user should currently be doing.
     /// Note that finished must be false.
     func current(n: Int) -> Activity

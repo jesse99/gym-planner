@@ -21,9 +21,13 @@ class gym_plannerTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testHistoryLabel() {
+        XCTAssertEqual(makeHistoryLabel([]), "")
+        XCTAssertEqual(makeHistoryLabel([100.0]), "")
+        XCTAssertEqual(makeHistoryLabel([100.0, 100.0]), "same")
+        XCTAssertEqual(makeHistoryLabel([100.0, 100.0, 100.0]), "same x2")
+        XCTAssertEqual(makeHistoryLabel([100.0, 100.0, 100.0, 110.0]), "+10 lbs, same x2")
+        XCTAssertEqual(makeHistoryLabel([100.0, 100.0, 100.0, 110.0, 100.0]), "-10 lbs, +10 lbs, same x2")
     }
             
     func testPerformanceExample() {

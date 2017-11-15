@@ -41,7 +41,7 @@ private class MastersBasicCyclePlan : Plan {
     
     struct Result: VariableWeightResult
     {
-        let title: String
+        let title: String   // "135 lbs 3x5"
         let date: Date
         let cycleIndex: Int
         let warmupWeight: Double
@@ -149,6 +149,27 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
 
+    func prevLabel() -> String {
+        let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
+        if let result = findCycleResult(cycleIndex) {
+            let w = Weight(result.weight, setting.apparatus)
+            if !result.missed {
+                return "Previous was \(w.find(.closest).text)"
+            } else {
+                return "Previous missed \(w.find(.closest).text)"
+            }
+        } else {
+            return ""
+        }
+    }
+    
+    func historyLabel() -> String {
+        let index = MastersBasicCyclePlan.getCycle(cycles, history)
+        let results = history.filter {$0.cycleIndex == index}
+        let weights = results.map {$0.weight}
+        return makeHistoryLabel(Array(weights))
+    }
+    
     func current(n: Int) -> Activity {
         assert(!finished())
 
@@ -208,7 +229,7 @@ private class MastersBasicCyclePlan : Plan {
     }
     
     private func handleAdvance() {
-        if let result = findFirstCycleResult() {
+        if let result = findCycleResult(0) {
             if !result.missed {
                 let w = Weight(sets.last!.weight.weight, setting.apparatus)
                 setting.weight = w.nextWeight()
@@ -221,9 +242,9 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
     
-    private func findFirstCycleResult() -> Result? {
+    private func findCycleResult(_ index: Int) -> Result? {
         for candidate in history.reversed() {
-            if candidate.cycleIndex == 0 {
+            if candidate.cycleIndex == index {
                 return candidate
             }
         }
