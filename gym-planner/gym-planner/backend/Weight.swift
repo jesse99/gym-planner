@@ -46,6 +46,12 @@ internal struct Weight: CustomStringConvertible {
         }
     }
     
+    /// Returns the weight immediately above weight.
+    func nextWeight() -> Double {
+        let (_, _, _, _, upperWeight, _) = findRange()
+        return upperWeight
+    }
+    
     var description: String {
         return String(format: "%.3f", weight)
     }

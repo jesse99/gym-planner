@@ -39,19 +39,22 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
     
-    struct Result
+    struct Result: VariableWeightResult
     {
+        let title: String
         let date: Date
         let cycleIndex: Int
-        let missedRep: Bool
+        let warmupWeight: Double
+        var missed: Bool
+        var weight: Double
 
-        let maxWarmupWeight: Double
-        var workingSetWeight: Double
+        var primary: Bool {get {return cycleIndex == 0}}
     }
-
-    init(_ exercise: Exercise, _ setting: VariableWeightSetting, _ cycles: [Execute], _ history: [Result]) {
+    
+    init(_ exercise: Exercise, _ setting: VariableWeightSetting, _ cycles: [Execute], _ history: [Result], _ persist: Persistence) {
         assert(setting.weight > 0)  // otherwise use MaxLiftsPlan
 
+        self.persist = persist
         self.exercise = exercise
         self.setting = setting
         self.cycles = cycles
@@ -86,12 +89,46 @@ private class MastersBasicCyclePlan : Plan {
         self.setIndex = 0
     }
     
-    // TODO: this version should compute a key using exercise and cycles and then ask some protocol
-    // for Data that it can use to de-serialize history
-    convenience init(_ exercise: Exercise, _ setting: VariableWeightSetting, _ cycles: [Execute]) {
-        self.init(exercise, setting, cycles, [])
-    }
+    convenience init(_ exercise: Exercise, _ cycles: [Execute], _ persist: Persistence) {
+        var key = ""
+        do {
+            key = MastersBasicCyclePlan.settingKey(exercise, cycles)
+            var data = try persist.load(key)
 
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            let setting = try decoder.decode(VariableWeightSetting.self, from: data)
+            
+            key = MastersBasicCyclePlan.historyKey(exercise, cycles)
+            data = try persist.load(key)
+            let history = try decoder.decode([Result].self, from: data)
+            
+            self.init(exercise, setting, cycles, history, persist)
+            
+        } catch {
+            print("Couldn't load \(key): \(error)") // note that this can happen the first time the exercise is performed
+            
+            switch exercise.settings {
+            case .variableWeight(let setting): self.init(exercise, setting, cycles, [], persist)
+            default: assert(false); abort()
+            }
+        }
+    }
+    
+    static func settingKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
+        return MastersBasicCyclePlan.planKey(exercise, cycles) + "-setting"
+    }
+    
+    static func historyKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
+        return MastersBasicCyclePlan.planKey(exercise, cycles) + "-history"
+    }
+    
+    private static func planKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
+        let cycleLabels = cycles.map {"\($0.numSets)x\($0.numReps)x\($0.percent)"}
+        let cycleStr = cycleLabels.joined(separator: "-")
+        return "\(exercise.name)-\(cycleStr)"
+    }
+    
     func label() -> String {
         return exercise.name
     }
@@ -162,13 +199,67 @@ private class MastersBasicCyclePlan : Plan {
         setIndex += 1
         assert(finished())
         
-        // TODO: record result, may need to pass in a protocol to get and append results, could be json I suppose
-        // TODO: update setting.weight as needed
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
-        let lastWarmup = sets.findLast {(set) -> Bool in set.warmup}
-        let result = Result(date: Date(), cycleIndex: cycleIndex, missedRep: missed, maxWarmupWeight: lastWarmup!.weight.weight, workingSetWeight: sets.last!.weight.weight)
+        saveResult(cycleIndex, missed)
+        
+        if cycleIndex == cycles.count-1 {
+            handleAdvance()
+        }
+    }
+    
+    private func handleAdvance() {
+        if let result = findFirstCycleResult() {
+            if !result.missed {
+                let w = Weight(sets.last!.weight.weight, setting.apparatus)
+                setting.weight = w.nextWeight()
+                setting.stalls = 0
+
+            } else {
+                setting.stalls += 1
+            }
+            saveSetting()
+        }
+    }
+    
+    private func findFirstCycleResult() -> Result? {
+        for candidate in history.reversed() {
+            if candidate.cycleIndex == 0 {
+                return candidate
+            }
+        }
+        return nil
     }
 
+    private func saveResult(_ cycleIndex: Int, _ missed: Bool) {
+        let lastWarmup = sets.findLast {(set) -> Bool in set.warmup}
+        let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0: 1)}
+        let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
+        let result = Result(title: title, date: Date(), cycleIndex: cycleIndex, warmupWeight: lastWarmup!.weight.weight, missed: missed, weight: sets.last!.weight.weight)
+        history.append(result)
+        
+        let key = MastersBasicCyclePlan.historyKey(exercise, cycles)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .secondsSince1970
+        do {
+            let data = try encoder.encode(history)
+            try persist.save(key, data)
+        } catch {
+            print("Error saving \(key): \(error)")
+        }
+    }
+    
+    private func saveSetting() {
+        let key = MastersBasicCyclePlan.settingKey(exercise, cycles)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .secondsSince1970
+        do {
+            let data = try encoder.encode(setting)
+            try persist.save(key, data)
+        } catch {
+            print("Error saving \(key): \(error)")
+        }
+    }
+    
     private static func getCycle(_ cycles: [Execute], _ history: [Result]) -> Int {
         if let last = history.last {
             return (last.cycleIndex + 1) % cycles.count
@@ -177,12 +268,13 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
 
+    private let persist: Persistence
     private let exercise: Exercise
-    private let setting: VariableWeightSetting
     private let cycles: [Execute]
-    private let history: [Result]
-    
     private let sets: [Set]
+
+    private var setting: VariableWeightSetting
+    private var history: [Result]
     private var setIndex: Int
 }
 
