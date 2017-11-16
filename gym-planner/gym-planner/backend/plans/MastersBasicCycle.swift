@@ -1,13 +1,9 @@
-/// N (typically three) week cycle where reps drop and weight goes up. Progression happens at the
+/// N (typically three) week cycle where reps drop and weight goes up. Progression happens after the
 /// last cycle if the first cycle went OK.
 import Foundation
 import os.log
 
 // 4x5 @ 100%, 4x3 @ 105%, 4x1 @ 110%
-// if 5's were ok then advance weight when finishing 1s
-// if 5's were not ok then keep weight the same
-// add deload for time
-// see how this differs from regular 531
 
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
 private class MastersBasicCyclePlan : Plan {
@@ -125,6 +121,7 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
     
+    // Plan methods
     func label() -> String {
         return exercise.name
     }
@@ -180,7 +177,7 @@ private class MastersBasicCyclePlan : Plan {
         return Activity(
             title: sets[setIndex].title,
             subtitle: "\(p)% of \(info1.text)",
-            amount: "\(sets[setIndex].numReps) @ \(info2.text)",
+            amount: "\(sets[setIndex].numReps) reps @ \(info2.text)",
             details: info2.plates,
             secs: nil)               // this is used for timed exercises
     }
@@ -217,6 +214,7 @@ private class MastersBasicCyclePlan : Plan {
         return "This is designed for lifters in their 40s and 50s. Typically it's used with three week cycles where the first week is sets of five, the second week sets of three, and the third week sets of one with the second week using 5% more weight and the third week 10% more weight. If all reps were completed for the sets of five then the weight is increased after the third week."
     }
     
+    // Internal items
     static func settingKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
         return MastersBasicCyclePlan.planKey(exercise, cycles) + "-setting"
     }
