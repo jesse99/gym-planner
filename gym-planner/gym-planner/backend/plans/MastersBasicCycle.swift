@@ -8,7 +8,7 @@ import Foundation
 // add deload for time
 // see how this differs from regular 531
 
-// TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup
+// TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
 private class MastersBasicCyclePlan : Plan {
     struct Execute
     {
@@ -19,7 +19,7 @@ private class MastersBasicCyclePlan : Plan {
 
     struct Set
     {
-        let title: String
+        let title: String   // "Workset 3 of 4"
         let numReps: Int
         let weight: Weight.Info
         let percent: Double
@@ -44,7 +44,6 @@ private class MastersBasicCyclePlan : Plan {
         let title: String   // "135 lbs 3x5"
         let date: Date
         let cycleIndex: Int
-        let warmupWeight: Double
         var missed: Bool
         var weight: Double
 
@@ -260,10 +259,9 @@ private class MastersBasicCyclePlan : Plan {
     }
 
     private func saveResult(_ cycleIndex: Int, _ missed: Bool) {
-        let lastWarmup = sets.findLast {(set) -> Bool in set.warmup}
         let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0: 1)}
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
-        let result = Result(title: title, date: Date(), cycleIndex: cycleIndex, warmupWeight: lastWarmup!.weight.weight, missed: missed, weight: sets.last!.weight.weight)
+        let result = Result(title: title, date: Date(), cycleIndex: cycleIndex, missed: missed, weight: sets.last!.weight.weight)
         history.append(result)
         
         let key = MastersBasicCyclePlan.historyKey(exercise, cycles)
