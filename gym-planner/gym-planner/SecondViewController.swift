@@ -5,11 +5,9 @@
 //  Created by Jesse Jones on 11/4/17.
 //  Copyright © 2017 MushinApps. All rights reserved.
 //
-
 import UIKit
 
 class SecondViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -19,7 +17,5 @@ class SecondViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
 

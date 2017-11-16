@@ -1,6 +1,7 @@
 /// N (typically three) week cycle where reps drop and weight goes up. Progression happens at the
 /// last cycle if the first cycle went OK.
 import Foundation
+import os.log
 
 // 4x5 @ 100%, 4x3 @ 105%, 4x1 @ 110%
 // if 5's were ok then advance weight when finishing 1s
@@ -52,6 +53,7 @@ private class MastersBasicCyclePlan : Plan {
     
     init(_ exercise: Exercise, _ setting: VariableWeightSetting, _ cycles: [Execute], _ history: [Result], _ persist: Persistence) {
         assert(setting.weight > 0)  // otherwise use NRepMaxPlan
+        os_log("entering MastersBasicCyclePlan for %@", type: .info, exercise.name)
 
         self.persist = persist
         self.exercise = exercise
@@ -59,7 +61,12 @@ private class MastersBasicCyclePlan : Plan {
         self.cycles = cycles
         self.history = history
         
-        self.workingSetWeight = deloadByDate(setting.weight, setting.updatedWeight, deloads).weight;
+        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+        self.workingSetWeight = deload.weight;
+        os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
+        if let percent = deload.percent {
+            os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
+        }
         
         var warmupsWithBar = 0
         switch setting.apparatus {
@@ -109,7 +116,7 @@ private class MastersBasicCyclePlan : Plan {
             self.init(exercise, setting, cycles, history, persist)
             
         } catch {
-            print("Couldn't load \(key): \(error)") // note that this can happen the first time the exercise is performed
+            os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
             
             switch exercise.settings {
             case .variableWeight(let setting): self.init(exercise, setting, cycles, [], persist)
@@ -242,10 +249,12 @@ private class MastersBasicCyclePlan : Plan {
                 let w = Weight(sets.last!.weight.weight, setting.apparatus)
                 setting.changeWeight(w.nextWeight())
                 setting.stalls = 0
+                os_log("advanced to = %.3f", type: .info, setting.weight)
 
             } else {
                 setting.sameWeight()
                 setting.stalls += 1
+                os_log("stalled = %d", type: .info, setting.stalls)
             }
             saveSetting()
         }
@@ -273,7 +282,7 @@ private class MastersBasicCyclePlan : Plan {
             let data = try encoder.encode(history)
             try persist.save(key, data)
         } catch {
-            print("Error saving \(key): \(error)")
+            os_log("Error saving %@: %@", type: .error, key, error.localizedDescription)
         }
     }
     
@@ -285,7 +294,7 @@ private class MastersBasicCyclePlan : Plan {
             let data = try encoder.encode(setting)
             try persist.save(key, data)
         } catch {
-            print("Error saving \(key): \(error)")
+            os_log("Error saving %@: %@", type: .error, key, error.localizedDescription)
         }
     }
     
