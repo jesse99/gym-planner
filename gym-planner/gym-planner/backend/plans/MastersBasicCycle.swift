@@ -51,7 +51,7 @@ private class MastersBasicCyclePlan : Plan {
     }
     
     init(_ exercise: Exercise, _ setting: VariableWeightSetting, _ cycles: [Execute], _ history: [Result], _ persist: Persistence) {
-        assert(setting.weight > 0)  // otherwise use MaxLiftsPlan
+        assert(setting.weight > 0)  // otherwise use NRepMaxPlan
 
         self.persist = persist
         self.exercise = exercise
@@ -77,7 +77,7 @@ private class MastersBasicCyclePlan : Plan {
         s.append(Set(setting.apparatus, phase: numWarmups-3, phaseCount: numWarmups, numReps: 3, percent: 0.6, weight: workingSetWeight, warmup: true))
         s.append(Set(setting.apparatus, phase: numWarmups-2, phaseCount: numWarmups, numReps: 1, percent: 0.7, weight: workingSetWeight, warmup: true))
         s.append(Set(setting.apparatus, phase: numWarmups-1, phaseCount: numWarmups, numReps: 1, percent: 0.8, weight: workingSetWeight, warmup: true))
-        s.append(Set(setting.apparatus, phase: numWarmups, phaseCount: numWarmups,   numReps: 1, percent: 0.9, weight: workingSetWeight, warmup: true))
+        s.append(Set(setting.apparatus, phase: numWarmups,   phaseCount: numWarmups, numReps: 1, percent: 0.9, weight: workingSetWeight, warmup: true))
         assert(s.count == numWarmups)
 
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
@@ -93,6 +93,7 @@ private class MastersBasicCyclePlan : Plan {
     convenience init(_ exercise: Exercise, _ cycles: [Execute], _ persist: Persistence) {
         var key = ""
         do {
+            // setting
             key = MastersBasicCyclePlan.settingKey(exercise, cycles)
             var data = try persist.load(key)
 
@@ -100,6 +101,7 @@ private class MastersBasicCyclePlan : Plan {
             decoder.dateDecodingStrategy = .secondsSince1970
             let setting = try decoder.decode(VariableWeightSetting.self, from: data)
             
+            // history
             key = MastersBasicCyclePlan.historyKey(exercise, cycles)
             data = try persist.load(key)
             let history = try decoder.decode([Result].self, from: data)
@@ -114,20 +116,6 @@ private class MastersBasicCyclePlan : Plan {
             default: assert(false); abort()
             }
         }
-    }
-    
-    static func settingKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
-        return MastersBasicCyclePlan.planKey(exercise, cycles) + "-setting"
-    }
-    
-    static func historyKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
-        return MastersBasicCyclePlan.planKey(exercise, cycles) + "-history"
-    }
-    
-    private static func planKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
-        let cycleLabels = cycles.map {"\($0.numSets)x\($0.numReps)x\($0.percent)"}
-        let cycleStr = cycleLabels.joined(separator: "-")
-        return "\(exercise.name)-\(cycleStr)"
     }
     
     func label() -> String {
@@ -157,11 +145,10 @@ private class MastersBasicCyclePlan : Plan {
         } else {
             let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
             if let result = findCycleResult(cycleIndex) {
-                let w = Weight(result.weight, setting.apparatus)
                 if !result.missed {
-                    return "Previous was \(w.find(.closest).text)"
+                    return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
                 } else {
-                    return "Previous missed \(w.find(.closest).text)"
+                    return "Previous missed \(Weight.friendlyUnitsStr(result.weight))"
                 }
             } else {
                 return ""
@@ -205,8 +192,9 @@ private class MastersBasicCyclePlan : Plan {
         if setIndex+1 < sets.count {
             return [Completion(title: "", isDefault: true, callback: {() -> Void in self.setIndex += 1})]
         } else {
-            return [Completion(title: "Completed all reps", isDefault: true, callback: {() -> Void in self.doFinish(false)}),
-            Completion(title: "Missed a rep", isDefault: false, callback: {() -> Void in self.doFinish(true)})]
+            return [
+                Completion(title: "Finished OK",  isDefault: true,  callback: {() -> Void in self.doFinish(false)}),
+                Completion(title: "Missed a rep", isDefault: false, callback: {() -> Void in self.doFinish(true)})]
         }
     }
 
@@ -219,7 +207,21 @@ private class MastersBasicCyclePlan : Plan {
     }
 
     func description() -> String {
-        return "This is designed for lifters in their 40s and 50s or lifters with a demanding physical job or sport. Typically it's used with three week cycles where the first week is sets of five, the second week sets of three, and the third week sets of one with the second week using 5% more weight and the third week 10% more weight. If all reps were completed for the sets of five then the weight is increased after the third week."
+        return "This is designed for lifters in their 40s and 50s. Typically it's used with three week cycles where the first week is sets of five, the second week sets of three, and the third week sets of one with the second week using 5% more weight and the third week 10% more weight. If all reps were completed for the sets of five then the weight is increased after the third week."
+    }
+    
+    static func settingKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
+        return MastersBasicCyclePlan.planKey(exercise, cycles) + "-setting"
+    }
+    
+    static func historyKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
+        return MastersBasicCyclePlan.planKey(exercise, cycles) + "-history"
+    }
+    
+    private static func planKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
+        let cycleLabels = cycles.map {"\($0.numSets)x\($0.numReps)x\($0.percent)"}
+        let cycleStr = cycleLabels.joined(separator: "-")
+        return "\(exercise.name)-masters-basic-cycle-\(cycleStr)"
     }
     
     private func doFinish(_ missed: Bool) {
@@ -259,7 +261,7 @@ private class MastersBasicCyclePlan : Plan {
     }
 
     private func saveResult(_ cycleIndex: Int, _ missed: Bool) {
-        let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0: 1)}
+        let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
         let result = Result(title: title, date: Date(), cycleIndex: cycleIndex, missed: missed, weight: sets.last!.weight.weight)
         history.append(result)
