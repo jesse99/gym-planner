@@ -60,6 +60,8 @@ private class MastersBasicCyclePlan : Plan {
         self.cycles = cycles
         self.history = history
         
+        self.workingSetWeight = deloadByDate(setting.weight, setting.updatedWeight, deloads).weight;
+        
         var warmupsWithBar = 0
         switch setting.apparatus {
         case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
@@ -69,20 +71,20 @@ private class MastersBasicCyclePlan : Plan {
         var s: [Set] = []
         let numWarmups = 5 + warmupsWithBar
         for i in 0..<warmupsWithBar {
-            s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: 5, percent: 0.0, weight: setting.weight, warmup: true))   // could also use max reps from all the executes, but 5 is probably better than 10 or whatever
+            s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: 5, percent: 0.0, weight: workingSetWeight, warmup: true))   // could also use max reps from all the executes, but 5 is probably better than 10 or whatever
         }
 
-        s.append(Set(setting.apparatus, phase: numWarmups-4, phaseCount: numWarmups, numReps: 5, percent: 0.5, weight: setting.weight, warmup: true))
-        s.append(Set(setting.apparatus, phase: numWarmups-3, phaseCount: numWarmups, numReps: 3, percent: 0.6, weight: setting.weight, warmup: true))
-        s.append(Set(setting.apparatus, phase: numWarmups-2, phaseCount: numWarmups, numReps: 1, percent: 0.7, weight: setting.weight, warmup: true))
-        s.append(Set(setting.apparatus, phase: numWarmups-1, phaseCount: numWarmups, numReps: 1, percent: 0.8, weight: setting.weight, warmup: true))
-        s.append(Set(setting.apparatus, phase: numWarmups, phaseCount: numWarmups,   numReps: 1, percent: 0.9, weight: setting.weight, warmup: true))
+        s.append(Set(setting.apparatus, phase: numWarmups-4, phaseCount: numWarmups, numReps: 5, percent: 0.5, weight: workingSetWeight, warmup: true))
+        s.append(Set(setting.apparatus, phase: numWarmups-3, phaseCount: numWarmups, numReps: 3, percent: 0.6, weight: workingSetWeight, warmup: true))
+        s.append(Set(setting.apparatus, phase: numWarmups-2, phaseCount: numWarmups, numReps: 1, percent: 0.7, weight: workingSetWeight, warmup: true))
+        s.append(Set(setting.apparatus, phase: numWarmups-1, phaseCount: numWarmups, numReps: 1, percent: 0.8, weight: workingSetWeight, warmup: true))
+        s.append(Set(setting.apparatus, phase: numWarmups, phaseCount: numWarmups,   numReps: 1, percent: 0.9, weight: workingSetWeight, warmup: true))
         assert(s.count == numWarmups)
 
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
         let cycle = cycles[cycleIndex]
         for i in 0...cycle.numSets {
-            s.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.numSets, numReps: cycle.numReps, percent: cycle.percent, weight: setting.weight, warmup: false))
+            s.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.numSets, numReps: cycle.numReps, percent: cycle.percent, weight: workingSetWeight, warmup: false))
         }
 
         self.sets = s
@@ -133,33 +135,38 @@ private class MastersBasicCyclePlan : Plan {
         return exercise.name
     }
 
-    /// "200 lbs (80% of Heavy Squat)"
     func sublabel() -> String {
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
         let cycle = cycles[cycleIndex]
         let sr = "\(cycle.numSets)x\(cycle.numReps)"
 
-        let info1 = Weight(setting.weight, setting.apparatus).find(.closest)
+        let info1 = Weight(workingSetWeight, setting.apparatus).find(.closest)
         if cycle.percent == 1.0 {
             return "\(sr)x\(info1.text)"
         } else {
-            let info2 = Weight(cycle.percent*setting.weight, setting.apparatus).find(.closest)
+            let info2 = Weight(cycle.percent*workingSetWeight, setting.apparatus).find(.closest)
             let p = String(format: "%.0f", 100.0*cycle.percent)
             return "\(sr)x\(info2.text) (\(p)% of \(info1.text)"
         }
     }
 
     func prevLabel() -> String {
-        let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
-        if let result = findCycleResult(cycleIndex) {
-            let w = Weight(result.weight, setting.apparatus)
-            if !result.missed {
-                return "Previous was \(w.find(.closest).text)"
-            } else {
-                return "Previous missed \(w.find(.closest).text)"
-            }
+        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads);
+        if let percent = deload.percent {
+            return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
+
         } else {
-            return ""
+            let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
+            if let result = findCycleResult(cycleIndex) {
+                let w = Weight(result.weight, setting.apparatus)
+                if !result.missed {
+                    return "Previous was \(w.find(.closest).text)"
+                } else {
+                    return "Previous missed \(w.find(.closest).text)"
+                }
+            } else {
+                return ""
+            }
         }
     }
     
@@ -173,7 +180,7 @@ private class MastersBasicCyclePlan : Plan {
     func current(n: Int) -> Activity {
         assert(!finished())
 
-        let info1 = Weight(setting.weight, setting.apparatus).find(.closest)
+        let info1 = Weight(workingSetWeight, setting.apparatus).find(.closest)
         let info2 = sets[setIndex].weight
         
         let p = String(format: "%.0f", 100.0*sets[setIndex].percent)
@@ -232,10 +239,11 @@ private class MastersBasicCyclePlan : Plan {
         if let result = findCycleResult(0) {
             if !result.missed {
                 let w = Weight(sets.last!.weight.weight, setting.apparatus)
-                setting.weight = w.nextWeight()
+                setting.changeWeight(w.nextWeight())
                 setting.stalls = 0
 
             } else {
+                setting.sameWeight()
                 setting.stalls += 1
             }
             saveSetting()
@@ -293,6 +301,8 @@ private class MastersBasicCyclePlan : Plan {
     private let exercise: Exercise
     private let cycles: [Execute]
     private let sets: [Set]
+    private let deloads: [Double] = [1.0, 1.0, 0.9, 0.85, 0.8];
+    private let workingSetWeight: Double    // setting.weight unless a deload happened
 
     private var setting: VariableWeightSetting
     private var history: [Result]

@@ -20,15 +20,28 @@ public enum Apparatus
 /// Used for exercises that use plates, or dumbbells, or machines with variable weights.
 public class VariableWeightSetting: Codable {
     var apparatus: Apparatus
-    var weight: Double  // starts out at 0.0
+    private(set) var weight: Double  // starts out at 0.0
+    private(set) var updatedWeight: Date
     var restSecs: Int
     var stalls: Int
     
     init(_ apparatus: Apparatus, restSecs: Int) {
         self.apparatus = apparatus
         self.weight = 0.0
+        self.updatedWeight = Date()
         self.restSecs = restSecs
         self.stalls = 0
+    }
+    
+    func changeWeight(_ weight: Double) {
+        self.weight = weight;
+        self.updatedWeight = Date()
+    }
+
+    /// Used to indicate that an exercise was done even though the weight didn't actually change
+    /// (so that we don't deload for time if the user is stalling).
+    func sameWeight() {
+        self.updatedWeight = Date()
     }
 }
 
