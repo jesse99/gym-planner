@@ -4,6 +4,7 @@ import os.log
 
 private class NRepMaxPlan : Plan {
     // TODO: note that the master plan has to persist setting when this finishes so that it is saved under the right name
+    // (or maybe this should take the setting key).
     init(_ exercise: Exercise, _ setting: VariableWeightSetting, numReps: Int) {
         os_log("entering NRepMaxPlan for %@", type: .info, exercise.name)
         
@@ -21,7 +22,7 @@ private class NRepMaxPlan : Plan {
     }
     
     func sublabel() -> String {
-        return "Finding \(numReps) max"
+        return "Finding \(numReps) rep max"
     }
     
     func prevLabel() -> String {
@@ -74,15 +75,10 @@ private class NRepMaxPlan : Plan {
     }
     
     func description() -> String {
-        return "Used to find an N\(numReps) rep max."
+        return "Used to find a \(numReps) rep max."
     }
     
     // Internal items
-    private func doFinish(_ missed: Bool) {
-        setting.changeWeight(weight)
-        done = true
-    }
-    
     private let exercise: Exercise
     private let setting: VariableWeightSetting
     private let numReps: Int
