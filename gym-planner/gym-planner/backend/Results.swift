@@ -51,3 +51,32 @@ public func makeHistoryLabel(_ weights: [Double]) -> String {
     
     return entries.joined(separator: ", ")
 }
+
+func makePrevLabel(_ history: [VariableWeightResult]) -> String {
+    if let result = history.last {
+        let count = countMisses(history)
+        if count == 0 {
+            return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
+        } else if count == 1 {
+            return "Previous missed \(Weight.friendlyUnitsStr(result.weight))"
+        } else {
+            return "Previous missed \(Weight.friendlyUnitsStr(result.weight)) \(count)x"
+        }
+    } else {
+        return ""
+    }
+}
+
+internal func countMisses(_ history: [VariableWeightResult]) -> Int {
+    var count = 0
+    
+    for result in history.reversed() {
+        if result.missed {
+            count += 1;
+        } else {
+            return count;
+        }
+    }
+    
+    return count
+}

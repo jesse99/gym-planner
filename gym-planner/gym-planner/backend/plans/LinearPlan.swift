@@ -131,15 +131,7 @@ private class LinearPlan : Plan {
             return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
             
         } else {
-            if let result = history.last {
-                if !result.missed {
-                    return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
-                } else {
-                    return "Previous missed \(Weight.friendlyUnitsStr(result.weight))"
-                }
-            } else {
-                return ""
-            }
+            return makePrevLabel(history)
         }
     }
     

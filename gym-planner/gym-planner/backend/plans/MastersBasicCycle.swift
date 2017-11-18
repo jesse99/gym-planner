@@ -156,16 +156,9 @@ private class MastersBasicCyclePlan : Plan {
             return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
 
         } else {
-            let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
-            if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex) {
-                if !result.missed {
-                    return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
-                } else {
-                    return "Previous missed \(Weight.friendlyUnitsStr(result.weight))"
-                }
-            } else {
-                return ""
-            }
+            let index = MastersBasicCyclePlan.getCycle(cycles, history)
+            let results = history.filter {$0.cycleIndex == index}
+            return makePrevLabel(results)
         }
     }
     
