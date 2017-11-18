@@ -2,7 +2,7 @@
 import Foundation
 import os.log
 
-private class FixedRepsPlan: Plan {
+private class VariableSetsPlan: Plan {
     struct Result: VariableWeightResult {
         let title: String   // "20 reps @ 135 lbs"
         let date: Date
@@ -14,7 +14,7 @@ private class FixedRepsPlan: Plan {
     }
     
     init(_ exercise: Exercise, _ setting: FixedWeightSetting, _ history: [Result], _ persist: Persistence, requiredReps: Int, targetReps: Int) {
-        os_log("entering FixedRepsPlan for %@", type: .info, exercise.name)
+        os_log("entering VariableSetsPlan for %@", type: .info, exercise.name)
         
         self.persist = persist
         self.exercise = exercise
@@ -28,7 +28,7 @@ private class FixedRepsPlan: Plan {
         var key = ""
         do {
             // setting
-            key = FixedRepsPlan.settingKey(exercise)
+            key = VariableSetsPlan.settingKey(exercise)
             var data = try persist.load(key)
             
             let decoder = JSONDecoder()
@@ -36,7 +36,7 @@ private class FixedRepsPlan: Plan {
             let setting = try decoder.decode(FixedWeightSetting.self, from: data)
             
             // history
-            key = FixedRepsPlan.historyKey(exercise)
+            key = VariableSetsPlan.historyKey(exercise)
             data = try persist.load(key)
             let history = try decoder.decode([Result].self, from: data)
             
@@ -133,11 +133,11 @@ private class FixedRepsPlan: Plan {
     
     // Internal items
     static func settingKey(_ exercise: Exercise) -> String {
-        return FixedRepsPlan.planKey(exercise) + "-setting"
+        return VariableSetsPlan.planKey(exercise) + "-setting"
     }
     
     static func historyKey(_ exercise: Exercise) -> String {
-        return FixedRepsPlan.planKey(exercise) + "-history"
+        return VariableSetsPlan.planKey(exercise) + "-history"
     }
     
     private static func planKey(_ exercise: Exercise) -> String {
@@ -158,7 +158,7 @@ private class FixedRepsPlan: Plan {
         let result = Result(title: title, date: Date(), weight: setting.weight, missed: false, reps: reps)
         history.append(result)
         
-        let key = FixedRepsPlan.historyKey(exercise)
+        let key = VariableSetsPlan.historyKey(exercise)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .secondsSince1970
         do {
@@ -170,7 +170,7 @@ private class FixedRepsPlan: Plan {
     }
     
     private func saveSetting() {
-        let key = FixedRepsPlan.settingKey(exercise)
+        let key = VariableSetsPlan.settingKey(exercise)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .secondsSince1970
         do {
