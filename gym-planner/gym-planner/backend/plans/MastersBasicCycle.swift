@@ -66,11 +66,14 @@ private class MastersBasicCyclePlan : Plan {
         let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
         self.maxWeight = deload.weight;
         
-        let workingSetWeight = cycle.percent*self.maxWeight;
-        os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
+        var workingSetWeight = cycle.percent*self.maxWeight;
         if let percent = deload.percent {
             os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
+        } else if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex), cycleIndex > 0 && result.missed {    // missed first cycle is dealt with in handleAdvance
+            os_log("using previous weight since this cycle was missed last time", type: .info)
+            workingSetWeight = result.weight
         }
+        os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
         
         var warmupsWithBar = 0
         switch setting.apparatus {
@@ -154,7 +157,7 @@ private class MastersBasicCyclePlan : Plan {
 
         } else {
             let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
-            if let result = findCycleResult(cycleIndex) {
+            if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex) {
                 if !result.missed {
                     return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
                 } else {
@@ -245,7 +248,7 @@ private class MastersBasicCyclePlan : Plan {
     }
     
     private func handleAdvance() {
-        if let result = findCycleResult(0) {
+        if let result = MastersBasicCyclePlan.findCycleResult(history, 0) {
             if !result.missed {
                 let w = Weight(sets.last!.weight.weight, setting.apparatus)
                 setting.changeWeight(w.nextWeight())
@@ -261,7 +264,7 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
     
-    private func findCycleResult(_ index: Int) -> Result? {
+    private static func findCycleResult(_ history: [Result], _ index: Int) -> Result? {
         for candidate in history.reversed() {
             if candidate.cycleIndex == index {
                 return candidate
