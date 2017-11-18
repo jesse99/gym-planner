@@ -63,7 +63,7 @@ public protocol Plan {
     
     /// Start over from the beginning.
     func reset()
-    
+        
     /// Explanation of how sets/reps, progression, and deloads work.
     func description() -> String
 }

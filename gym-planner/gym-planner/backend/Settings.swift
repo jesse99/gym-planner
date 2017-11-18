@@ -37,11 +37,23 @@ public class VariableWeightSetting: Codable {
         self.weight = weight;
         self.updatedWeight = Date()
     }
-
+    
     /// Used to indicate that an exercise was done even though the weight didn't actually change
     /// (so that we don't deload for time if the user is stalling).
     func sameWeight() {
         self.updatedWeight = Date()
+    }
+}
+
+/// Used for an exercise where the weight is derived from another exercises's VariableWeightSetting,
+/// e.g. when PercentOfPlan is used.
+public class DerivedWeightSetting: Codable {
+    var apparatus: Apparatus
+    var restSecs: Int
+    
+    init(_ apparatus: Apparatus, restSecs: Int) {
+        self.apparatus = apparatus
+        self.restSecs = restSecs
     }
 }
 
@@ -59,6 +71,7 @@ public class FixedWeightSetting: Codable {
 
 public enum Settings {
     case variableWeight(VariableWeightSetting)
+    case derivedWeight(DerivedWeightSetting)
     case fixedWeight(FixedWeightSetting)
 }
 
