@@ -5,12 +5,12 @@ import os.log
 private class NRepMaxPlan : Plan {
     // TODO: note that the master plan has to persist setting when this finishes so that it is saved under the right name
     // (or maybe this should take the setting key).
-    init(_ exercise: Exercise, _ setting: VariableWeightSetting, numReps: Int) {
+    init(_ exercise: Exercise, _ setting: VariableWeightSetting, workReps: Int) {
         os_log("entering NRepMaxPlan for %@", type: .info, exercise.name)
         
         self.exercise = exercise
         self.setting = setting
-        self.numReps = numReps
+        self.numReps = workReps
         
         weight = 0.0
         setNum = 1

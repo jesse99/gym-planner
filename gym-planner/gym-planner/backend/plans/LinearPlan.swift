@@ -1,20 +1,18 @@
-/// Plan that uses a percent of the weight from another plan.
+/// Advance weight after each successful workout.
 import Foundation
 import os.log
 
-private class PercentOfPlan : Plan {
+private class LinearPlan : Plan {
     struct Sets {
         let firstWarmupPercent: Double
         let warmupReps: [Int]
         
         let workSets: Int;
         let workReps: Int
-        let percent: Double
     }
     
     struct Set {
         let title: String      // "Workset 3 of 4"
-        let subtitle: String   // "90% of 140 lbs"
         let numReps: Int
         let weight: Weight.Info
         let warmup: Bool
@@ -24,39 +22,41 @@ private class PercentOfPlan : Plan {
             self.weight = Weight(percent*weight, apparatus).find(.lower)
             self.numReps = numReps
             self.warmup = true
-
-            let info = Weight(weight, apparatus).find(.closest)
-            let p = String(format: "%.0f", 100.0*percent)
-            self.subtitle = "\(p)% of \(info.text)"
         }
-
+        
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, weight: Double) {
             self.title = "Workset \(phase) of \(phaseCount)"
-            self.subtitle = ""
             self.weight = Weight(weight, apparatus).find(.closest)
             self.numReps = numReps
             self.warmup = false
         }
     }
     
-    struct Result: DerivedWeightResult {
+    struct Result: VariableWeightResult {
         let title: String   // "135 lbs 3x5"
         let date: Date
+        var missed: Bool
         var weight: Double
+        
+        var primary: Bool {get {return true}}
     }
     
-    init(_ exercise: Exercise, _ setting: DerivedWeightSetting, _ otherName: String, _ otherWeight: Double, _ sets: Sets, _ history: [Result], _ persist: Persistence) {
-        os_log("entering PercentOfPlan for %@", type: .info, exercise.name)
+    init(_ exercise: Exercise, _ setting: VariableWeightSetting, _ history: [Result], _ persist: Persistence, _ sets: Sets) {
+        assert(setting.weight > 0)  // otherwise use NRepMaxPlan
+        os_log("entering LinearPlan for %@", type: .info, exercise.name)
         
         self.persist = persist
         self.exercise = exercise
         self.setting = setting
         self.history = history
-        self.percent = sets.percent
-        self.otherName = otherName
         
-        let workingSetWeight = sets.percent*otherWeight;
-        os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
+        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+        let weight = deload.weight;
+        
+        if let percent = deload.percent {
+            os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
+        }
+        os_log("weight = %.3f", type: .info, weight)
         
         var warmupsWithBar = 0
         switch setting.apparatus {
@@ -65,48 +65,48 @@ private class PercentOfPlan : Plan {
         }
         
         var s: [Set] = []
-        let numWarmups = warmupsWithBar + sets.warmupReps.count
+        let numWarmups = warmupsWithBar + sets.warmupReps.count // TODO: some duplication here with other plans
         for i in 0..<warmupsWithBar {
-            s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: sets.warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
+            s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: sets.warmupReps.first ?? 5, percent: 0.0, weight: weight))
         }
         
         let delta = sets.warmupReps.count > 0 ? (0.9 - sets.firstWarmupPercent)/Double(sets.warmupReps.count - 1) : 0.0
         for (i, reps) in sets.warmupReps.enumerated() {
             let percent = sets.firstWarmupPercent + Double(i)*delta
-            s.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
+            s.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: weight))
         }
         
         for i in 0...sets.workSets {
-            s.append(Set(setting.apparatus, phase: i+1, phaseCount: sets.workSets, numReps: sets.workReps, weight: workingSetWeight))
+            s.append(Set(setting.apparatus, phase: i+1, phaseCount: sets.workSets, numReps: sets.workReps, weight: weight))
         }
         
         self.sets = s
         self.setIndex = 0
     }
     
-    convenience init(_ exercise: Exercise, _ otherName: String, _ otherWeight: Double, _ sets: Sets, _ persist: Persistence) {
+    convenience init(_ exercise: Exercise, _ persist: Persistence, _ sets: Sets) {
         var key = ""
         do {
             // setting
-            key = PercentOfPlan.settingKey(exercise, otherName)
+            key = LinearPlan.settingKey(exercise)
             var data = try persist.load(key)
             
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            let setting = try decoder.decode(DerivedWeightSetting.self, from: data)
+            let setting = try decoder.decode(VariableWeightSetting.self, from: data)
             
             // history
-            key = PercentOfPlan.historyKey(exercise, otherName)
+            key = LinearPlan.historyKey(exercise)
             data = try persist.load(key)
             let history = try decoder.decode([Result].self, from: data)
             
-            self.init(exercise, setting, otherName, otherWeight, sets, history, persist)
+            self.init(exercise, setting, history, persist, sets)
             
         } catch {
             os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
             
             switch exercise.settings {
-            case .derivedWeight(let setting): self.init(exercise, setting, otherName, otherWeight, sets, [], persist)
+            case .variableWeight(let setting): self.init(exercise, setting, [], persist, sets)
             default: assert(false); abort()
             }
         }
@@ -118,21 +118,28 @@ private class PercentOfPlan : Plan {
     }
     
     func sublabel() -> String {
-        if let weight = sets.last?.weight {
-            let p = Int(100.0*self.percent)
-            return "\(weight.text) (\(p)% of \(otherName))"
-
+        if let set = sets.last {
+            return "\(set.numReps) reps @ \(set.weight.text)"
         } else {
-            let p = Int(100.0*self.percent)
-            return "\(p)% of \(otherName)"
+            return ""
         }
     }
     
     func prevLabel() -> String {
-        if let result = history.last {
-            return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
+        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads);
+        if let percent = deload.percent {
+            return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
+            
         } else {
-            return ""
+            if let result = history.last {
+                if !result.missed {
+                    return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
+                } else {
+                    return "Previous missed \(Weight.friendlyUnitsStr(result.weight))"
+                }
+            } else {
+                return ""
+            }
         }
     }
     
@@ -147,7 +154,7 @@ private class PercentOfPlan : Plan {
         let info = sets[setIndex].weight
         return Activity(
             title: sets[setIndex].title,
-            subtitle: sets[setIndex].subtitle,
+            subtitle: "",
             amount: "\(sets[setIndex].numReps) reps @ \(info.text)",
             details: info.plates,
             secs: nil)               // this is used for timed exercises
@@ -162,7 +169,8 @@ private class PercentOfPlan : Plan {
             return [Completion(title: "", isDefault: true, callback: {() -> Void in self.setIndex += 1})]
         } else {
             return [
-                Completion(title: "Done", isDefault: false, callback: {() -> Void in self.doFinish()})]
+                Completion(title: "Finished OK",  isDefault: true,  callback: {() -> Void in self.doFinish(false)}),
+                Completion(title: "Missed a rep", isDefault: false, callback: {() -> Void in self.doFinish(true)})]
         }
     }
     
@@ -175,36 +183,59 @@ private class PercentOfPlan : Plan {
     }
     
     func description() -> String {
-        return "This does an exercise at a percentage of another exercises workset. It's typically used to perform a light or medium version of an exercise."
+        return "In this plan weights are advanced each time the lifter successfully completes an exercise. If the lifter fails to do all reps three times in a row then the weight is reduced by 10%. This plan is used by beginner programs like StrongLifts."
     }
     
     // Internal items
-    static func settingKey(_ exercise: Exercise, _ otherName: String) -> String {
-        return PercentOfPlan.planKey(exercise, otherName) + "-setting"
+    static func settingKey(_ exercise: Exercise) -> String {
+        return LinearPlan.planKey(exercise) + "-setting"
     }
     
-    static func historyKey(_ exercise: Exercise, _ otherName: String) -> String {
-        return PercentOfPlan.planKey(exercise, otherName) + "-history"
+    static func historyKey(_ exercise: Exercise) -> String {
+        return LinearPlan.planKey(exercise) + "-history"
     }
     
-    private static func planKey(_ exercise: Exercise, _ otherName: String) -> String {
-        return "\(exercise.name)-percent-of-\(otherName)"
+    private static func planKey(_ exercise: Exercise) -> String {
+        return "\(exercise.name)-linear-plan"
     }
     
-    private func doFinish() {
+    private func doFinish(_ missed: Bool) {
         setIndex += 1
         assert(finished())
         
-        saveResult()
+        saveResult(missed)
+        handleAdvance(missed)
     }
     
-    private func saveResult() {
+    private func handleAdvance(_ missed: Bool) {
+        if !missed {
+            let w = Weight(setting.weight, setting.apparatus)
+            setting.changeWeight(w.nextWeight())
+            setting.stalls = 0
+            os_log("advanced to = %.3f", type: .info, setting.weight)
+            
+        } else {
+            setting.sameWeight()
+            setting.stalls += 1
+            os_log("stalled = %dx", type: .info, setting.stalls)
+            
+            if setting.stalls >= 3 {
+                let info = Weight(0.9*setting.weight, setting.apparatus).find(.lower)
+                setting.changeWeight(info.weight)
+                setting.stalls = 0
+                os_log("deloaded to = %.3f", type: .info, setting.weight)
+            }
+        }
+        saveSetting()
+    }
+    
+    private func saveResult(_ missed: Bool) {
         let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
-        let result = Result(title: title, date: Date(), weight: sets.last!.weight.weight)
+        let result = Result(title: title, date: Date(), missed: missed, weight: sets.last!.weight.weight)
         history.append(result)
         
-        let key = PercentOfPlan.historyKey(exercise, otherName)
+        let key = LinearPlan.historyKey(exercise)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .secondsSince1970
         do {
@@ -216,7 +247,7 @@ private class PercentOfPlan : Plan {
     }
     
     private func saveSetting() {
-        let key = PercentOfPlan.settingKey(exercise, otherName)
+        let key = LinearPlan.settingKey(exercise)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .secondsSince1970
         do {
@@ -230,10 +261,9 @@ private class PercentOfPlan : Plan {
     private let persist: Persistence
     private let exercise: Exercise
     private let sets: [Set]
-    private let percent: Double
-    private let otherName: String
-
-    private var setting: DerivedWeightSetting
+    private let deloads: [Double] = [1.0, 1.0, 0.95, 0.9, 0.85];
+    
+    private var setting: VariableWeightSetting
     private var history: [Result]
     private var setIndex: Int
 }

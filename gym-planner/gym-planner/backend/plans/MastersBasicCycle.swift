@@ -8,8 +8,8 @@ import os.log
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
 private class MastersBasicCyclePlan : Plan {
     struct Execute {
-        let numSets: Int
-        let numReps: Int
+        let workSets: Int
+        let workReps: Int
         let percent: Double
     }
 
@@ -94,8 +94,8 @@ private class MastersBasicCyclePlan : Plan {
         s.append(Set(setting.apparatus, phase: numWarmups,   phaseCount: numWarmups, numReps: 1, percent: 0.9, weight: workingSetWeight))
         assert(s.count == numWarmups)
 
-        for i in 0...cycle.numSets {
-            s.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.numSets, numReps: cycle.numReps, weight: workingSetWeight))
+        for i in 0...cycle.workSets {
+            s.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, weight: workingSetWeight))
         }
 
         self.sets = s
@@ -138,7 +138,7 @@ private class MastersBasicCyclePlan : Plan {
     func sublabel() -> String {
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
         let cycle = cycles[cycleIndex]
-        let sr = "\(cycle.numSets)x\(cycle.numReps)"
+        let sr = "\(cycle.workSets)x\(cycle.workReps)"
 
         let info1 = Weight(maxWeight, setting.apparatus).find(.closest)
         if cycle.percent == 1.0 {
@@ -230,7 +230,7 @@ private class MastersBasicCyclePlan : Plan {
     }
     
     private static func planKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
-        let cycleLabels = cycles.map {"\($0.numSets)x\($0.numReps)x\($0.percent)"}
+        let cycleLabels = cycles.map {"\($0.workSets)x\($0.workReps)x\($0.percent)"}
         let cycleStr = cycleLabels.joined(separator: "-")
         return "\(exercise.name)-masters-basic-cycle-\(cycleStr)"
     }
