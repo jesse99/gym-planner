@@ -1,4 +1,4 @@
-/// Masters program with cycles
+/// Masters program with cycles of 3x5, 3x3,and 3x1.
 import Foundation
 
 func HML() -> Program {
@@ -32,7 +32,7 @@ func HML() -> Program {
 
     let tags: [Program.Tags] = [.intermediate, .strength, .age40s, .age50s]
     let description = """
-This is the program I use and is based on the HLM program from the book _The Barbell Prescription: Strength Training for Life After 40_. It uses very gradual progression and the heavy day cycles between sets of 5, 3, and 1 reps with the weight increasing each time the reps go down. It's a three day a week program and the days look like this:
+This is the program I use and is based on the HLM program from the book _The Barbell Prescription: Strength Training for Life After 40_. It uses a very gradual progression and the heavy day cycles between sets of 5, 3, and 1 reps with the weight increasing each time the reps go down. It's a three day a week program and the days look like this:
 
 **Heavy**
 * Squat 3x5,3,1   reps change each week
@@ -56,7 +56,7 @@ These should feel like you are working hard without being in danger of missing a
 All the reps should be fairly easy.
 
 **Notes**
-Chinps are done with as many sets as are required, once you can do thirty add weights. Note that weights advance unless you stall on the set with five reps. The medium and light days are switched which probably isn't ideal but works better with my schedule.
+Chinps are done with as many sets as are required, once you can do thirty add weights. Weights on the barbell routines advance unless you stall on the set with five reps. The medium and light days are switched which probably isn't ideal but works better with my schedule.
 """
     return Program("HML", workouts, exercises, plans, tags, description)
 }

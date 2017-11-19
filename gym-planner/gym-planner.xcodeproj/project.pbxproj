@@ -20,7 +20,7 @@
 		378FC14B1FBD3B6A00A3C66E /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC14A1FBD3B6A00A3C66E /* DateExtension.swift */; };
 		378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */; };
 		37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46B1FAE289100244ADD /* AppDelegate.swift */; };
-		37CED46E1FAE289100244ADD /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46D1FAE289100244ADD /* FirstViewController.swift */; };
+		37CED46E1FAE289100244ADD /* WorkoutsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46D1FAE289100244ADD /* WorkoutsController.swift */; };
 		37CED4701FAE289100244ADD /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46F1FAE289100244ADD /* SecondViewController.swift */; };
 		37CED4731FAE289100244ADD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37CED4711FAE289100244ADD /* Main.storyboard */; };
 		37CED4751FAE289100244ADD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37CED4741FAE289100244ADD /* Assets.xcassets */; };
@@ -59,7 +59,7 @@
 		378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NRepMaxPlan.swift; sourceTree = "<group>"; };
 		37CED4681FAE289100244ADD /* gym-planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gym-planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CED46B1FAE289100244ADD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		37CED46D1FAE289100244ADD /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		37CED46D1FAE289100244ADD /* WorkoutsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutsController.swift; sourceTree = "<group>"; };
 		37CED46F1FAE289100244ADD /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		37CED4721FAE289100244ADD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		37CED4741FAE289100244ADD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -125,13 +125,13 @@
 			children = (
 				37CED48D1FAE29CB00244ADD /* backend */,
 				37CED46B1FAE289100244ADD /* AppDelegate.swift */,
-				37CED46D1FAE289100244ADD /* FirstViewController.swift */,
 				377F055A1FC0E1000015D7EF /* Helpers.swift */,
+				37CED4761FAE289100244ADD /* LaunchScreen.storyboard */,
+				37CED4711FAE289100244ADD /* Main.storyboard */,
 				377F05571FC0DD8F0015D7EF /* programs */,
 				37CED46F1FAE289100244ADD /* SecondViewController.swift */,
-				37CED4711FAE289100244ADD /* Main.storyboard */,
+				37CED46D1FAE289100244ADD /* WorkoutsController.swift */,
 				37CED4741FAE289100244ADD /* Assets.xcassets */,
-				37CED4761FAE289100244ADD /* LaunchScreen.storyboard */,
 				37CED4791FAE289100244ADD /* Info.plist */,
 			);
 			path = "gym-planner";
@@ -304,7 +304,7 @@
 				3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */,
 				376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */,
 				378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */,
-				37CED46E1FAE289100244ADD /* FirstViewController.swift in Sources */,
+				37CED46E1FAE289100244ADD /* WorkoutsController.swift in Sources */,
 				377F05591FC0DDA10015D7EF /* HML.swift in Sources */,
 				3743E2B91FB824CC00787CB3 /* Persistence.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,

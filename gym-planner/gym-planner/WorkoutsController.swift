@@ -1,13 +1,6 @@
-//
-//  FirstViewController.swift
-//  gym-planner
-//
-//  Created by Jesse Jones on 11/4/17.
-//  Copyright © 2017 MushinApps. All rights reserved.
-//
 import UIKit
 
-class FirstViewController: UIViewController {
+class WorkoutsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -17,5 +10,8 @@ class FirstViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var statusLabel: UILabel!
 }
 
