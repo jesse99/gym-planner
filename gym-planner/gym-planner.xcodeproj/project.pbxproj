@@ -12,6 +12,10 @@
 		376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9E1FB7C7F9006EEAC3 /* Results.swift */; };
 		3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3778CE971FBE730D0042111C /* PercentOfPlan.swift */; };
 		377F054E1FC0B5980015D7EF /* LinearPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F054D1FC0B5980015D7EF /* LinearPlan.swift */; };
+		377F05501FC0D9CE0015D7EF /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F054F1FC0D9CE0015D7EF /* Program.swift */; };
+		377F05591FC0DDA10015D7EF /* HML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F05581FC0DDA10015D7EF /* HML.swift */; };
+		377F055B1FC0E1000015D7EF /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F055A1FC0E1000015D7EF /* Helpers.swift */; };
+		377F055D1FC11E1B0015D7EF /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F055C1FC11E1B0015D7EF /* Either.swift */; };
 		378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */; };
 		378FC14B1FBD3B6A00A3C66E /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC14A1FBD3B6A00A3C66E /* DateExtension.swift */; };
 		378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */; };
@@ -27,7 +31,7 @@
 		37CED4A81FB1612900244ADD /* weightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4A71FB1612900244ADD /* weightTests.swift */; };
 		37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4A91FB1625700244ADD /* Exercise.swift */; };
 		37CED4AD1FB3FCED00244ADD /* SequenceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AC1FB3FCED00244ADD /* SequenceExtensions.swift */; };
-		37CED4B01FB52E2F00244ADD /* MastersBasicCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AF1FB52E2F00244ADD /* MastersBasicCycle.swift */; };
+		37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +50,10 @@
 		376E3C9E1FB7C7F9006EEAC3 /* Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
 		3778CE971FBE730D0042111C /* PercentOfPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentOfPlan.swift; sourceTree = "<group>"; };
 		377F054D1FC0B5980015D7EF /* LinearPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearPlan.swift; sourceTree = "<group>"; };
+		377F054F1FC0D9CE0015D7EF /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
+		377F05581FC0DDA10015D7EF /* HML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HML.swift; sourceTree = "<group>"; };
+		377F055A1FC0E1000015D7EF /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		377F055C1FC11E1B0015D7EF /* Either.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableSetsPlan.swift; sourceTree = "<group>"; };
 		378FC14A1FBD3B6A00A3C66E /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NRepMaxPlan.swift; sourceTree = "<group>"; };
@@ -65,7 +73,7 @@
 		37CED4A71FB1612900244ADD /* weightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weightTests.swift; sourceTree = "<group>"; };
 		37CED4A91FB1625700244ADD /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		37CED4AC1FB3FCED00244ADD /* SequenceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtensions.swift; sourceTree = "<group>"; };
-		37CED4AF1FB52E2F00244ADD /* MastersBasicCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastersBasicCycle.swift; sourceTree = "<group>"; };
+		37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastersBasicCyclePlan.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +94,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		377F05571FC0DD8F0015D7EF /* programs */ = {
+			isa = PBXGroup;
+			children = (
+				377F05581FC0DDA10015D7EF /* HML.swift */,
+			);
+			path = programs;
+			sourceTree = "<group>";
+		};
 		37CED45F1FAE289100244ADD = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +126,8 @@
 				37CED48D1FAE29CB00244ADD /* backend */,
 				37CED46B1FAE289100244ADD /* AppDelegate.swift */,
 				37CED46D1FAE289100244ADD /* FirstViewController.swift */,
+				377F055A1FC0E1000015D7EF /* Helpers.swift */,
+				377F05571FC0DD8F0015D7EF /* programs */,
 				37CED46F1FAE289100244ADD /* SecondViewController.swift */,
 				37CED4711FAE289100244ADD /* Main.storyboard */,
 				37CED4741FAE289100244ADD /* Assets.xcassets */,
@@ -134,8 +152,10 @@
 			children = (
 				37CED4AE1FB52E1A00244ADD /* plans */,
 				37CED4AB1FB3FCD000244ADD /* extensions */,
+				377F055C1FC11E1B0015D7EF /* Either.swift */,
 				37CED4A91FB1625700244ADD /* Exercise.swift */,
 				3743E2B81FB824CC00787CB3 /* Persistence.swift */,
+				377F054F1FC0D9CE0015D7EF /* Program.swift */,
 				37CED48E1FAE29E000244ADD /* Plan.swift */,
 				376E3C9E1FB7C7F9006EEAC3 /* Results.swift */,
 				376E3C9C1FB7923F006EEAC3 /* Settings.swift */,
@@ -156,11 +176,11 @@
 		37CED4AE1FB52E1A00244ADD /* plans */ = {
 			isa = PBXGroup;
 			children = (
-				37CED4AF1FB52E2F00244ADD /* MastersBasicCycle.swift */,
+				377F054D1FC0B5980015D7EF /* LinearPlan.swift */,
+				37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */,
 				378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */,
 				3778CE971FBE730D0042111C /* PercentOfPlan.swift */,
 				378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */,
-				377F054D1FC0B5980015D7EF /* LinearPlan.swift */,
 			);
 			path = plans;
 			sourceTree = "<group>";
@@ -269,12 +289,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				37CED4A61FB15E7300244ADD /* Weight.swift in Sources */,
+				377F055B1FC0E1000015D7EF /* Helpers.swift in Sources */,
 				377F054E1FC0B5980015D7EF /* LinearPlan.swift in Sources */,
 				378FC14B1FBD3B6A00A3C66E /* DateExtension.swift in Sources */,
+				377F055D1FC11E1B0015D7EF /* Either.swift in Sources */,
 				37CED4701FAE289100244ADD /* SecondViewController.swift in Sources */,
 				37CED4AD1FB3FCED00244ADD /* SequenceExtensions.swift in Sources */,
-				37CED4B01FB52E2F00244ADD /* MastersBasicCycle.swift in Sources */,
+				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
 				376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */,
+				377F05501FC0D9CE0015D7EF /* Program.swift in Sources */,
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,
 				378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */,
 				37CED48F1FAE29E000244ADD /* Plan.swift in Sources */,
@@ -282,6 +305,7 @@
 				376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */,
 				378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */,
 				37CED46E1FAE289100244ADD /* FirstViewController.swift in Sources */,
+				377F05591FC0DDA10015D7EF /* HML.swift in Sources */,
 				3743E2B91FB824CC00787CB3 /* Persistence.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
 			);

@@ -2,38 +2,48 @@
 import Foundation
 import os.log
 
-private class NRepMaxPlan : Plan {
+public class NRepMaxPlan : Plan {
     // TODO: note that the master plan has to persist setting when this finishes so that it is saved under the right name
     // (or maybe this should take the setting key).
-    init(_ exercise: Exercise, _ setting: VariableWeightSetting, workReps: Int) {
-        os_log("entering NRepMaxPlan for %@", type: .info, exercise.name)
-        
-        self.exercise = exercise
-        self.setting = setting
+    
+    // This is a bit of a weird plan because it uses a different plan's setting.
+    init(_ name: String, workReps: Int, _ setting: VariableWeightSetting) {
+        self.name = name
         self.numReps = workReps
-        
-        weight = 0.0
-        setNum = 1
+        self.setting = setting
     }
     
     // Plan methods
-    func label() -> String {
+    public let name: String
+    
+    public func startup(_ program: Program, _ exercise: Exercise, _ persist: Persistence) -> StartupResult {
+        os_log("entering NRepMaxPlan for %@", type: .info, exercise.name)
+
+        self.exercise = exercise
+        self.weight = 0.0
+        self.setNum = 1
+        self.done = false
+        
+        return .ok
+    }
+    
+    public func label() -> String {
         return exercise.name
     }
     
-    func sublabel() -> String {
+    public func sublabel() -> String {
         return "Finding \(numReps) rep max"
     }
     
-    func prevLabel() -> String {
+    public func prevLabel() -> String {
         return ""
     }
     
-    func historyLabel() -> String {
+    public func historyLabel() -> String {
         return ""
     }
     
-    func current(n: Int) -> Activity {
+    public func current(n: Int) -> Activity {
         assert(!finished())
         
         let info = Weight(weight, setting.apparatus).find(.closest)
@@ -45,11 +55,11 @@ private class NRepMaxPlan : Plan {
             secs: nil)               // this is used for timed exercises
     }
     
-    func restSecs() -> Int {
+    public func restSecs() -> Int {
         return 0                // no telling how hard the current set is for the user so if he wants rest he'll have to press the start timer button
     }
     
-    func completions() -> [Completion] {
+    public func completions() -> [Completion] {
         var result: [Completion] = []
         
         result.append(Completion(title: "Done", isDefault: false, callback: {self.done = true}))
@@ -64,27 +74,32 @@ private class NRepMaxPlan : Plan {
         return result
     }
     
-    func finished() -> Bool {
+    public func finished() -> Bool {
         return done
     }
     
-    func reset() {
+    public func reset() {
         weight = 0.0
         setNum = 1
         done = false
     }
     
-    func description() -> String {
+    public func description() -> String {
         return "Used to find a \(numReps) rep max."
     }
     
+    public func settings() -> Settings {
+        return .variableWeight(setting)
+    }
+    
     // Internal items
-    private let exercise: Exercise
-    private let setting: VariableWeightSetting
     private let numReps: Int
+    private var setting: VariableWeightSetting
 
-    private var weight: Double
-    private var setNum: Int
+    private var exercise: Exercise!
+
+    private var weight: Double = 0.0
+    private var setNum: Int = 0
     private var done = false
 }
 

@@ -2,16 +2,7 @@
 import Foundation
 import os.log
 
-private class PercentOfPlan : Plan {
-    struct Sets {
-        let firstWarmupPercent: Double
-        let warmupReps: [Int]
-        
-        let workSets: Int;
-        let workReps: Int
-        let percent: Double
-    }
-    
+public class PercentOfPlan : Plan {
     struct Set {
         let title: String      // "Workset 3 of 4"
         let subtitle: String   // "90% of 140 lbs"
@@ -45,46 +36,26 @@ private class PercentOfPlan : Plan {
         var weight: Double
     }
     
-    init(_ exercise: Exercise, _ setting: DerivedWeightSetting, _ otherName: String, _ otherWeight: Double, _ sets: Sets, _ history: [Result], _ persist: Persistence) {
-        os_log("entering PercentOfPlan for %@", type: .info, exercise.name)
-        
-        self.persist = persist
-        self.exercise = exercise
-        self.setting = setting
-        self.history = history
-        self.percent = sets.percent
+    init(_ name: String, _ otherName: String, firstWarmupPercent: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
+        self.name = name
         self.otherName = otherName
-        
-        let workingSetWeight = sets.percent*otherWeight;
-        os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
-        
-        var warmupsWithBar = 0
-        switch setting.apparatus {
-        case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
-        default: break
-        }
-        
-        var s: [Set] = []
-        let numWarmups = warmupsWithBar + sets.warmupReps.count
-        for i in 0..<warmupsWithBar {
-            s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: sets.warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
-        }
-        
-        let delta = sets.warmupReps.count > 0 ? (0.9 - sets.firstWarmupPercent)/Double(sets.warmupReps.count - 1) : 0.0
-        for (i, reps) in sets.warmupReps.enumerated() {
-            let percent = sets.firstWarmupPercent + Double(i)*delta
-            s.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
-        }
-        
-        for i in 0...sets.workSets {
-            s.append(Set(setting.apparatus, phase: i+1, phaseCount: sets.workSets, numReps: sets.workReps, weight: workingSetWeight))
-        }
-        
-        self.sets = s
-        self.setIndex = 0
+        self.firstWarmupPercent = firstWarmupPercent
+        self.warmupReps = warmupReps
+        self.workSets = workSets
+        self.workReps = workReps
+        self.percent = percent
     }
     
-    convenience init(_ exercise: Exercise, _ otherName: String, _ otherWeight: Double, _ sets: Sets, _ persist: Persistence) {
+    // Plan methods
+    public let name: String
+    
+    public func startup(_ program: Program, _ exercise: Exercise, _ persist: Persistence) -> StartupResult {
+        os_log("entering PercentOfPlan for %@", type: .info, exercise.name)
+        
+        self.exercise = exercise
+        self.persist = persist
+
+        // initialize setting and history
         var key = ""
         do {
             // setting
@@ -93,31 +64,65 @@ private class PercentOfPlan : Plan {
             
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            let setting = try decoder.decode(DerivedWeightSetting.self, from: data)
+            self.setting = try decoder.decode(DerivedWeightSetting.self, from: data)
             
             // history
             key = PercentOfPlan.historyKey(exercise, otherName)
             data = try persist.load(key)
-            let history = try decoder.decode([Result].self, from: data)
-            
-            self.init(exercise, setting, otherName, otherWeight, sets, history, persist)
+            self.history = try decoder.decode([Result].self, from: data)
             
         } catch {
             os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
             
-            switch exercise.settings {
-            case .derivedWeight(let setting): self.init(exercise, setting, otherName, otherWeight, sets, [], persist)
+            self.history = []
+            switch exercise.defaultSettings {
+            case .derivedWeight(let setting): self.setting = setting
             default: assert(false); abort()
             }
         }
+
+        // initialize sets
+        switch getOtherWeight(program, persist) {
+        case .left(let message):
+            return .error(message)
+            
+        case .right(let otherWeight):
+            let workingSetWeight = percent*otherWeight;
+            os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
+            
+            var warmupsWithBar = 0
+            switch setting.apparatus {
+            case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
+            default: break
+            }
+            
+            var s: [Set] = []
+            let numWarmups = warmupsWithBar + warmupReps.count
+            for i in 0..<warmupsWithBar {
+                s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
+            }
+            
+            let delta = warmupReps.count > 0 ? (0.9 - firstWarmupPercent)/Double(warmupReps.count - 1) : 0.0
+            for (i, reps) in warmupReps.enumerated() {
+                let percent = firstWarmupPercent + Double(i)*delta
+                s.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
+            }
+            
+            for i in 0...workSets {
+                s.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: workingSetWeight))
+            }
+            
+            self.sets = s
+            self.setIndex = 0
+            return .ok
+        }
     }
     
-    // Plan methods
-    func label() -> String {
+    public func label() -> String {
         return exercise.name
     }
     
-    func sublabel() -> String {
+    public func sublabel() -> String {
         if let weight = sets.last?.weight {
             let p = Int(100.0*self.percent)
             return "\(weight.text) (\(p)% of \(otherName))"
@@ -128,7 +133,7 @@ private class PercentOfPlan : Plan {
         }
     }
     
-    func prevLabel() -> String {
+    public func prevLabel() -> String {
         if let result = history.last {
             return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
         } else {
@@ -136,12 +141,12 @@ private class PercentOfPlan : Plan {
         }
     }
     
-    func historyLabel() -> String {
+    public func historyLabel() -> String {
         let weights = history.map {$0.weight}
         return makeHistoryLabel(Array(weights))
     }
     
-    func current(n: Int) -> Activity {
+    public func current(n: Int) -> Activity {
         assert(!finished())
         
         let info = sets[setIndex].weight
@@ -153,11 +158,11 @@ private class PercentOfPlan : Plan {
             secs: nil)               // this is used for timed exercises
     }
     
-    func restSecs() -> Int {
+    public func restSecs() -> Int {
         return sets[setIndex].warmup ? 0 : setting.restSecs
     }
     
-    func completions() -> [Completion] {
+    public func completions() -> [Completion] {
         if setIndex+1 < sets.count {
             return [Completion(title: "", isDefault: true, callback: {() -> Void in self.setIndex += 1})]
         } else {
@@ -166,16 +171,20 @@ private class PercentOfPlan : Plan {
         }
     }
     
-    func finished() -> Bool {
+    public func finished() -> Bool {
         return setIndex == sets.count
     }
     
-    func reset() {
+    public func reset() {
         setIndex = 0
     }
     
-    func description() -> String {
+    public func description() -> String {
         return "This does an exercise at a percentage of another exercises workset. It's typically used to perform a light or medium version of an exercise."
+    }
+    
+    public func settings() -> Settings {
+        return .derivedWeight(setting)
     }
     
     // Internal items
@@ -227,15 +236,40 @@ private class PercentOfPlan : Plan {
         }
     }
     
-    private let persist: Persistence
-    private let exercise: Exercise
-    private let sets: [Set]
-    private let percent: Double
+    private func getOtherWeight(_ program: Program, _ persist: Persistence) -> Either<String, Double> {
+        if let exercise = program.findExercise(otherName) {
+            if let plan = program.findPlan(exercise.plan) {
+                if case .ok = plan.startup(program, exercise, persist) {
+                    switch plan.settings() {
+                    case .variableWeight(let setting): return .right(setting.weight)
+                    case .fixedWeight(let setting): return .right(setting.weight)
+                    default: return .left("\(otherName) doesn't use a variable or fixed weight plan")
+                    }
+                } else {
+                    return .left("Execute '\(otherName)' first")
+                }
+            } else {
+                return .left("Couldn't find plan '\(exercise.plan)'")
+            }
+        } else {
+            return .left("Couldn't find exercise '\(otherName)'")
+        }
+    }
+    
     private let otherName: String
+    private let firstWarmupPercent: Double
+    private let warmupReps: [Int]
+    private let workSets: Int;
+    private let workReps: Int
+    private let percent: Double
 
-    private var setting: DerivedWeightSetting
-    private var history: [Result]
-    private var setIndex: Int
+    private var persist: Persistence!
+    private var exercise: Exercise!
+    private var setting: DerivedWeightSetting!
+    private var history: [Result]!
+    private var sets: [Set]!
+
+    private var setIndex: Int = 0
 }
 
 

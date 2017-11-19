@@ -33,8 +33,23 @@ public struct Activity {
     public let secs: Int?
 }
 
+public enum StartupResult {
+    /// Typically NRepsMaxPlan should be used when this happens.
+    case noWeight
+    
+    /// Arbitrary error, e.g. need to perform another exercise first.
+    case error(String)
+    
+    case ok
+}
+
 /// Used to tell the user how to perform sets of some activity, e.g. warmup and work sets for a barbell exercise.
 public protocol Plan {
+    var name: String {get}
+
+    // If the plan could not be started this will return an error message.
+    func startup(_ program: Program, _ exercise: Exercise, _ persist: Persistence) -> StartupResult
+
     /// "Light Squat".
     func label() -> String
     
@@ -66,6 +81,8 @@ public protocol Plan {
         
     /// Explanation of how sets/reps, progression, and deloads work.
     func description() -> String
+    
+    func settings() -> Settings
 }
 
 // Phrak could be LinearAMRAP
@@ -75,11 +92,6 @@ public protocol Plan {
 
 // BodyWeightAMRAP
 //    sets/reps
-
-// progression          how much weight to add
-// failure handler      change sets/reps and/or weight and/or deload and/or rest for a bit
-// deload for time          blah
-
 
 // GZCLP    https://www.reddit.com/r/Fitness/comments/44hnbc/strength_training_using_the_gzcl_method_from/
 // set/rep scheme           5x3+

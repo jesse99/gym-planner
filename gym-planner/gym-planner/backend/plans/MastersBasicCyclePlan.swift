@@ -6,7 +6,7 @@ import os.log
 // 4x5 @ 100%, 4x3 @ 105%, 4x1 @ 110%
 
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
-private class MastersBasicCyclePlan : Plan {
+public class MastersBasicCyclePlan : Plan {
     struct Execute {
         let workSets: Int
         let workReps: Int
@@ -50,19 +50,50 @@ private class MastersBasicCyclePlan : Plan {
         var primary: Bool {get {return cycleIndex == 0}}
     }
     
-    init(_ exercise: Exercise, _ setting: VariableWeightSetting, _ cycles: [Execute], _ history: [Result], _ persist: Persistence) {
-        assert(setting.weight > 0)  // otherwise use NRepMaxPlan
-        os_log("entering MastersBasicCyclePlan for %@", type: .info, exercise.name)
-
-        self.persist = persist
-        self.exercise = exercise
-        self.setting = setting
+    init(_ name: String, _ cycles: [Execute]) {
+        self.name = name
         self.cycles = cycles
-        self.history = history
+    }
+    
+    // Plan methods
+    public let name: String
+    
+    public func startup(_ program: Program, _ exercise: Exercise, _ persist: Persistence) -> StartupResult {
+        os_log("entering MastersBasicCyclePlan for %@", type: .info, exercise.name)
         
+        self.exercise = exercise
+        self.persist = persist
+        
+        // Initialize setting and history
+        var key = ""
+        do {
+            // setting
+            key = MastersBasicCyclePlan.settingKey(exercise)
+            var data = try persist.load(key)
+            
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            self.setting = try decoder.decode(VariableWeightSetting.self, from: data)
+            
+            // history
+            key = MastersBasicCyclePlan.historyKey(exercise)
+            data = try persist.load(key)
+            self.history = try decoder.decode([Result].self, from: data)
+            
+            if setting.weight == 0 {
+                return .noWeight
+            }
+
+        } catch {
+            os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
+            return .noWeight
+        }
+        assert(setting.weight > 0)  // otherwise use NRepMaxPlan
+
+        // Initialize maxWeight and sets
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
         let cycle = cycles[cycleIndex]
-
+        
         let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
         self.maxWeight = deload.weight;
         
@@ -80,62 +111,34 @@ private class MastersBasicCyclePlan : Plan {
         case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
         default: break
         }
-
+        
         var s: [Set] = []
         let numWarmups = 5 + warmupsWithBar
         for i in 0..<warmupsWithBar {
             s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: 5, percent: 0.0, weight: workingSetWeight))   // could also use max reps from all the executes, but 5 is probably better than 10 or whatever
         }
-
+        
         s.append(Set(setting.apparatus, phase: numWarmups-4, phaseCount: numWarmups, numReps: 5, percent: 0.5, weight: workingSetWeight))
         s.append(Set(setting.apparatus, phase: numWarmups-3, phaseCount: numWarmups, numReps: 3, percent: 0.6, weight: workingSetWeight))
         s.append(Set(setting.apparatus, phase: numWarmups-2, phaseCount: numWarmups, numReps: 1, percent: 0.7, weight: workingSetWeight))
         s.append(Set(setting.apparatus, phase: numWarmups-1, phaseCount: numWarmups, numReps: 1, percent: 0.8, weight: workingSetWeight))
         s.append(Set(setting.apparatus, phase: numWarmups,   phaseCount: numWarmups, numReps: 1, percent: 0.9, weight: workingSetWeight))
         assert(s.count == numWarmups)
-
+        
         for i in 0...cycle.workSets {
             s.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, weight: workingSetWeight))
         }
-
+        
         self.sets = s
         self.setIndex = 0
+        return .ok
     }
     
-    convenience init(_ exercise: Exercise, _ cycles: [Execute], _ persist: Persistence) {
-        var key = ""
-        do {
-            // setting
-            key = MastersBasicCyclePlan.settingKey(exercise, cycles)
-            var data = try persist.load(key)
-
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            let setting = try decoder.decode(VariableWeightSetting.self, from: data)
-            
-            // history
-            key = MastersBasicCyclePlan.historyKey(exercise, cycles)
-            data = try persist.load(key)
-            let history = try decoder.decode([Result].self, from: data)
-            
-            self.init(exercise, setting, cycles, history, persist)
-            
-        } catch {
-            os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
-            
-            switch exercise.settings {
-            case .variableWeight(let setting): self.init(exercise, setting, cycles, [], persist)
-            default: assert(false); abort()
-            }
-        }
-    }
-    
-    // Plan methods
-    func label() -> String {
+    public func label() -> String {
         return exercise.name
     }
 
-    func sublabel() -> String {
+    public func sublabel() -> String {
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
         let cycle = cycles[cycleIndex]
         let sr = "\(cycle.workSets)x\(cycle.workReps)"
@@ -150,7 +153,7 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
 
-    func prevLabel() -> String {
+    public func prevLabel() -> String {
         let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads);
         if let percent = deload.percent {
             return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
@@ -162,14 +165,14 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
     
-    func historyLabel() -> String {
+    public func historyLabel() -> String {
         let index = MastersBasicCyclePlan.getCycle(cycles, history)
         let results = history.filter {$0.cycleIndex == index}
         let weights = results.map {$0.weight}
         return makeHistoryLabel(Array(weights))
     }
     
-    func current(n: Int) -> Activity {
+    public func current(n: Int) -> Activity {
         assert(!finished())
 
         let info = sets[setIndex].weight
@@ -181,7 +184,7 @@ private class MastersBasicCyclePlan : Plan {
             secs: nil)               // this is used for timed exercises
     }
 
-    func restSecs() -> Int {
+    public func restSecs() -> Int {
         if sets[setIndex].warmup && !sets[setIndex+1].warmup {
             return setting.restSecs/2
         } else if !sets[setIndex].warmup {
@@ -191,7 +194,7 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
 
-    func completions() -> [Completion] {
+    public func completions() -> [Completion] {
         if setIndex+1 < sets.count {
             return [Completion(title: "", isDefault: true, callback: {() -> Void in self.setIndex += 1})]
         } else {
@@ -201,31 +204,33 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
 
-    func finished() -> Bool {
+    public func finished() -> Bool {
         return setIndex == sets.count
     }
 
-    func reset() {
+    public func reset() {
         setIndex = 0
     }
 
-    func description() -> String {
+    public func description() -> String {
         return "This is designed for lifters in their 40s and 50s. Typically it's used with three week cycles where the first week is sets of five, the second week sets of three, and the third week sets of one with the second week using 5% more weight and the third week 10% more weight. If all reps were completed for the sets of five then the weight is increased after the third week."
     }
     
+    public func settings() -> Settings {
+        return .variableWeight(setting)
+    }
+    
     // Internal items
-    static func settingKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
-        return MastersBasicCyclePlan.planKey(exercise, cycles) + "-setting"
+    static func settingKey(_ exercise: Exercise) -> String {
+        return MastersBasicCyclePlan.planKey(exercise) + "-setting"
     }
     
-    static func historyKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
-        return MastersBasicCyclePlan.planKey(exercise, cycles) + "-history"
+    static func historyKey(_ exercise: Exercise) -> String {
+        return MastersBasicCyclePlan.planKey(exercise) + "-history"
     }
     
-    private static func planKey(_ exercise: Exercise, _ cycles: [Execute]) -> String {
-        let cycleLabels = cycles.map {"\($0.workSets)x\($0.workReps)x\($0.percent)"}
-        let cycleStr = cycleLabels.joined(separator: "-")
-        return "\(exercise.name)-masters-basic-cycle-\(cycleStr)"
+    private static func planKey(_ exercise: Exercise) -> String {
+        return "\(exercise.name)-masters-basic-cycle"
     }
     
     private func doFinish(_ missed: Bool) {
@@ -272,7 +277,7 @@ private class MastersBasicCyclePlan : Plan {
         let result = Result(title: title, date: Date(), cycleIndex: cycleIndex, missed: missed, weight: sets.last!.weight.weight)
         history.append(result)
         
-        let key = MastersBasicCyclePlan.historyKey(exercise, cycles)
+        let key = MastersBasicCyclePlan.historyKey(exercise)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .secondsSince1970
         do {
@@ -284,7 +289,7 @@ private class MastersBasicCyclePlan : Plan {
     }
     
     private func saveSetting() {
-        let key = MastersBasicCyclePlan.settingKey(exercise, cycles)
+        let key = MastersBasicCyclePlan.settingKey(exercise)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .secondsSince1970
         do {
@@ -303,15 +308,16 @@ private class MastersBasicCyclePlan : Plan {
         }
     }
 
-    private let persist: Persistence
-    private let exercise: Exercise
     private let cycles: [Execute]
-    private let sets: [Set]
-    private let maxWeight: Double
     private let deloads: [Double] = [1.0, 1.0, 0.9, 0.85, 0.8];
 
-    private var setting: VariableWeightSetting
-    private var history: [Result]
-    private var setIndex: Int
+    private var persist: Persistence!
+    private var exercise: Exercise!
+    private var setting: VariableWeightSetting!
+    private var history: [Result]!
+    private var sets: [Set]!
+    private var maxWeight: Double = 0.0
+
+    private var setIndex: Int = 0
 }
 

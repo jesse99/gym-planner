@@ -2,7 +2,7 @@
 import Foundation
 import os.log
 
-private class VariableSetsPlan: Plan {
+public class VariableSetsPlan: Plan {
     struct Result: VariableWeightResult {
         let title: String   // "20 reps @ 135 lbs"
         let date: Date
@@ -13,18 +13,22 @@ private class VariableSetsPlan: Plan {
         let reps: [Int]
     }
     
-    init(_ exercise: Exercise, _ setting: FixedWeightSetting, _ history: [Result], _ persist: Persistence, requiredReps: Int, targetReps: Int) {
-        os_log("entering VariableSetsPlan for %@", type: .info, exercise.name)
-        
-        self.persist = persist
-        self.exercise = exercise
-        self.setting = setting
-        self.history = history
+    init(_ name: String, requiredReps: Int, targetReps: Int) {
+        self.name = name
         self.requiredReps = requiredReps
         self.targetReps = targetReps
     }
     
-    convenience init(_ exercise: Exercise, _ persist: Persistence, requiredReps: Int, targetReps: Int) {
+    // Plan methods
+    public let name: String
+    
+    public func startup(_ program: Program, _ exercise: Exercise, _ persist: Persistence) -> StartupResult {
+        os_log("entering VariableSetsPlan for %@", type: .info, exercise.name)
+        
+        self.exercise = exercise
+        self.persist = persist
+        self.reps = []
+
         var key = ""
         do {
             // setting
@@ -33,31 +37,31 @@ private class VariableSetsPlan: Plan {
             
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            let setting = try decoder.decode(FixedWeightSetting.self, from: data)
+            self.setting = try decoder.decode(FixedWeightSetting.self, from: data)
             
             // history
             key = VariableSetsPlan.historyKey(exercise)
             data = try persist.load(key)
-            let history = try decoder.decode([Result].self, from: data)
-            
-            self.init(exercise, setting, history, persist, requiredReps: requiredReps, targetReps: targetReps)
+            self.history = try decoder.decode([Result].self, from: data)
             
         } catch {
             os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
             
-            switch exercise.settings {
-            case .fixedWeight(let setting): self.init(exercise, setting, [], persist, requiredReps: requiredReps, targetReps: targetReps)
+            self.history = []
+            switch exercise.defaultSettings {
+            case .fixedWeight(let setting): self.setting = setting
             default: assert(false); abort()
             }
         }
+        
+        return .ok
     }
     
-    // Plan methods
-    func label() -> String {
+    public func label() -> String {
         return exercise.name
     }
     
-    func sublabel() -> String {
+    public func sublabel() -> String {
         if setting.weight > 0 {
             return "\(requiredReps) reps @ \(Weight.friendlyStr(setting.weight))"
         } else {
@@ -65,7 +69,7 @@ private class VariableSetsPlan: Plan {
         }
     }
     
-    func prevLabel() -> String {
+    public func prevLabel() -> String {
         if let result = history.last {
             let c = result.reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let r = result.reps.map {"\($0)"}
@@ -80,11 +84,11 @@ private class VariableSetsPlan: Plan {
         }
     }
     
-    func historyLabel() -> String {
+    public func historyLabel() -> String {
         return "Target is \(targetReps) reps"
     }
     
-    func current(n: Int) -> Activity {
+    public func current(n: Int) -> Activity {
         assert(!finished())
         
         let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
@@ -100,11 +104,11 @@ private class VariableSetsPlan: Plan {
             secs: nil)               // this is used for timed exercises
     }
     
-    func restSecs() -> Int {
+    public func restSecs() -> Int {
         return setting.restSecs
     }
     
-    func completions() -> [Completion] {
+    public func completions() -> [Completion] {
         let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
         let delta = requiredReps - completed
         
@@ -118,17 +122,21 @@ private class VariableSetsPlan: Plan {
         return options
     }
     
-    func finished() -> Bool {
+    public func finished() -> Bool {
         let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
         return completed >= requiredReps
     }
     
-    func reset() {
+    public func reset() {
         reps = []
     }
     
-    func description() -> String {
+    public func description() -> String {
         return "Used to perform an exercise for a number of reps using as many sets as needed. Often used with pullups and chinups."
+    }
+    
+    public func settings() -> Settings {
+        return .fixedWeight(setting)
     }
     
     // Internal items
@@ -181,13 +189,14 @@ private class VariableSetsPlan: Plan {
         }
     }
     
-    private let persist: Persistence
-    private let exercise: Exercise
     private let requiredReps: Int
     private let targetReps: Int
+
+    private var persist: Persistence!
+    private var exercise: Exercise!
+    private var setting: FixedWeightSetting!
+    private var history: [Result]!
     
-    private var setting: FixedWeightSetting
-    private var history: [Result]
     private var reps: [Int] = []
 }
 
