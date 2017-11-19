@@ -33,9 +33,9 @@ public class LinearPlan : Plan {
         var primary: Bool {get {return true}}
     }
     
-    init(_ name: String, firstWarmupPercent: Double, warmupReps: [Int], workSets: Int, workReps: Int) {
+    init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int) {
         self.name = name
-        self.firstWarmupPercent = firstWarmupPercent
+        self.firstWarmup = firstWarmup
         self.warmupReps = warmupReps
         self.workSets = workSets
         self.workReps = workReps
@@ -97,9 +97,9 @@ public class LinearPlan : Plan {
             s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: weight))
         }
         
-        let delta = warmupReps.count > 0 ? (0.9 - firstWarmupPercent)/Double(warmupReps.count - 1) : 0.0
+        let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
         for (i, reps) in warmupReps.enumerated() {
-            let percent = firstWarmupPercent + Double(i)*delta
+            let percent = firstWarmup + Double(i)*delta
             s.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: weight))
         }
         
@@ -253,7 +253,7 @@ public class LinearPlan : Plan {
         }
     }
     
-    private let firstWarmupPercent: Double
+    private let firstWarmup: Double
     private let warmupReps: [Int]
     private let workSets: Int;
     private let workReps: Int

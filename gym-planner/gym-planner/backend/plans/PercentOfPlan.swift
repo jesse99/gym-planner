@@ -36,10 +36,10 @@ public class PercentOfPlan : Plan {
         var weight: Double
     }
     
-    init(_ name: String, _ otherName: String, firstWarmupPercent: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
+    init(_ name: String, _ otherName: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
         self.name = name
         self.otherName = otherName
-        self.firstWarmupPercent = firstWarmupPercent
+        self.firstWarmup = firstWarmup
         self.warmupReps = warmupReps
         self.workSets = workSets
         self.workReps = workReps
@@ -102,9 +102,9 @@ public class PercentOfPlan : Plan {
                 s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
             }
             
-            let delta = warmupReps.count > 0 ? (0.9 - firstWarmupPercent)/Double(warmupReps.count - 1) : 0.0
+            let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
             for (i, reps) in warmupReps.enumerated() {
-                let percent = firstWarmupPercent + Double(i)*delta
+                let percent = firstWarmup + Double(i)*delta
                 s.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
             }
             
@@ -257,7 +257,7 @@ public class PercentOfPlan : Plan {
     }
     
     private let otherName: String
-    private let firstWarmupPercent: Double
+    private let firstWarmup: Double
     private let warmupReps: [Int]
     private let workSets: Int;
     private let workReps: Int

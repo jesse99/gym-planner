@@ -2,7 +2,7 @@
 import Foundation
 
 public class Workout {
-    init(_ name: String, _ exercises: [String], optional: [String]) {
+    init(_ name: String, _ exercises: [String], optional: [String] = []) {
         self.name = name
         self.exercises = exercises
         self.optional = optional
@@ -56,5 +56,18 @@ public class Program {
     public let tags: Set<Tags>
     public let description: String
     // TODO: may want a custom flag
+}
+
+/// Helper used when constructing programs.
+public func createBarBell(_ name: String, _ formalName: String, _ plan: String, restSecs: Double, warmupsWithBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = []) -> Exercise {
+    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets, warmupsWithBar: warmupsWithBar)
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restSecs*60.0))
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// Helper used when constructing programs.
+public func createFixed(_ name: String, _ formalName: String, _ plan: String, restSecs: Double) -> Exercise {
+    let setting = FixedWeightSetting(restSecs: Int(restSecs*60.0))
+    return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 

@@ -14,4 +14,17 @@ func defaultPlates() -> [(Int, Double)] {
     //    }
 }
 
+func defaultBumpers() -> [(Int, Double)]
+{
+//    switch units
+//    {
+//    case .imperial:
+        return [(2, 10.0), (2, 25), (4, 45)]
+        
+//    case .metric:
+//        let plates = [5.0, 10, 20]
+//        return plates.map {$0*Double.kgToLb}
+//    }
+}
+
 
