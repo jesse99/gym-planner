@@ -59,7 +59,7 @@ public class PercentOfPlan : Plan {
         var key = ""
         do {
             // setting
-            key = PercentOfPlan.settingKey(exercise, otherName)
+            key = PercentOfPlan.settingKey(exercise, name)
             var data = try persist.load(key)
             
             let decoder = JSONDecoder()
@@ -67,7 +67,7 @@ public class PercentOfPlan : Plan {
             self.setting = try decoder.decode(DerivedWeightSetting.self, from: data)
             
             // history
-            key = PercentOfPlan.historyKey(exercise, otherName)
+            key = PercentOfPlan.historyKey(exercise, name)
             data = try persist.load(key)
             self.history = try decoder.decode([Result].self, from: data)
             

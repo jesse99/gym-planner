@@ -8,3 +8,4 @@ public protocol Persistence {
     func save(_ key: String, _ data: Data) throws
 }
 
+

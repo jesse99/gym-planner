@@ -10,11 +10,11 @@ func HML() -> Program {
         createBarBell("Squat",          "Low bar Squat",  "531",          restSecs: 3.0, warmupsWithBar: 4),
         createBarBell("Bench Press",    "Bench Press",    "531",          restSecs: 3.0),
         createBarBell("Deadlift",       "Deadlift",       "Dead",         restSecs: 3.5, useBumpers: true),
-        createBarBell("Light Squat",    "Low bar Squat",  "Light Squat",  restSecs: 2.0, warmupsWithBar: 4),
+        createBarBell("Light Squat",    "Low bar Squat",  "Light Squat",  restSecs: 2.0, warmupsWithBar: 4, derived: true),
         createBarBell("Overhead Press", "Overhead Press", "53",           restSecs: 3.0, magnets: [1.25]),
         createFixed  ("Chinups",        "Chinup",         "Chins",        restSecs: 2.0),
-        createBarBell("Medium Squat",   "Low bar Squat",  "Medium Squat", restSecs: 3.0, warmupsWithBar: 4),
-        createBarBell("Medium Bench",   "Bench Press",    "Medium Bench", restSecs: 3.0)]
+        createBarBell("Medium Squat",   "Low bar Squat",  "Medium Squat", restSecs: 3.0, warmupsWithBar: 4, derived: true),
+        createBarBell("Medium Bench",   "Bench Press",    "Medium Bench", restSecs: 3.0, derived: true)]
 
     let plans: [Plan] = [
         MastersBasicCyclePlan("531",  [cycle(3, by: 5, at: 1.0), cycle(3, by: 3, at: 1.05), cycle(3, by: 1, at: 1.1)]),

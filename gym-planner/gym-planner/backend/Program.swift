@@ -59,10 +59,15 @@ public class Program {
 }
 
 /// Helper used when constructing programs.
-public func createBarBell(_ name: String, _ formalName: String, _ plan: String, restSecs: Double, warmupsWithBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = []) -> Exercise {
+public func createBarBell(_ name: String, _ formalName: String, _ plan: String, restSecs: Double, warmupsWithBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = [], derived: Bool = false) -> Exercise {
     let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets, warmupsWithBar: warmupsWithBar)
-    let setting = VariableWeightSetting(apparatus, restSecs: Int(restSecs*60.0))
-    return Exercise(name, formalName, plan, .variableWeight(setting))
+    if !derived {
+        let setting = VariableWeightSetting(apparatus, restSecs: Int(restSecs*60.0))
+        return Exercise(name, formalName, plan, .variableWeight(setting))
+    } else {
+        let setting = DerivedWeightSetting(apparatus, restSecs: Int(restSecs*60.0))
+        return Exercise(name, formalName, plan, .derivedWeight(setting))
+    }
 }
 
 /// Helper used when constructing programs.
