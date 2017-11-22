@@ -21,6 +21,8 @@
 		378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */; };
 		378FC14B1FBD3B6A00A3C66E /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC14A1FBD3B6A00A3C66E /* DateExtension.swift */; };
 		378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */; };
+		37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B308D91FC3234F00556E8F /* ExerciseController.swift */; };
+		37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B308DB1FC3BFFB00556E8F /* FontExtension.swift */; };
 		37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46B1FAE289100244ADD /* AppDelegate.swift */; };
 		37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46D1FAE289100244ADD /* WorkoutsTabController.swift */; };
 		37CED4701FAE289100244ADD /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46F1FAE289100244ADD /* SecondViewController.swift */; };
@@ -61,6 +63,8 @@
 		378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableSetsPlan.swift; sourceTree = "<group>"; };
 		378FC14A1FBD3B6A00A3C66E /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NRepMaxPlan.swift; sourceTree = "<group>"; };
+		37B308D91FC3234F00556E8F /* ExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseController.swift; sourceTree = "<group>"; };
+		37B308DB1FC3BFFB00556E8F /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		37CED4681FAE289100244ADD /* gym-planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gym-planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CED46B1FAE289100244ADD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		37CED46D1FAE289100244ADD /* WorkoutsTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutsTabController.swift; sourceTree = "<group>"; };
@@ -102,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				377C11F51FC276300063A324 /* LabelExtension.swift */,
+				37B308DB1FC3BFFB00556E8F /* FontExtension.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -138,6 +143,7 @@
 				37CED48D1FAE29CB00244ADD /* backend */,
 				37CED4741FAE289100244ADD /* Assets.xcassets */,
 				37CED46B1FAE289100244ADD /* AppDelegate.swift */,
+				37B308D91FC3234F00556E8F /* ExerciseController.swift */,
 				377C11F41FC2761A0063A324 /* extensions */,
 				377F055A1FC0E1000015D7EF /* Helpers.swift */,
 				37CED4791FAE289100244ADD /* Info.plist */,
@@ -311,6 +317,7 @@
 				37CED4701FAE289100244ADD /* SecondViewController.swift in Sources */,
 				37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */,
 				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
+				37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */,
 				376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */,
 				377F05501FC0D9CE0015D7EF /* Program.swift in Sources */,
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,
@@ -319,6 +326,7 @@
 				3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */,
 				376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */,
 				378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */,
+				37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */,
 				37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */,
 				377C11F61FC276300063A324 /* LabelExtension.swift in Sources */,
 				377F05591FC0DDA10015D7EF /* HML.swift in Sources */,

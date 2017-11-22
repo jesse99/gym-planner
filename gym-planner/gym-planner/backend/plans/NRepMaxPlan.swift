@@ -20,10 +20,10 @@ public class NRepMaxPlan : Plan {
         os_log("entering NRepMaxPlan for %@", type: .info, exercise.name)
 
         self.exercise = exercise
-        self.weight = 0.0
+        self.weight = Weight(0.0, setting.apparatus).find(.closest).weight
         self.setNum = 1
         self.done = false
-        
+
         return .ok
     }
     
@@ -43,20 +43,20 @@ public class NRepMaxPlan : Plan {
         return ""
     }
     
-    public func current(n: Int) -> Activity {
+    public func current() -> Activity {
         assert(!finished())
         
         let info = Weight(weight, setting.apparatus).find(.closest)
         return Activity(
             title: "Set \(setNum)",
-            subtitle: "",
+            subtitle: "Finding \(numReps) rep max",
             amount: "\(numReps) reps @ \(info.text)",
             details: info.plates,
             secs: nil)               // this is used for timed exercises
     }
     
-    public func restSecs() -> Int {
-        return 0                // no telling how hard the current set is for the user so if he wants rest he'll have to press the start timer button
+    public func restSecs() -> RestTime {
+        return RestTime(autoStart: false, secs: setting.restSecs)                // no telling how hard the current set is for the user so if he wants rest he'll have to press the start timer button
     }
     
     public func completions() -> [Completion] {
@@ -65,13 +65,19 @@ public class NRepMaxPlan : Plan {
         result.append(Completion(title: "Done", isDefault: false, callback: {self.done = true}))
         
         var prevWeight = weight
-        for _ in 0..<6 {
+        for _ in 0..<7 {
             let nextWeight = Weight(prevWeight, setting.apparatus).nextWeight()
-            result.append(Completion(title: "Add \(Weight.friendlyStr(nextWeight - weight))", isDefault: false, callback: {self.weight = nextWeight}))
-            prevWeight = nextWeight
+            if nextWeight > weight {    // at some point we'll run out of plates so the new weight won't be larger
+                result.append(Completion(title: "Add \(Weight.friendlyUnitsStr(nextWeight - weight))", isDefault: false, callback: {self.weight = nextWeight; self.setNum += 1}))
+                prevWeight = nextWeight
+            }
         }
         
         return result
+    }
+    
+    public func atStart() -> Bool {
+        return setNum == 1
     }
     
     public func finished() -> Bool {
@@ -79,7 +85,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public func reset() {
-        weight = 0.0
+        self.weight = Weight(0.0, setting.apparatus).find(.closest).weight
         setNum = 1
         done = false
     }
@@ -99,7 +105,7 @@ public class NRepMaxPlan : Plan {
     private var exercise: Exercise!
 
     private var weight: Double = 0.0
-    private var setNum: Int = 0
+    private var setNum: Int = 1
     private var done = false
 }
 

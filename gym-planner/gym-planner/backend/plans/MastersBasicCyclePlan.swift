@@ -81,12 +81,16 @@ public class MastersBasicCyclePlan : Plan {
             self.history = try decoder.decode([Result].self, from: data)
             
             if setting.weight == 0 {
-                return .noWeight
+                return .newPlan(NRepMaxPlan("Rep Max", workReps: sets.last?.numReps ?? 5, setting))
             }
 
         } catch {
             os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
-            return .noWeight
+            let cycle = cycles[0]
+            switch exercise.defaultSettings {
+            case .variableWeight(let setting): return .newPlan(NRepMaxPlan("Rep Max", workReps: cycle.workReps, setting))
+            default: return .error("\(exercise.name) isn't using variable weight")
+            }
         }
         assert(setting.weight > 0)  // otherwise use NRepMaxPlan
 
@@ -172,7 +176,7 @@ public class MastersBasicCyclePlan : Plan {
         return makeHistoryLabel(Array(weights))
     }
     
-    public func current(n: Int) -> Activity {
+    public func current() -> Activity {
         assert(!finished())
 
         let info = sets[setIndex].weight
@@ -184,13 +188,15 @@ public class MastersBasicCyclePlan : Plan {
             secs: nil)               // this is used for timed exercises
     }
 
-    public func restSecs() -> Int {
-        if sets[setIndex].warmup && !sets[setIndex+1].warmup {
-            return setting.restSecs/2
+    public func restSecs() -> RestTime {
+        if finished() {
+            return RestTime(autoStart: true, secs: setting.restSecs)   // TODO: make this an option?
+        } else if sets[setIndex].warmup && !sets[setIndex+1].warmup {
+            return RestTime(autoStart: true, secs: setting.restSecs/2)
         } else if !sets[setIndex].warmup {
-            return setting.restSecs
+            return RestTime(autoStart: true, secs: setting.restSecs)
         } else {
-            return 0
+            return RestTime(autoStart: false, secs: setting.restSecs)
         }
     }
 
@@ -204,6 +210,10 @@ public class MastersBasicCyclePlan : Plan {
         }
     }
 
+    public func atStart() -> Bool {
+        return setIndex == 0
+    }
+    
     public func finished() -> Bool {
         return setIndex == sets.count
     }

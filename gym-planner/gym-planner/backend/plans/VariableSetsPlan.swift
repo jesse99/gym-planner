@@ -88,7 +88,7 @@ public class VariableSetsPlan: Plan {
         return "Target is \(targetReps) reps"
     }
     
-    public func current(n: Int) -> Activity {
+    public func current() -> Activity {
         assert(!finished())
         
         let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
@@ -104,8 +104,8 @@ public class VariableSetsPlan: Plan {
             secs: nil)               // this is used for timed exercises
     }
     
-    public func restSecs() -> Int {
-        return setting.restSecs
+    public func restSecs() -> RestTime {
+        return RestTime(autoStart: !finished(), secs: setting.restSecs)
     }
     
     public func completions() -> [Completion] {
@@ -120,6 +120,10 @@ public class VariableSetsPlan: Plan {
         }
         
         return options
+    }
+    
+    public func atStart() -> Bool {
+        return reps.isEmpty
     }
     
     public func finished() -> Bool {

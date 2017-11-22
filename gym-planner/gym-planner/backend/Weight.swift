@@ -1,5 +1,6 @@
 /// Types used to manage weights.
 import Foundation
+import os.log
 
 protocol WeightGenerator
 {
@@ -89,9 +90,13 @@ internal struct Weight: CustomStringConvertible {
         return result
     }
     
-    static func friendlyUnitsStr(_ weight: Double) -> String
+    static func friendlyUnitsStr(_ weight: Double, plural: Bool = true) -> String
     {
-        return Weight.friendlyStr(weight) + " lbs"  // TODO: also kg
+        if plural {
+            return Weight.friendlyStr(weight) + " lbs"  // TODO: also kg
+        } else {
+            return Weight.friendlyStr(weight) + " lb"
+        }
     }
     
     // This is for unit testing
@@ -133,9 +138,11 @@ internal struct Weight: CustomStringConvertible {
     }
     
     private func findRange() -> (Double, String, Double, String, Double, String) {
+        //os_log("---- weight = %.3f ---------------------------------------------------", type: .info, weight)
         let g = createGenerator()
         
         let first = g.first()
+//        os_log("candidate = %.3f (%@)", type: .info, first.0, first.1)
         var lowerWeight = first.0
         var lowerPlates = first.1
         var closestWeight = first.0
@@ -145,17 +152,33 @@ internal struct Weight: CustomStringConvertible {
 
         while true {
             if let candidate = g.next() {
+//                let log = abs(candidate.0 - weight) < 10.0
+//                if log {
+//                    os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
+//                }
                 if candidate.0 < weight && candidate.0 < lowerWeight {   // always prefer the first candidate (generators return the simplest combinations first)
+//                    if !log {
+//                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
+//                    }
+//                    os_log("   new lower", type: .info)
                     lowerWeight = candidate.0
                     lowerPlates = candidate.1
                 }
 
                 if abs(candidate.0 - weight) < abs(closestWeight - weight) {
+//                    if !log {
+//                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
+//                    }
+//                    os_log("   new closer", type: .info)
                     closestWeight = candidate.0
                     closestPlates = candidate.1
                 }
 
-                if candidate.0 > weight && abs(candidate.0 - weight) < abs(upperWeight - weight) {
+                if candidate.0 > weight && (upperWeight - weight < 0.01 || abs(candidate.0 - weight) < abs(upperWeight - weight)) {
+//                    if !log {
+//                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
+//                    }
+//                    os_log("   new upper", type: .info)
                     upperWeight = candidate.0
                     upperPlates = candidate.1
                 }
@@ -186,6 +209,10 @@ internal struct Weight: CustomStringConvertible {
         init(_ barWeight: Double, _ collarWeight: Double, _ plates: [(Int, Double)], _ bumpers: [(Int, Double)], _ magnets: [Double], pairedPlates: Bool) {            
             var p: [(Double, String)] = []
             
+            if barWeight > 0.0 {
+                self.entries.append((barWeight, ""))
+            }
+
             // For an apparatus that takes two plates (like a barbell) we want to return info about one end
             // of the bar so we need to divide count by two so that we don't tell the user to add more plates
             // than he wants to use.
@@ -210,10 +237,12 @@ internal struct Weight: CustomStringConvertible {
             self.plates = p
             self.fixedWeight = barWeight + Double(scaling)*collarWeight
             self.hasBumper = !bumpers.isEmpty
+            self.pairedPlates = pairedPlates
             
             if !p.isEmpty {
                 add1()
-            } else {
+            }
+            if entries.isEmpty {
                 self.entries.append((0.0, ""))
             }
         }
@@ -243,23 +272,25 @@ internal struct Weight: CustomStringConvertible {
         
         private func add1() {
             // This can return the same plate more than once but that's OK.
+            let scaling = pairedPlates ? 2.0 : 1.0
             for w in plates {
                 if !hasBumper || w.1 == "bumper" {  // If the user says to use bumpers then we'll always use them (so stuff like deadlifts isn't super annoying at lighter weights)
                     if w.1 != "magnet" {  // don't allow just a magnet
-                        entries.append((fixedWeight + w.0, PlatesGenerator.platesStr([w])))
+                        entries.append((fixedWeight + scaling*w.0, PlatesGenerator.platesStr([w])))
                     }
                 }
             }
         }
         
         private func add2() {
+            let scaling = pairedPlates ? 2.0 : 1.0
             if plates.count >= 2 {
                 for i1 in 0..<plates.count-1 {
                     for i2 in i1+1..<plates.count {
                         if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" {
                             if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" {
                                 let w = plates[i1].0 + plates[i2].0
-                                entries.append((fixedWeight + w, PlatesGenerator.platesStr([plates[i1], plates[i2]])))
+                                entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2]])))
                             }
                         }
                     }
@@ -268,6 +299,7 @@ internal struct Weight: CustomStringConvertible {
         }
 
         private func add3() {
+            let scaling = pairedPlates ? 2.0 : 1.0
             if plates.count >= 3 {
                 for i1 in 0..<plates.count-2 {
                     for i2 in i1+1..<plates.count-1 {
@@ -275,7 +307,7 @@ internal struct Weight: CustomStringConvertible {
                             if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" || plates[i3].1 == "bumper" {
                                 if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" || plates[i3].1 != "magnet" {
                                     let w = plates[i1].0 + plates[i2].0 + plates[i3].0
-                                    entries.append((fixedWeight + w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3]])))
+                                    entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3]])))
                                 }
                             }
                         }
@@ -286,6 +318,7 @@ internal struct Weight: CustomStringConvertible {
 
         private func add4() {
             if plates.count >= 4 {
+                let scaling = pairedPlates ? 2.0 : 1.0
                 for i1 in 0..<plates.count-3 {
                     for i2 in i1+1..<plates.count-2 {
                         for i3 in i2+1..<plates.count-1 {
@@ -293,7 +326,7 @@ internal struct Weight: CustomStringConvertible {
                                 if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" || plates[i3].1 == "bumper" || plates[i4].1 == "bumper" {
                                     if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" || plates[i3].1 != "magnet" || plates[i4].1 != "magnet" {
                                         let w = plates[i1].0 + plates[i2].0 + plates[i3].0 + plates[i4].0
-                                        entries.append((fixedWeight + w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4]])))
+                                        entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4]])))
                                     }
                                 }
                             }
@@ -305,6 +338,7 @@ internal struct Weight: CustomStringConvertible {
         
         private func add5() {
             if plates.count >= 5 {
+                let scaling = pairedPlates ? 2.0 : 1.0
                 for i1 in 0..<plates.count-4 {
                     for i2 in i1+1..<plates.count-3 {
                         for i3 in i2+1..<plates.count-2 {
@@ -313,7 +347,7 @@ internal struct Weight: CustomStringConvertible {
                                     if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" || plates[i3].1 == "bumper" || plates[i4].1 == "bumper" || plates[i5].1 == "bumper" {
                                         if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" || plates[i3].1 != "magnet" || plates[i4].1 != "magnet" || plates[i5].1 != "magnet" {
                                             let w = plates[i1].0 + plates[i2].0 + plates[i3].0 + plates[i4].0 + plates[i5].0
-                                            entries.append((fixedWeight + w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4], plates[i5]])))
+                                            entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4], plates[i5]])))
                                         }
                                     }
                                 }
@@ -326,6 +360,7 @@ internal struct Weight: CustomStringConvertible {
 
         private func add6() {
             if plates.count >= 6 {
+                let scaling = pairedPlates ? 2.0 : 1.0
                 for i1 in 0..<plates.count-5 {
                     for i2 in i1+1..<plates.count-4 {
                         for i3 in i2+1..<plates.count-3 {
@@ -335,7 +370,7 @@ internal struct Weight: CustomStringConvertible {
                                         if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" || plates[i3].1 == "bumper" || plates[i4].1 == "bumper" || plates[i5].1 == "bumper" || plates[i6].1 == "bumper" {
                                             if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" || plates[i3].1 != "magnet" || plates[i4].1 != "magnet" || plates[i5].1 != "magnet" || plates[i6].1 != "magnet" {
                                                 let w = plates[i1].0 + plates[i2].0 + plates[i3].0 + plates[i4].0 + plates[i5].0 + plates[i6].0
-                                                entries.append((fixedWeight + w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4], plates[i5], plates[i6]])))
+                                                entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4], plates[i5], plates[i6]])))
                                             }
                                         }
                                     }
@@ -348,25 +383,41 @@ internal struct Weight: CustomStringConvertible {
         }
         
         private static func platesStr(_ plates: [(Double, String)]) -> String {
-            let s = plates.map {(w) -> String in Weight.friendlyStr(w.0)}
-
             // "45 lb plate"
             if plates.count == 1 {
-                return "\(s[0]) lb \(plates[0].1)"
-                
-            // "2 10s"
-            } else if s.all({(t) -> Bool in t == s[0]}) {
-                return "\(plates.count) \(s[0])s"
+                return "\(Weight.friendlyUnitsStr(plates[0].0, plural: false)) \(plates[0].1)"
 
-            // "10 + 5 + 2.5"
             } else {
-                return s.reversed().joined(separator: " + ")
+                var s = plates.map {(w) -> String in Weight.friendlyStr(w.0)}
+                
+                // "2 10s"
+                // "10 + 5 + 2.5"
+                var text = ""
+                while let plate = s.popLast() {
+                    var count = 1
+                    while let plate2 = s.last, plate2 == plate {
+                        count += 1
+                        _ = s.popLast()
+                    }
+                    
+                    if !text.isEmpty {
+                        text += " + "
+                    }
+                    if count == 1 {
+                        text += plate
+                    } else {
+                        text += "\(count) \(plate)s"
+                    }
+                }
+                
+                return text
             }
         }
         
         private let plates: [(Double, String)]  // (10.0, "plate") or (45.0, "bummper") or (1.25, "magnet")
         private let fixedWeight: Double
         private let hasBumper: Bool
+        private let pairedPlates: Bool
         
         private var entries: [(Double, String)] = []
         private var index = 0

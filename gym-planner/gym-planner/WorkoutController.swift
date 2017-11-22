@@ -122,7 +122,7 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
                     cell.detailTextLabel!.text = plan.sublabel()
                     cell.detailTextLabel?.setColor(.black)
 
-                case .noWeight:
+                case .newPlan(_):
                     cell.textLabel!.text = plan.label()
                     cell.detailTextLabel!.text = "Not completed"
                     cell.detailTextLabel?.setColor(.black)
@@ -261,12 +261,50 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
 //        }
 //    }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt path: IndexPath)
-    {
-//        let exerciseName = filtered[(path as NSIndexPath).item]
-//        WorkoutController.presentWorkout(self, workout, exerciseName, breadcrumbLabel.text!, "unwindToWorkoutID")
+    func tableView(_ tableView: UITableView, didSelectRowAt path: IndexPath) {
+        var err = ""
+        
+        let index = (path as NSIndexPath).item
+        //        let name = filtered[index]
+        let name = workout.exercises[index]
+        if let exercise = program.findExercise(name) {
+            if let plan = program.findPlan(exercise.plan) {
+                let persist = DummyPersistence()
+                switch plan.startup(program, exercise, persist) {
+                case .ok:
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
+                    view.initialize(program, workout, exercise, plan, breadcrumbLabel.text!, "unwindToWorkoutID")
+                    self.present(view, animated: true, completion: nil)
+                    
+                case .newPlan(let p):
+                    switch p.startup(program, exercise, persist) {
+                    case .ok:
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
+                        view.initialize(program, workout, exercise, p, breadcrumbLabel.text!, "unwindToWorkoutID")
+                        self.present(view, animated: true, completion: nil)
+                    case .newPlan(let q):
+                        err = "Plan \(plan.name) started plan \(p.name) which started \(q.name)"
+                    case .error(let mesg):
+                        err = mesg
+                    }
+                    
+                case .error(let mesg):
+                    err = mesg
+                }
+                
+            }
+        }
+        
+        if !err.isEmpty {
+            let alert = UIAlertController.init(title: "Can't start \(name).", message: err, preferredStyle: .alert)
+            let action = UIAlertAction.init(title: "OK", style: .default, handler: nil)
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
-
+    
 //    private func isSkipped(_ workout: Workout, _ exerciseName: String) -> Bool
 //    {
 //        if let exercise = presults.program.exercises[exerciseName] as? WeightedExercise

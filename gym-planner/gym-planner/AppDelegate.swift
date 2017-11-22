@@ -1,16 +1,14 @@
-//
-//  AppDelegate.swift
-//  gym-planner
-//
-//  Created by Jesse Jones on 11/4/17.
-//  Copyright © 2017 MushinApps. All rights reserved.
-//
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            self.notificationsAreEnabled = granted
+        }
+        
         return true
     }
 
@@ -36,5 +34,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func scheduleTimerNotification(_ fireDate: Date)
+    {
+        let content = UNMutableNotificationContent()
+        content.title = "Finished resting."
+        content.body = ""
+        content.sound = UNNotificationSound.default()
+        
+        let time = fireDate.timeIntervalSinceNow
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: time, repeats: false)
+        let request = UNNotificationRequest(identifier: "FinishedResting", content: content, trigger: trigger)
+        let center = UNUserNotificationCenter.current()
+        center.add(request, withCompletionHandler: nil)
+    }
+    
     var window: UIWindow?
+    var notificationsAreEnabled = false
 }

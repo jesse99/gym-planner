@@ -146,7 +146,7 @@ public class PercentOfPlan : Plan {
         return makeHistoryLabel(Array(weights))
     }
     
-    public func current(n: Int) -> Activity {
+    public func current() -> Activity {
         assert(!finished())
         
         let info = sets[setIndex].weight
@@ -158,8 +158,8 @@ public class PercentOfPlan : Plan {
             secs: nil)               // this is used for timed exercises
     }
     
-    public func restSecs() -> Int {
-        return sets[setIndex].warmup ? 0 : setting.restSecs
+    public func restSecs() -> RestTime {
+        return RestTime(autoStart: !finished() && !sets[setIndex].warmup, secs: setting.restSecs)
     }
     
     public func completions() -> [Completion] {
@@ -169,6 +169,10 @@ public class PercentOfPlan : Plan {
             return [
                 Completion(title: "Done", isDefault: false, callback: {() -> Void in self.doFinish()})]
         }
+    }
+    
+    public func atStart() -> Bool {
+        return setIndex == 0
     }
     
     public func finished() -> Bool {

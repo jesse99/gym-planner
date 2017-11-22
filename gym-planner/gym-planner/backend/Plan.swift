@@ -34,13 +34,21 @@ public struct Activity {
 }
 
 public enum StartupResult {
-    /// Typically NRepsMaxPlan should be used when this happens.
-    case noWeight
+    /// Plan started up OK.
+    case ok
+    
+    /// Startup the new plan instead of the original plan. Typically the new plan will be
+    /// NRepMaxPlan.
+    case newPlan(Plan)
     
     /// Arbitrary error, e.g. need to perform another exercise first.
     case error(String)
+}
+
+public struct RestTime {
+    public let autoStart: Bool
     
-    case ok
+    public let secs: Int
 }
 
 /// Used to tell the user how to perform sets of some activity, e.g. warmup and work sets for a barbell exercise.
@@ -64,14 +72,17 @@ public protocol Plan {
     
     /// Returns a struct outlining what the user should currently be doing.
     /// Note that finished must be false.
-    func current(n: Int) -> Activity
+    func current() -> Activity
     
     /// How long for the user to rest after completing whatever current told him to do.
-    func restSecs() -> Int
+    func restSecs() -> RestTime
     
     /// If there is only one completion then just call the callback. Otherwise prompt the
     /// user and then call the callback for whichever completion the user chose.
     func completions() -> [Completion]
+    
+    /// Returns true if the user hasn't done anything yet.
+    func atStart() -> Bool
     
     /// Returns true if there are no more activities to perform.
     func finished() -> Bool

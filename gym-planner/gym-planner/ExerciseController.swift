@@ -1,0 +1,378 @@
+import os.log
+import AVFoundation // for vibrate
+import UIKit
+import UserNotifications
+
+class ExerciseController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        breadcrumbLabel.text = breadcrumb
+        
+//        detailsLabel.backgroundColor = targetColor(.background)
+//        previousLabel.backgroundColor = detailsLabel.backgroundColor
+//        historyLabel.backgroundColor = detailsLabel.backgroundColor
+//        view.backgroundColor = detailsLabel.backgroundColor
+        
+//        setting = settings[exerciseName]! as! WeightedSetting
+        
+//        restorePosition()
+        resetPressed(self)
+    }
+    
+    func initialize(_ program: Program, _ workout: Workout, _ exercise: Exercise, _ plan: Plan, _ breadcrumb: String, _ unwindTo: String) {
+        self.program = program
+        self.workout = workout
+        self.exercise = exercise
+        self.plan = plan            // note that this has been started already
+        self.unwindTo = unwindTo
+        self.breadcrumb = "\(breadcrumb) • \(exercise.name)"
+        
+        let notify = NotificationCenter.default
+        notify.addObserver(self, selector: #selector(ExerciseController.leavingForeground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+    }
+    
+    @objc func leavingForeground() {
+        //savePosition()
+    }
+    
+    private func updateUI() {
+        if !plan.finished() {
+            let current = plan.current()
+            titleLabel.text = current.title
+            subtitleLabel.text = current.subtitle
+            amountLabel.text = current.amount
+            detailsLabel.text = current.details
+
+            nextButton.setTitle("Next", for: .normal)
+
+        } else {
+            //titleLabel.text = "All Done"
+            nextButton.setTitle("All Done", for: .normal)
+        }
+        
+        previousLabel.text = plan.prevLabel()
+        historyLabel.text = plan.historyLabel()
+
+        resetButton.isEnabled = !plan.atStart()
+        startTimerButton.isEnabled = plan.restSecs().secs > 0
+
+        nextButton.titleLabel?.font = UIFont.systemFont(ofSize: 32)
+        startTimerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        
+        let font = UIFont.preferredFont(forTextStyle: .headline)
+        titleLabel.font = font.makeBold()
+    }
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        
+        updateUI()
+        notesButton.isEnabled = exercise.formalName != ""
+        secsLabel.isHidden = timer == nil
+
+        // Not sure why this didn't take in the scene editor. Did see a comment saying setting
+        // the text of a button will reset the font but we're not doing that.
+        nextButton.titleLabel?.font = UIFont.systemFont(ofSize: 32)
+        startTimerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        
+//        var shown = false
+//        if !exercise.hasBaseExercise()
+//        {
+//            if setting.getMaxWeight(exercise) <= 0.0
+//            {
+//                shown = showTooltip(superview: view, forItem: optionsButton, "You can skip this by typing in the weight you want to use. You can also adjust how quickly weights jump up each time by toggling the available weights.", .bottom, id: "short_cut_max_lifts")
+//            }
+//        }
+//
+//        if !shown
+//        {
+//            shown = showTooltip(superview: view, forItem: exitButton, "The Exit button will suspend the current exercise so that you can resume it later.", .bottom, id: "exit_button")
+//        }
+//
+//        if !shown
+//        {
+//            shown = showTooltip(superview: view, forItem: resetButton, "The Reset button will restart the current exercise from the beginning.", .bottom, id: "reset_button")
+//        }
+//
+//        if !shown
+//        {
+//            _ = showTooltip(superview: view, forView: nextButton, "Pressing the background starts and stops the timer (but doesn't start the exercise).", .top, id: "table_presses")
+//        }
+    }
+    
+    @IBAction func unwindToWeightedWorkout(_ segue: UIStoryboardSegue)
+    {
+        //restorePosition()
+        updateUI()
+    }
+    
+    @IBAction func nextPressed(_ sender: Any) {
+        //dismissTooltip()
+        stopTimer()
+        
+        if plan.finished() {
+            self.performSegue(withIdentifier: unwindTo, sender: self)
+        } else {
+            let results = plan.completions()
+            if results.count == 1 {
+                results[0].callback()
+                handleNext("default")
+            } else {
+                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+                
+                for result in results {
+                    let action = UIAlertAction(title: result.title, style: .default) {_ in result.callback(); self.handleNext(result.title)}
+                    alert.addAction(action)
+                    if result.isDefault {
+                        alert.preferredAction = action
+                    }
+                }
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    private func handleNext(_ action: String) {
+        if plan.finished() {
+            updateUI()
+            maybeStartTimer()
+        } else {
+            os_log("%@: %@/%@", type: .info, action, plan.current().amount, plan.current().details)
+            fadeOut {self.updateUI(); self.maybeStartTimer()}
+        }
+    }
+    
+    private func maybeStartTimer() {
+        let rest = plan.restSecs()
+        if rest.autoStart && rest.secs > 0 {
+            startTimer(force: false)    // TODO: do we really need a force argument?
+            startedTimer = true
+        }
+    }
+    
+    @IBAction func startTimerPressed(_ sender: Any) {
+        if timer != nil {
+            stopTimer()
+        } else {
+            startTime = Date()
+            startTimer(force: true)
+        }
+    }
+    
+    @IBAction func resetPressed(_ sender: Any) {
+        //dismissTooltip()
+        
+        plan.reset()
+        self.startedTimer = false
+        stopTimer()
+        updateUI()
+    }
+    
+    @IBAction func notesPressed(_ sender: Any) {
+//        savePosition()
+//        dismissTooltip()
+//
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let view = storyboard.instantiateViewController(withIdentifier: "ShowNoteControllerID") as! ShowNoteController
+//        view.initialize("unwindToWeightedWorkoutID", exercise.formalName, breadcrumbLabel.text!)
+//        present(view, animated: true, completion: nil)
+    }
+    
+    @IBAction func optionsPressed(_ sender: Any) {
+//        savePosition()
+//        dismissTooltip()
+//
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let view = storyboard.instantiateViewController(withIdentifier: "WeightedSettingsID") as! WeightedSettingController
+//        view.initialize(workout, exercise, exercise, setting, maxPercent, cycleIndex, breadcrumbLabel.text!)
+//        present(view, animated: true, completion: nil)
+    }
+    
+//    private func savePosition()
+//    {
+//        // We only save our state if the user actually started the lift (this way
+//        // RandomExercise can tell which lift the user is on).
+//        if let lifts = lifts
+//        {
+//            if !lifts.atStart()
+//            {
+//                var state: [String: NSObject] = [
+//                    "startTime": startTime as NSObject,
+//                    "timerRunning": NSNumber(value: timer != nil),
+//                    "startedTimer": NSNumber(value: startedTimer as Bool),
+//                    "trailingTimer": NSNumber(value: trailingTimer as Bool)]
+//                lifts.saveState(&state)
+//
+//                let app = UIApplication.shared.delegate as! AppDelegate
+//                app.saveLift(workout.name, exercise, state)
+//            }
+//        }
+//    }
+//
+//    private func restorePosition()
+//    {
+//        if let lifts = lifts
+//        {
+//            let app = UIApplication.shared.delegate as! AppDelegate
+//            if let state = app.getLift(workout.name, exercise)
+//            {
+//                startTime = state["startTime"] as! Date
+//                startedTimer = (state["startedTimer"] as! NSNumber).boolValue
+//                trailingTimer = (state["trailingTimer"] as! NSNumber).boolValue
+//                lifts.restoreState(state)
+//
+//                if startedTimer && setting.restSecs(maxPercent, cycleIndex) > 0
+//                {
+//                    if (state["timerRunning"] as! NSNumber).boolValue
+//                    {
+//                        startTimer(force: true)
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
+    private func startTimer(force: Bool) {
+        let restSecs = plan.restSecs().secs
+        if timer == nil && (restSecs > 0 || force) {
+            let secs = Double(restSecs) - Date().timeIntervalSince(startTime)
+            if !force || secs <= 0.0 || secs >= Double(restSecs) {
+                startTime = Date()
+            }
+            
+            secsLabel.text = ""
+            //secsLabel.backgroundColor = grayColor(211, 0.7)
+            secsLabel.isHidden = false
+            timer = Timer.scheduledTimer(timeInterval: 0.8, target: self, selector: #selector(ExerciseController.timerFired(_:)), userInfo: nil, repeats: true)
+            
+            let app = UIApplication.shared.delegate as! AppDelegate
+            if app.notificationsAreEnabled {
+                app.scheduleTimerNotification(Date(timeInterval: Double(restSecs), since: startTime))
+            }
+            
+            nextButton.isHidden = true
+            UIApplication.shared.isIdleTimerDisabled = true
+        }
+        
+        startTimerButton.setTitle("Stop Timer", for: UIControlState())
+        startTimerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+    }
+    
+    private func stopTimer() {
+        if let t = timer {
+            secsLabel.isHidden = true
+            t.invalidate()
+            timer = nil
+            nextButton.isHidden = false
+            
+            let center = UNUserNotificationCenter.current()
+            center.removeAllPendingNotificationRequests()
+            UIApplication.shared.isIdleTimerDisabled = false
+        }
+        
+        startTimerButton.setTitle("Start Timer", for: UIControlState())
+        startTimerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+    }
+    
+    // Note that this can't be private (or the selector doesn't work).
+    @objc func timerFired(_ sender: AnyObject) {
+        if UIApplication.shared.applicationState == .active {
+            let secs = Double(plan.restSecs().secs) - Date().timeIntervalSince(startTime)
+            if updateTimerLabel(secsLabel, secs) {
+                // We don't want to run the timer too long since it chews up the battery.
+                stopTimer()
+            }
+        }
+    }
+    
+    // Returns true if the timer has run so long that it should be forcibly stopped.
+    func updateTimerLabel(_ label: UILabel, _ secs: Double) -> Bool {
+        if secs >= 0.0 {
+            label.text = secsToShortDurationName(secs)
+            label.textColor = UIColor.black
+            return false
+        } else {
+            if secs < -2 {
+                label.text = "+" + secsToShortDurationName(-secs)
+            } else {
+                label.text = "Done!"
+            }
+            let color = newColor(0, 100, 0) // DarkGreen
+            if label.textColor != color {
+                AudioServicesPlayAlertSound(UInt32(kSystemSoundID_Vibrate))
+                label.textColor = color
+            }
+            
+            return -secs > 2*60
+        }
+    }
+    
+    private var currentAnimator: NSObject? = nil
+    
+    func animationDuration() -> Double {
+        var duration = 1.0
+        if UIDevice.current.name == "Jesse’s MacBook Pro" {
+            duration /= 5
+        }
+        return duration
+    }
+    
+    private func fadeOut(_ callback: @escaping () -> Void) {
+        if #available(iOS 10.0, *) {
+            let timing = UICubicTimingParameters(animationCurve: .easeIn)
+            let animator = UIViewPropertyAnimator(duration: animationDuration(), timingParameters: timing)
+            animator.addAnimations {self.nextButton.alpha = 0.0; self.titleLabel.alpha = 0.0; self.subtitleLabel.alpha = 0.0; self.amountLabel.alpha = 0.0; self.detailsLabel.alpha = 0.0}
+            animator.addCompletion {_ in callback(); self.fadeIn()}
+            animator.startAnimation()
+            
+            currentAnimator = animator  // prevent GC
+        } else {
+            callback()
+        }
+    }
+    
+    private func fadeIn() {
+        if #available(iOS 10.0, *) {
+            let timing = UICubicTimingParameters(animationCurve: .easeOut)
+            let animator = UIViewPropertyAnimator(duration: animationDuration(), timingParameters: timing)
+            animator.addAnimations {self.nextButton.alpha = 1.0; self.titleLabel.alpha = 1.0; self.subtitleLabel.alpha = 1.0; self.amountLabel.alpha = 1.0; self.detailsLabel.alpha = 1.0}
+            animator.startAnimation()
+            
+            currentAnimator = animator  // prevent GC
+        }
+    }
+    
+    @IBOutlet private var breadcrumbLabel: UILabel!
+    @IBOutlet private var titleLabel: UILabel!
+    @IBOutlet private var subtitleLabel: UILabel!
+    @IBOutlet private var amountLabel: UILabel!
+    @IBOutlet private var detailsLabel: UILabel!
+    @IBOutlet private var secsLabel: UILabel!
+    @IBOutlet private var previousLabel: UILabel!
+    @IBOutlet private var historyLabel: UILabel!
+    @IBOutlet private var nextButton: UIButton!
+    @IBOutlet private var startTimerButton: UIButton!
+    @IBOutlet private var resetButton: UIBarButtonItem!
+    @IBOutlet private var notesButton: UIBarButtonItem!
+    
+    private var timer: Timer? = nil
+    private var startTime = Date()
+
+    private var program: Program!
+    private var workout: Workout!
+    private var exercise: Exercise!
+    private var plan: Plan!
+    private var unwindTo: String!
+    
+    private var startedTimer = false
+    private var breadcrumb = ""
+}
+
