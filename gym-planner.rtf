@@ -1,9 +1,11 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;}
-{\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red170\green13\blue145;\red0\green0\blue0;
-\red46\green13\blue110;\red196\green26\blue22;\red92\green38\blue153;}
-{\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;
-\csgenericrgb\c18100\c5200\c43100;\csgenericrgb\c77000\c10200\c8600;\csgenericrgb\c35900\c14900\c60100;}
+{\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red0\green0\blue0;\red170\green13\blue145;
+\red46\green13\blue110;\red196\green26\blue22;\red92\green38\blue153;\red63\green110\blue116;\red38\green71\blue75;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c0\c0\c0;\csgenericrgb\c66500\c5200\c56900;
+\csgenericrgb\c18100\c5200\c43100;\csgenericrgb\c77000\c10200\c8600;\csgenericrgb\c35900\c14900\c60100;\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c14900\c27800\c29400;
+}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/126365/ios-frameworks-tutorial"}}{\fldrslt 
 \f0\fs48 \cf2 https://www.raywenderlich.com/126365/ios-frameworks-tutorial}}
@@ -18,6 +20,10 @@
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/"}}{\fldrslt \cf2 https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/}}\
 \
+view restoration\
+	{\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/117471/state-restoration-tutorial"}}{\fldrslt https://www.raywenderlich.com/117471/state-restoration-tutorial}}\
+	testing: {\field{\*\fldinst{HYPERLINK "https://stackoverflow.com/questions/19424670/state-restoration-in-ios"}}{\fldrslt https://stackoverflow.com/questions/19424670/state-restoration-in-ios}}\
+	\
 carthage\
 	install with homebrew\
 	pretty simple\
@@ -66,51 +72,76 @@ ohp		5.7\
 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\f1\fs36 \cf3 import\cf4  os.log
+\f1\fs28 \cf3 \CocoaLigature0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\f0\fs48 \cf2 \CocoaLigature1 \
+\
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf4 import\cf3  os.log
 \f0\fs24 \cf0 \
 
-\f1\fs36 \cf4         \cf5 os_log\cf4 (\cf6 "creating weight with %@"\cf4 , type: .\cf7 info\cf4 , obj)
+\f1\fs36 \cf3         \cf5 os_log\cf3 (\cf6 "creating weight with %@"\cf3 , type: .\cf7 info\cf3 , obj)
 \f0\fs24 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
 \fs48 \cf2 			also .error, .fault, .debug\
 			\
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\b \
-make sure description talks about how each day feels\
-when finished NRepsMax should update titles and such
-\b0 \
-\
-current\
-	
-\b title
-\b0 \
-	
-\b subtitle
-\b0 \
-	
-\b amount
-\b0 \
-	
-\b details/plates
-\b0 \
-\
-Next Button	\
-	secs\
-Start Timer\
-\
-prev label\
-history label	\
-\
-Exit Reset       Notes Options		\
-			
-\i \
+\f1\fs36 \cf3     \cf4 private\cf3  \cf4 func\cf3  encode() -> \cf8 Either\cf3 <\cf7 String\cf3 , \cf7 Data\cf3 > \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3         \cf4 let\cf3  encoder = \cf7 JSONEncoder\cf3 ()
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3         encoder.\cf7 dateEncodingStrategy\cf3  = .\cf5 secondsSince1970
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3         \cf4 do\cf3  \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3             \cf4 let\cf3  data = \cf4 try\cf3  encoder.\cf5 encode\cf3 (\cf4 self\cf3 )
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3             \cf4 return\cf3  .\cf9 right\cf3 (data)
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3         \} \cf4 catch\cf3  \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3             \cf4 return\cf3  .\cf9 left\cf3 (error.\cf7 localizedDescription\cf3 )
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3         \}
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf3     \}\
+    \
+exercise could have setting and its own plan\
+    
+\f0\fs24 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\b\fs48 \cf2 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
-\i0 \cf2 \
-* Get exercise screen working\
-* Look at TODOs\
-* Use use state restoration\
+\b0 \cf2 * 
+\b Pay bills
+\b0 \
+* Need a way to encode and decode plans:\
+	- maybe a unit test to check round tripping\
+	- should we load a new instance of history and settings?\
+* Look into state restoration\
+	- test throwing an exception\
+	- add version info\
+	- can use xcode to stop the app\
+	- make sure that the done button works properly\
+* Make sure changes are persisted.\
+* Workout screen should dim exercises that were performed.\
+* Workouts screen needs to show when stuff happened\
+	- and highlight current\
 * Make sure xcode is installing a debug version (with asserts enabled)\
 * Before using the app make squat use a linear plan\
 * Get edit settings working\

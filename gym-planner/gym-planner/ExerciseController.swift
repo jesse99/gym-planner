@@ -7,17 +7,10 @@ class ExerciseController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        breadcrumbLabel.text = breadcrumb
-        
 //        detailsLabel.backgroundColor = targetColor(.background)
 //        previousLabel.backgroundColor = detailsLabel.backgroundColor
 //        historyLabel.backgroundColor = detailsLabel.backgroundColor
 //        view.backgroundColor = detailsLabel.backgroundColor
-        
-//        setting = settings[exerciseName]! as! WeightedSetting
-        
-//        restorePosition()
-        resetPressed(self)
     }
     
     func initialize(_ program: Program, _ workout: Workout, _ exercise: Exercise, _ plan: Plan, _ breadcrumb: String, _ unwindTo: String) {
@@ -27,15 +20,62 @@ class ExerciseController: UIViewController {
         self.plan = plan            // note that this has been started already
         self.unwindTo = unwindTo
         self.breadcrumb = "\(breadcrumb) • \(exercise.name)"
+    }
+    
+    override func encodeRestorableState(with coder: NSCoder) {
+        coder.encode(workout.name, forKey: "workout.name")
+        coder.encode(breadcrumb, forKey: "breadcrumb")
         
-        let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(ExerciseController.leavingForeground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        super.encodeRestorableState(with: coder)
+    }
+    
+    override func decodeRestorableState(with coder: NSCoder) {
+        print("decode state")
+        program = HML() // TODO: get or load this somehow
+        breadcrumb = coder.decodeObject(forKey: "breadcrumb") as! String
+        unwindTo = coder.decodeObject(forKey: "unwindTo") as! String
+        
+        // We'll assume these fail.
+        workout = Workout("unknown", [], optional: [])
+        exercise = Exercise("unknown", "unknown", "unknown", .fixedWeight(FixedWeightSetting(restSecs: 60)))
+
+        var name = coder.decodeObject(forKey: "workout.name") as! String
+        if let w = program.findWorkout(name) {
+            workout = w
+        } else {
+            os_log("couldn't load workout '%@' for program '%@'", type: .error, name, program.name)
+        }
+        
+        name = coder.decodeObject(forKey: "exercise.name") as! String
+        if let e = program.findExercise(name) {
+            exercise = e
+        } else {
+            os_log("couldn't load exercise '%@' for program '%@'", type: .error, name, program.name)
+        }
+
+        let data = coder.decodeObject(forKey: "plan") as! Data
+        if let p = program.findPlan(name) {
+            plan = p
+        } else {
+            os_log("couldn't load plan '%@' for program '%@'", type: .error, name, program.name)
+            let persist = DummyPersistence()
+            plan = VariableSetsPlan("unknown", requiredReps: 3, targetReps: 10)
+            switch plan.startup(program, exercise, persist) {
+            case .ok: break
+            default: assert(false)
+            }
+        }
+
+        super.decodeRestorableState(with: coder)
+    }
+    
+    override func applicationFinishedRestoringState() {
     }
     
     @objc func leavingForeground() {
         //savePosition()
     }
-    
+
     private func updateUI() {
         if !plan.finished() {
             let current = plan.current()
@@ -68,6 +108,13 @@ class ExerciseController: UIViewController {
     {
         super.viewWillAppear(animated)
         
+        breadcrumbLabel.text = breadcrumb
+        
+        //        setting = settings[exerciseName]! as! WeightedSetting
+        
+        //        restorePosition()
+        resetPressed(self)
+
         updateUI()
         notesButton.isEnabled = exercise.formalName != ""
         secsLabel.isHidden = timer == nil
@@ -76,6 +123,9 @@ class ExerciseController: UIViewController {
         // the text of a button will reset the font but we're not doing that.
         nextButton.titleLabel?.font = UIFont.systemFont(ofSize: 32)
         startTimerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        
+        let notify = NotificationCenter.default
+        notify.addObserver(self, selector: #selector(ExerciseController.leavingForeground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool)

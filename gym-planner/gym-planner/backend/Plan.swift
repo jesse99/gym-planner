@@ -52,7 +52,7 @@ public struct RestTime {
 }
 
 /// Used to tell the user how to perform sets of some activity, e.g. warmup and work sets for a barbell exercise.
-public protocol Plan {
+public protocol Plan: Encodable {
     var name: String {get}
 
     // If the plan could not be started this will return an error message.

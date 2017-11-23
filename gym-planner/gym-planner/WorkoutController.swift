@@ -1,4 +1,5 @@
 import UIKit
+import os.log
 
 struct StringError: Error {
     let message: String
@@ -13,18 +14,25 @@ class DummyPersistence: Persistence {
     }
 }
 
+// When a new view is created the sequence of events is:
+//    initialize
+//    viewDidLoad
+//    viewWillAppear
+// When view restoration kicks in the sequence is:
+//    viewDidLoad
+//    decode state
+//    viewWillAppear
 class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    func initialize(_ program: Program, _ workout: Workout, _ breadcrumb: String)
-    {
+    func initialize(_ program: Program, _ workout: Workout, _ breadcrumb: String) {
+        print("initialize")
         self.program = program
         self.workout = workout
         self.breadcrumb = "\(breadcrumb) • \(workout.name)"
     }
     
     override func viewDidLoad() {
+        print("viewDidLoad")
         super.viewDidLoad()
-
-        breadcrumbLabel.text = breadcrumb
         
         //filtered = workout.exercises.filter {presults.isActive(workout, $0) && !isSkipped(workout, $0)}
         tableView.dataSource = self
@@ -37,14 +45,44 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         view.backgroundColor = tableView.backgroundColor
     }
     
+    override func encodeRestorableState(with coder: NSCoder) {
+        coder.encode(workout.name, forKey: "workout.name")
+        coder.encode(breadcrumb, forKey: "breadcrumb")
+        
+        super.encodeRestorableState(with: coder)
+    }
+    
+    override func decodeRestorableState(with coder: NSCoder) {
+        print("decode state")
+        program = HML() // TODO: get or load this somehow
+        breadcrumb = coder.decodeObject(forKey: "breadcrumb") as! String
+        
+        let name = coder.decodeObject(forKey: "workout.name") as! String
+        if let w = program.findWorkout(name) {
+            workout = w
+        } else {
+            os_log("couldn't load workout '%@' for program '%@'", type: .error, name, program.name)
+            workout = program.workouts[0]
+        }
+        
+        super.decodeRestorableState(with: coder)
+    }
+    
+    override func applicationFinishedRestoringState() {
+    }
+    
     @objc func enteringForeground() {
         // Enough time may have passed that we need to redo our labels.
+        print("enteringForeground")
         tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("viewWillAppear")
         super.viewDidAppear(animated)
 
+        breadcrumbLabel.text = breadcrumb
+        
 //        var shown = showTooltip(superview: view, forItem: optionsButton, " Use options to deactivate exercises you'd prefer not to do.", .bottom, id: "deactivate_exercises")
         
 //        if !shown

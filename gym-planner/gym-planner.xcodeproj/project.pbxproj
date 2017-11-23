@@ -124,6 +124,7 @@
 			children = (
 				37CED46A1FAE289100244ADD /* gym-planner */,
 				37CED4811FAE289100244ADD /* gym-plannerTests */,
+				37CED4741FAE289100244ADD /* Assets.xcassets */,
 				37CED4691FAE289100244ADD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -141,7 +142,6 @@
 			isa = PBXGroup;
 			children = (
 				37CED48D1FAE29CB00244ADD /* backend */,
-				37CED4741FAE289100244ADD /* Assets.xcassets */,
 				37CED46B1FAE289100244ADD /* AppDelegate.swift */,
 				37B308D91FC3234F00556E8F /* ExerciseController.swift */,
 				377C11F41FC2761A0063A324 /* extensions */,

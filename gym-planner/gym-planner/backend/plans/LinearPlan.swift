@@ -44,6 +44,35 @@ public class LinearPlan : Plan {
     // Plan methods
     public let name: String
     
+    public func decode(_ persist: Persistence) -> StartupResult {
+        var key = ""
+        do {
+            // setting
+            key = LinearPlan.settingKey(exercise)
+            var data = try persist.load(key)
+            
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            self.setting = try decoder.decode(VariableWeightSetting.self, from: data)
+            
+            // history
+            key = LinearPlan.historyKey(exercise)
+            data = try persist.load(key)
+            self.history = try decoder.decode([Result].self, from: data)
+            
+            if setting.weight == 0 {
+                return .newPlan(NRepMaxPlan("Rep Max", workReps: workReps, setting))
+            }
+            
+        } catch {
+            os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
+            switch exercise.defaultSettings {
+            case .variableWeight(let setting): return .newPlan(NRepMaxPlan("Rep Max", workReps: workReps, setting))
+            default: return .error("\(exercise.name) isn't using variable weight")
+            }
+        }
+    }
+    
     public func startup(_ program: Program, _ exercise: Exercise, _ persist: Persistence) -> StartupResult {
         os_log("entering LinearPlan for %@", type: .info, exercise.name)
         

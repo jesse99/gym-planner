@@ -20,7 +20,19 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(WorkoutsTabController.enteringForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }
-
+    
+    override func encodeRestorableState(with coder: NSCoder) {
+        // TODO: save program? or program name?
+        super.encodeRestorableState(with: coder)
+    }
+    
+    override func decodeRestorableState(with coder: NSCoder) {
+        super.decodeRestorableState(with: coder)
+    }
+    
+    override func applicationFinishedRestoringState() {
+    }
+    
     @objc func enteringForeground() {
         // Enough time may have passed that we need to redo our labels.
         //presults.updateCardio()   // TODO
