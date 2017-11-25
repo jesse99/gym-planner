@@ -1,5 +1,6 @@
 import UIKit
 import UserNotifications
+import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        //saveResults()   // this shouldn't take longer than 5s
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -42,8 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func scheduleTimerNotification(_ fireDate: Date)
-    {
+    func scheduleTimerNotification(_ fireDate: Date) {
         let content = UNMutableNotificationContent()
         content.title = "Finished resting."
         content.body = ""
@@ -56,6 +57,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         center.add(request, withCompletionHandler: nil)
     }
     
+    private func getPath(fileName: String) -> String {
+        let dirs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let dir = dirs.first!
+        let name = sanitizeFileName(fileName)
+        let url = dir.appendingPathComponent("\(name).archive")
+        return url.path
+    }
+    
+    
+    fileprivate func sanitizeFileName(_ name: String) -> String {
+        var result = ""
+        
+        for ch in name {
+            switch ch {
+            // All we really should have to re-map is "/" but other characters can be annoying
+            // in file names so we'll zap those too. List is from
+            // https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
+            case "/", "\\", "?", "%", "*", ":", "|", "\"", "<", ">", ".", " ":
+                result += "_"
+            default:
+                result.append(ch)
+            }
+        }
+        
+        return result
+    }
+
     var window: UIWindow?
     var notificationsAreEnabled = false
 }

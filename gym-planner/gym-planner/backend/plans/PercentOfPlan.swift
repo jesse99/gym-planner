@@ -3,7 +3,7 @@ import Foundation
 import os.log
 
 public class PercentOfPlan : Plan {
-    struct Set {
+    struct Set: Codable {
         let title: String      // "Workset 3 of 4"
         let subtitle: String   // "90% of 140 lbs"
         let numReps: Int
@@ -30,13 +30,14 @@ public class PercentOfPlan : Plan {
         }
     }
     
-    struct Result: DerivedWeightResult {
+    struct Result: DerivedWeightResult, Codable {
         let title: String   // "135 lbs 3x5"
         let date: Date
         var weight: Double
     }
     
     init(_ name: String, _ otherName: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
+        os_log("init PercentOfPlan for %@", type: .info, name)
         self.name = name
         self.otherName = otherName
         self.firstWarmup = firstWarmup
@@ -49,77 +50,55 @@ public class PercentOfPlan : Plan {
     // Plan methods
     public let name: String
     
-    public func startup(_ program: Program, _ exercise: Exercise, _ persist: Persistence) -> StartupResult {
-        os_log("entering PercentOfPlan for %@", type: .info, exercise.name)
-        
-        self.exercise = exercise
-        self.persist = persist
+    public func start(_ exerciseName: String) -> StartResult {
+        os_log("starting PercentOfPlan for %@ and %@", type: .info, name, exerciseName)
 
-        // initialize setting and history
-        var key = ""
-        do {
-            // setting
-            key = PercentOfPlan.settingKey(exercise, name)
-            var data = try persist.load(key)
-            
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            self.setting = try decoder.decode(DerivedWeightSetting.self, from: data)
-            
-            // history
-            key = PercentOfPlan.historyKey(exercise, name)
-            data = try persist.load(key)
-            self.history = try decoder.decode([Result].self, from: data)
-            
-        } catch {
-            os_log("Couldn't load %@: %@", type: .info, key, error.localizedDescription) // note that this can happen the first time the exercise is performed
-            
-            self.history = []
-            switch exercise.defaultSettings {
-            case .derivedWeight(let setting): self.setting = setting
-            default: assert(false); abort()
-            }
-        }
+        self.sets = []
+        self.setIndex = 0
+        self.exerciseName = exerciseName
 
-        // initialize sets
-        switch getOtherWeight(program, persist) {
-        case .left(let message):
-            return .error(message)
-            
-        case .right(let otherWeight):
-            let workingSetWeight = percent*otherWeight;
-            os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
-            
-            var warmupsWithBar = 0
-            switch setting.apparatus {
-            case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
-            default: break
+        switch findSetting(exerciseName) {
+        case .right(let setting):
+            switch getOtherWeight() {
+            case .right(let otherWeight):
+                let workingSetWeight = percent*otherWeight;
+                os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
+                
+                var warmupsWithBar = 0
+                switch setting.apparatus {
+                case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
+                default: break
+                }
+                
+                let numWarmups = warmupsWithBar + warmupReps.count
+                for i in 0..<warmupsWithBar {
+                    sets.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
+                }
+                
+                let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
+                for (i, reps) in warmupReps.enumerated() {
+                    let percent = firstWarmup + Double(i)*delta
+                    sets.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
+                }
+                
+                for i in 0...workSets {
+                    sets.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: workingSetWeight))
+                }
+                frontend.saveExercise(exerciseName)
+
+            case .left(let message):
+                return .error(message)
             }
             
-            var s: [Set] = []
-            let numWarmups = warmupsWithBar + warmupReps.count
-            for i in 0..<warmupsWithBar {
-                s.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
-            }
-            
-            let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
-            for (i, reps) in warmupReps.enumerated() {
-                let percent = firstWarmup + Double(i)*delta
-                s.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
-            }
-            
-            for i in 0...workSets {
-                s.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: workingSetWeight))
-            }
-            
-            self.sets = s
-            self.setIndex = 0
             return .ok
+            
+        case .left(let err):
+            return .error(err)
         }
     }
     
     public func label() -> String {
-        return exercise.name
+        return exerciseName
     }
     
     public func sublabel() -> String {
@@ -159,12 +138,18 @@ public class PercentOfPlan : Plan {
     }
     
     public func restSecs() -> RestTime {
-        return RestTime(autoStart: !finished() && !sets[setIndex].warmup, secs: setting.restSecs)
+        switch findSetting(exerciseName) {
+        case .right(let setting):
+            return RestTime(autoStart: !finished() && !sets[setIndex].warmup, secs: setting.restSecs)
+
+        case .left(_):
+            return RestTime(autoStart: false, secs: 0)
+        }
     }
     
     public func completions() -> [Completion] {
         if setIndex+1 < sets.count {
-            return [Completion(title: "", isDefault: true, callback: {() -> Void in self.setIndex += 1})]
+            return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]
         } else {
             return [
                 Completion(title: "Done", isDefault: false, callback: {() -> Void in self.doFinish()})]
@@ -181,82 +166,47 @@ public class PercentOfPlan : Plan {
     
     public func reset() {
         setIndex = 0
+        frontend.saveExercise(exerciseName)
     }
     
     public func description() -> String {
         return "This does an exercise at a percentage of another exercises workset. It's typically used to perform a light or medium version of an exercise."
     }
     
-    public func settings() -> Settings {
-        return .derivedWeight(setting)
-    }
-    
     // Internal items
-    static func settingKey(_ exercise: Exercise, _ otherName: String) -> String {
-        return PercentOfPlan.planKey(exercise, otherName) + "-setting"
-    }
-    
-    static func historyKey(_ exercise: Exercise, _ otherName: String) -> String {
-        return PercentOfPlan.planKey(exercise, otherName) + "-history"
-    }
-    
-    private static func planKey(_ exercise: Exercise, _ otherName: String) -> String {
-        return "\(exercise.name)-percent-of-\(otherName)"
+    private func doNext() {
+        setIndex += 1
+        frontend.saveExercise(exerciseName)
     }
     
     private func doFinish() {
         setIndex += 1
         assert(finished())
-        
-        saveResult()
+        addResult()
+        frontend.saveExercise(exerciseName)
     }
     
-    private func saveResult() {
+    private func addResult() {
         let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
         let result = Result(title: title, date: Date(), weight: sets.last!.weight.weight)
         history.append(result)
-        
-        let key = PercentOfPlan.historyKey(exercise, otherName)
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .secondsSince1970
-        do {
-            let data = try encoder.encode(history)
-            try persist.save(key, data)
-        } catch {
-            os_log("Error saving %@: %@", type: .error, key, error.localizedDescription)
-        }
     }
     
-    private func saveSetting() {
-        let key = PercentOfPlan.settingKey(exercise, otherName)
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .secondsSince1970
-        do {
-            let data = try encoder.encode(setting)
-            try persist.save(key, data)
-        } catch {
-            os_log("Error saving %@: %@", type: .error, key, error.localizedDescription)
-        }
-    }
-    
-    private func getOtherWeight(_ program: Program, _ persist: Persistence) -> Either<String, Double> {
-        if let exercise = program.findExercise(otherName) {
-            if let plan = program.findPlan(exercise.plan) {
-                if case .ok = plan.startup(program, exercise, persist) {
-                    switch plan.settings() {
-                    case .variableWeight(let setting): return .right(setting.weight)
-                    case .fixedWeight(let setting): return .right(setting.weight)
-                    default: return .left("\(otherName) doesn't use a variable or fixed weight plan")
-                    }
-                } else {
-                    return .left("Execute '\(otherName)' first")
+    private func getOtherWeight() -> Either<String, Double> {
+        switch findExercise(otherName) {
+        case .right(let exercise):
+            if case .ok = exercise.plan.start(otherName) {
+                switch exercise.settings {
+                case .variableWeight(let setting): return .right(setting.weight)
+                case .fixedWeight(let setting): return .right(setting.weight)
+                default: return .left("\(otherName) doesn't use a variable or fixed weight plan")
                 }
             } else {
-                return .left("Couldn't find plan '\(exercise.plan)'")
+                return .left("Execute '\(otherName)' first")
             }
-        } else {
-            return .left("Couldn't find exercise '\(otherName)'")
+        case .left(let err):
+            return .left(err)
         }
     }
     
@@ -267,12 +217,9 @@ public class PercentOfPlan : Plan {
     private let workReps: Int
     private let percent: Double
 
-    private var persist: Persistence!
-    private var exercise: Exercise!
-    private var setting: DerivedWeightSetting!
-    private var history: [Result]!
-    private var sets: [Set]!
-
+    private var exerciseName: String = ""
+    private var history: [Result] = []
+    private var sets: [Set] = []
     private var setIndex: Int = 0
 }
 

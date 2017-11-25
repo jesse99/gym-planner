@@ -19,7 +19,7 @@ internal struct Weight: CustomStringConvertible {
         case upper
     }
     
-    struct Info {
+    struct Info: Codable {
         // 145.0
         let weight: Double
         

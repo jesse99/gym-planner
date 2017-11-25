@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3743E2B91FB824CC00787CB3 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743E2B81FB824CC00787CB3 /* Persistence.swift */; };
+		3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743E2B81FB824CC00787CB3 /* FrontEnd.swift */; };
 		376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9C1FB7923F006EEAC3 /* Settings.swift */; };
 		376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9E1FB7C7F9006EEAC3 /* Results.swift */; };
 		3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3778CE971FBE730D0042111C /* PercentOfPlan.swift */; };
@@ -49,7 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3743E2B81FB824CC00787CB3 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		3743E2B81FB824CC00787CB3 /* FrontEnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEnd.swift; sourceTree = "<group>"; };
 		376E3C9C1FB7923F006EEAC3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		376E3C9E1FB7C7F9006EEAC3 /* Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
 		3778CE971FBE730D0042111C /* PercentOfPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentOfPlan.swift; sourceTree = "<group>"; };
@@ -174,7 +174,7 @@
 				37CED4AB1FB3FCD000244ADD /* extensions */,
 				377F055C1FC11E1B0015D7EF /* Either.swift */,
 				37CED4A91FB1625700244ADD /* Exercise.swift */,
-				3743E2B81FB824CC00787CB3 /* Persistence.swift */,
+				3743E2B81FB824CC00787CB3 /* FrontEnd.swift */,
 				37CED48E1FAE29E000244ADD /* Plan.swift */,
 				377F054F1FC0D9CE0015D7EF /* Program.swift */,
 				376E3C9E1FB7C7F9006EEAC3 /* Results.swift */,
@@ -330,7 +330,7 @@
 				37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */,
 				377C11F61FC276300063A324 /* LabelExtension.swift in Sources */,
 				377F05591FC0DDA10015D7EF /* HML.swift in Sources */,
-				3743E2B91FB824CC00787CB3 /* Persistence.swift in Sources */,
+				3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

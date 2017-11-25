@@ -13,17 +13,17 @@ class ExerciseController: UIViewController {
 //        view.backgroundColor = detailsLabel.backgroundColor
     }
     
-    func initialize(_ program: Program, _ workout: Workout, _ exercise: Exercise, _ plan: Plan, _ breadcrumb: String, _ unwindTo: String) {
+    func initialize(_ program: Program, _ workout: Workout, _ exercise: Exercise, _ breadcrumb: String, _ unwindTo: String) {
         self.program = program
         self.workout = workout
-        self.exercise = exercise
-        self.plan = plan            // note that this has been started already
+        self.exercise = exercise    // note that the plan has been started already
         self.unwindTo = unwindTo
         self.breadcrumb = "\(breadcrumb) • \(exercise.name)"
     }
     
     override func encodeRestorableState(with coder: NSCoder) {
         coder.encode(workout.name, forKey: "workout.name")
+        coder.encode(exercise.name, forKey: "exercise.name")
         coder.encode(breadcrumb, forKey: "breadcrumb")
         
         super.encodeRestorableState(with: coder)
@@ -35,10 +35,6 @@ class ExerciseController: UIViewController {
         breadcrumb = coder.decodeObject(forKey: "breadcrumb") as! String
         unwindTo = coder.decodeObject(forKey: "unwindTo") as! String
         
-        // We'll assume these fail.
-        workout = Workout("unknown", [], optional: [])
-        exercise = Exercise("unknown", "unknown", "unknown", .fixedWeight(FixedWeightSetting(restSecs: 60)))
-
         var name = coder.decodeObject(forKey: "workout.name") as! String
         if let w = program.findWorkout(name) {
             workout = w
@@ -53,19 +49,6 @@ class ExerciseController: UIViewController {
             os_log("couldn't load exercise '%@' for program '%@'", type: .error, name, program.name)
         }
 
-        let data = coder.decodeObject(forKey: "plan") as! Data
-        if let p = program.findPlan(name) {
-            plan = p
-        } else {
-            os_log("couldn't load plan '%@' for program '%@'", type: .error, name, program.name)
-            let persist = DummyPersistence()
-            plan = VariableSetsPlan("unknown", requiredReps: 3, targetReps: 10)
-            switch plan.startup(program, exercise, persist) {
-            case .ok: break
-            default: assert(false)
-            }
-        }
-
         super.decodeRestorableState(with: coder)
     }
     
@@ -77,8 +60,8 @@ class ExerciseController: UIViewController {
     }
 
     private func updateUI() {
-        if !plan.finished() {
-            let current = plan.current()
+        if !exercise.plan.finished() {
+            let current = exercise.plan.current()    // TODO: plan can be nil
             titleLabel.text = current.title
             subtitleLabel.text = current.subtitle
             amountLabel.text = current.amount
@@ -91,11 +74,11 @@ class ExerciseController: UIViewController {
             nextButton.setTitle("All Done", for: .normal)
         }
         
-        previousLabel.text = plan.prevLabel()
-        historyLabel.text = plan.historyLabel()
+        previousLabel.text = exercise.plan.prevLabel()
+        historyLabel.text = exercise.plan.historyLabel()
 
-        resetButton.isEnabled = !plan.atStart()
-        startTimerButton.isEnabled = plan.restSecs().secs > 0
+        resetButton.isEnabled = !exercise.plan.atStart()
+        startTimerButton.isEnabled = exercise.plan.restSecs().secs > 0
 
         nextButton.titleLabel?.font = UIFont.systemFont(ofSize: 32)
         startTimerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
@@ -167,10 +150,10 @@ class ExerciseController: UIViewController {
         //dismissTooltip()
         stopTimer()
         
-        if plan.finished() {
+        if exercise.plan.finished() {
             self.performSegue(withIdentifier: unwindTo, sender: self)
         } else {
-            let results = plan.completions()
+            let results = exercise.plan.completions()
             if results.count == 1 {
                 results[0].callback()
                 handleNext("default")
@@ -191,17 +174,17 @@ class ExerciseController: UIViewController {
     }
     
     private func handleNext(_ action: String) {
-        if plan.finished() {
+        if exercise.plan.finished() {
             updateUI()
             maybeStartTimer()
         } else {
-            os_log("%@: %@/%@", type: .info, action, plan.current().amount, plan.current().details)
+            os_log("%@: %@/%@", type: .info, action, exercise.plan.current().amount, exercise.plan.current().details)
             fadeOut {self.updateUI(); self.maybeStartTimer()}
         }
     }
     
     private func maybeStartTimer() {
-        let rest = plan.restSecs()
+        let rest = exercise.plan.restSecs()
         if rest.autoStart && rest.secs > 0 {
             startTimer(force: false)    // TODO: do we really need a force argument?
             startedTimer = true
@@ -220,7 +203,7 @@ class ExerciseController: UIViewController {
     @IBAction func resetPressed(_ sender: Any) {
         //dismissTooltip()
         
-        plan.reset()
+        exercise.plan.reset()
         self.startedTimer = false
         stopTimer()
         updateUI()
@@ -291,7 +274,7 @@ class ExerciseController: UIViewController {
 //    }
     
     private func startTimer(force: Bool) {
-        let restSecs = plan.restSecs().secs
+        let restSecs = exercise.plan.restSecs().secs
         if timer == nil && (restSecs > 0 || force) {
             let secs = Double(restSecs) - Date().timeIntervalSince(startTime)
             if !force || secs <= 0.0 || secs >= Double(restSecs) {
@@ -335,7 +318,7 @@ class ExerciseController: UIViewController {
     // Note that this can't be private (or the selector doesn't work).
     @objc func timerFired(_ sender: AnyObject) {
         if UIApplication.shared.applicationState == .active {
-            let secs = Double(plan.restSecs().secs) - Date().timeIntervalSince(startTime)
+            let secs = Double(exercise.plan.restSecs().secs) - Date().timeIntervalSince(startTime)
             if updateTimerLabel(secsLabel, secs) {
                 // We don't want to run the timer too long since it chews up the battery.
                 stopTimer()
@@ -419,7 +402,6 @@ class ExerciseController: UIViewController {
     private var program: Program!
     private var workout: Workout!
     private var exercise: Exercise!
-    private var plan: Plan!
     private var unwindTo: String!
     
     private var startedTimer = false

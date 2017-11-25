@@ -5,15 +5,6 @@ struct StringError: Error {
     let message: String
 }
 
-class DummyPersistence: Persistence {
-    func load(_ key: String) throws -> Data {
-        throw StringError(message: "Load isn't implemented")
-    }
-    
-    func save(_ key: String, _ data: Data) throws {
-    }
-}
-
 // When a new view is created the sequence of events is:
 //    initialize
 //    viewDidLoad
@@ -152,27 +143,20 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
 //        let name = filtered[index]
         let name = workout.exercises[index]
         if let exercise = program.findExercise(name) {
-            if let plan = program.findPlan(exercise.plan) {
-                let persist = DummyPersistence()
-                switch plan.startup(program, exercise, persist) {
-                case .ok:
-                    cell.textLabel!.text = plan.label()
-                    cell.detailTextLabel!.text = plan.sublabel()
-                    cell.detailTextLabel?.setColor(.black)
+            switch exercise.plan.start(name) {
+            case .ok:
+                cell.textLabel!.text = exercise.plan.label()
+                cell.detailTextLabel!.text = exercise.plan.sublabel()
+                cell.detailTextLabel?.setColor(.black)
 
-                case .newPlan(_):
-                    cell.textLabel!.text = plan.label()
-                    cell.detailTextLabel!.text = "Not completed"
-                    cell.detailTextLabel?.setColor(.black)
+            case .newPlan(_):
+                cell.textLabel!.text = exercise.plan.label()
+                cell.detailTextLabel!.text = "Not completed"
+                cell.detailTextLabel?.setColor(.black)
 
-                case .error(let mesg):
-                    cell.textLabel!.text = name
-                    cell.detailTextLabel!.text = mesg
-                    cell.detailTextLabel?.setColor(.red)
-                }
-            } else {
+            case .error(let mesg):
                 cell.textLabel!.text = name
-                cell.detailTextLabel!.text = "Couldn't find plan '\(exercise.plan)'"
+                cell.detailTextLabel!.text = mesg
                 cell.detailTextLabel?.setColor(.red)
             }
         } else {
@@ -306,32 +290,35 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         //        let name = filtered[index]
         let name = workout.exercises[index]
         if let exercise = program.findExercise(name) {
-            if let plan = program.findPlan(exercise.plan) {
-                let persist = DummyPersistence()
-                switch plan.startup(program, exercise, persist) {
+            switch exercise.plan.start(name) {
+            case .ok:
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
+                view.initialize(program, workout, exercise, breadcrumbLabel.text!, "unwindToWorkoutID")
+                self.present(view, animated: true, completion: nil)
+                
+            case .newPlan(let p):
+                let newName = exercise.name + "-" + p.name
+                switch p.start(newName) {
                 case .ok:
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
-                    view.initialize(program, workout, exercise, plan, breadcrumbLabel.text!, "unwindToWorkoutID")
-                    self.present(view, animated: true, completion: nil)
-                    
-                case .newPlan(let p):
-                    switch p.startup(program, exercise, persist) {
-                    case .ok:
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
-                        view.initialize(program, workout, exercise, p, breadcrumbLabel.text!, "unwindToWorkoutID")
-                        self.present(view, animated: true, completion: nil)
-                    case .newPlan(let q):
-                        err = "Plan \(plan.name) started plan \(p.name) which started \(q.name)"
-                    case .error(let mesg):
-                        err = mesg
+                    var newExercise = program.findExercise(newName)
+                    if newExercise == nil {
+                        newExercise = exercise.withPlan(newName, p)
+                        program.exercises.append(newExercise!)
                     }
                     
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
+                    view.initialize(program, workout, newExercise!, breadcrumbLabel.text!, "unwindToWorkoutID")
+                    self.present(view, animated: true, completion: nil)
+                case .newPlan(let q):
+                    err = "Plan \(exercise.plan.name) started plan \(p.name) which started \(q.name)"
                 case .error(let mesg):
                     err = mesg
                 }
                 
+            case .error(let mesg):
+                err = mesg
             }
         }
         

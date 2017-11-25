@@ -114,19 +114,6 @@ extension Apparatus: Codable {
         let magnets: [Double]
     }
     
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        switch self {
-        case .barbell(bar: let bar, collar: let collar, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: let warmupsWithBar):
-            try container.encode(Base.barbell, forKey: .base)
-            try container.encode(BarbellParams(bar, collar, plates, bumpers, magnets, warmupsWithBar), forKey: .barbellParams)
-        case .dumbbells(weights: let weights, magnets: let magnets):
-            try container.encode(Base.dumbbells, forKey: .base)
-            try container.encode(DumbbellParams(weights: weights, magnets: magnets), forKey: .dumbbellParams)
-        }
-    }
-    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let base = try container.decode(Base.self, forKey: .base)
@@ -140,6 +127,62 @@ extension Apparatus: Codable {
         case .dumbbells:
             let p = try container.decode(DumbbellParams.self, forKey: .dumbbellParams)
             self = .dumbbells(weights: p.weights, magnets: p.magnets)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        switch self {
+        case .barbell(bar: let bar, collar: let collar, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: let warmupsWithBar):
+            try container.encode(Base.barbell, forKey: .base)
+            try container.encode(BarbellParams(bar, collar, plates, bumpers, magnets, warmupsWithBar), forKey: .barbellParams)
+        case .dumbbells(weights: let weights, magnets: let magnets):
+            try container.encode(Base.dumbbells, forKey: .base)
+            try container.encode(DumbbellParams(weights: weights, magnets: magnets), forKey: .dumbbellParams)
+        }
+    }
+}
+
+extension Settings: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case base, varParams, derivedParams, fixedParams
+    }
+    
+    private enum Base: String, Codable {
+        case variable, derived, fixed
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let base = try container.decode(Base.self, forKey: .base)
+        
+        switch base {
+        case .variable:
+            let s = try container.decode(VariableWeightSetting.self, forKey: .varParams)
+            self = .variableWeight(s)
+        case .derived:
+            let s = try container.decode(DerivedWeightSetting.self, forKey: .derivedParams)
+            self = .derivedWeight(s)
+        case .fixed:
+            let s = try container.decode(FixedWeightSetting.self, forKey: .fixedParams)
+            self = .fixedWeight(s)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        switch self {
+        case .variableWeight(let setting):
+            try container.encode(Base.variable, forKey: .base)
+            try container.encode(setting, forKey: .varParams)
+        case .derivedWeight(let setting):
+            try container.encode(Base.derived, forKey: .base)
+            try container.encode(setting, forKey: .derivedParams)
+        case .fixedWeight(let setting):
+            try container.encode(Base.fixed, forKey: .base)
+            try container.encode(setting, forKey: .fixedParams)
         }
     }
 }

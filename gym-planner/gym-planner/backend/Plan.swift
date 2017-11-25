@@ -33,31 +33,30 @@ public struct Activity {
     public let secs: Int?
 }
 
-public enum StartupResult {
-    /// Plan started up OK.
-    case ok
-    
-    /// Startup the new plan instead of the original plan. Typically the new plan will be
-    /// NRepMaxPlan.
-    case newPlan(Plan)
-    
-    /// Arbitrary error, e.g. need to perform another exercise first.
-    case error(String)
-}
-
 public struct RestTime {
     public let autoStart: Bool
     
     public let secs: Int
 }
 
+public enum StartResult {
+    /// Plan started up OK.
+    case ok
+
+    /// Startup the new plan instead of the original plan. Typically the new plan will be
+    /// NRepMaxPlan.
+    case newPlan(Plan)
+
+    /// Arbitrary error, e.g. need to perform another exercise first.
+    case error(String)
+}
+
 /// Used to tell the user how to perform sets of some activity, e.g. warmup and work sets for a barbell exercise.
-public protocol Plan: Encodable {
+public protocol Plan: Codable {
     var name: String {get}
 
-    // If the plan could not be started this will return an error message.
-    func startup(_ program: Program, _ exercise: Exercise, _ persist: Persistence) -> StartupResult
-
+    func start(_ exerciseName: String) -> StartResult
+    
     /// "Light Squat".
     func label() -> String
     
@@ -92,8 +91,6 @@ public protocol Plan: Encodable {
         
     /// Explanation of how sets/reps, progression, and deloads work.
     func description() -> String
-    
-    func settings() -> Settings
 }
 
 // Phrak could be LinearAMRAP
