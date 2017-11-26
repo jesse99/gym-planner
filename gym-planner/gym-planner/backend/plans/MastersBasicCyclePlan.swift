@@ -7,13 +7,31 @@ import os.log
 
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
 public class MastersBasicCyclePlan : Plan {
-    struct Execute: Codable {
+    struct Execute: Storable {
         let workSets: Int
         let workReps: Int
         let percent: Double
+
+        init(workSets: Int, workReps: Int, percent: Double) {
+            self.workSets = workSets
+            self.workReps = workReps
+            self.percent = percent
+        }
+        
+        init(from store: Store) {
+            self.workSets = store.getInt("workSets")
+            self.workReps = store.getInt("workReps")
+            self.percent = store.getDbl("percent")
+        }
+        
+        func save(_ store: Store) {
+            store.addInt("workSets", workSets)
+            store.addInt("workReps", workReps)
+            store.addDbl("percent", percent)
+        }
     }
 
-    struct Set: Codable {
+    struct Set: Storable {
         let title: String      // "Workset 3 of 4"
         let subtitle: String   // "90% of 140 lbs"
         let numReps: Int
@@ -38,9 +56,25 @@ public class MastersBasicCyclePlan : Plan {
             self.numReps = numReps
             self.warmup = false
         }
+
+        init(from store: Store) {
+            self.title = store.getStr("title")
+            self.subtitle = store.getStr("subtitle")
+            self.numReps = store.getInt("numReps")
+            self.weight = store.getObj("weight")
+            self.warmup = store.getBool("warmup")
+        }
+        
+        func save(_ store: Store) {
+            store.addStr("title", title)
+            store.addStr("subtitle", subtitle)
+            store.addInt("numReps", numReps)
+            store.addObj("weight", weight)
+            store.addBool("warmup", warmup)
+        }
     }
     
-    struct Result: VariableWeightResult, Codable {
+    struct Result: VariableWeightResult, Storable {
         let title: String   // "135 lbs 3x5"
         let date: Date
         let cycleIndex: Int
@@ -48,16 +82,68 @@ public class MastersBasicCyclePlan : Plan {
         var weight: Double
 
         var primary: Bool {get {return cycleIndex == 0}}
+
+        init(title: String, cycleIndex: Int, missed: Bool, weight: Double) {
+            self.title = title
+            self.date = Date()
+            self.cycleIndex = cycleIndex
+            self.missed = missed
+            self.weight = weight
+        }
+        
+        init(from store: Store) {
+            self.title = store.getStr("title")
+            self.date = store.getDate("date")
+            self.cycleIndex = store.getInt("cycleIndex")
+            self.missed = store.getBool("missed")
+            self.weight = store.getDbl("weight")
+        }
+        
+        func save(_ store: Store) {
+            store.addStr("title", title)
+            store.addDate("date", date)
+            store.addInt("cycleIndex", cycleIndex)
+            store.addBool("missed", missed)
+            store.addDbl("weight", weight)
+        }
     }
     
     init(_ name: String, _ cycles: [Execute]) {
         os_log("init MastersBasicCyclePlan for %@", type: .info, name)
         self.name = name
+        self.typeName = "MastersBasicCyclePlan"
         self.cycles = cycles
+        self.deloads = [1.0, 1.0, 0.9, 0.85, 0.8];
+    }
+    
+    public required init(from store: Store) {
+        self.name = store.getStr("name")
+        self.typeName = "MastersBasicCyclePlan"
+        self.cycles = store.getObjArray("cycles")
+        self.deloads = store.getDblArray("deloads")
+        
+        self.exerciseName = store.getStr("exerciseName")
+        self.history = store.getObjArray("history")
+        self.sets = store.getObjArray("sets")
+        self.maxWeight = store.getDbl("maxWeight")
+        self.setIndex = store.getInt("setIndex")
+    }
+    
+    public func save(_ store: Store) {
+        store.addStr("name", name)
+        store.addObjArray("cycles", cycles)
+        store.addDblArray("deloads", deloads)
+        
+        store.addStr("exerciseName", exerciseName)
+        store.addObjArray("history", history)
+        store.addObjArray("sets", sets)
+        store.addDbl("maxWeight", maxWeight)
+        store.addInt("setIndex", setIndex)
     }
     
     // Plan methods
     public let name: String
+    public let typeName: String
     
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting MastersBasicCyclePlan for %@ and %@", type: .info, name, exerciseName)
@@ -277,7 +363,7 @@ public class MastersBasicCyclePlan : Plan {
     private func addResult(_ cycleIndex: Int, _ missed: Bool) {
         let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
-        let result = Result(title: title, date: Date(), cycleIndex: cycleIndex, missed: missed, weight: sets.last!.weight.weight)
+        let result = Result(title: title, cycleIndex: cycleIndex, missed: missed, weight: sets.last!.weight.weight)
         history.append(result)
     }
     
@@ -290,8 +376,7 @@ public class MastersBasicCyclePlan : Plan {
     }
 
     private let cycles: [Execute]
-    private let deloads: [Double] = [1.0, 1.0, 0.9, 0.85, 0.8];
-
+    private let deloads: [Double]
     
     private var exerciseName: String = ""
     private var history: [Result] = []

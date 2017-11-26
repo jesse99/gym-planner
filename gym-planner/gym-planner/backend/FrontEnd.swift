@@ -37,3 +37,6 @@ public func findSetting(_ name: String) -> Either<String, VariableWeightSetting>
         return .left("Couldn't find exercise '\(name)'")
     }
 }
+
+
+

@@ -52,8 +52,12 @@ public enum StartResult {
 }
 
 /// Used to tell the user how to perform sets of some activity, e.g. warmup and work sets for a barbell exercise.
-public protocol Plan: Codable {
+public protocol Plan: Storable {
+    /// This returns a name like "531" or "Light Squat".
     var name: String {get}
+    
+    /// This is used by Exercise to deserialize plans.
+    var typeName: String {get}
 
     func start(_ exerciseName: String) -> StartResult
     

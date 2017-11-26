@@ -3,7 +3,7 @@ import Foundation
 import os.log
 
 public class LinearPlan : Plan {
-    struct Set: Codable {
+    struct Set: Storable {
         let title: String      // "Workset 3 of 4"
         let numReps: Int
         let weight: Weight.Info
@@ -22,28 +22,95 @@ public class LinearPlan : Plan {
             self.numReps = numReps
             self.warmup = false
         }
+
+        init(from store: Store) {
+            self.title = store.getStr("title")
+            self.numReps = store.getInt("numReps")
+            self.weight = store.getObj("weight")
+            self.warmup = store.getBool("warmup")
+        }
+        
+        func save(_ store: Store) {
+            store.addStr("title", title)
+            store.addInt("numReps", numReps)
+            store.addObj("weight", weight)
+            store.addBool("warmup", warmup)
+        }
     }
     
-    struct Result: VariableWeightResult, Codable {
+    struct Result: VariableWeightResult, Storable {
         let title: String   // "135 lbs 3x5"
         let date: Date
         var missed: Bool
         var weight: Double
         
         var primary: Bool {get {return true}}
+        
+        init(title: String, missed: Bool, weight: Double) {
+            self.title = title
+            self.date = Date()
+            self.missed = missed
+            self.weight = weight
+        }
+
+        init(from store: Store) {
+            self.title = store.getStr("title")
+            self.date = store.getDate("date")
+            self.missed = store.getBool("missed")
+            self.weight = store.getDbl("weight")
+        }
+        
+        func save(_ store: Store) {
+            store.addStr("title", title)
+            store.addDate("date", date)
+            store.addBool("missed", missed)
+            store.addDbl("weight", weight)
+        }
     }
     
     init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int) {
         os_log("init LinearPlan for %@", type: .info, name)
         self.name = name
+        self.typeName = "LinearPlan"
         self.firstWarmup = firstWarmup
         self.warmupReps = warmupReps
         self.workSets = workSets
         self.workReps = workReps
+        self.deloads = [1.0, 1.0, 0.95, 0.9, 0.85]
+    }
+    
+    public required init(from store: Store) {
+        self.name = store.getStr("name")
+        self.typeName = "LinearPlan"
+        self.firstWarmup = store.getDbl("firstWarmup")
+        self.warmupReps = store.getIntArray("warmupReps")
+        self.workSets = store.getInt("workSets")
+        self.workReps = store.getInt("workReps")
+        self.deloads = store.getDblArray("deloads")
+        
+        self.exerciseName = store.getStr("exerciseName")
+        self.sets = store.getObjArray("sets")
+        self.history = store.getObjArray("history")
+        self.setIndex = store.getInt("setIndex")
+    }
+    
+    public func save(_ store: Store) {
+        store.addStr("name", name)
+        store.addDbl("firstWarmup", firstWarmup)
+        store.addIntArray("warmupReps", warmupReps)
+        store.addInt("workSets", workSets)
+        store.addInt("workReps", workReps)
+        store.addDblArray("deloads", deloads)
+        
+        store.addStr("exerciseName", exerciseName)
+        store.addObjArray("sets", sets)
+        store.addObjArray("history", history)
+        store.addInt("setIndex", setIndex)
     }
     
     // Plan methods
     public let name: String
+    public let typeName: String
     
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting LinearPlan for %@ and %@", type: .info, name, exerciseName)
@@ -222,7 +289,7 @@ public class LinearPlan : Plan {
     private func addResult(_ missed: Bool) {
         let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
-        let result = Result(title: title, date: Date(), missed: missed, weight: sets.last!.weight.weight)
+        let result = Result(title: title, missed: missed, weight: sets.last!.weight.weight)
         history.append(result)
     }
     
@@ -230,7 +297,7 @@ public class LinearPlan : Plan {
     private let warmupReps: [Int]
     private let workSets: Int
     private let workReps: Int
-    private let deloads: [Double] = [1.0, 1.0, 0.95, 0.9, 0.85]
+    private let deloads: [Double]
 
     private var exerciseName: String = ""
     private var sets: [Set] = []

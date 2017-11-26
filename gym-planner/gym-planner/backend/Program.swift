@@ -1,19 +1,31 @@
 /// Types encapsulating a set of exercises to perform within workout days.
 import Foundation
 
-public class Workout: Codable {
+public class Workout: Storable {
     init(_ name: String, _ exercises: [String], optional: [String] = []) {
         self.name = name
         self.exercises = exercises
         self.optional = optional
     }
+
+    public required init(from store: Store) {
+        self.name = store.getStr("name")
+        self.exercises = store.getStrArray("exercises")
+        self.optional = store.getStrArray("optional")
+    }
     
+    public func save(_ store: Store) {
+        store.addStr("name", name)
+        store.addStrArray("exercises", exercises)
+        store.addStrArray("optional", optional)
+    }
+
     public var name: String         // "Heavy Day"
     public var exercises: [String]
     public var optional: [String]   // names from exercises that default to inactive
 }
 
-public class Program: Codable {
+public class Program: Storable {
     public enum Tags {
         case beginner
         case intermediate
@@ -35,7 +47,23 @@ public class Program: Codable {
         self.tags = Set(tags)
         self.description = description
     }
+
+    public required init(from store: Store) {
+        self.name = store.getStr("name")
+        self.workouts = store.getObjArray("workouts")
+        self.exercises = store.getObjArray("exercises")
+        self.tags = Set(store.getObjArray("tags"))
+        self.description = store.getStr("description")
+    }
     
+    public func save(_ store: Store) {
+        store.addStr("name", name)
+        store.addObjArray("workouts", workouts)
+        store.addObjArray("exercises", exercises)
+        store.addObjArray("tags", Array(tags))
+        store.addStr("description", description)
+    }
+
     public func findWorkout(_ name: String) -> Workout? {
         return workouts.first {$0.name == name}
     }
@@ -70,3 +98,38 @@ public func createFixed(_ name: String, _ formalName: String, _ plan: Plan, rest
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
+extension Program.Tags: Storable {
+    public init(from store: Store) {
+        switch store.getStr("tag") {
+        case "beginner": self = .beginner
+        case "intermediate": self = .intermediate
+        case "advanced": self = .advanced
+            
+        case "strength": self = .strength
+        case "hypertrophy": self = .hypertrophy
+        case "conditioning": self = .conditioning
+            
+        case "female": self = .female
+        case "age40s": self = .age40s
+        case "age50s": self = .age50s
+
+        default: assert(false); abort()
+        }
+    }
+    
+    public func save(_ store: Store) {
+        switch self {
+        case .beginner: store.addStr("tag", "beginner")
+        case .intermediate: store.addStr("tag", "intermediate")
+        case .advanced: store.addStr("tag", "advanced")
+            
+        case .strength: store.addStr("tag", "strength")
+        case .hypertrophy: store.addStr("tag", "hypertrophy")
+        case .conditioning: store.addStr("tag", "conditioning")
+            
+        case .female: store.addStr("tag", "female")
+        case .age40s: store.addStr("tag", "age40s")
+        case .age50s: store.addStr("tag", "age50s")
+        }
+    }
+}

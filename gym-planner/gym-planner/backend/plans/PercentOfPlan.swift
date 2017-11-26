@@ -3,7 +3,7 @@ import Foundation
 import os.log
 
 public class PercentOfPlan : Plan {
-    struct Set: Codable {
+    struct Set: Storable {
         let title: String      // "Workset 3 of 4"
         let subtitle: String   // "90% of 140 lbs"
         let numReps: Int
@@ -28,17 +28,52 @@ public class PercentOfPlan : Plan {
             self.numReps = numReps
             self.warmup = false
         }
+
+        init(from store: Store) {
+            self.title = store.getStr("title")
+            self.subtitle = store.getStr("subtitle")
+            self.numReps = store.getInt("numReps")
+            self.weight = store.getObj("weight")
+            self.warmup = store.getBool("warmup")
+        }
+        
+        func save(_ store: Store) {
+            store.addStr("title", title)
+            store.addStr("subtitle", subtitle)
+            store.addInt("numReps", numReps)
+            store.addObj("weight", weight)
+            store.addBool("warmup", warmup)
+        }
     }
     
-    struct Result: DerivedWeightResult, Codable {
+    struct Result: DerivedWeightResult, Storable {
         let title: String   // "135 lbs 3x5"
         let date: Date
         var weight: Double
+
+        init(title: String, weight: Double) {
+            self.title = title
+            self.date = Date()
+            self.weight = weight
+        }
+        
+        init(from store: Store) {
+            self.title = store.getStr("title")
+            self.date = store.getDate("date")
+            self.weight = store.getDbl("weight")
+        }
+        
+        func save(_ store: Store) {
+            store.addStr("title", title)
+            store.addDate("date", date)
+            store.addDbl("weight", weight)
+        }
     }
     
     init(_ name: String, _ otherName: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
         os_log("init PercentOfPlan for %@", type: .info, name)
         self.name = name
+        self.typeName = "PercentOfPlan"
         self.otherName = otherName
         self.firstWarmup = firstWarmup
         self.warmupReps = warmupReps
@@ -47,8 +82,40 @@ public class PercentOfPlan : Plan {
         self.percent = percent
     }
     
+    public required init(from store: Store) {
+        self.name = store.getStr("name")
+        self.typeName = "PercentOfPlan"
+        self.otherName = store.getStr("otherName")
+        self.firstWarmup = store.getDbl("firstWarmup")
+        self.warmupReps = store.getIntArray("warmupReps")
+        self.workSets = store.getInt("workSets")
+        self.workReps = store.getInt("workReps")
+        self.percent = store.getDbl("percent")
+        
+        self.exerciseName = store.getStr("exerciseName")
+        self.history = store.getObjArray("history")
+        self.sets = store.getObjArray("sets")
+        self.setIndex = store.getInt("setIndex")
+    }
+    
+    public func save(_ store: Store) {
+        store.addStr("name", name)
+        store.addStr("otherName", otherName)
+        store.addDbl("firstWarmup", firstWarmup)
+        store.addIntArray("warmupReps", warmupReps)
+        store.addInt("workSets", workSets)
+        store.addInt("workReps", workReps)
+        store.addDbl("percent", percent)
+
+        store.addStr("exerciseName", exerciseName)
+        store.addObjArray("history", history)
+        store.addObjArray("sets", sets)
+        store.addInt("setIndex", setIndex)
+    }
+    
     // Plan methods
     public let name: String
+    public let typeName: String
     
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting PercentOfPlan for %@ and %@", type: .info, name, exerciseName)
@@ -189,7 +256,7 @@ public class PercentOfPlan : Plan {
     private func addResult() {
         let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
-        let result = Result(title: title, date: Date(), weight: sets.last!.weight.weight)
+        let result = Result(title: title, weight: sets.last!.weight.weight)
         history.append(result)
     }
     

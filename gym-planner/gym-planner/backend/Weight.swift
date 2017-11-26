@@ -19,7 +19,7 @@ internal struct Weight: CustomStringConvertible {
         case upper
     }
     
-    struct Info: Codable {
+    struct Info: Storable {
         // 145.0
         let weight: Double
         
@@ -28,6 +28,24 @@ internal struct Weight: CustomStringConvertible {
         
         // "45 + 5"
         let plates: String
+
+        init(weight: Double, text: String, plates: String) {
+            self.weight = weight
+            self.text = text
+            self.plates = plates
+        }
+        
+        init(from store: Store) {
+            self.weight = store.getDbl("weight")
+            self.text = store.getStr("text")
+            self.plates = store.getStr("plates")
+        }
+        
+        func save(_ store: Store) {
+            store.addDbl("weight", weight)
+            store.addStr("text", text)
+            store.addStr("plates", plates)
+        }
     }
     
     init(_ weight: Double, _ apparatus: Apparatus) {

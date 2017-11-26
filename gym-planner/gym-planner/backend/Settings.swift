@@ -18,7 +18,7 @@ public enum Apparatus
 }
 
 /// Used for exercises that use plates, or dumbbells, or machines with variable weights.
-public class VariableWeightSetting: Codable {
+public class VariableWeightSetting: Storable {
     var apparatus: Apparatus
     private(set) var weight: Double  // starts out at 0.0
     private(set) var updatedWeight: Date
@@ -31,6 +31,22 @@ public class VariableWeightSetting: Codable {
         self.updatedWeight = Date()
         self.restSecs = restSecs
         self.stalls = 0
+    }
+    
+    public required init(from store: Store) {
+        self.apparatus = store.getObj("apparatus")
+        self.weight = store.getDbl("weight")
+        self.updatedWeight = store.getDate("updatedWeight")
+        self.restSecs = store.getInt("restSecs")
+        self.stalls = store.getInt("stalls")
+    }
+    
+    public func save(_ store: Store) {
+        store.addObj("apparatus", apparatus)
+        store.addDbl("weight", weight)
+        store.addDate("updatedWeight", updatedWeight)
+        store.addInt("restSecs", restSecs)
+        store.addInt("stalls", stalls)
     }
     
     func changeWeight(_ weight: Double) {
@@ -47,7 +63,7 @@ public class VariableWeightSetting: Codable {
 
 /// Used for an exercise where the weight is derived from another exercises's VariableWeightSetting,
 /// e.g. when PercentOfPlan is used.
-public class DerivedWeightSetting: Codable {
+public class DerivedWeightSetting: Storable {
     var apparatus: Apparatus
     var restSecs: Int
     
@@ -55,17 +71,37 @@ public class DerivedWeightSetting: Codable {
         self.apparatus = apparatus
         self.restSecs = restSecs
     }
+    
+    public required init(from store: Store) {
+        self.apparatus = store.getObj("apparatus")
+        self.restSecs = store.getInt("restSecs")
+    }
+    
+    public func save(_ store: Store) {
+        store.addObj("apparatus", apparatus)
+        store.addInt("restSecs", restSecs)
+    }
 }
 
 /// Used for exercises where the user controls how much weight is used (which can be
 /// zero for a body weight exercise).
-public class FixedWeightSetting: Codable {
+public class FixedWeightSetting: Storable {
     var weight: Double  // starts out at 0.0
     var restSecs: Int
     
     init(restSecs: Int) {
         self.weight = 0.0
         self.restSecs = restSecs
+    }
+    
+    public required init(from store: Store) {
+        self.weight = store.getDbl("weight")
+        self.restSecs = store.getInt("restSecs")
+    }
+    
+    public func save(_ store: Store) {
+        store.addDbl("weight", weight)
+        store.addInt("restSecs", restSecs)
     }
 }
 
@@ -77,112 +113,88 @@ public enum Settings {
 
 // TODO: CardioSetting
 
-// Enums with associated values can't be directly archived so we need all this nonsense.
-extension Apparatus: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case base, barbellParams, dumbbellParams
-    }
-    
-    private enum Base: String, Codable {
-        case barbell, dumbbells
-    }
-    
-    private struct BarbellParams: Codable {
-        let bar: Double
-        let collar: Double
-        let plateCounts: [Int]
-        let plateWeights: [Double]  // also can't archived tuples so we break apart the .barbell arrays
-        let bumperCounts: [Int]
-        let bumperWeights: [Double]
-        let magnets: [Double]
-        let warmupsWithBar: Int
-        
-        init(_ bar: Double, _ collar: Double, _ plates: [(Int, Double)], _ bumpers: [(Int, Double)], _ magnets: [Double], _ warmupsWithBar: Int) {
-            self.bar = bar
-            self.collar = collar
-            self.plateCounts = plates.map {$0.0}
-            self.plateWeights = plates.map {$0.1}
-            self.bumperCounts = bumpers.map {$0.0}
-            self.bumperWeights = bumpers.map {$0.1}
-            self.magnets = magnets
-            self.warmupsWithBar = warmupsWithBar
+extension Apparatus: Storable {
+    public init(from store: Store) {
+        switch store.getStr("type") {
+        case "barbell":
+            let bar = store.getDbl("bar")
+            let collar = store.getDbl("collar")
+            
+            let p1 = store.getIntArray("plates-counts")
+            let p2 = store.getDblArray("plates-weights")
+            let plates = Array(zip(p1, p2))
+            
+            let b1 = store.getIntArray("bumpers-counts")
+            let b2 = store.getDblArray("bumpers-weights")
+            let bumpers = Array(zip(b1, b2))
+            
+            let magnets = store.getDblArray("magnets")
+            let warmupsWithBar = store.getInt("warmupsWithBar")
+            self = .barbell(bar: bar, collar: collar, plates: plates, bumpers: bumpers, magnets: magnets, warmupsWithBar: warmupsWithBar)
+            
+        case "dumbbells":
+            let weights = store.getDblArray("weights")
+            let magnets = store.getDblArray("magnets")
+            self = .dumbbells(weights: weights, magnets: magnets)
+            
+        default:
+            assert(false); abort()
         }
     }
     
-    private struct DumbbellParams: Codable {
-        let weights: [Double]
-        let magnets: [Double]
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let base = try container.decode(Base.self, forKey: .base)
-        
-        switch base {
-        case .barbell:
-            let p = try container.decode(BarbellParams.self, forKey: .barbellParams)
-            let plates = Array(zip(p.plateCounts, p.plateWeights))
-            let bumpers = Array(zip(p.bumperCounts, p.bumperWeights))
-            self = .barbell(bar: p.bar, collar: p.collar, plates: plates, bumpers: bumpers, magnets: p.magnets, warmupsWithBar: p.warmupsWithBar)
-        case .dumbbells:
-            let p = try container.decode(DumbbellParams.self, forKey: .dumbbellParams)
-            self = .dumbbells(weights: p.weights, magnets: p.magnets)
-        }
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
+    public func save(_ store: Store) {
         switch self {
         case .barbell(bar: let bar, collar: let collar, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: let warmupsWithBar):
-            try container.encode(Base.barbell, forKey: .base)
-            try container.encode(BarbellParams(bar, collar, plates, bumpers, magnets, warmupsWithBar), forKey: .barbellParams)
+            store.addStr("type", "barbell")
+            store.addDbl("bar", bar)
+            store.addDbl("collar", collar)
+            
+            let p1 = plates.map {$0.0}
+            let p2 = plates.map {$0.1}
+            store.addIntArray("plates-counts", p1)
+            store.addDblArray("plates-weights", p2)
+            
+            let b1 = bumpers.map {$0.0}
+            let b2 = bumpers.map {$0.1}
+            store.addIntArray("bumpers-counts", b1)
+            store.addDblArray("bumpers-weights", b2)
+            
+            store.addDblArray("magnets", magnets)
+            store.addInt("warmupsWithBar", warmupsWithBar)
+            
         case .dumbbells(weights: let weights, magnets: let magnets):
-            try container.encode(Base.dumbbells, forKey: .base)
-            try container.encode(DumbbellParams(weights: weights, magnets: magnets), forKey: .dumbbellParams)
+            store.addStr("type", "dumbbells")
+            store.addDblArray("weights", weights)
+            store.addDblArray("magnets", magnets)
         }
     }
 }
 
-extension Settings: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case base, varParams, derivedParams, fixedParams
-    }
-    
-    private enum Base: String, Codable {
-        case variable, derived, fixed
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let base = try container.decode(Base.self, forKey: .base)
-        
-        switch base {
-        case .variable:
-            let s = try container.decode(VariableWeightSetting.self, forKey: .varParams)
-            self = .variableWeight(s)
-        case .derived:
-            let s = try container.decode(DerivedWeightSetting.self, forKey: .derivedParams)
-            self = .derivedWeight(s)
-        case .fixed:
-            let s = try container.decode(FixedWeightSetting.self, forKey: .fixedParams)
-            self = .fixedWeight(s)
+extension Settings: Storable {
+    public init(from store: Store) {
+        switch store.getStr("type") {
+        case "variable":
+            self = .variableWeight(store.getObj("setting"))
+        case "derived":
+            self = .derivedWeight(store.getObj("setting"))
+        case "fixed":
+            self = .fixedWeight(store.getObj("setting"))
+        default:
+            assert(false); abort()
         }
     }
     
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
+    public func save(_ store: Store) {
         switch self {
         case .variableWeight(let setting):
-            try container.encode(Base.variable, forKey: .base)
-            try container.encode(setting, forKey: .varParams)
+            store.addStr("type", "variable")
+            store.addObj("setting", setting)
         case .derivedWeight(let setting):
-            try container.encode(Base.derived, forKey: .base)
-            try container.encode(setting, forKey: .derivedParams)
+            store.addStr("type", "derived")
+            store.addObj("setting", setting)
         case .fixedWeight(let setting):
-            try container.encode(Base.fixed, forKey: .base)
-            try container.encode(setting, forKey: .fixedParams)
+            store.addStr("type", "fixed")
+            store.addObj("setting", setting)
         }
     }
 }

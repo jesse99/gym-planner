@@ -3,7 +3,7 @@ import Foundation
 import os.log
 
 public class VariableSetsPlan: Plan {
-    struct Result: VariableWeightResult, Codable {
+    struct Result: VariableWeightResult, Storable {
         let title: String   // "20 reps @ 135 lbs"
         let date: Date
         var weight: Double
@@ -11,17 +11,64 @@ public class VariableSetsPlan: Plan {
         var primary: Bool {get {return true}}
         
         let reps: [Int]
+
+        init(title: String, weight: Double, missed: Bool, reps: [Int]) {
+            self.title = title
+            self.date = Date()
+            self.weight = weight
+            self.missed = missed
+            self.reps = reps
+        }
+        
+        init(from store: Store) {
+            self.title = store.getStr("title")
+            self.date = store.getDate("date")
+            self.weight = store.getDbl("weight")
+            self.missed = store.getBool("missed")
+            self.reps = store.getIntArray("reps")
+        }
+        
+        func save(_ store: Store) {
+            store.addStr("title", title)
+            store.addDate("date", date)
+            store.addDbl("weight", weight)
+            store.addBool("missed", missed)
+            store.addIntArray("reps", reps)
+        }
     }
     
     init(_ name: String, requiredReps: Int, targetReps: Int) {
         os_log("init VariableSetsPlan for %@ and %@", type: .info, name)
         self.name = name
+        self.typeName = "VariableSetsPlan"
         self.requiredReps = requiredReps
         self.targetReps = targetReps
     }
     
+    public required init(from store: Store) {
+        self.name = store.getStr("name")
+        self.typeName = "VariableSetsPlan"
+        self.requiredReps = store.getInt("requiredReps")
+        self.targetReps = store.getInt("targetReps")
+        
+        self.exerciseName = store.getStr("exerciseName")
+        self.history = store.getObjArray("history")
+        self.reps = store.getIntArray("reps")
+    }
+    
+    public func save(_ store: Store) {
+        store.addStr("name", name)
+        store.addInt("requiredReps", requiredReps)
+        store.addInt("targetReps", targetReps)
+        
+        store.addStr("exerciseName", exerciseName)
+        store.addObjArray("history", history)
+        store.addIntArray("reps", reps)
+    }
+    
     // Plan methods
     public let name: String
+    public let typeName: String
     
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting VariableSetsPlan for %@ and %@", type: .info, name, exerciseName)
@@ -154,7 +201,7 @@ public class VariableSetsPlan: Plan {
         case .right(let setting):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let title = "\(completed) reps @ \(Weight.friendlyStr(setting.weight))"
-            let result = Result(title: title, date: Date(), weight: setting.weight, missed: false, reps: reps)
+            let result = Result(title: title, weight: setting.weight, missed: false, reps: reps)
             history.append(result)
 
         case .left(_):

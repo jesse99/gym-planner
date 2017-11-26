@@ -10,11 +10,32 @@ public class NRepMaxPlan : Plan {
     init(_ name: String, workReps: Int) {
         os_log("init NRepMaxPlan for %@", type: .info, name)
         self.name = name
+        self.typeName = "NRepMaxPlan"
         self.numReps = workReps
+    }
+    
+    public required init(from store: Store) {
+        self.name = store.getStr("name")
+        self.typeName = "NRepMaxPlan"
+        self.numReps = store.getInt("numReps")
+        self.exerciseName = store.getStr("exerciseName")
+        self.weight = store.getDbl("weight")
+        self.setNum = store.getInt("setNum")
+        self.done = store.getBool("done")
+    }
+    
+    public func save(_ store: Store) {
+        store.addStr("name", name)
+        store.addInt("numReps", numReps)
+        store.addStr("exerciseName", exerciseName)
+        store.addDbl("weight", weight)
+        store.addInt("setNum", setNum)
+        store.addBool("done", done)
     }
     
     // Plan methods
     public let name: String
+    public let typeName: String
     
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting NRepMaxPlan for %@ and %@", type: .info, name, exerciseName)
