@@ -75,8 +75,7 @@ internal struct Weight: CustomStringConvertible {
         return String(format: "%.3f", weight)
     }
     
-    static func friendlyStr(_ weight: Double) -> String
-    {
+    static func friendlyStr(_ weight: Double) -> String {
         var result: String
         
         // Note that weights are always stored as lbs internally.
@@ -92,14 +91,12 @@ internal struct Weight: CustomStringConvertible {
         //            result = String(format: "%.2f", arguments: [weight*Double.lbToKg])
         //        }
         
-        while result.hasSuffix("0")
-        {
+        while result.hasSuffix("0") {
             let start = result.index(result.endIndex, offsetBy: -1)
             let end = result.endIndex
             result.removeSubrange(start..<end)
         }
-        if result.hasSuffix(".")
-        {
+        if result.hasSuffix(".") {
             let start = result.index(result.endIndex, offsetBy: -1)
             let end = result.endIndex
             result.removeSubrange(start..<end)
@@ -108,8 +105,7 @@ internal struct Weight: CustomStringConvertible {
         return result
     }
     
-    static func friendlyUnitsStr(_ weight: Double, plural: Bool = true) -> String
-    {
+    static func friendlyUnitsStr(_ weight: Double, plural: Bool = true) -> String {
         if plural {
             return Weight.friendlyStr(weight) + " lbs"  // TODO: also kg
         } else {
@@ -126,9 +122,7 @@ internal struct Weight: CustomStringConvertible {
         while true {
             if let candidate = g.next() {
                 result += ", " + Weight.friendlyStr(candidate.0)
-            }
-            else
-            {
+            } else {
                 break
             }
         }
@@ -145,9 +139,7 @@ internal struct Weight: CustomStringConvertible {
         while true {
             if let candidate = g.next() {
                 result += ", " + candidate.1
-            }
-            else
-            {
+            } else {
                 break
             }
         }

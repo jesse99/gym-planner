@@ -203,7 +203,7 @@ public class PercentOfPlan : Plan {
         return Activity(
             title: sets[setIndex].title,
             subtitle: sets[setIndex].subtitle,
-            amount: "\(sets[setIndex].numReps) reps @ \(info.text)",
+            amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
             details: info.plates,
             secs: nil)               // this is used for timed exercises
     }

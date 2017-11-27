@@ -92,7 +92,7 @@ public class VariableSetsPlan: Plan {
         switch findSetting(exerciseName) {
         case .right(let setting):
             if setting.weight > 0 {
-                return "\(requiredReps) reps @ \(Weight.friendlyStr(setting.weight))"
+                return "\(repsStr(requiredReps)) @ \(Weight.friendlyStr(setting.weight))"
             } else {
                 return "\(requiredReps) reps"
             }
@@ -108,7 +108,7 @@ public class VariableSetsPlan: Plan {
             let r = result.reps.map {"\($0)"}
             let rs = r.joined(separator: ", ")
             if result.weight > 0 {
-                return "Previous was \(rs) (\(c) reps @ \(Weight.friendlyStr(result.weight))"
+                return "Previous was \(rs) (\(repsStr(c)) @ \(Weight.friendlyStr(result.weight))"
             } else {
                 return "Previous was \(rs) (\(c) reps)"
             }
@@ -204,7 +204,7 @@ public class VariableSetsPlan: Plan {
         switch findSetting(exerciseName) {
         case .right(let setting):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-            let title = "\(completed) reps @ \(Weight.friendlyStr(setting.weight))"
+            let title = "\(repsStr(completed)) @ \(Weight.friendlyStr(setting.weight))"
             let result = Result(title: title, weight: setting.weight, missed: false, reps: reps)
             history.append(result)
 

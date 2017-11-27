@@ -171,7 +171,7 @@ public class LinearPlan : Plan {
     
     public func sublabel() -> String {
         if let set = sets.last {
-            return "\(set.numReps) reps @ \(set.weight.text)"
+            return "\(repsStr(set.numReps)) @ \(set.weight.text)"
         } else {
             return ""
         }
@@ -204,7 +204,7 @@ public class LinearPlan : Plan {
         return Activity(
             title: sets[setIndex].title,
             subtitle: "",
-            amount: "\(sets[setIndex].numReps) reps @ \(info.text)",
+            amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
             details: info.plates,
             secs: nil)               // this is used for timed exercises
     }

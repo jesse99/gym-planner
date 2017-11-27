@@ -48,3 +48,11 @@ public class Exercise: Storable {
     // If true don't display the plan in UI.
     public let hidden: Bool
 }
+
+internal func repsStr(_ reps: Int) -> String {
+    if reps == 1 {
+        return "1 rep"
+    } else {
+        return "\(reps) reps"
+    }
+}

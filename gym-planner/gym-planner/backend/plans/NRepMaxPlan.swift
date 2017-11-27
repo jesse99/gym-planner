@@ -84,7 +84,7 @@ public class NRepMaxPlan : Plan {
             return Activity(
                 title: "Set \(setNum)",
                 subtitle: "Finding \(numReps) rep max",
-                amount: "\(numReps) reps @ \(info.text)",
+                amount: "\(repsStr(numReps)) @ \(info.text)",
                 details: info.plates,
                 secs: nil)               // this is used for timed exercises
 
