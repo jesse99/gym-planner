@@ -61,6 +61,8 @@ public protocol Plan: Storable {
 
     func start(_ exerciseName: String) -> StartResult
     
+    func isStarted() -> Bool
+    
     /// "Light Squat".
     func label() -> String
     

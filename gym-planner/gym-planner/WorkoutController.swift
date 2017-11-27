@@ -143,21 +143,28 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         let name = workout.exercises[index]
         let app = UIApplication.shared.delegate as! AppDelegate
         if let exercise = app.program.findExercise(name) {
-            switch exercise.plan.start(name) {
-            case .ok:
+            if exercise.plan.isStarted() {
                 cell.textLabel!.text = exercise.plan.label()
                 cell.detailTextLabel!.text = exercise.plan.sublabel()
                 cell.detailTextLabel?.setColor(.black)
 
-            case .newPlan(_):
-                cell.textLabel!.text = exercise.plan.label()
-                cell.detailTextLabel!.text = "Not completed"
-                cell.detailTextLabel?.setColor(.black)
+            } else {
+                switch exercise.plan.start(name) {
+                case .ok:
+                    cell.textLabel!.text = exercise.plan.label()
+                    cell.detailTextLabel!.text = exercise.plan.sublabel()
+                    cell.detailTextLabel?.setColor(.black)
 
-            case .error(let mesg):
-                cell.textLabel!.text = name
-                cell.detailTextLabel!.text = mesg
-                cell.detailTextLabel?.setColor(.red)
+                case .newPlan(_):
+                    cell.textLabel!.text = exercise.plan.label()
+                    cell.detailTextLabel!.text = "Not completed"
+                    cell.detailTextLabel?.setColor(.black)
+
+                case .error(let mesg):
+                    cell.textLabel!.text = name
+                    cell.detailTextLabel!.text = mesg
+                    cell.detailTextLabel?.setColor(.red)
+                }
             }
         } else {
             cell.textLabel!.text = name

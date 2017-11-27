@@ -205,10 +205,15 @@ internal struct Weight: CustomStringConvertible {
                 // TODO: see how fast this on a real phone, if it looks a little slow we could optimize this by bailing
                 // when we have good values for lower and upper
             }
-            else
-            {
+            else {
                 break
             }
+        }
+        
+        // lowerWeight starts out at the smallest weight so we'll always have a decent value.
+        // But if upperWeight is too large for the available weights we need to fall back to whatever was closest.
+        if upperWeight < weight {
+            upperWeight = closestWeight
         }
         
         return (lowerWeight, lowerPlates, closestWeight, closestPlates, upperWeight, upperPlates)
@@ -228,6 +233,7 @@ internal struct Weight: CustomStringConvertible {
         init(_ barWeight: Double, _ collarWeight: Double, _ plates: [(Int, Double)], _ bumpers: [(Int, Double)], _ magnets: [Double], pairedPlates: Bool) {            
             var p: [(Double, String)] = []
             
+            entries.reserveCapacity(1000)
             if barWeight > 0.0 {
                 self.entries.append((barWeight, ""))
             }

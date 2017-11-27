@@ -203,6 +203,10 @@ public class MastersBasicCyclePlan : Plan {
         }
     }
     
+    public func isStarted() -> Bool {
+        return !sets.isEmpty
+    }
+    
     public func label() -> String {
         return exerciseName
     }

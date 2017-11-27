@@ -4,11 +4,8 @@ import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
-            self.notificationsAreEnabled = granted
-        }
+    override init() {
+        super.init()
         
         let path = getPath(fileName: "program_name")
         if let name = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? String {
@@ -19,8 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
             os_log("failed to load program from %@", type: .info, path)
             program = HML() // TODO: use a better default
         }
-
+        
         frontend = self
+    }
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            self.notificationsAreEnabled = granted
+        }
         
         return true
     }

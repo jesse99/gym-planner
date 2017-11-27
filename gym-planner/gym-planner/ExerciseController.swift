@@ -18,12 +18,15 @@ class ExerciseController: UIViewController {
         self.exercise = exercise    // note that the plan has been started already
         self.unwindTo = unwindTo
         self.breadcrumb = "\(breadcrumb) • \(exercise.name)"
+
+        resetPressed(self)
     }
     
     override func encodeRestorableState(with coder: NSCoder) {
+        coder.encode(breadcrumb, forKey: "breadcrumb")
+        coder.encode(unwindTo, forKey: "unwindTo")
         coder.encode(workout.name, forKey: "workout.name")
         coder.encode(exercise.name, forKey: "exercise.name")
-        coder.encode(breadcrumb, forKey: "breadcrumb")
         
         super.encodeRestorableState(with: coder)
     }
@@ -92,11 +95,6 @@ class ExerciseController: UIViewController {
         
         breadcrumbLabel.text = breadcrumb
         
-        //        setting = settings[exerciseName]! as! WeightedSetting
-        
-        //        restorePosition()
-        resetPressed(self)
-
         updateUI()
         notesButton.isEnabled = exercise.formalName != ""
         secsLabel.isHidden = timer == nil

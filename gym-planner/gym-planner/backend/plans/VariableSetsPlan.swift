@@ -80,6 +80,10 @@ public class VariableSetsPlan: Plan {
         return .ok
     }
     
+    public func isStarted() -> Bool {
+        return !exerciseName.isEmpty
+    }
+    
     public func label() -> String {
         return exerciseName
     }

@@ -55,6 +55,10 @@ public class NRepMaxPlan : Plan {
         }
     }
     
+    public func isStarted() -> Bool {
+        return setNum > 0
+    }
+    
     public func label() -> String {
         return exerciseName
     }
@@ -183,6 +187,6 @@ public class NRepMaxPlan : Plan {
 
     private var exerciseName: String = ""
     private var weight: Double = 0.0
-    private var setNum: Int = 1
+    private var setNum: Int = 0
     private var done = false
 }
