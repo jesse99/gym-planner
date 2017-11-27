@@ -162,7 +162,7 @@ public class LinearPlan : Plan {
     }
     
     public func isStarted() -> Bool {
-        return !sets.isEmpty
+        return !sets.isEmpty && !finished()
     }
     
     public func label() -> String {
@@ -265,10 +265,11 @@ public class LinearPlan : Plan {
         switch findSetting(exerciseName) {
         case .right(let setting):
             if !missed {
+                let old = setting.weight
                 let w = Weight(setting.weight, setting.apparatus)
                 setting.changeWeight(w.nextWeight())
                 setting.stalls = 0
-                os_log("advanced to = %.3f", type: .info, setting.weight)
+                os_log("advanced from %.3f to %.3f", type: .info, old, setting.weight)
                 
             } else {
                 setting.sameWeight()

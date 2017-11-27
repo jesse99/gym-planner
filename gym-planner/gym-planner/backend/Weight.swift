@@ -192,7 +192,7 @@ internal struct Weight: CustomStringConvertible {
                     closestPlates = candidate.1
                 }
 
-                if candidate.0 > weight && candidate.0 < upperWeight {
+                if candidate.0 > weight && (candidate.0 < upperWeight || upperWeight < weight) {
 //                if candidate.0 > weight && (upperWeight - weight < 0.01 || abs(candidate.0 - weight) < abs(upperWeight - weight)) {
 //                    if !log {
 //                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
@@ -214,6 +214,7 @@ internal struct Weight: CustomStringConvertible {
         // But if upperWeight is too large for the available weights we need to fall back to whatever was closest.
         if upperWeight < weight {
             upperWeight = closestWeight
+            upperPlates = closestPlates
         }
         
         return (lowerWeight, lowerPlates, closestWeight, closestPlates, upperWeight, upperPlates)

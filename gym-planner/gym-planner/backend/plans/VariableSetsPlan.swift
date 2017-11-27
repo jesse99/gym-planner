@@ -81,7 +81,7 @@ public class VariableSetsPlan: Plan {
     }
     
     public func isStarted() -> Bool {
-        return !exerciseName.isEmpty
+        return !exerciseName.isEmpty && !finished()
     }
     
     public func label() -> String {

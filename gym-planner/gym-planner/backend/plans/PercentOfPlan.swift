@@ -165,7 +165,7 @@ public class PercentOfPlan : Plan {
     }
     
     public func isStarted() -> Bool {
-        return !sets.isEmpty
+        return !sets.isEmpty && !finished()
     }
     
     public func label() -> String {

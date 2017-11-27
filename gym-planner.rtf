@@ -82,13 +82,11 @@ ohp		5.7\
 \f0\fs48 \cf2 \CocoaLigature1 \
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf2 * Test view restoration\
-	- workouts\
-	- workout\
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 \cf2 * Barbell generator seems too slow\
 	- time this (use unit test on phone)\
+	- note that this will be called for each exercise within a workout\
 	- might be faster if deferred calling platesStr\
+	  or use a cache?\
 * Need a way to encode and decode plans:\
 	- maybe a unit test to check round tripping\
 	- should we load a new instance of history and settings?\

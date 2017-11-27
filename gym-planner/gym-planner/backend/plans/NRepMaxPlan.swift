@@ -56,7 +56,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public func isStarted() -> Bool {
-        return setNum > 0
+        return setNum > 0 && !finished()
     }
     
     public func label() -> String {

@@ -19,7 +19,8 @@ class ExerciseController: UIViewController {
         self.unwindTo = unwindTo
         self.breadcrumb = "\(breadcrumb) • \(exercise.name)"
 
-        resetPressed(self)
+        exercise.plan.reset()
+        self.startedTimer = false
     }
     
     override func encodeRestorableState(with coder: NSCoder) {
