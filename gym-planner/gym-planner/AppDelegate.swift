@@ -3,16 +3,28 @@ import UserNotifications
 import os.log
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             self.notificationsAreEnabled = granted
         }
         
+        let path = getPath(fileName: "program_name")
+        if let name = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? String {
+            program = loadProgram(name)
+        }
+        
+        if program == nil {
+            os_log("failed to load program from %@", type: .info, path)
+            program = HML() // TODO: use a better default
+        }
+
+        frontend = self
+        
         return true
     }
-
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -21,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        //saveResults()   // this shouldn't take longer than 5s
+        saveProgram(program)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -44,6 +56,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func saveExercise(_ name: String) {
+        saveProgram(program)
+    }
+    
+    func findExercise(_ name: String) -> Exercise? {
+        return program.findExercise(name)
+    }
+
     func scheduleTimerNotification(_ fireDate: Date) {
         let content = UNMutableNotificationContent()
         content.title = "Finished resting."
@@ -57,6 +77,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         center.add(request, withCompletionHandler: nil)
     }
     
+    private func loadProgram(_ name: String) -> Program? {
+        let path = getPath(fileName: "program-" + name)
+        if let data = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? Data {
+            do {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .secondsSince1970
+                let store = try decoder.decode(Store.self, from: data)
+                return Program(from: store)
+            } catch {
+                os_log("failed to decode program from %@: %@", type: .error, path, error.localizedDescription)
+            }
+        } else {
+            os_log("failed to unarchive program from %@", type: .error, path)
+        }
+        return nil
+    }
+    
+    private func saveProgram(_ program: Program) {
+        var path = getPath(fileName: "program_name")
+        saveObject(program.name as AnyObject, path)
+
+        path = getPath(fileName: "program-" + program.name)
+        let store = Store()
+        program.save(store)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .secondsSince1970
+        
+        do {
+            let data = try encoder.encode(store)
+            saveObject(data as AnyObject, path)
+        } catch {
+            os_log("Error encoding program %@: %@", type: .error, program.name, error.localizedDescription)
+        }
+    }
+    
+    private func saveObject(_ object: AnyObject, _ path: String)
+    {
+        if NSKeyedArchiver.archiveRootObject(object, toFile: path) {
+            //print("saved \(name) to \(path)")
+        } else {
+            os_log("failed to save to %@", type: .error, path)
+        }
+    }
+    
     private func getPath(fileName: String) -> String {
         let dirs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let dir = dirs.first!
@@ -66,13 +130,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    fileprivate func sanitizeFileName(_ name: String) -> String {
+    private func sanitizeFileName(_ name: String) -> String {
         var result = ""
         
         for ch in name {
             switch ch {
             // All we really should have to re-map is "/" but other characters can be annoying
-            // in file names so we'll zap those too. List is from
+            // in file names so we'll zap those too. List is from:
             // https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
             case "/", "\\", "?", "%", "*", ":", "|", "\"", "<", ">", ".", " ":
                 result += "_"
@@ -86,4 +150,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var notificationsAreEnabled = false
+    var program: Program!
 }

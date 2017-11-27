@@ -107,7 +107,7 @@ public class NRepMaxPlan : Plan {
     public func completions() -> [Completion] {
         var result: [Completion] = []
         
-        result.append(Completion(title: "Done", isDefault: false, callback: {self.done = true}))
+        result.append(Completion(title: "Done", isDefault: false, callback: {self.doFinish()}))
         
         switch findSetting(exerciseName) {
         case .right(let setting):
@@ -115,7 +115,7 @@ public class NRepMaxPlan : Plan {
             for _ in 0..<7 {
                 let nextWeight = Weight(prevWeight, setting.apparatus).nextWeight()
                 if nextWeight > weight {    // at some point we'll run out of plates so the new weight won't be larger
-                    result.append(Completion(title: "Add \(Weight.friendlyUnitsStr(nextWeight - weight))", isDefault: false, callback: {self.weight = nextWeight; self.setNum += 1}))
+                    result.append(Completion(title: "Add \(Weight.friendlyUnitsStr(nextWeight - weight))", isDefault: false, callback: {self.doNext(nextWeight)}))
                     prevWeight = nextWeight
                 }
             }
@@ -155,6 +155,30 @@ public class NRepMaxPlan : Plan {
     }
     
     // Internal items
+    private func doNext(_ nextWeight: Double) {
+        weight = nextWeight
+        setNum += 1
+        frontend.saveExercise(exerciseName)
+    }
+    
+    private func doFinish() {
+        done = true
+        updateWeight()
+        frontend.saveExercise(exerciseName)
+    }
+
+    private func updateWeight() {
+        switch findSetting(exerciseName) {
+        case .right(let setting):
+            setting.changeWeight(weight)
+            setting.stalls = 0
+            os_log("set weight to = %.3f", type: .info, setting.weight)
+            
+        case .left(let err):
+            os_log("%@ updateWeight failed: %@", type: .error, name, err)
+        }
+    }
+
     private let numReps: Int
 
     private var exerciseName: String = ""

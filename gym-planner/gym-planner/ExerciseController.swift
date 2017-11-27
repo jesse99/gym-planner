@@ -13,8 +13,7 @@ class ExerciseController: UIViewController {
 //        view.backgroundColor = detailsLabel.backgroundColor
     }
     
-    func initialize(_ program: Program, _ workout: Workout, _ exercise: Exercise, _ breadcrumb: String, _ unwindTo: String) {
-        self.program = program
+    func initialize(_ workout: Workout, _ exercise: Exercise, _ breadcrumb: String, _ unwindTo: String) {
         self.workout = workout
         self.exercise = exercise    // note that the plan has been started already
         self.unwindTo = unwindTo
@@ -31,22 +30,22 @@ class ExerciseController: UIViewController {
     
     override func decodeRestorableState(with coder: NSCoder) {
         print("decode state")
-        program = HML() // TODO: get or load this somehow
+        let app = UIApplication.shared.delegate as! AppDelegate
         breadcrumb = coder.decodeObject(forKey: "breadcrumb") as! String
         unwindTo = coder.decodeObject(forKey: "unwindTo") as! String
         
         var name = coder.decodeObject(forKey: "workout.name") as! String
-        if let w = program.findWorkout(name) {
+        if let w = app.program.findWorkout(name) {
             workout = w
         } else {
-            os_log("couldn't load workout '%@' for program '%@'", type: .error, name, program.name)
+            os_log("couldn't load workout '%@' for program '%@'", type: .error, name, app.program.name)
         }
         
         name = coder.decodeObject(forKey: "exercise.name") as! String
-        if let e = program.findExercise(name) {
+        if let e = app.program.findExercise(name) {
             exercise = e
         } else {
-            os_log("couldn't load exercise '%@' for program '%@'", type: .error, name, program.name)
+            os_log("couldn't load exercise '%@' for program '%@'", type: .error, name, app.program.name)
         }
 
         super.decodeRestorableState(with: coder)
@@ -399,7 +398,6 @@ class ExerciseController: UIViewController {
     private var timer: Timer? = nil
     private var startTime = Date()
 
-    private var program: Program!
     private var workout: Workout!
     private var exercise: Exercise!
     private var unwindTo: String!

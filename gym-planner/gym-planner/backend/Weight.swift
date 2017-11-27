@@ -174,7 +174,7 @@ internal struct Weight: CustomStringConvertible {
 //                if log {
 //                    os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
 //                }
-                if candidate.0 < weight && candidate.0 < lowerWeight {   // always prefer the first candidate (generators return the simplest combinations first)
+                if candidate.0 < weight && candidate.0 > lowerWeight {   // always prefer the first candidate (generators return the simplest combinations first)
 //                    if !log {
 //                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
 //                    }
@@ -192,7 +192,8 @@ internal struct Weight: CustomStringConvertible {
                     closestPlates = candidate.1
                 }
 
-                if candidate.0 > weight && (upperWeight - weight < 0.01 || abs(candidate.0 - weight) < abs(upperWeight - weight)) {
+                if candidate.0 > weight && candidate.0 < upperWeight {
+//                if candidate.0 > weight && (upperWeight - weight < 0.01 || abs(candidate.0 - weight) < abs(upperWeight - weight)) {
 //                    if !log {
 //                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
 //                    }
@@ -465,7 +466,7 @@ struct Deload {
 /// if oldDate was 3 or more weeks ago deload by 20%
 func deloadByDate(_ weight: Double, _ oldDate: Date, _ deloads: [Double]) -> Deload {
     let weeks = Int(Date().weeksSinceDate(oldDate))
-    let index = max(weeks, deloads.count - 1)
+    let index = max(min(weeks, deloads.count - 1), 0)
     let percent = Int(100.0*(1.0 - deloads[index]))
     return Deload(weight: weight*deloads[index], percent: percent > 0 ? percent : nil, weeks: weeks)
 }

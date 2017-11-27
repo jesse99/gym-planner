@@ -39,8 +39,8 @@ public class Store: Codable {
     public func addDblArray(_ key: String, _ value: [Double]) {
         assert(!key.isEmpty)
         assert(!store.keys.contains(key), "store already contains \(key)")
-        assert(!value.any {!$0.isNaN}, "\(key) has a NaN")
-        assert(!value.any {!$0.isInfinite}, "\(key) has an Inf")
+        assert(value.all {!$0.isNaN}, "\(key) has a NaN")
+        assert(value.all {!$0.isInfinite}, "\(key) has an Inf")
         let v = value.map {Value.double($0)}
         store[key] = .array(v)
     }

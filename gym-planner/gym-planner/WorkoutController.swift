@@ -14,9 +14,8 @@ struct StringError: Error {
 //    decode state
 //    viewWillAppear
 class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    func initialize(_ program: Program, _ workout: Workout, _ breadcrumb: String) {
+    func initialize(_ workout: Workout, _ breadcrumb: String) {
         print("initialize")
-        self.program = program
         self.workout = workout
         self.breadcrumb = "\(breadcrumb) • \(workout.name)"
     }
@@ -45,15 +44,15 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
     
     override func decodeRestorableState(with coder: NSCoder) {
         print("decode state")
-        program = HML() // TODO: get or load this somehow
         breadcrumb = coder.decodeObject(forKey: "breadcrumb") as! String
         
         let name = coder.decodeObject(forKey: "workout.name") as! String
-        if let w = program.findWorkout(name) {
+        let app = UIApplication.shared.delegate as! AppDelegate
+        if let w = app.program.findWorkout(name) {
             workout = w
         } else {
-            os_log("couldn't load workout '%@' for program '%@'", type: .error, name, program.name)
-            workout = program.workouts[0]
+            os_log("couldn't load workout '%@' for program '%@'", type: .error, name, app.program.name)
+            workout = app.program.workouts[0]
         }
         
         super.decodeRestorableState(with: coder)
@@ -142,7 +141,8 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         let index = (path as NSIndexPath).item
 //        let name = filtered[index]
         let name = workout.exercises[index]
-        if let exercise = program.findExercise(name) {
+        let app = UIApplication.shared.delegate as! AppDelegate
+        if let exercise = app.program.findExercise(name) {
             switch exercise.plan.start(name) {
             case .ok:
                 cell.textLabel!.text = exercise.plan.label()
@@ -289,27 +289,28 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         let index = (path as NSIndexPath).item
         //        let name = filtered[index]
         let name = workout.exercises[index]
-        if let exercise = program.findExercise(name) {
+        let app = UIApplication.shared.delegate as! AppDelegate
+        if let exercise = app.program.findExercise(name) {
             switch exercise.plan.start(name) {
             case .ok:
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
-                view.initialize(program, workout, exercise, breadcrumbLabel.text!, "unwindToWorkoutID")
+                view.initialize(workout, exercise, breadcrumbLabel.text!, "unwindToWorkoutID")
                 self.present(view, animated: true, completion: nil)
                 
             case .newPlan(let p):
                 let newName = exercise.name + "-" + p.name
+                var newExercise = app.program.findExercise(newName)
+                if newExercise == nil {
+                    newExercise = exercise.withPlan(newName, p)
+                    app.program.exercises.append(newExercise!)
+                }
+                
                 switch p.start(newName) {
                 case .ok:
-                    var newExercise = program.findExercise(newName)
-                    if newExercise == nil {
-                        newExercise = exercise.withPlan(newName, p)
-                        program.exercises.append(newExercise!)
-                    }
-                    
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
-                    view.initialize(program, workout, newExercise!, breadcrumbLabel.text!, "unwindToWorkoutID")
+                    view.initialize(workout, newExercise!, breadcrumbLabel.text!, "unwindToWorkoutID")
                     self.present(view, animated: true, completion: nil)
                 case .newPlan(let q):
                     err = "Plan \(exercise.plan.name) started plan \(p.name) which started \(q.name)"
@@ -355,9 +356,8 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
     
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var breadcrumbLabel: UILabel! // TODO: this should be a BreadcrumbView
-    @IBOutlet var optionsButton: UIBarButtonItem!
+    @IBOutlet private var optionsButton: UIBarButtonItem!
 
-    private var program: Program!
     private var workout: Workout!
     private var breadcrumb: String!
 }

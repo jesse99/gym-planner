@@ -120,7 +120,7 @@ public class LinearPlan : Plan {
 
         switch findSetting(exerciseName) {
         case .right(let setting):
-            if setting.weight > 0 {
+            if setting.weight == 0.0 {
                 return .newPlan(NRepMaxPlan("Rep Max", workReps: workReps))
             }
             
@@ -149,7 +149,7 @@ public class LinearPlan : Plan {
                 sets.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: weight))
             }
             
-            for i in 0...workSets {
+            for i in 0..<workSets {
                 sets.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: weight))
             }
             frontend.saveExercise(exerciseName)

@@ -1,19 +1,7 @@
 import XCTest
 @testable import gym_planner
 
-// TODO:
-// lower
-// upper
-// closest
-// units, should these be per exercise?
-// bodyweight in separate file?
 class weightTests: XCTestCase {
-//    func testWeight() {
-//        let e = Exercise("Bench Press", .barbell(bar: 45, collar: 0, plates: [10, 25], bumpers: [], magnets: []))
-//        let w = Weight(100.0)
-//        XCTAssertEqual(w.text(.lower, e), "95 lbs")
-//    }
-    
     func testBarbellGenerator() {
         var a: Apparatus = .barbell(bar: 0, collar: 0, plates: [], bumpers: [], magnets: [], warmupsWithBar: 0)
         var w = Weight(100.0, a)

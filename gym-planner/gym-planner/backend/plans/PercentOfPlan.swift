@@ -148,7 +148,7 @@ public class PercentOfPlan : Plan {
                     sets.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
                 }
                 
-                for i in 0...workSets {
+                for i in 0..<workSets {
                     sets.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: workingSetWeight))
                 }
                 frontend.saveExercise(exerciseName)

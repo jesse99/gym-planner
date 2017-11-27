@@ -2,19 +2,12 @@ import Foundation
 
 /// Protocol used to communicate with the front end.
 public protocol FrontEnd {
-    /// Used to de-serialize Plans.
-//    func load(_ key: String) throws -> Data
-
-    /// Used to serialize Plans.
-//    func save(_ key: String, _ data: Data) throws
-    
     func saveExercise(_ name: String)
 
     func findExercise(_ name: String) -> Exercise?
 }
 
 public var frontend: FrontEnd!
-
 
 public func findExercise(_ name: String) -> Either<String, Exercise> {
     if let exercise = frontend.findExercise(name) {

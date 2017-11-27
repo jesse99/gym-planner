@@ -22,7 +22,6 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func encodeRestorableState(with coder: NSCoder) {
-        // TODO: save program? or program name?
         super.encodeRestorableState(with: coder)
     }
     
@@ -106,17 +105,19 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return program.workouts.count
+        let app = UIApplication.shared.delegate as! AppDelegate
+        return app.program.workouts.count
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt path: IndexPath) {
         //dismissTooltip()
         let index = path.item
-        let workout = program.workouts[index]
+        let app = UIApplication.shared.delegate as! AppDelegate
+        let workout = app.program.workouts[index]
 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let view = storyboard.instantiateViewController(withIdentifier: "WorkoutID") as! WorkoutController
-        view.initialize(program, workout, "Workouts")
+        view.initialize(workout, "Workouts")
         present(view, animated: true, completion: nil)
     }
     
@@ -125,7 +126,8 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         cell.backgroundColor = tableView.backgroundColor
         
         let index = path.item
-        let workout = program.workouts[index]
+        let app = UIApplication.shared.delegate as! AppDelegate
+        let workout = app.program.workouts[index]
         cell.textLabel!.text = workout.name
         cell.detailTextLabel!.text = ""
 
@@ -292,6 +294,4 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var statusLabel: UILabel!
-    
-    private let program: Program = HML()    // TODO: load this?
 }

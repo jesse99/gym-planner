@@ -154,7 +154,7 @@ public class MastersBasicCyclePlan : Plan {
 
         switch findSetting(exerciseName) {
         case .right(let setting):
-            if setting.weight > 0 {
+            if setting.weight == 0.0 {
                 return .newPlan(NRepMaxPlan("Rep Max", workReps: cycles.first?.workReps ?? 5))
             }
             
@@ -191,7 +191,7 @@ public class MastersBasicCyclePlan : Plan {
             sets.append(Set(setting.apparatus, phase: numWarmups,   phaseCount: numWarmups, numReps: 1, percent: 0.9, weight: workingSetWeight))
             assert(sets.count == numWarmups)
             
-            for i in 0...cycle.workSets {
+            for i in 0..<cycle.workSets {
                 sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, weight: workingSetWeight))
             }
             frontend.saveExercise(exerciseName)
@@ -216,11 +216,11 @@ public class MastersBasicCyclePlan : Plan {
             
             let info1 = Weight(maxWeight, setting.apparatus).find(.closest)
             if cycle.percent == 1.0 {
-                return "\(sr)x\(info1.text)"
+                return "\(sr) @ \(info1.text)"
             } else {
                 let info2 = sets.last!.weight
                 let p = String(format: "%.0f", 100.0*cycle.percent)
-                return "\(sr)x\(info2.text) (\(p)% of \(info1.text)"
+                return "\(sr) @ \(info2.text) (\(p)% of \(info1.text))"
             }
 
         case .left(let err):
@@ -265,12 +265,13 @@ public class MastersBasicCyclePlan : Plan {
             secs: nil)               // this is used for timed exercises
     }
 
+    // Note that this is called after advancing.
     public func restSecs() -> RestTime {
         switch findSetting(exerciseName) {
         case .right(let setting):
             if finished() {
                 return RestTime(autoStart: true, secs: setting.restSecs)   // TODO: make this an option?
-            } else if sets[setIndex].warmup && !sets[setIndex+1].warmup {
+            } else if setIndex > 0 && sets[setIndex-1].warmup && !sets[setIndex].warmup {
                 return RestTime(autoStart: true, secs: setting.restSecs/2)
             } else if !sets[setIndex].warmup {
                 return RestTime(autoStart: true, secs: setting.restSecs)

@@ -24,6 +24,7 @@
 		37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B308D91FC3234F00556E8F /* ExerciseController.swift */; };
 		37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B308DB1FC3BFFB00556E8F /* FontExtension.swift */; };
 		37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C5D18E1FC9F25400951FA8 /* Store.swift */; };
+		37C5D1911FCB578F00951FA8 /* storableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C5D1901FCB578F00951FA8 /* storableTests.swift */; };
 		37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46B1FAE289100244ADD /* AppDelegate.swift */; };
 		37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46D1FAE289100244ADD /* WorkoutsTabController.swift */; };
 		37CED4701FAE289100244ADD /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46F1FAE289100244ADD /* SecondViewController.swift */; };
@@ -67,6 +68,7 @@
 		37B308D91FC3234F00556E8F /* ExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseController.swift; sourceTree = "<group>"; };
 		37B308DB1FC3BFFB00556E8F /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		37C5D18E1FC9F25400951FA8 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		37C5D1901FCB578F00951FA8 /* storableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storableTests.swift; sourceTree = "<group>"; };
 		37CED4681FAE289100244ADD /* gym-planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gym-planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CED46B1FAE289100244ADD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		37CED46D1FAE289100244ADD /* WorkoutsTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutsTabController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				37CED4821FAE289100244ADD /* gym_plannerTests.swift */,
+				37C5D1901FCB578F00951FA8 /* storableTests.swift */,
 				37CED4A71FB1612900244ADD /* weightTests.swift */,
 				37CED4841FAE289100244ADD /* Info.plist */,
 			);
@@ -344,6 +347,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37CED4831FAE289100244ADD /* gym_plannerTests.swift in Sources */,
+				37C5D1911FCB578F00951FA8 /* storableTests.swift in Sources */,
 				37CED4A81FB1612900244ADD /* weightTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
