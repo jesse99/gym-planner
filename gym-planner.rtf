@@ -85,28 +85,17 @@ ohp		5.7\
 \cf2 * Barbell generator seems too slow\
 	- time this (use unit test on phone)\
 	- note that this will be called for each exercise within a workout\
-	- might be faster if deferred calling platesStr\
+	- might be faster if deferred calling platesStr, or saving off a closure\
 	  or use a cache?\
-* Need a way to encode and decode plans:\
-	- maybe a unit test to check round tripping\
-	- should we load a new instance of history and settings?\
-* Look into state restoration\
-	- test throwing an exception\
-	- add version info\
-	- can use xcode to stop the app\
-	- make sure that the done button works properly\
-* Make sure changes are persisted.\
+* Make sure xcode is installing a debug version (with asserts enabled)\
 * Need an abort with a log message\
 * Workout screen should dim exercises that were performed.\
 * Workouts screen needs to show when stuff happened\
 	- and highlight current\
-* Make sure xcode is installing a debug version (with asserts enabled)\
 * Before using the app make squat use a linear plan\
 * Get edit settings working\
 	- maybe put these in their own storyboard\
 * Get selecting weights working\
-* Save state as it is changed, not on entering the background\
-* Dont load everything into memory\
 * Add mobility workouts\
 * Add a cardio workout\
 * Add more programs\

@@ -53,22 +53,53 @@ internal struct Weight: CustomStringConvertible {
         self.apparatus = apparatus
     }
     
-    /// Note that if the direction constraint
-    /// can't be satisfied this will return something as close as possible, e.g. doing a find using
-    /// a weight below the smallest dumbbell will return the smallest dumbbell.
+    /// Note that if the direction constraint can't be satisfied this will return something as close as possible,
+    /// e.g. doing a find using a weight below the smallest dumbbell will return the smallest dumbbell.
     func find(_ to: Direction) -> Info {
-        let (lowerWeight, lowerPlates, closestWeight, closestPlates, upperWeight, upperPlates) = findRange()
-        switch to {
-        case .lower: return Info(weight: lowerWeight, text: "\(Weight.friendlyStr(lowerWeight)) lbs", plates: lowerPlates)
-        case .closest: return Info(weight: closestWeight, text: "\(Weight.friendlyStr(closestWeight)) lbs", plates: closestPlates)
-        case .upper: return Info(weight: upperWeight, text: "\(Weight.friendlyStr(upperWeight)) lbs", plates: upperPlates)
+        switch apparatus {
+        case .barbell(bar: let barWeight, collar: let collarWeight, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: _):
+            let limit = 20
+            let smallest = 2*min(plates.first ?? 45.0, bumpers.first ?? 45.0, magnets.first ?? 45.0)
+            let floor = max(barWeight, weight - Double(limit/2)*smallest)
+            
+            // This can get a bit squirrelly when magnets are used because they can be much smaller than the
+            // smallest plate and when bumpers are used because we don't want to just use the bare bar and the
+            // smallest bumper can be a lot larger than the smallest plate. So we'll just find a bunch of
+            // candidates about the target weight and select lowest, closest, and upper from those.
+            var candidates: [Info] = []
+            for n in 0..<limit {
+                let x = findPairedPlates(floor + Double(n)*smallest, barWeight, collarWeight, plates, bumpers, magnets)
+                candidates.append(x)
+            }
+            
+            var delta = Double.infinity
+            var first = candidates.count
+            var last = candidates.count
+            for (i, x) in candidates.enumerated() {
+                let d = abs(x.weight - weight)
+                if d < delta {
+                    delta = d
+                    first = i
+                }
+                if d == delta {
+                    last = i
+                }
+            }
+
+            switch to {
+            case .lower: return first > 0 ? candidates[first-1] : candidates[first]
+            case .closest: return candidates[first]
+            case .upper: return last+1 < candidates.count ? candidates[last+1] : candidates[last]
+            }
+            
+        case .dumbbells(_, _):
+            assert(false)
         }
     }
     
     /// Returns the weight immediately above weight.
     func nextWeight() -> Double {
-        let (_, _, _, _, upperWeight, _) = findRange()
-        return upperWeight
+        return find(.upper).weight
     }
     
     var description: String {
@@ -113,333 +144,99 @@ internal struct Weight: CustomStringConvertible {
         }
     }
     
-    // This is for unit testing
-    internal func _weights() -> String {
-        var result = ""
+    private func findPairedPlates(_ target: Double, _ barWeight: Double, _ collarWeight: Double, _ plates: [Double], _ bumpers: [Double], _ magnets: [Double]) -> Info {
+        var used: [(Double, String)] = []
+        var sum = barWeight + 2*collarWeight
         
-        let g = createGenerator()
-        result += Weight.friendlyStr(g.first().0)
-        while true {
-            if let candidate = g.next() {
-                result += ", " + Weight.friendlyStr(candidate.0)
-            } else {
-                break
+        var candidates = bumpers.map {($0, "bumper")}
+        for p in plates {
+            if !candidates.contains(where: {(x, _) -> Bool in x == p}) {
+                candidates.append((p, "plate"))
+            }
+        }
+        for m in magnets {
+            if !candidates.contains(where: {(x, _) -> Bool in x == m}) {
+                candidates.append((m, "magnet"))
+            }
+        }
+        candidates.sort {$0.0 < $1.0}
+        
+        // Biggest plate can be added as many times as neccesary.
+        if let (last, kind) = candidates.last {
+            while sum + 2*last <= target {
+                sum += 2*last
+                used.append((last, kind))
             }
         }
         
-        return result
-    }
-    
-    // This is for unit testing
-    internal func _labels() -> String {
-        var result = ""
-        
-        let g = createGenerator()
-        result += g.first().1
-        while true {
-            if let candidate = g.next() {
-                result += ", " + candidate.1
-            } else {
-                break
-            }
-        }
-
-        return result
-    }
-    
-    private func findRange() -> (Double, String, Double, String, Double, String) {
-        //os_log("---- weight = %.3f ---------------------------------------------------", type: .info, weight)
-        let g = createGenerator()
-        
-        let first = g.first()
-//        os_log("candidate = %.3f (%@)", type: .info, first.0, first.1)
-        var lowerWeight = first.0
-        var lowerPlates = first.1
-        var closestWeight = first.0
-        var closestPlates = first.1
-        var upperWeight = first.0
-        var upperPlates = first.1
-
-        while true {
-            if let candidate = g.next() {
-//                let log = abs(candidate.0 - weight) < 10.0
-//                if log {
-//                    os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
-//                }
-                if candidate.0 < weight && candidate.0 > lowerWeight {   // always prefer the first candidate (generators return the simplest combinations first)
-//                    if !log {
-//                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
-//                    }
-//                    os_log("   new lower", type: .info)
-                    lowerWeight = candidate.0
-                    lowerPlates = candidate.1
+        // Remaining plates can be added up to 2x.
+        var addedMagnet = false
+        for (plate, kind) in candidates.reversed() {
+            if kind != "magnet" || (!used.isEmpty && !addedMagnet) {  // magnets require a plate and are only added once
+                if sum + 2*plate <= target {
+                    sum += 2*plate
+                    used.append((plate, kind))
+                    if kind == "magnet" {
+                        addedMagnet = true
+                    }
                 }
 
-                if abs(candidate.0 - weight) < abs(closestWeight - weight) {
-//                    if !log {
-//                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
-//                    }
-//                    os_log("   new closer", type: .info)
-                    closestWeight = candidate.0
-                    closestPlates = candidate.1
+                if kind != "magnet" {
+                    if sum + 2*plate <= target {
+                        sum += 2*plate
+                        used.append((plate, kind))
+                    }
                 }
-
-                if candidate.0 > weight && (candidate.0 < upperWeight || upperWeight < weight) {
-//                if candidate.0 > weight && (upperWeight - weight < 0.01 || abs(candidate.0 - weight) < abs(upperWeight - weight)) {
-//                    if !log {
-//                        os_log("candidate = %.3f (%@)", type: .info, candidate.0, candidate.1)
-//                    }
-//                    os_log("   new upper", type: .info)
-                    upperWeight = candidate.0
-                    upperPlates = candidate.1
-                }
-                
-                // TODO: see how fast this on a real phone, if it looks a little slow we could optimize this by bailing
-                // when we have good values for lower and upper
-            }
-            else {
-                break
             }
         }
         
-        // lowerWeight starts out at the smallest weight so we'll always have a decent value.
-        // But if upperWeight is too large for the available weights we need to fall back to whatever was closest.
-        if upperWeight < weight {
-            upperWeight = closestWeight
-            upperPlates = closestPlates
+        // If there are bumpers then make sure that the user isn't using just the bar or a baby plate (or low weight deadlifts suck).
+        if let first = bumpers.first, sum < barWeight + 2*collarWeight + 2*first {
+            sum = barWeight + 2*collarWeight + 2*first
+            used = [(first, "bumper")]
         }
         
-        return (lowerWeight, lowerPlates, closestWeight, closestPlates, upperWeight, upperPlates)
-    }
-    
-    private func createGenerator() -> WeightGenerator {
-        switch apparatus {
-        case .barbell(bar: let barWeight, collar: let collarWeight, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: _):
-            return PlatesGenerator(barWeight, collarWeight, plates, bumpers, magnets, pairedPlates: true)
-        case .dumbbells(_, _):
-            assert(false)
+        // Only use collars if we used a plate.
+        if used.isEmpty {
+            sum -= 2*collarWeight
         }
+        
+        return Info(weight: sum, text: Weight.friendlyUnitsStr(sum), plates: Weight.platesStr(used))
     }
     
-    private class PlatesGenerator: WeightGenerator
-    {
-        init(_ barWeight: Double, _ collarWeight: Double, _ plates: [(Int, Double)], _ bumpers: [(Int, Double)], _ magnets: [Double], pairedPlates: Bool) {            
-            var p: [(Double, String)] = []
+    private static func platesStr(_ plates: [(Double, String)]) -> String {
+        if plates.count == 0 {
+            return "no plates"
             
-            entries.reserveCapacity(1000)
-            if barWeight > 0.0 {
-                self.entries.append((barWeight, ""))
-            }
+        // "45 lb plate"
+        } else if plates.count == 1 {
+            return "\(Weight.friendlyUnitsStr(plates[0].0, plural: false)) \(plates[0].1)"
 
-            // For an apparatus that takes two plates (like a barbell) we want to return info about one end
-            // of the bar so we need to divide count by two so that we don't tell the user to add more plates
-            // than he wants to use.
-            let scaling = pairedPlates ? 2 : 1
-            for (count, weight) in bumpers {
-                for _ in 0..<count/scaling {
-                    p.append((weight, "bumper"))
-                }
-            }
-
-            for (count, weight) in plates {
-                for _ in 0..<count/scaling {
-                    p.append((weight, "plate"))
-                }
-            }
-
-            for weight in magnets {
-                p.append((weight, "magnet"))
-            }
-            p.sort {$0.0 < $1.0}
-
-            self.plates = p
-            self.fixedWeight = barWeight + Double(scaling)*collarWeight
-            self.hasBumper = !bumpers.isEmpty
-            self.pairedPlates = pairedPlates
+        } else {
+            var s = plates.reversed().map {(w) -> String in Weight.friendlyStr(w.0)}
             
-            if !p.isEmpty {
-                add1()
-            }
-            if entries.isEmpty {
-                self.entries.append((0.0, ""))
-            }
-        }
-        
-        func first() -> (Double, String) {
-            return entries[0]
-        }
-        
-        func next() -> (Double, String)? {
-            index += 1
-            if index >= entries.count {
-                index = 0
-                combos += 1
-                
-                entries = []
-                switch combos {
-                case 2: add2()
-                case 3: add3()
-                case 4: add4()
-                case 5: add5()
-                case 6: add6()
-                default: break
-                }
-            }
-            return index < entries.count ? entries[index] : nil
-        }
-        
-        private func add1() {
-            // This can return the same plate more than once but that's OK.
-            let scaling = pairedPlates ? 2.0 : 1.0
-            for w in plates {
-                if !hasBumper || w.1 == "bumper" {  // If the user says to use bumpers then we'll always use them (so stuff like deadlifts isn't super annoying at lighter weights)
-                    if w.1 != "magnet" {  // don't allow just a magnet
-                        entries.append((fixedWeight + scaling*w.0, PlatesGenerator.platesStr([w])))
-                    }
-                }
-            }
-        }
-        
-        private func add2() {
-            let scaling = pairedPlates ? 2.0 : 1.0
-            if plates.count >= 2 {
-                for i1 in 0..<plates.count-1 {
-                    for i2 in i1+1..<plates.count {
-                        if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" {
-                            if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" {
-                                let w = plates[i1].0 + plates[i2].0
-                                entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2]])))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private func add3() {
-            let scaling = pairedPlates ? 2.0 : 1.0
-            if plates.count >= 3 {
-                for i1 in 0..<plates.count-2 {
-                    for i2 in i1+1..<plates.count-1 {
-                        for i3 in i2+1..<plates.count {
-                            if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" || plates[i3].1 == "bumper" {
-                                if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" || plates[i3].1 != "magnet" {
-                                    let w = plates[i1].0 + plates[i2].0 + plates[i3].0
-                                    entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3]])))
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private func add4() {
-            if plates.count >= 4 {
-                let scaling = pairedPlates ? 2.0 : 1.0
-                for i1 in 0..<plates.count-3 {
-                    for i2 in i1+1..<plates.count-2 {
-                        for i3 in i2+1..<plates.count-1 {
-                            for i4 in i3+1..<plates.count {
-                                if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" || plates[i3].1 == "bumper" || plates[i4].1 == "bumper" {
-                                    if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" || plates[i3].1 != "magnet" || plates[i4].1 != "magnet" {
-                                        let w = plates[i1].0 + plates[i2].0 + plates[i3].0 + plates[i4].0
-                                        entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4]])))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        private func add5() {
-            if plates.count >= 5 {
-                let scaling = pairedPlates ? 2.0 : 1.0
-                for i1 in 0..<plates.count-4 {
-                    for i2 in i1+1..<plates.count-3 {
-                        for i3 in i2+1..<plates.count-2 {
-                            for i4 in i3+1..<plates.count-1 {
-                                for i5 in i4+1..<plates.count {
-                                    if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" || plates[i3].1 == "bumper" || plates[i4].1 == "bumper" || plates[i5].1 == "bumper" {
-                                        if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" || plates[i3].1 != "magnet" || plates[i4].1 != "magnet" || plates[i5].1 != "magnet" {
-                                            let w = plates[i1].0 + plates[i2].0 + plates[i3].0 + plates[i4].0 + plates[i5].0
-                                            entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4], plates[i5]])))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private func add6() {
-            if plates.count >= 6 {
-                let scaling = pairedPlates ? 2.0 : 1.0
-                for i1 in 0..<plates.count-5 {
-                    for i2 in i1+1..<plates.count-4 {
-                        for i3 in i2+1..<plates.count-3 {
-                            for i4 in i3+1..<plates.count-2 {
-                                for i5 in i4+1..<plates.count-1 {
-                                    for i6 in i5+1..<plates.count {
-                                        if !hasBumper || plates[i1].1 == "bumper" || plates[i2].1 == "bumper" || plates[i3].1 == "bumper" || plates[i4].1 == "bumper" || plates[i5].1 == "bumper" || plates[i6].1 == "bumper" {
-                                            if plates[i1].1 != "magnet" || plates[i2].1 != "magnet" || plates[i3].1 != "magnet" || plates[i4].1 != "magnet" || plates[i5].1 != "magnet" || plates[i6].1 != "magnet" {
-                                                let w = plates[i1].0 + plates[i2].0 + plates[i3].0 + plates[i4].0 + plates[i5].0 + plates[i6].0
-                                                entries.append((fixedWeight + scaling*w, PlatesGenerator.platesStr([plates[i1], plates[i2], plates[i3], plates[i4], plates[i5], plates[i6]])))
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        private static func platesStr(_ plates: [(Double, String)]) -> String {
-            // "45 lb plate"
-            if plates.count == 1 {
-                return "\(Weight.friendlyUnitsStr(plates[0].0, plural: false)) \(plates[0].1)"
-
-            } else {
-                var s = plates.map {(w) -> String in Weight.friendlyStr(w.0)}
-                
-                // "2 10s"
-                // "10 + 5 + 2.5"
-                var text = ""
-                while let plate = s.popLast() {
-                    var count = 1
-                    while let plate2 = s.last, plate2 == plate {
-                        count += 1
-                        _ = s.popLast()
-                    }
-                    
-                    if !text.isEmpty {
-                        text += " + "
-                    }
-                    if count == 1 {
-                        text += plate
-                    } else {
-                        text += "\(count) \(plate)s"
-                    }
+            // "2 10s"
+            // "10 + 5 + 2.5"
+            var text = ""
+            while let plate = s.popLast() {
+                var count = 1
+                while let plate2 = s.last, plate2 == plate {
+                    count += 1
+                    _ = s.popLast()
                 }
                 
-                return text
+                if !text.isEmpty {
+                    text += " + "
+                }
+                if count == 1 {
+                    text += plate
+                } else {
+                    text += "\(count) \(plate)s"
+                }
             }
+            
+            return text
         }
-        
-        private let plates: [(Double, String)]  // (10.0, "plate") or (45.0, "bummper") or (1.25, "magnet")
-        private let fixedWeight: Double
-        private let hasBumper: Bool
-        private let pairedPlates: Bool
-        
-        private var entries: [(Double, String)] = []
-        private var index = 0
-        private var combos = 1
     }
 
     private let weight: Double

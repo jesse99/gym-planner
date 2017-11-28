@@ -3,7 +3,7 @@ import Foundation
 
 public enum Apparatus
 {
-    case barbell(bar: Double, collar: Double, plates: [(Int, Double)], bumpers: [(Int, Double)], magnets: [Double], warmupsWithBar: Int)
+    case barbell(bar: Double, collar: Double, plates: [Double], bumpers: [Double], magnets: [Double], warmupsWithBar: Int)
     
     case dumbbells(weights: [Double], magnets: [Double])
     //
@@ -119,15 +119,8 @@ extension Apparatus: Storable {
         case "barbell":
             let bar = store.getDbl("bar")
             let collar = store.getDbl("collar")
-            
-            let p1 = store.getIntArray("plates-counts")
-            let p2 = store.getDblArray("plates-weights")
-            let plates = Array(zip(p1, p2))
-            
-            let b1 = store.getIntArray("bumpers-counts")
-            let b2 = store.getDblArray("bumpers-weights")
-            let bumpers = Array(zip(b1, b2))
-            
+            let plates = store.getDblArray("plates", ifMissing: defaultPlates())
+            let bumpers = store.getDblArray("bumpers", ifMissing: defaultBumpers())
             let magnets = store.getDblArray("magnets")
             let warmupsWithBar = store.getInt("warmupsWithBar")
             self = .barbell(bar: bar, collar: collar, plates: plates, bumpers: bumpers, magnets: magnets, warmupsWithBar: warmupsWithBar)
@@ -148,17 +141,8 @@ extension Apparatus: Storable {
             store.addStr("type", "barbell")
             store.addDbl("bar", bar)
             store.addDbl("collar", collar)
-            
-            let p1 = plates.map {$0.0}
-            let p2 = plates.map {$0.1}
-            store.addIntArray("plates-counts", p1)
-            store.addDblArray("plates-weights", p2)
-            
-            let b1 = bumpers.map {$0.0}
-            let b2 = bumpers.map {$0.1}
-            store.addIntArray("bumpers-counts", b1)
-            store.addDblArray("bumpers-weights", b2)
-            
+            store.addDblArray("plates", plates)
+            store.addDblArray("bumpers", bumpers)
             store.addDblArray("magnets", magnets)
             store.addInt("warmupsWithBar", warmupsWithBar)
             

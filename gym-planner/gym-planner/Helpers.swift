@@ -4,10 +4,10 @@ import UIKit
 
 // Good resource for what sort of plates are typically available is http://www.roguefitness.com/weightlifting-bars-plates/plates/metal-plates?gclid=CN7rt9bpgNACFQqPfgod-5IObw
 // Also http://forum.bodybuilding.com/showthread.php?t=123528451
-func defaultPlates() -> [(Int, Double)] {
+func defaultPlates() -> [Double] {
     //    switch units {
     //    case .imperial:
-    return [(4, 2.5), (4, 5), (4, 10), (4, 25), (8, 45)]
+    return [2.5, 5, 10, 25, 45]
     
     //    case .metric:
     //        let plates = [1.25, 2.5, 5, 10, 15, 20, 25]
@@ -15,11 +15,11 @@ func defaultPlates() -> [(Int, Double)] {
     //    }
 }
 
-func defaultBumpers() -> [(Int, Double)] {
+func defaultBumpers() -> [Double] {
 //    switch units
 //    {
 //    case .imperial:
-        return [(4, 10.0), (4, 25), (8, 45)]
+        return [15.0, 25, 45]
         
 //    case .metric:
 //        let plates = [5.0, 10, 20]
