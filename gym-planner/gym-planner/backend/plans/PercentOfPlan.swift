@@ -197,7 +197,7 @@ public class PercentOfPlan : Plan {
     }
     
     public func current() -> Activity {
-        assert(!finished())
+        frontend.assert(!finished(), "PercentOfPlan finished in current")
         
         let info = sets[setIndex].weight
         return Activity(
@@ -252,7 +252,7 @@ public class PercentOfPlan : Plan {
     
     private func doFinish() {
         setIndex += 1
-        assert(finished())
+        frontend.assert(finished(), "PercentOfPlan not finished in doFinish")
         addResult()
         frontend.saveExercise(exerciseName)
     }

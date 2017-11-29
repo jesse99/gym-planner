@@ -93,7 +93,7 @@ internal struct Weight: CustomStringConvertible {
             }
             
         case .dumbbells(_, _):
-            assert(false)
+            frontend.assert(false, "find doesn't support dumbbells"); abort()
         }
     }
     

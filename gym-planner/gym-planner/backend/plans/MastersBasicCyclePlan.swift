@@ -189,7 +189,7 @@ public class MastersBasicCyclePlan : Plan {
             sets.append(Set(setting.apparatus, phase: numWarmups-2, phaseCount: numWarmups, numReps: 1, percent: 0.7, weight: workingSetWeight))
             sets.append(Set(setting.apparatus, phase: numWarmups-1, phaseCount: numWarmups, numReps: 1, percent: 0.8, weight: workingSetWeight))
             sets.append(Set(setting.apparatus, phase: numWarmups,   phaseCount: numWarmups, numReps: 1, percent: 0.9, weight: workingSetWeight))
-            assert(sets.count == numWarmups)
+            frontend.assert(sets.count == numWarmups, "MastersBasicCyclePlan sets.count is \(sets.count) but numWarmups is \(numWarmups)")
             
             for i in 0..<cycle.workSets {
                 sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, weight: workingSetWeight))
@@ -258,7 +258,7 @@ public class MastersBasicCyclePlan : Plan {
     }
     
     public func current() -> Activity {
-        assert(!finished())
+        frontend.assert(!finished(), "MastersBasicCyclePlan finished in current")
 
         let info = sets[setIndex].weight
         return Activity(
@@ -323,7 +323,7 @@ public class MastersBasicCyclePlan : Plan {
     
     private func doFinish(_ missed: Bool) {
         setIndex += 1
-        assert(finished())
+        frontend.assert(finished(), "MastersBasicCyclePlan not finished in doFinish")
         
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
         addResult(cycleIndex, missed)

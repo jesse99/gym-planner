@@ -198,7 +198,7 @@ public class LinearPlan : Plan {
     }
     
     public func current() -> Activity {
-        assert(!finished())
+        frontend.assert(!finished(), "LinearPlan is finished in current")
         
         let info = sets[setIndex].weight
         return Activity(
@@ -254,7 +254,7 @@ public class LinearPlan : Plan {
     
     private func doFinish(_ missed: Bool) {
         setIndex += 1
-        assert(finished())
+        frontend.assert(finished(), "LinearPlan is not finished in doFinish")
         
         addResult(missed)
         handleAdvance(missed)

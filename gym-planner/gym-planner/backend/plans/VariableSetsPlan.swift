@@ -122,7 +122,7 @@ public class VariableSetsPlan: Plan {
     }
     
     public func current() -> Activity {
-        assert(!finished())
+        frontend.assert(!finished(), "VariableSetsPlan finished in current")
         
         switch findSetting(exerciseName) {
         case .right(let setting):

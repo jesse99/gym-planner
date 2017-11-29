@@ -16,13 +16,14 @@ public class Exercise: Storable {
         self.settings = store.getObj("settings")
         self.hidden = store.getBool("hidden")
         
-        switch store.getStr("plan-type") {
+        let pname = store.getStr("plan-type")
+        switch pname {
         case "LinearPlan":            let p: LinearPlan = store.getObj("plan"); self.plan = p
         case "MastersBasicCyclePlan": let p: MastersBasicCyclePlan = store.getObj("plan"); self.plan = p
         case "NRepMaxPlan":           let p: NRepMaxPlan = store.getObj("plan"); self.plan = p
         case "PercentOfPlan":         let p: PercentOfPlan = store.getObj("plan"); self.plan = p
         case "VariableSetsPlan":      let p: VariableSetsPlan = store.getObj("plan"); self.plan = p
-        default: assert(false); abort()
+        default: frontend.assert(false, "loading exercise \(name) had unknown plan: \(pname)"); abort()
         }
     }
     

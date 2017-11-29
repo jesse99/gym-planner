@@ -100,7 +100,8 @@ public func createFixed(_ name: String, _ formalName: String, _ plan: Plan, rest
 
 extension Program.Tags: Storable {
     public init(from store: Store) {
-        switch store.getStr("tag") {
+        let tname = store.getStr("tag")
+        switch tname {
         case "beginner": self = .beginner
         case "intermediate": self = .intermediate
         case "advanced": self = .advanced
@@ -113,7 +114,7 @@ extension Program.Tags: Storable {
         case "age40s": self = .age40s
         case "age50s": self = .age50s
 
-        default: assert(false); abort()
+        default: frontend.assert(false, "loading program had unknown tag: \(tname)"); abort()
         }
     }
     

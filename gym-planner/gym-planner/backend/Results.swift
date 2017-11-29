@@ -39,7 +39,7 @@ public func makeHistoryLabel(_ weights: [Double]) -> String {
         while i-count >= 0 && labels[i-count] == labels[i] {
             count += 1
         }
-        assert(count >= 1)
+        frontend.assert(count >= 1, "count is \(count) in makeHistoryLabel with \(weights)")
         
         if count == 1 {
             entries.append(labels[i])

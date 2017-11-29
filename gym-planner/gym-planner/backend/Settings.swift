@@ -115,7 +115,8 @@ public enum Settings {
 
 extension Apparatus: Storable {
     public init(from store: Store) {
-        switch store.getStr("type") {
+        let tname = store.getStr("type")
+        switch tname {
         case "barbell":
             let bar = store.getDbl("bar")
             let collar = store.getDbl("collar")
@@ -131,7 +132,7 @@ extension Apparatus: Storable {
             self = .dumbbells(weights: weights, magnets: magnets)
             
         default:
-            assert(false); abort()
+            frontend.assert(false, "loading apparatus had unknown type: \(tname)"); abort()
         }
     }
     
@@ -156,7 +157,8 @@ extension Apparatus: Storable {
 
 extension Settings: Storable {
     public init(from store: Store) {
-        switch store.getStr("type") {
+        let tname = store.getStr("type")
+        switch tname {
         case "variable":
             self = .variableWeight(store.getObj("setting"))
         case "derived":
@@ -164,7 +166,7 @@ extension Settings: Storable {
         case "fixed":
             self = .fixedWeight(store.getObj("setting"))
         default:
-            assert(false); abort()
+            frontend.assert(false, "loading settings had unknown type: \(tname)"); abort()
         }
     }
     

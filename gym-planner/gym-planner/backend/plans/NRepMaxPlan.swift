@@ -76,7 +76,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public func current() -> Activity {
-        assert(!finished())
+        frontend.assert(!finished(), "NRepMaxPlan finished in current")
         
         switch findSetting(exerciseName) {
         case .right(let setting):

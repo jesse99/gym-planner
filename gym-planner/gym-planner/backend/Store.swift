@@ -17,27 +17,27 @@ public class Store: Codable {
     }
     
     public func addBool(_ key: String, _ value: Bool) {
-        assert(!key.isEmpty)
-        assert(!store.keys.contains(key), "store already contains \(key)")
+        frontend.assert(!key.isEmpty, "addBool key was empty")
+        frontend.assert(!store.keys.contains(key), "store already contains \(key)")
         store[key] = .bool(value)
     }
     
     public func addDate(_ key: String, _ value: Date) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addDate key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
         store[key] = .date(value)
     }
     
     public func addDbl(_ key: String, _ value: Double) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addDbl key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
-        assert(!value.isNaN, "\(key) is NaN")
-        assert(!value.isInfinite, "\(key) is Inf")
+        frontend.assert(!value.isNaN, "\(key) is NaN")
+        frontend.assert(!value.isInfinite, "\(key) is Inf")
         store[key] = .double(value)
     }
     
     public func addDblArray(_ key: String, _ value: [Double]) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addDblArray key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
         assert(value.all {!$0.isNaN}, "\(key) has a NaN")
         assert(value.all {!$0.isInfinite}, "\(key) has an Inf")
@@ -46,20 +46,20 @@ public class Store: Codable {
     }
     
     public func addInt(_ key: String, _ value: Int) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addInt key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
         store[key] = .int(value)
     }
     
     public func addIntArray(_ key: String, _ value: [Int]) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addIntArray key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
         let v = value.map {Value.int($0)}
         store[key] = .array(v)
     }
     
     public func addObj(_ key: String, _ value: Storable) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addObj key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
 
         let inner = Store()
@@ -68,7 +68,7 @@ public class Store: Codable {
     }
     
     public func addObjArray(_ key: String, _ value: [Storable]) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addObjArray key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
 
         var v: [Value] = []
@@ -82,13 +82,13 @@ public class Store: Codable {
     }
     
     public func addStr(_ key: String, _ value: String) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addStr key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
         store[key] = .string(value)
     }
     
     public func addStrArray(_ key: String, _ value: [String]) {
-        assert(!key.isEmpty)
+        frontend.assert(!key.isEmpty, "addStrArray key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
         let v = value.map {Value.string($0)}
         store[key] = .array(v)
