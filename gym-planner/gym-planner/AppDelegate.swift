@@ -68,6 +68,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         return program.findExercise(name)
     }
 
+    func assert(_ predicate: Bool, _ message: String) {
+        if !predicate {
+            var controller = self.window?.rootViewController
+            while let next = controller?.presentedViewController {
+                controller = next
+            }
+            
+            if controller != nil {
+                let alert = UIAlertController(title: "Assertion failed", message: message, preferredStyle: .actionSheet)
+                
+                let action = UIAlertAction(title: "OK", style: .default, handler: {(_) in Swift.assert(false, message)})
+                alert.addAction(action)
+                
+                controller!.present(alert, animated: true, completion:nil)
+            } else {
+                Swift.assert(false, message)
+            }
+        }
+    }
+    
     func scheduleTimerNotification(_ fireDate: Date) {
         let content = UNMutableNotificationContent()
         content.title = "Finished resting."

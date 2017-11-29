@@ -5,6 +5,8 @@ public protocol FrontEnd {
     func saveExercise(_ name: String)
 
     func findExercise(_ name: String) -> Exercise?
+
+    func assert(_ predicate: Bool, _ message: String)
 }
 
 public var frontend: FrontEnd!
