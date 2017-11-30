@@ -307,17 +307,14 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
                 
             case .newPlan(let p):
                 let newName = exercise.name + "-" + p.name
-                var newExercise = app.program.findExercise(newName)
-                if newExercise == nil {
-                    newExercise = exercise.withPlan(newName, p)
-                    app.program.exercises.append(newExercise!)
-                }
+                let newExercise = exercise.withPlan(newName, p)
+                app.program.setExercise(newExercise)
                 
                 switch p.start(newName) {
                 case .ok:
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let view = storyboard.instantiateViewController(withIdentifier: "ExerciseID") as! ExerciseController
-                    view.initialize(workout, newExercise!, breadcrumbLabel.text!, "unwindToWorkoutID")
+                    view.initialize(workout, newExercise, breadcrumbLabel.text!, "unwindToWorkoutID")
                     self.present(view, animated: true, completion: nil)
                 case .newPlan(let q):
                     err = "Plan \(exercise.plan.name) started plan \(p.name) which started \(q.name)"

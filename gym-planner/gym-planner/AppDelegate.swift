@@ -122,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         var path = getPath(fileName: "program_name")
         saveObject(program.name as AnyObject, path)
 
-        path = getPath(fileName: "program-" + program.name)
+        path = getPath(fileName: "program2-" + program.name)
         let store = Store()
         program.save(store)
         let encoder = JSONEncoder()

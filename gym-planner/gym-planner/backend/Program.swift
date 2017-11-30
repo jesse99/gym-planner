@@ -71,6 +71,14 @@ public class Program: Storable {
     public func findExercise(_ name: String) -> Exercise? {
         return exercises.first {$0.name == name}
     }
+    
+    public func setExercise(_ exercise: Exercise) {
+        if let index = exercises.index(where: {$0.name == exercise.name}) {
+            exercises[index] = exercise
+        } else {
+            exercises.append(exercise)
+        }
+    }
    
     public var name: String             // "Mad Cow"
     public var workouts: [Workout]
