@@ -43,7 +43,7 @@ public class NRepMaxPlan : Plan {
 
         switch findSetting(exerciseName) {
         case .right(let setting):
-            self.weight = Weight(0.0, setting.apparatus).find(.closest).weight
+            self.weight = Weight(0.0, setting.apparatus).closest().weight
             self.setNum = 1
             self.done = false
             frontend.saveExercise(exerciseName)
@@ -80,7 +80,7 @@ public class NRepMaxPlan : Plan {
         
         switch findSetting(exerciseName) {
         case .right(let setting):
-            let info = Weight(weight, setting.apparatus).find(.closest)
+            let info = Weight(weight, setting.apparatus).closest()
             return Activity(
                 title: "Set \(setNum)",
                 subtitle: "Finding \(numReps) rep max",
@@ -142,7 +142,7 @@ public class NRepMaxPlan : Plan {
     public func reset() {
         switch findSetting(exerciseName) {
         case .right(let setting):
-            self.weight = Weight(0.0, setting.apparatus).find(.closest).weight
+            self.weight = Weight(0.0, setting.apparatus).closest().weight
             setNum = 1
             done = false
 

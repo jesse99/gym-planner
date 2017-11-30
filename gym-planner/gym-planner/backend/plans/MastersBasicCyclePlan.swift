@@ -40,11 +40,11 @@ public class MastersBasicCyclePlan : Plan {
         
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, weight: Double) {
             self.title = "Warmup \(phase) of \(phaseCount)"
-            self.weight = Weight(percent*weight, apparatus).find(.lower)
+            self.weight = Weight(percent*weight, apparatus).closest(below: weight)
             self.numReps = numReps
             self.warmup = true
 
-            let info1 = Weight(weight, apparatus).find(.closest)
+            let info1 = Weight(weight, apparatus).closest()
             let p = String(format: "%.0f", 100.0*percent)
             self.subtitle = "\(p)% of \(info1.text)"
         }
@@ -52,7 +52,7 @@ public class MastersBasicCyclePlan : Plan {
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, weight: Double) {
             self.title = "Workset \(phase) of \(phaseCount)"
             self.subtitle = ""
-            self.weight = Weight(weight, apparatus).find(.closest)
+            self.weight = Weight(weight, apparatus).closest()
             self.numReps = numReps
             self.warmup = false
         }
@@ -218,7 +218,7 @@ public class MastersBasicCyclePlan : Plan {
             let cycle = cycles[cycleIndex]
             let sr = "\(cycle.workSets)x\(cycle.workReps)"
             
-            let info1 = Weight(maxWeight, setting.apparatus).find(.closest)
+            let info1 = Weight(maxWeight, setting.apparatus).closest()
             if cycle.percent == 1.0 {
                 return "\(sr) @ \(info1.text)"
             } else {

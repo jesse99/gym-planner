@@ -12,11 +12,11 @@ public class PercentOfPlan : Plan {
         
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, weight: Double) {
             self.title = "Warmup \(phase) of \(phaseCount)"
-            self.weight = Weight(percent*weight, apparatus).find(.lower)
+            self.weight = Weight(percent*weight, apparatus).closest(below: weight)
             self.numReps = numReps
             self.warmup = true
 
-            let info = Weight(weight, apparatus).find(.closest)
+            let info = Weight(weight, apparatus).closest()
             let p = String(format: "%.0f", 100.0*percent)
             self.subtitle = "\(p)% of \(info.text)"
         }
@@ -24,7 +24,7 @@ public class PercentOfPlan : Plan {
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, weight: Double) {
             self.title = "Workset \(phase) of \(phaseCount)"
             self.subtitle = ""
-            self.weight = Weight(weight, apparatus).find(.closest)
+            self.weight = Weight(weight, apparatus).closest()
             self.numReps = numReps
             self.warmup = false
         }

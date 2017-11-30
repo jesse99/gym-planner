@@ -13,12 +13,6 @@ protocol WeightGenerator
 // TODO:
 // units
 internal struct Weight: CustomStringConvertible {
-    enum Direction {
-        case lower
-        case closest
-        case upper
-    }
-    
     struct Info: Storable {
         // 145.0
         let weight: Double
@@ -52,54 +46,64 @@ internal struct Weight: CustomStringConvertible {
         self.weight = weight
         self.apparatus = apparatus
     }
-    
-    /// Note that if the direction constraint can't be satisfied this will return something as close as possible,
-    /// e.g. doing a find using a weight below the smallest dumbbell will return the smallest dumbbell.
-    func find(_ to: Direction) -> Info {
-        switch apparatus {
-        case .barbell(bar: let barWeight, collar: let collarWeight, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: _):
-            let limit = 20
-            let smallest = 2*min(plates.first ?? 45.0, bumpers.first ?? 45.0, magnets.first ?? 45.0)
-            let floor = max(barWeight, weight - Double(limit/2)*smallest)
-            
-            // This can get a bit squirrelly when magnets are used because they can be much smaller than the
-            // smallest plate and when bumpers are used because we don't want to just use the bare bar and the
-            // smallest bumper can be a lot larger than the smallest plate. So we'll just find a bunch of
-            // candidates about the target weight and select lowest, closest, and upper from those.
-            var candidates: [Info] = []
-            for n in 0..<limit {
-                let x = findPairedPlates(floor + Double(n)*smallest, barWeight, collarWeight, plates, bumpers, magnets)
-                candidates.append(x)
-            }
-            
-            var delta = Double.infinity
-            var first = candidates.count
-            var last = candidates.count
-            for (i, x) in candidates.enumerated() {
-                let d = abs(x.weight - weight)
-                if d < delta {
-                    delta = d
-                    first = i
-                }
-                if d == delta {
-                    last = i
-                }
-            }
 
-            switch to {
-            case .lower: return first > 0 ? candidates[first-1] : candidates[first]
-            case .closest: return candidates[first]
-            case .upper: return last+1 < candidates.count ? candidates[last+1] : candidates[last]
+    /// Best effort at returning something closest to weight.
+    func closest() -> Info {
+        let candidates = closestRange()
+        
+        var delta = Double.infinity
+        var index = candidates.count
+        for (i, x) in candidates.enumerated() {
+            let d = abs(x.weight - weight)
+            if d < delta {
+                delta = d
+                index = i
             }
-            
-        case .dumbbells(_, _):
-            frontend.assert(false, "find doesn't support dumbbells"); abort()
         }
+        
+        return candidates[index]
+    }
+    
+    /// Best effort at returning something closest to weight while remaining below another weight.
+    func closest(below: Double) -> Info {
+        let candidates = closestRange()
+        let limit = Weight(below, apparatus).closest().weight
+        
+        var delta = Double.infinity
+        var index = 0
+        for (i, x) in candidates.enumerated() {
+            let d = abs(x.weight - weight)
+            if d < delta && x.weight < limit {
+                delta = d
+                index = i
+            }
+        }
+        
+        return candidates[index]
+    }
+    
+    /// Best effort at returning something closest to weight while remaining above another weight.
+    func closest(above: Double) -> Info {
+        let candidates = closestRange()
+        let limit = Weight(above, apparatus).closest().weight
+        
+        var delta = Double.infinity
+        var index = candidates.count - 1
+        for (i, x) in candidates.enumerated() {
+            let d = abs(x.weight - weight)
+            if d < delta && x.weight > limit {
+                delta = d
+                index = i
+            }
+        }
+        
+        return candidates[index]
     }
     
     /// Returns the weight immediately above weight.
     func nextWeight() -> Double {
-        return find(.upper).weight
+        let temp = Weight(weight + 0.0001, apparatus)
+        return temp.closest(above: weight).weight
     }
     
     var description: String {
@@ -141,6 +145,31 @@ internal struct Weight: CustomStringConvertible {
             return Weight.friendlyStr(weight) + " lbs"  // TODO: also kg
         } else {
             return Weight.friendlyStr(weight) + " lb"
+        }
+    }
+    
+    // Returns a range about weight sorted from smallest to largest.
+    private func closestRange() -> [Info] {
+        switch apparatus {
+        case .barbell(bar: let barWeight, collar: let collarWeight, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: _):
+            let limit = 18
+            let smallest = 2*min(plates.first ?? 45.0, bumpers.first ?? 45.0, magnets.first ?? 45.0)
+            let floor = max(barWeight, weight - Double(limit/2)*smallest)
+            
+            // This can get a bit squirrelly when magnets are used because they can be much smaller than the
+            // smallest plate and when bumpers are used because we don't want to just use the bare bar and the
+            // smallest bumper can be a lot larger than the smallest plate. So we'll just find a bunch of
+            // candidates about the target weight and select lowest, closest, and upper from those.
+            var candidates: [Info] = []
+            for n in 0..<limit {
+                let x = findPairedPlates(floor + Double(n)*smallest, barWeight, collarWeight, plates, bumpers, magnets)
+                candidates.append(x)
+            }
+            
+            return candidates
+            
+        case .dumbbells(_, _):
+            frontend.assert(false, "find doesn't support dumbbells"); abort()
         }
     }
     

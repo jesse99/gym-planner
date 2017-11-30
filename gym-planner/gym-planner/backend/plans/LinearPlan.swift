@@ -11,14 +11,14 @@ public class LinearPlan : Plan {
         
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, weight: Double) {
             self.title = "Warmup \(phase) of \(phaseCount)"
-            self.weight = Weight(percent*weight, apparatus).find(.lower)
+            self.weight = Weight(percent*weight, apparatus).closest(below: weight)
             self.numReps = numReps
             self.warmup = true
         }
         
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, weight: Double) {
             self.title = "Workset \(phase) of \(phaseCount)"
-            self.weight = Weight(weight, apparatus).find(.closest)
+            self.weight = Weight(weight, apparatus).closest()
             self.numReps = numReps
             self.warmup = false
         }
@@ -277,7 +277,7 @@ public class LinearPlan : Plan {
                 os_log("stalled = %dx", type: .info, setting.stalls)
                 
                 if setting.stalls >= 3 {
-                    let info = Weight(0.9*setting.weight, setting.apparatus).find(.lower)
+                    let info = Weight(0.9*setting.weight, setting.apparatus).closest(below: setting.weight)
                     setting.changeWeight(info.weight)
                     setting.stalls = 0
                     os_log("deloaded to = %.3f", type: .info, setting.weight)
