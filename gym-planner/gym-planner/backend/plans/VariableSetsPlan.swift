@@ -195,6 +195,10 @@ public class VariableSetsPlan: Plan {
         reps.append(count)
         
         if finished() {
+            if case let .right(exercise) = findExercise(exerciseName) {
+                exercise.completed = Date()
+            }
+            
             addResult()
         }
         frontend.saveExercise(exerciseName)

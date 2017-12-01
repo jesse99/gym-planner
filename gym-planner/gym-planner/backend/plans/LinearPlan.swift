@@ -256,6 +256,10 @@ public class LinearPlan : Plan {
         setIndex += 1
         frontend.assert(finished(), "LinearPlan is not finished in doFinish")
         
+        if case let .right(exercise) = findExercise(exerciseName) {
+            exercise.completed = Date()
+        }
+        
         addResult(missed)
         handleAdvance(missed)
         frontend.saveExercise(exerciseName)

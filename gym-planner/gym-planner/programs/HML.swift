@@ -45,9 +45,9 @@ func HML() -> Program {
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restSecs: 3.0, derived: true)]
 
     let workouts = [
-        Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"]),
-        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"]),
-        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"])]
+        Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
+        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true),
+        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"], scheduled: true)]
 
     let tags: [Program.Tags] = [.intermediate, .strength, .age40s, .age50s]
     let description = """

@@ -325,6 +325,10 @@ public class MastersBasicCyclePlan : Plan {
         setIndex += 1
         frontend.assert(finished(), "MastersBasicCyclePlan not finished in doFinish")
         
+        if case let .right(exercise) = findExercise(exerciseName) {
+            exercise.completed = Date()
+        }
+        
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
         addResult(cycleIndex, missed)
         

@@ -7,6 +7,7 @@ public class Exercise: Storable {
         self.formalName = formalName
         self.plan = plan
         self.settings = settings
+        self.completed = nil
         self.hidden = hidden
     }
     
@@ -15,6 +16,12 @@ public class Exercise: Storable {
         self.formalName = store.getStr("formalName")
         self.settings = store.getObj("settings")
         self.hidden = store.getBool("hidden")
+        
+        if store.hasKey("completed") {
+            self.completed = store.getDate("completed")
+        } else {
+            self.completed = nil
+        }
         
         let pname = store.getStr("plan-type")
         switch pname {
@@ -34,6 +41,10 @@ public class Exercise: Storable {
         store.addObj("plan", plan)
         store.addObj("settings", settings)
         store.addBool("hidden", hidden)
+        
+        if let c = completed {
+            store.addDate("completed", c)
+        }
     }
     
     /// This is used for plans that have to run a different plan first, e.g. NRepMaxPlan.
@@ -46,7 +57,10 @@ public class Exercise: Storable {
     public let plan: Plan
     public let settings: Settings
     
-    // If true don't display the plan in UI.
+    /// Date the exercise was last completed.
+    public var completed: Date?
+    
+    /// If true don't display the plan in UI.
     public let hidden: Bool
 }
 

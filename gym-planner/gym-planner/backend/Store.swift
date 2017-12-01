@@ -94,6 +94,10 @@ public class Store: Codable {
         store[key] = .array(v)
     }
     
+    public func hasKey(_ key: String) -> Bool {
+        return store.keys.contains(key)
+    }
+    
     public func getBool(_ key: String, ifMissing: Bool? = nil) -> Bool {
         if let e = store[key], case let .bool(v) = e {
             return v

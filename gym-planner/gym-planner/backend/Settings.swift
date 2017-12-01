@@ -21,7 +21,7 @@ public enum Apparatus
 public class VariableWeightSetting: Storable {
     var apparatus: Apparatus
     private(set) var weight: Double  // starts out at 0.0
-    private(set) var updatedWeight: Date
+    private(set) var updatedWeight: Date    // last time the weight was set, to either a new value or the same value and by the user or the app
     var restSecs: Int
     var stalls: Int
     

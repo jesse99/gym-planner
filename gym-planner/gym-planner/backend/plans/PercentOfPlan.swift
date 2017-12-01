@@ -251,6 +251,10 @@ public class PercentOfPlan : Plan {
     }
     
     private func doFinish() {
+        if case let .right(exercise) = findExercise(exerciseName) {
+            exercise.completed = Date()
+        }
+        
         setIndex += 1
         frontend.assert(finished(), "PercentOfPlan not finished in doFinish")
         addResult()

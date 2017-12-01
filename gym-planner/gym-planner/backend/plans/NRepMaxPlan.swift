@@ -166,6 +166,10 @@ public class NRepMaxPlan : Plan {
     }
     
     private func doFinish() {
+        if case let .right(exercise) = findExercise(exerciseName) {
+            exercise.completed = Date()
+        }
+        
         done = true
         updateWeight()
         frontend.saveExercise(exerciseName)

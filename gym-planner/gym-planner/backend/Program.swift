@@ -2,27 +2,37 @@
 import Foundation
 
 public class Workout: Storable {
-    init(_ name: String, _ exercises: [String], optional: [String] = []) {
+    init(_ name: String, _ exercises: [String], scheduled: Bool, optional: [String] = []) {
         self.name = name
         self.exercises = exercises
         self.optional = optional
+        self.scheduled = scheduled
     }
 
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.exercises = store.getStrArray("exercises")
         self.optional = store.getStrArray("optional")
+        self.scheduled = store.getBool("scheduled", ifMissing: true)
     }
     
     public func save(_ store: Store) {
         store.addStr("name", name)
         store.addStrArray("exercises", exercises)
         store.addStrArray("optional", optional)
+        store.addBool("scheduled", scheduled)
     }
 
     public var name: String         // "Heavy Day"
     public var exercises: [String]
-    public var optional: [String]   // names from exercises that default to inactive
+    
+    /// Names from exercises that default to inactive.
+    public var optional: [String]
+    
+    /// True for workouts that are typically performed on a certain day, eg the push day for a
+    /// push/pull program. False for stuff like a mobility or cardio workout that can be
+    /// performed at any time.
+    public var scheduled: Bool
 }
 
 public class Program: Storable {
