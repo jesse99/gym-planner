@@ -149,10 +149,11 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
                 cell.detailTextLabel?.setColor(.red)    // TODO: use targetColor
 
             } else {
-                switch exercise.plan.clone().start(name) {
+                let p = exercise.plan.clone()
+                switch p.start(name) {
                 case .ok:
-                    cell.textLabel!.text = exercise.plan.label()
-                    cell.detailTextLabel!.text = exercise.plan.sublabel()
+                    cell.textLabel!.text = p.label()
+                    cell.detailTextLabel!.text = p.sublabel()
                     let calendar = Calendar.current
                     if let completed = exercise.completed, calendar.isDate(completed, inSameDayAs: Date()) {
                         cell.textLabel?.setColor(.lightGray)
@@ -163,7 +164,7 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
                     }
 
                 case .newPlan(_):
-                    cell.textLabel!.text = exercise.plan.label()
+                    cell.textLabel!.text = p.label()
                     cell.detailTextLabel!.text = "Not completed"
                     cell.textLabel?.setColor(.black)
                     cell.detailTextLabel?.setColor(.black)

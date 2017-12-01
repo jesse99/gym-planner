@@ -178,7 +178,7 @@ public class LinearPlan : Plan {
     
     public func sublabel() -> String {
         if let set = sets.last {
-            return "\(repsStr(set.numReps)) @ \(set.weight.text)"
+            return "\(workSets)x\(workReps) @ \(set.weight.text)"
         } else {
             return ""
         }

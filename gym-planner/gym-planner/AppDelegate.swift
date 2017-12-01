@@ -102,9 +102,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         center.add(request, withCompletionHandler: nil)
     }
     
+    let programPrefix = "program3-"
+    
     private func loadProgram(_ name: String) -> Program? {
 //        print("-----------------------------------------")
-        let path = getPath(fileName: "program2-" + name)
+        let path = getPath(fileName: programPrefix + name)
         if let data = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? Data {
             do {
                 let decoder = JSONDecoder()
@@ -129,7 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         var path = getPath(fileName: "program_name")
         saveObject(program.name as AnyObject, path)
 
-        path = getPath(fileName: "program2-" + program.name)
+        path = getPath(fileName: programPrefix + program.name)
         let store = Store()
         program.save(store)
         let encoder = JSONEncoder()
