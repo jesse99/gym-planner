@@ -7,7 +7,7 @@ public protocol Storable {
     func save(_ store: Store)
 }
 
-public class Store: Codable {
+public class Store: Codable, CustomStringConvertible {
     init() {
         self.store = [:]
     }
@@ -245,6 +245,10 @@ public class Store: Codable {
         }
     }
 
+    public var description: String {
+        return objectToStr(store, 0)
+    }
+    
     private var store: [String: Value]
 }
 
@@ -256,6 +260,39 @@ fileprivate enum Value {
     case string(String)
     case array([Value])
     case object([String: Value])
+}
+
+extension Value {
+    func describe(_ level: Int) -> String {
+        switch self {
+        case .bool(let x): return (x ? "true" : "false")
+        case .date(let x): return x.description
+        case .double(let x): return String(format: "%.3f", x)
+        case .int(let x): return String(format: "%d", x)
+        case .string(let x): return "'" + x + "'"
+        case .array(let x): return "[" + (x.map {$0.describe(level)}).joined(separator: ", ") + "]"
+        case .object(let x): return "\n" + objectToStr(x, level+1)
+        }
+    }
+}
+
+fileprivate func objectToStr(_ obj: [String: Value], _ level: Int) -> String {
+    var result = ""
+    
+    var prefix = ""
+    for _ in 0..<level {
+        prefix += "   "
+    }
+    result = prefix + "{\n"
+    
+    for (key, value) in obj {
+        result += prefix + "   \(key): "
+        result += value.describe(level+1)
+        result += "\n"
+    }
+    
+    result += prefix + "}"
+    return result
 }
 
 // Codable can't handle enums with associated values so we need to manually serialize Value.

@@ -61,6 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
     }
 
     func saveExercise(_ name: String) {
+//        print("-----------------------------------------")
         saveProgram(program)
     }
     
@@ -102,12 +103,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
     }
     
     private func loadProgram(_ name: String) -> Program? {
-        let path = getPath(fileName: "program-" + name)
+//        print("-----------------------------------------")
+        let path = getPath(fileName: "program2-" + name)
         if let data = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? Data {
             do {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .secondsSince1970
                 let store = try decoder.decode(Store.self, from: data)
+//                print("---- json ---------------------------------------")
+//                print(String(data: data, encoding: .utf8)!)
+//
+//                print("---- loading ---------------------------------------")
+//                print(store)
                 return Program(from: store)
             } catch {
                 os_log("failed to decode program from %@: %@", type: .error, path, error.localizedDescription)
@@ -127,9 +134,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         program.save(store)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .secondsSince1970
-        
+        //encoder.outputFormatting = .prettyPrinted
+
         do {
             let data = try encoder.encode(store)
+//            print("---- saving ---------------------------------------")
+//            print(store)
             saveObject(data as AnyObject, path)
         } catch {
             os_log("Error encoding program %@: %@", type: .error, program.name, error.localizedDescription)

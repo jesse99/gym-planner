@@ -70,6 +70,13 @@ public class VariableSetsPlan: Plan {
     public let name: String
     public let typeName: String
     
+    public func clone() -> Plan {
+        let store = Store()
+        store.addObj("self", self)
+        let result: VariableSetsPlan = store.getObj("self")
+        return result
+    }
+    
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting VariableSetsPlan for %@ and %@", type: .info, name, exerciseName)
 
@@ -81,7 +88,7 @@ public class VariableSetsPlan: Plan {
     }
     
     public func isStarted() -> Bool {
-        return !exerciseName.isEmpty && !finished()
+        return !exerciseName.isEmpty && !reps.isEmpty && !finished()
     }
     
     public func label() -> String {

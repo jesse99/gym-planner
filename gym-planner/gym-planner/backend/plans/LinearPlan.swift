@@ -112,6 +112,13 @@ public class LinearPlan : Plan {
     public let name: String
     public let typeName: String
     
+    public func clone() -> Plan {
+        let store = Store()
+        store.addObj("self", self)
+        let result: LinearPlan = store.getObj("self")
+        return result
+    }
+    
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting LinearPlan for %@ and %@", type: .info, name, exerciseName)
         self.sets = []

@@ -139,8 +139,8 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
 //        }
 //        else
         
-        let started = findStartedWorkouts()
-        if started.contains(index) {
+        let todays = findTodaysWorkouts()
+        if todays.contains(index) {
             // Highlight any workouts the user is currently performing (can be multiple if he is switching between
             // something like mobility and a lifting workout).
             let color = UIColor.red             // TODO: use targetColor
@@ -151,7 +151,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             // Otherwise highlight the first workout the user hasn't completed or the oldest completed workout.
             let selectedIndex = findFirstMissingWorkout() ?? findOldestWorkout() ?? app.program.workouts.count
-            let color = selectedIndex == index && started.isEmpty ? UIColor.red : UIColor.black
+            let color = selectedIndex == index && todays.isEmpty ? UIColor.red : UIColor.black
             cell.textLabel!.setColor(color)
             cell.detailTextLabel!.setColor(color)
 
@@ -173,21 +173,25 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
     
-    private func findStartedWorkouts() -> [Int] {
-        var started: [Int] = []
+    private func findTodaysWorkouts() -> [Int] {
+        var todays: [Int] = []
         
         let app = UIApplication.shared.delegate as! AppDelegate
+        let calendar = Calendar.current
         for (i, workout) in app.program.workouts.enumerated() {
             for name in workout.exercises {
                 if let exercise = app.program.findExercise(name) {
                     if exercise.plan.isStarted() {
-                        started.append(i)
+                        todays.append(i)
+                        break
+                    } else if let completed = exercise.completed, calendar.isDate(completed, inSameDayAs: Date()) {
+                        todays.append(i)
                         break
                     }
                 }
             }
         }
-        return started
+        return todays
     }
     
     private func dateWorkoutWasCompleted(_ workout: Workout) -> (Date, Bool)? {

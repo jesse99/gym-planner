@@ -19,7 +19,6 @@ class ExerciseController: UIViewController {
         self.unwindTo = unwindTo
         self.breadcrumb = "\(breadcrumb) • \(exercise.name)"
 
-        exercise.plan.reset()
         self.startedTimer = false
     }
     

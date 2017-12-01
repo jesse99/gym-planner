@@ -37,6 +37,13 @@ public class NRepMaxPlan : Plan {
     public let name: String
     public let typeName: String
     
+    public func clone() -> Plan {
+        let store = Store()
+        store.addObj("self", self)
+        let result: NRepMaxPlan = store.getObj("self")
+        return result
+    }
+    
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting NRepMaxPlan for %@ and %@", type: .info, name, exerciseName)
         self.exerciseName = exerciseName

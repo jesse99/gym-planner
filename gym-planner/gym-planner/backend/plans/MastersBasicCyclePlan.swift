@@ -6,8 +6,8 @@ import os.log
 // 4x5 @ 100%, 4x3 @ 105%, 4x1 @ 110%
 
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
-public class MastersBasicCyclePlan : Plan {
-    struct Execute: Storable {
+public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
+    struct Execute: Storable, CustomDebugStringConvertible {
         let workSets: Int
         let workReps: Int
         let percent: Double
@@ -29,9 +29,13 @@ public class MastersBasicCyclePlan : Plan {
             store.addInt("workReps", workReps)
             store.addDbl("percent", percent)
         }
+
+        var debugDescription: String {
+            return "\(workSets)x\(workReps) @ \(Int(100.0*percent))"
+        }
     }
 
-    struct Set: Storable {
+    struct Set: Storable, CustomDebugStringConvertible {
         let title: String      // "Workset 3 of 4"
         let subtitle: String   // "90% of 140 lbs"
         let numReps: Int
@@ -72,14 +76,22 @@ public class MastersBasicCyclePlan : Plan {
             store.addObj("weight", weight)
             store.addBool("warmup", warmup)
         }
+
+        var debugDescription: String {
+            return title
+        }
     }
     
-    struct Result: VariableWeightResult, Storable {
+    struct Result: VariableWeightResult, Storable, CustomDebugStringConvertible {
         let title: String   // "135 lbs 3x5"
         let date: Date
         let cycleIndex: Int
         var missed: Bool
         var weight: Double
+
+        var debugDescription: String {
+            return title + " for cycle \(cycleIndex)" + (missed ? " (missed)" : "")
+        }
 
         var primary: Bool {get {return cycleIndex == 0}}
 
@@ -114,6 +126,7 @@ public class MastersBasicCyclePlan : Plan {
         self.typeName = "MastersBasicCyclePlan"
         self.cycles = cycles
         self.deloads = [1.0, 1.0, 0.9, 0.85, 0.8];
+        self.setIndex = 0
     }
     
     public required init(from store: Store) {
@@ -126,7 +139,7 @@ public class MastersBasicCyclePlan : Plan {
         self.history = store.getObjArray("history")
         self.sets = store.getObjArray("sets")
         self.maxWeight = store.getDbl("maxWeight")
-        self.setIndex = store.getInt("setIndex")
+        self.setIndex = store.getInt("mbc-setIndex", ifMissing: 0)
     }
     
     public func save(_ store: Store) {
@@ -138,12 +151,23 @@ public class MastersBasicCyclePlan : Plan {
         store.addObjArray("history", history)
         store.addObjArray("sets", sets)
         store.addDbl("maxWeight", maxWeight)
-        store.addInt("setIndex", setIndex)
+        store.addInt("mbc-setIndex", setIndex)
+    }
+    
+    public var debugDescription: String {
+        return name
     }
     
     // Plan methods
     public let name: String
     public let typeName: String
+    
+    public func clone() -> Plan {
+        let store = Store()
+        store.addObj("self", self)
+        let result: MastersBasicCyclePlan = store.getObj("self")
+        return result
+    }
     
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting MastersBasicCyclePlan for %@ and %@", type: .info, name, exerciseName)
@@ -303,7 +327,7 @@ public class MastersBasicCyclePlan : Plan {
     }
     
     public func finished() -> Bool {
-        return setIndex == sets.count
+        return !sets.isEmpty && setIndex == sets.count
     }
 
     public func reset() {
@@ -392,6 +416,6 @@ public class MastersBasicCyclePlan : Plan {
     private var history: [Result] = []
     private var sets: [Set] = []
     private var maxWeight: Double = 0.0
-    private var setIndex: Int = 0
+    private var setIndex: Int
 }
 

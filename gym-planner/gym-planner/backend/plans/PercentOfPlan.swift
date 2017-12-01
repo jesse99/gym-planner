@@ -117,6 +117,13 @@ public class PercentOfPlan : Plan {
     public let name: String
     public let typeName: String
     
+    public func clone() -> Plan {
+        let store = Store()
+        store.addObj("self", self)
+        let result: PercentOfPlan = store.getObj("self")
+        return result
+    }
+    
     public func start(_ exerciseName: String) -> StartResult {
         os_log("starting PercentOfPlan for %@ and %@", type: .info, name, exerciseName)
 
@@ -271,7 +278,7 @@ public class PercentOfPlan : Plan {
     private func getOtherWeight() -> Either<String, Double> {
         switch findExercise(otherName) {
         case .right(let exercise):
-            if case .ok = exercise.plan.start(otherName) {
+            if case .ok = exercise.plan.clone().start(otherName) {
                 switch exercise.settings {
                 case .variableWeight(let setting): return .right(setting.weight)
                 case .fixedWeight(let setting): return .right(setting.weight)
