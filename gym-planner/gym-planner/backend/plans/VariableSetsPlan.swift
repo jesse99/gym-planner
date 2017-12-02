@@ -110,17 +110,25 @@ public class VariableSetsPlan: Plan {
     }
     
     public func prevLabel() -> String {
-        if let result = history.last {
+        func resultToStr(_ result: Result) -> String {
             let c = result.reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let r = result.reps.map {"\($0)"}
             let rs = r.joined(separator: ", ")
             if result.weight > 0 {
-                return "Previous was \(rs) (\(repsStr(c)) @ \(Weight.friendlyStr(result.weight))"
+                return "\(rs) (\(repsStr(c)) @ \(Weight.friendlyStr(result.weight))"
             } else {
-                return "Previous was \(rs) (\(c) reps)"
+                return "\(rs) (\(c) reps)"
             }
-        } else {
+        }
+
+        if history.count == 0 {
             return ""
+
+        } else if history.count == 1 {
+            return "Previous was \(resultToStr(history[history.count - 1]))"
+
+        } else {
+            return "Previous was \(resultToStr(history[history.count - 1])) and \(resultToStr(history[history.count - 2]))"
         }
     }
     
@@ -136,11 +144,20 @@ public class VariableSetsPlan: Plan {
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let suffix = weight > 0 ? " @ \(Weight.friendlyStr(weight))" : ""
             
+            var subtitle = ""
+            if reps.count > 1 {
+                let a = reps.map {"\($0)"}
+                let s = a.joined(separator: ", ")
+                subtitle = "\(completed) of \(requiredReps) (\(s))"
+            } else {
+                subtitle = "\(completed) of \(requiredReps)"
+            }
+            
             let delta = requiredReps - completed
             let amount = delta > 1 ? "1-\(delta) reps\(suffix)" : "1 rep"
             return Activity(
                 title: "Set \(reps.count + 1)",
-                subtitle: "",
+                subtitle: subtitle,
                 amount: amount,
                 details: "",
                 secs: nil)               // this is used for timed exercises
