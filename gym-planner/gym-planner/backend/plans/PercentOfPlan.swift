@@ -70,11 +70,10 @@ public class PercentOfPlan : Plan {
         }
     }
     
-    init(_ name: String, _ otherName: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
+    init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
         os_log("init PercentOfPlan for %@", type: .info, name)
         self.name = name
         self.typeName = "PercentOfPlan"
-        self.otherName = otherName
         self.firstWarmup = firstWarmup
         self.warmupReps = warmupReps
         self.workSets = workSets
@@ -87,7 +86,6 @@ public class PercentOfPlan : Plan {
         if let savedPlan = inPlan as? PercentOfPlan {
             return typeName == savedPlan.typeName &&
                 name == savedPlan.name &&
-                otherName == savedPlan.otherName &&
                 firstWarmup == savedPlan.firstWarmup &&
                 warmupReps == savedPlan.warmupReps &&
                 workSets == savedPlan.workSets &&
@@ -101,7 +99,6 @@ public class PercentOfPlan : Plan {
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.typeName = "PercentOfPlan"
-        self.otherName = store.getStr("otherName")
         self.firstWarmup = store.getDbl("firstWarmup")
         self.warmupReps = store.getIntArray("warmupReps")
         self.workSets = store.getInt("workSets")
@@ -116,7 +113,6 @@ public class PercentOfPlan : Plan {
     
     public func save(_ store: Store) {
         store.addStr("name", name)
-        store.addStr("otherName", otherName)
         store.addDbl("firstWarmup", firstWarmup)
         store.addIntArray("warmupReps", warmupReps)
         store.addInt("workSets", workSets)
@@ -203,14 +199,20 @@ public class PercentOfPlan : Plan {
         case .left(_):
             break
         }
+        
+        switch findBaseExerciseName(name) {
+            case .right(let otherName):
+                if let weight = sets.last?.weight {
+                    let p = Int(100.0*self.percent)
+                    return "\(weight.text) (\(p)% of \(otherName)\(suffix))"
+                
+                } else {
+                    let p = Int(100.0*self.percent)
+                    return "\(p)% of \(otherName)\(suffix)"
+                }
 
-        if let weight = sets.last?.weight {
-            let p = Int(100.0*self.percent)
-            return "\(weight.text) (\(p)% of \(otherName)\(suffix))"
-
-        } else {
-            let p = Int(100.0*self.percent)
-            return "\(p)% of \(otherName)\(suffix)"
+            case .left(let err):
+                return err
         }
     }
     
@@ -300,23 +302,28 @@ public class PercentOfPlan : Plan {
     }
     
     private func getOtherWeight() -> Either<String, Double> {
-        switch findExercise(otherName) {
-        case .right(let exercise):
-            if case .ok = exercise.plan.clone().start(otherName) {
-                switch exercise.settings {
-                case .variableWeight(let setting): return .right(setting.weight)
-                case .fixedWeight(let setting): return .right(setting.weight)
-                default: return .left("\(otherName) doesn't use a variable or fixed weight plan")
+        // We do this bit just so that we can produce a better error message for the user.
+        switch findBaseExerciseName(name) {
+        case .right(let otherName):
+            switch findExercise(otherName) {
+            case .right(let otherExercise):
+                switch otherExercise.plan.clone().start(otherName) {
+                case .ok: break
+                case .newPlan(_): return .left("Execute \(otherName) first")
+                case .error(let err): return .left(err)
                 }
-            } else {
-                return .left("Execute \(otherName) first")
+            case .left(let err):
+                return .left(err)
             }
+            
         case .left(let err):
             return .left(err)
         }
+        
+        // If the base exercise can be started as is then iy'll have a weight that we can use.
+        return findWeight(name)
     }
     
-    private let otherName: String
     private let firstWarmup: Double
     private let warmupReps: [Int]
     private let workSets: Int;

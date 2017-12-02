@@ -64,21 +64,26 @@ public class VariableWeightSetting: Storable {
 /// Used for an exercise where the weight is derived from another exercises's VariableWeightSetting,
 /// e.g. when PercentOfPlan is used.
 public class DerivedWeightSetting: Storable {
-    var apparatus: Apparatus
     var restSecs: Int
     
-    init(_ apparatus: Apparatus, restSecs: Int) {
-        self.apparatus = apparatus
+    /// The name of the exercise that this exercise depends upon. (This isn't really a setting because
+    /// it's not something a user is expected to fiddle with from workout to workout but this is a
+    /// convient spot to put it so that code can do things like find the apparatus the base exercise
+    /// uses).
+    var otherName: String
+    
+    init(_ otherName: String, restSecs: Int) {
+        self.otherName = otherName
         self.restSecs = restSecs
     }
     
     public required init(from store: Store) {
-        self.apparatus = store.getObj("apparatus")
+        self.otherName = store.getStr("otherName")
         self.restSecs = store.getInt("restSecs")
     }
     
     public func save(_ store: Store) {
-        store.addObj("apparatus", apparatus)
+        store.addStr("otherName", otherName)
         store.addInt("restSecs", restSecs)
     }
 }

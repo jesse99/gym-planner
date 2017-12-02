@@ -62,6 +62,7 @@ public class Exercise: Storable {
             os_log("ignoring saved exercise %@", type: .info, name)
         }
     }
+
     public var name: String             // "Heavy Bench"
     public var formalName: String       // "Bench Press"
     public var plan: Plan

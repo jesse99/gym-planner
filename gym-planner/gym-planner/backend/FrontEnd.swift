@@ -37,7 +37,7 @@ public func findWeight(_ name: String) -> Either<String, Double> {
     if let exercise = frontend.findExercise(name) {
         switch exercise.settings {
         case .variableWeight(let setting): return .right(setting.weight)
-        case .derivedWeight(_): return .left("Exercise '\(name)' uses a derived weight")
+        case .derivedWeight(let setting): return findWeight(setting.otherName)
         case .fixedWeight(let setting): return .right(setting.weight)
         }
     } else {
@@ -61,7 +61,7 @@ public func findApparatus(_ name: String) -> Either<String, Apparatus> {
     if let exercise = frontend.findExercise(name) {
         switch exercise.settings {
         case .variableWeight(let setting): return .right(setting.apparatus)
-        case .derivedWeight(let setting): return .right(setting.apparatus)
+        case .derivedWeight(let setting): return findApparatus(setting.otherName)
         case .fixedWeight(_): return .left("Exercise '\(name)' is using fixed weight not variable or derived weight")
         }
     } else {
@@ -69,7 +69,17 @@ public func findApparatus(_ name: String) -> Either<String, Apparatus> {
     }
 }
 
-
-
-
+/// If the exercise depends upon another exercise (e.g. for DerivedWeightSetting)
+/// then return the other exercise's name. Otherwise return self.name.
+public func findBaseExerciseName(_ name: String) -> Either<String, String> {
+    if let exercise = frontend.findExercise(name) {
+        switch exercise.settings {
+        case .variableWeight(_): return .right(name)
+        case .derivedWeight(let setting): return name != setting.otherName ? findBaseExerciseName(setting.otherName) : .left("Derived exercise name is itself: '\(name)'")  // TODO: UI should make sure otherName can't be name
+        case .fixedWeight(_): return .right(name)
+        }
+    } else {
+        return .left("Couldn't find exercise '\(name)'")
+    }
+}
 

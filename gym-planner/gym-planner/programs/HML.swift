@@ -24,15 +24,15 @@ func HML() -> Program {
     }
     
     func planLSquat() -> Plan {
-        return PercentOfPlan("Light Squat",  "Squat",       firstWarmup: 0.5, warmupReps: [5, 3, 1, 1],    workSets: 1, workReps: 5, percent: 0.88)
+        return PercentOfPlan("Light Squat",  firstWarmup: 0.5, warmupReps: [5, 3, 1, 1],    workSets: 1, workReps: 5, percent: 0.88)
     }
     
     func planMSquat() -> Plan {
-        return PercentOfPlan("Medium Squat", "Squat",       firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 2, workReps: 5, percent: 0.94)
+        return PercentOfPlan("Medium Squat", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 2, workReps: 5, percent: 0.94)
     }
     
     func planMBench() -> Plan {
-        return PercentOfPlan("Medium Bench", "Bench Press", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 2, workReps: 5, percent: 0.94)
+        return PercentOfPlan("Medium Bench", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 2, workReps: 5, percent: 0.94)
     }
     
     func planChin() -> Plan {
@@ -43,11 +43,11 @@ func HML() -> Program {
         createBarBell("Squat",          "Low bar Squat",  planSquat(),  restSecs: 3.0, warmupsWithBar: 3),
         createBarBell("Bench Press",    "Bench Press",    plan531(),    restSecs: 3.0),
         createBarBell("Deadlift",       "Deadlift",       planDead(),   restSecs: 3.5, useBumpers: true),
-        createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restSecs: 2.0, warmupsWithBar: 3, derived: true),
+        createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restSecs: 2.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Overhead Press", "Overhead Press", plan53(),     restSecs: 3.0, magnets: [1.25]),
         createFixed  ("Chinups",        "Chinup",         planChin(),   restSecs: 2.0),
-        createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restSecs: 3.0, warmupsWithBar: 3, derived: true),
-        createBarBell("Medium Bench",   "Bench Press",    planMBench(), restSecs: 3.0, derived: true)]
+        createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restSecs: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
+        createBarBell("Medium Bench",   "Bench Press",    planMBench(), restSecs: 3.0, derivedFrom: "Bench Press")]
 
     let workouts = [
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
