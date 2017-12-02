@@ -176,7 +176,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.setIndex = 0
         self.exerciseName = exerciseName
 
-        switch findSetting(exerciseName) {
+        switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             if setting.weight == 0.0 {
                 return .newPlan(NRepMaxPlan("Rep Max", workReps: cycles.first?.workReps ?? 5))
@@ -236,13 +236,13 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
 
     public func sublabel() -> String {
-        switch findSetting(exerciseName) {
-        case .right(let setting):
+        switch findApparatus(exerciseName) {
+        case .right(let apparatus):
             let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
             let cycle = cycles[cycleIndex]
             let sr = "\(cycle.workSets)x\(cycle.workReps)"
             
-            let info1 = Weight(maxWeight, setting.apparatus).closest()
+            let info1 = Weight(maxWeight, apparatus).closest()
             if cycle.percent == 1.0 {
                 return "\(sr) @ \(info1.text)"
             } else {
@@ -257,7 +257,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
 
     public func prevLabel() -> String {
-        switch findSetting(exerciseName) {
+        switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads);
             if let percent = deload.percent {
@@ -295,16 +295,16 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
 
     // Note that this is called after advancing.
     public func restSecs() -> RestTime {
-        switch findSetting(exerciseName) {
-        case .right(let setting):
+        switch findRestSecs(exerciseName) {
+        case .right(let secs):
             if finished() {
-                return RestTime(autoStart: true, secs: setting.restSecs)   // TODO: make this an option?
+                return RestTime(autoStart: true, secs: secs)   // TODO: make this an option?
             } else if setIndex > 0 && sets[setIndex-1].warmup && !sets[setIndex].warmup {
-                return RestTime(autoStart: true, secs: setting.restSecs/2)
+                return RestTime(autoStart: true, secs: secs/2)
             } else if !sets[setIndex].warmup {
-                return RestTime(autoStart: true, secs: setting.restSecs)
+                return RestTime(autoStart: true, secs: secs)
             } else {
-                return RestTime(autoStart: false, secs: setting.restSecs)
+                return RestTime(autoStart: false, secs: secs)
             }
 
         case .left(_):
@@ -363,7 +363,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
     
     private func handleAdvance() {
-        switch findSetting(exerciseName) {
+        switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             if let result = MastersBasicCyclePlan.findCycleResult(history, 0) {
                 if !result.missed {

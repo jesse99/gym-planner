@@ -21,12 +21,24 @@ public func findExercise(_ name: String) -> Either<String, Exercise> {
 
 // It'd be nicer if plans could cache this off in their start methods but that's problematic
 // when view restoration kicks in because we'd wind up with two instances of the settings.
-public func findSetting(_ name: String) -> Either<String, VariableWeightSetting> {
+public func findVariableWeightSetting(_ name: String) -> Either<String, VariableWeightSetting> {
     if let exercise = frontend.findExercise(name) {
         if case let .variableWeight(setting) = exercise.settings {
             return .right(setting)
         } else {
             return .left("Exercise '\(name)' isn't using variable weight")
+        }
+    } else {
+        return .left("Couldn't find exercise '\(name)'")
+    }
+}
+
+public func findWeight(_ name: String) -> Either<String, Double> {
+    if let exercise = frontend.findExercise(name) {
+        switch exercise.settings {
+        case .variableWeight(let setting): return .right(setting.weight)
+        case .derivedWeight(_): return .left("Exercise '\(name)' uses a derived weight")
+        case .fixedWeight(let setting): return .right(setting.weight)
         }
     } else {
         return .left("Couldn't find exercise '\(name)'")

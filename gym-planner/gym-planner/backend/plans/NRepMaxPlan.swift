@@ -48,9 +48,9 @@ public class NRepMaxPlan : Plan {
         os_log("starting NRepMaxPlan for %@ and %@", type: .info, name, exerciseName)
         self.exerciseName = exerciseName
 
-        switch findSetting(exerciseName) {
-        case .right(let setting):
-            self.weight = Weight(0.0, setting.apparatus).closest().weight
+        switch findApparatus(exerciseName) {
+        case .right(let apparatus):
+            self.weight = Weight(0.0, apparatus).closest().weight
             self.setNum = 1
             self.done = false
             frontend.saveExercise(exerciseName)
@@ -85,9 +85,9 @@ public class NRepMaxPlan : Plan {
     public func current() -> Activity {
         frontend.assert(!finished(), "NRepMaxPlan finished in current")
         
-        switch findSetting(exerciseName) {
-        case .right(let setting):
-            let info = Weight(weight, setting.apparatus).closest()
+        switch findApparatus(exerciseName) {
+        case .right(let apparatus):
+            let info = Weight(weight, apparatus).closest()
             return Activity(
                 title: "Set \(setNum)",
                 subtitle: "Finding \(numReps) rep max",
@@ -106,9 +106,9 @@ public class NRepMaxPlan : Plan {
     }
     
     public func restSecs() -> RestTime {
-        switch findSetting(exerciseName) {
-        case .right(let setting):
-            return RestTime(autoStart: false, secs: setting.restSecs)                // no telling how hard the current set is for the user so if he wants rest he'll have to press the start timer button
+        switch findRestSecs(exerciseName) {
+        case .right(let secs):
+            return RestTime(autoStart: false, secs: secs)                // no telling how hard the current set is for the user so if he wants rest he'll have to press the start timer button
 
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
@@ -120,11 +120,11 @@ public class NRepMaxPlan : Plan {
         
         result.append(Completion(title: "Done", isDefault: false, callback: {self.doFinish()}))
         
-        switch findSetting(exerciseName) {
-        case .right(let setting):
+        switch findApparatus(exerciseName) {
+        case .right(let apparatus):
             var prevWeight = weight
             for _ in 0..<7 {
-                let nextWeight = Weight(prevWeight, setting.apparatus).nextWeight()
+                let nextWeight = Weight(prevWeight, apparatus).nextWeight()
                 if nextWeight > weight {    // at some point we'll run out of plates so the new weight won't be larger
                     result.append(Completion(title: "Add \(Weight.friendlyUnitsStr(nextWeight - weight))", isDefault: false, callback: {self.doNext(nextWeight)}))
                     prevWeight = nextWeight
@@ -147,9 +147,9 @@ public class NRepMaxPlan : Plan {
     }
     
     public func reset() {
-        switch findSetting(exerciseName) {
-        case .right(let setting):
-            self.weight = Weight(0.0, setting.apparatus).closest().weight
+        switch findApparatus(exerciseName) {
+        case .right(let apparatus):
+            self.weight = Weight(0.0, apparatus).closest().weight
             setNum = 1
             done = false
 
@@ -183,7 +183,7 @@ public class NRepMaxPlan : Plan {
     }
 
     private func updateWeight() {
-        switch findSetting(exerciseName) {
+        switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             setting.changeWeight(weight)
             setting.stalls = 0

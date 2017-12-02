@@ -96,10 +96,10 @@ public class VariableSetsPlan: Plan {
     }
     
     public func sublabel() -> String {
-        switch findSetting(exerciseName) {
-        case .right(let setting):
-            if setting.weight > 0 {
-                return "\(repsStr(requiredReps)) @ \(Weight.friendlyStr(setting.weight))"
+        switch findWeight(exerciseName) {
+        case .right(let weight):
+            if weight > 0 {
+                return "\(repsStr(requiredReps)) @ \(Weight.friendlyStr(weight))"
             } else {
                 return "\(requiredReps) reps"
             }
@@ -131,10 +131,10 @@ public class VariableSetsPlan: Plan {
     public func current() -> Activity {
         frontend.assert(!finished(), "VariableSetsPlan finished in current")
         
-        switch findSetting(exerciseName) {
-        case .right(let setting):
+        switch findWeight(exerciseName) {
+        case .right(let weight):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-            let suffix = setting.weight > 0 ? " @ \(Weight.friendlyStr(setting.weight))" : ""
+            let suffix = weight > 0 ? " @ \(Weight.friendlyStr(weight))" : ""
             
             let delta = requiredReps - completed
             let amount = delta > 1 ? "1-\(delta) reps\(suffix)" : "1 rep"
@@ -156,9 +156,9 @@ public class VariableSetsPlan: Plan {
     }
     
     public func restSecs() -> RestTime {
-        switch findSetting(exerciseName) {
-        case .right(let setting):
-            return RestTime(autoStart: !finished(), secs: setting.restSecs)
+        switch findRestSecs(exerciseName) {
+        case .right(let secs):
+            return RestTime(autoStart: !finished(), secs: secs)
 
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
@@ -212,11 +212,11 @@ public class VariableSetsPlan: Plan {
     }
     
     private func addResult() {
-        switch findSetting(exerciseName) {
-        case .right(let setting):
+        switch findWeight(exerciseName) {
+        case .right(let weight):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-            let title = "\(repsStr(completed)) @ \(Weight.friendlyStr(setting.weight))"
-            let result = Result(title: title, weight: setting.weight, missed: false, reps: reps)
+            let title = "\(repsStr(completed)) @ \(Weight.friendlyStr(weight))"
+            let result = Result(title: title, weight: weight, missed: false, reps: reps)
             history.append(result)
 
         case .left(_):

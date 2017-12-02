@@ -133,7 +133,7 @@ public class LinearPlan : Plan {
         self.setIndex = 0
         self.exerciseName = exerciseName
 
-        switch findSetting(exerciseName) {
+        switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             if setting.weight == 0.0 {
                 return .newPlan(NRepMaxPlan("Rep Max", workReps: workReps))
@@ -193,7 +193,7 @@ public class LinearPlan : Plan {
     }
     
     public func prevLabel() -> String {
-        switch findSetting(exerciseName) {
+        switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads);
             if let percent = deload.percent {
@@ -225,9 +225,9 @@ public class LinearPlan : Plan {
     }
     
     public func restSecs() -> RestTime {
-        switch findSetting(exerciseName) {
-        case .right(let setting):
-            return RestTime(autoStart: !finished() && !sets[setIndex].warmup, secs: setting.restSecs)
+        switch findRestSecs(exerciseName) {
+        case .right(let secs):
+            return RestTime(autoStart: !finished() && !sets[setIndex].warmup, secs: secs)
 
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
@@ -281,7 +281,7 @@ public class LinearPlan : Plan {
     }
     
     private func handleAdvance(_ missed: Bool) {
-        switch findSetting(exerciseName) {
+        switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             if !missed {
                 let old = setting.weight
