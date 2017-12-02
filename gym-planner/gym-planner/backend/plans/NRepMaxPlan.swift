@@ -14,6 +14,17 @@ public class NRepMaxPlan : Plan {
         self.numReps = workReps
     }
     
+    // This should consider typeName and whatever was passed into the init above.
+    public func shouldSync(_ inPlan: Plan) -> Bool {
+        if let savedPlan = inPlan as? NRepMaxPlan {
+            return typeName == savedPlan.typeName &&
+                name == savedPlan.name &&
+                numReps == savedPlan.numReps
+        } else {
+            return false
+        }
+    }
+    
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.typeName = "NRepMaxPlan"

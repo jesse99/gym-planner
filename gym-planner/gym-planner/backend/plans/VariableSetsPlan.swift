@@ -45,6 +45,18 @@ public class VariableSetsPlan: Plan {
         self.targetReps = targetReps
     }
     
+    // This should consider typeName and whatever was passed into the init above.
+    public func shouldSync(_ inPlan: Plan) -> Bool {
+        if let savedPlan = inPlan as? VariableSetsPlan {
+            return typeName == savedPlan.typeName &&
+                name == savedPlan.name &&
+                requiredReps == savedPlan.requiredReps &&
+                targetReps == savedPlan.targetReps
+        } else {
+            return false
+        }
+    }
+    
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.typeName = "VariableSetsPlan"

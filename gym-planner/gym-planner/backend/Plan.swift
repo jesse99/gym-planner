@@ -59,6 +59,8 @@ public protocol Plan: Storable {
     /// This is used by Exercise to deserialize plans.
     var typeName: String {get}
     
+    func shouldSync(_ savedPlan: Plan) -> Bool
+    
     func clone() -> Plan
 
     func start(_ exerciseName: String) -> StartResult

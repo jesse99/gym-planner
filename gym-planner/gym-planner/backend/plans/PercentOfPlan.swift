@@ -82,6 +82,22 @@ public class PercentOfPlan : Plan {
         self.percent = percent
     }
     
+    // This should consider typeName and whatever was passed into the init above.
+    public func shouldSync(_ inPlan: Plan) -> Bool {
+        if let savedPlan = inPlan as? PercentOfPlan {
+            return typeName == savedPlan.typeName &&
+                name == savedPlan.name &&
+                otherName == savedPlan.otherName &&
+                firstWarmup == savedPlan.firstWarmup &&
+                warmupReps == savedPlan.warmupReps &&
+                workSets == savedPlan.workSets &&
+                workReps == savedPlan.workReps &&
+                percent == savedPlan.percent
+        } else {
+            return false
+        }
+    }
+    
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.typeName = "PercentOfPlan"

@@ -1,5 +1,6 @@
 /// Types encapsulating a set of exercises to perform within workout days.
 import Foundation
+import os.log
 
 public class Workout: Storable {
     init(_ name: String, _ exercises: [String], scheduled: Bool, optional: [String] = []) {
@@ -87,6 +88,23 @@ public class Program: Storable {
             exercises[index] = exercise
         } else {
             exercises.append(exercise)
+        }
+    }
+    
+    /// Used to sync a saved version of a built-in program with the current version
+    /// of the built in program. In general all that should be used from the saved
+    /// program are settings and plan states (anything else requires a program edit
+    /// which requires that the user re-name the program),
+    public func sync(_ savedProgram: Program) {
+        frontend.assert(name == savedProgram.name, "attempt to sync programs \(name) and \(savedProgram.name)")
+        for savedExercise in savedProgram.exercises {
+            if let exercise = exercises.first(where: {$0.name == savedExercise.name}) {
+                exercise.sync(savedExercise)
+            } else if savedExercise.hidden {
+                exercises.append(savedExercise)
+            } else {
+                os_log("dropping saved exercise %@", type: .info, savedExercise.name)
+            }
         }
     }
    

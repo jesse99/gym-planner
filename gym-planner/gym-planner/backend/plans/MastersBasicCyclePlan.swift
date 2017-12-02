@@ -7,7 +7,7 @@ import os.log
 
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
 public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
-    struct Execute: Storable, CustomDebugStringConvertible {
+    struct Execute: Storable, Equatable, CustomDebugStringConvertible {
         let workSets: Int
         let workReps: Int
         let percent: Double
@@ -28,6 +28,10 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
             store.addInt("workSets", workSets)
             store.addInt("workReps", workReps)
             store.addDbl("percent", percent)
+        }
+
+        static func ==(lhs: Execute, rhs: Execute)->Bool {
+            return lhs.workSets == rhs.workSets && lhs.workReps == rhs.workReps && lhs.percent == rhs.percent
         }
 
         var debugDescription: String {
@@ -129,6 +133,17 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.setIndex = 0
     }
     
+    // This should consider typeName and whatever was passed into the init above.
+    public func shouldSync(_ inPlan: Plan) -> Bool {
+        if let savedPlan = inPlan as? MastersBasicCyclePlan {
+            return typeName == savedPlan.typeName &&
+                name == savedPlan.name &&
+                cycles == savedPlan.cycles
+        } else {
+            return false
+        }
+    }
+
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.typeName = "MastersBasicCyclePlan"

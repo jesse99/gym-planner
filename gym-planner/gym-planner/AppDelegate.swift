@@ -6,7 +6,8 @@ import os.log
 class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
     override init() {
         super.init()
-        
+        frontend = self
+
         let path = getPath(fileName: "program_name")
         if let name = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? String {
             program = loadProgram(name)
@@ -16,8 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
             os_log("failed to load program from %@", type: .info, path)
             program = HML() // TODO: use a better default
         }
-        
-        frontend = self
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -117,7 +116,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
 //
 //                print("---- loading ---------------------------------------")
 //                print(store)
-                return Program(from: store)
+                let savedProgram = Program(from: store)
+                let builtin = HML()      // TODO: do a lookup of built-in programs
+                if savedProgram.name == builtin.name {
+                    os_log("syncing %@", type: .info, builtin.name)
+                    builtin.sync(savedProgram)
+                    return builtin
+                } else {
+                    return savedProgram
+                }
             } catch {
                 os_log("failed to decode program from %@: %@", type: .error, path, error.localizedDescription)
             }
@@ -164,7 +171,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         let url = dir.appendingPathComponent("\(name).archive")
         return url.path
     }
-    
     
     private func sanitizeFileName(_ name: String) -> String {
         var result = ""

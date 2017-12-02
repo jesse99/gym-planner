@@ -1,5 +1,6 @@
 /// Types representing a routine within a workout.
 import Foundation
+import os.log
 
 public class Exercise: Storable {
     init(_ name: String, _ formalName: String, _ plan: Plan, _ settings: Settings, hidden: Bool = false) {
@@ -52,16 +53,25 @@ public class Exercise: Storable {
         return Exercise(newName, formalName, newPlan, settings, hidden: true)
     }
     
-    public let name: String             // "Heavy Bench"
-    public let formalName: String       // "Bench Press"
-    public let plan: Plan
-    public let settings: Settings
+    public func sync(_ savedExercise: Exercise) {
+        if plan.shouldSync(savedExercise.plan) {
+            plan = savedExercise.plan
+            completed = savedExercise.completed
+            settings = savedExercise.settings
+        } else {
+            os_log("ignoring saved exercise %@", type: .info, name)
+        }
+    }
+    public var name: String             // "Heavy Bench"
+    public var formalName: String       // "Bench Press"
+    public var plan: Plan
+    public var settings: Settings
     
     /// Date the exercise was last completed.
     public var completed: Date?
     
     /// If true don't display the plan in UI.
-    public let hidden: Bool
+    public var hidden: Bool
 }
 
 internal func repsStr(_ reps: Int) -> String {

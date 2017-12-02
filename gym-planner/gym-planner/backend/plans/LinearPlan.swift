@@ -87,6 +87,20 @@ public class LinearPlan : Plan {
         self.deloads = [1.0, 1.0, 0.95, 0.9, 0.85]
     }
     
+    // This should consider typeName and whatever was passed into the init above.
+    public func shouldSync(_ inPlan: Plan) -> Bool {
+        if let savedPlan = inPlan as? LinearPlan {
+            return typeName == savedPlan.typeName &&
+                name == savedPlan.name &&
+                firstWarmup == savedPlan.firstWarmup &&
+                warmupReps == savedPlan.warmupReps &&
+                workSets == savedPlan.workSets &&
+                workReps == savedPlan.workReps
+        } else {
+            return false
+        }
+    }
+
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.typeName = "LinearPlan"
@@ -95,13 +109,13 @@ public class LinearPlan : Plan {
         self.workSets = store.getInt("workSets")
         self.workReps = store.getInt("workReps")
         self.deloads = store.getDblArray("deloads")
-        
+
         self.exerciseName = store.getStr("exerciseName")
         self.sets = store.getObjArray("sets")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
     }
-    
+
     public func save(_ store: Store) {
         store.addStr("name", name)
         store.addDbl("firstWarmup", firstWarmup)
