@@ -1,7 +1,7 @@
 /// Masters program with cycles of 3x5, 3x3,and 3x1.
 import Foundation
 
-func HML() -> Program {
+func HLM2() -> Program {
     func cycle(_ worksets: Int, by: Int, at: Double) -> MastersBasicCyclePlan.Execute {
         return MastersBasicCyclePlan.Execute(workSets: worksets, workReps: by, percent: at)
     }
@@ -36,7 +36,7 @@ func HML() -> Program {
     }
     
     func planChin() -> Plan {
-        return VariableSetsPlan("Chins", requiredReps: 10, targetReps: 30)
+        return VariableSetsPlan("Chinups", targetReps: 50)
     }
     
     let exercises = [
@@ -45,18 +45,18 @@ func HML() -> Program {
         createBarBell("Deadlift",       "Deadlift",       planDead(),   restSecs: 3.5, useBumpers: true),
         createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restSecs: 2.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Overhead Press", "Overhead Press", plan53(),     restSecs: 3.0, magnets: [1.25]),
-        createFixed  ("Chinups",        "Chinup",         planChin(),   restSecs: 2.0),
+        createReps   ("Chinups",        "Chinup",         planChin(),   restSecs: 2.0, requestedReps: 10),
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restSecs: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restSecs: 3.0, derivedFrom: "Bench Press")]
 
     let workouts = [
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
-        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true),
-        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"], scheduled: true)]
+        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"], scheduled: true),
+        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true)]
 
     let tags: [Program.Tags] = [.intermediate, .strength, .age40s, .age50s]
     let description = """
-This is the program I use and is based on the HLM program from the book _The Barbell Prescription: Strength Training for Life After 40_. It uses a very gradual progression and the heavy day cycles between sets of 5, 3, and 1 reps with the weight increasing each time the reps go down. It's a three day a week program and the days look like this:
+This is the program I use and is based on the HLM program from the book _The Barbell Prescription: Strength Training for Life After 40_ with the addition of mobility and cardio workouts. It uses a very gradual progression and the heavy day cycles between sets of 5, 3, and 1 reps with the weight increasing each time the reps go down. It's a three day a week program and the days look like this:
 
 **Heavy**
 * Squat 3x5,3,1   reps change each week
@@ -68,7 +68,7 @@ It should be a bit of a struggle to do all the reps.
 **Medium**
 * Squat 2x5 at 94% of heavy's 5 rep weight
 * Bench 2x5 at 94% of heavy's 5 rep weight
-* Chins up to 30 reps
+* Chins up to 50 reps
 
 These should feel like you are working hard without being in danger of missing a rep and with some energy left after each set.
 
@@ -80,7 +80,7 @@ These should feel like you are working hard without being in danger of missing a
 All the reps should be fairly easy.
 
 **Notes**
-Chinps are done with as many sets as are required, once you can do thirty add weights. Weights on the barbell routines advance unless you stall on the set with five reps. The medium and light days are switched which probably isn't ideal but works better with my schedule.
+Chinps are done with as many sets as are required, once you can do fifty add weights. Weights on the barbell routines advance unless you stall on the set with five reps..
 """
-    return Program("HML", workouts, exercises, tags, description)
+    return Program("HLM2", workouts, exercises, tags, description)
 }

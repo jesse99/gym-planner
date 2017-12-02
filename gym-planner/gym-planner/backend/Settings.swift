@@ -88,6 +88,33 @@ public class DerivedWeightSetting: Storable {
     }
 }
 
+/// Used with VariableRepsPlan.
+public class VariableRepsSetting: Storable {
+    var weight: Double  // starts out at 0.0
+    var restSecs: Int
+    
+    /// Number of reps the user wants to do.
+    var requestedReps: Int
+    
+    init(requestedReps: Int, restSecs: Int) {
+        self.requestedReps = requestedReps
+        self.weight = 0.0
+        self.restSecs = restSecs
+    }
+    
+    public required init(from store: Store) {
+        self.requestedReps = store.getInt("requestedReps")
+        self.weight = store.getDbl("weight")
+        self.restSecs = store.getInt("restSecs")
+    }
+    
+    public func save(_ store: Store) {
+        store.addInt("requestedReps", requestedReps)
+        store.addDbl("weight", weight)
+        store.addInt("restSecs", restSecs)
+    }
+}
+
 /// Used for exercises where the user controls how much weight is used (which can be
 /// zero for a body weight exercise).
 public class FixedWeightSetting: Storable {
@@ -114,6 +141,7 @@ public enum Settings {
     case variableWeight(VariableWeightSetting)
     case derivedWeight(DerivedWeightSetting)
     case fixedWeight(FixedWeightSetting)
+    case variableReps(VariableRepsSetting)
 }
 
 // TODO: CardioSetting
@@ -185,6 +213,9 @@ extension Settings: Storable {
             store.addObj("setting", setting)
         case .fixedWeight(let setting):
             store.addStr("type", "fixed")
+            store.addObj("setting", setting)
+        case .variableReps(let setting):
+            store.addStr("type", "variableReps")
             store.addObj("setting", setting)
         }
     }

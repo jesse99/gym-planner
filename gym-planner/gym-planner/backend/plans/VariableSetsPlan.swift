@@ -37,11 +37,10 @@ public class VariableSetsPlan: Plan {
         }
     }
     
-    init(_ name: String, requiredReps: Int, targetReps: Int) {
+    init(_ name: String, targetReps: Int) {
         os_log("init VariableSetsPlan for %@ and %@", type: .info, name)
         self.name = name
         self.typeName = "VariableSetsPlan"
-        self.requiredReps = requiredReps
         self.targetReps = targetReps
     }
     
@@ -50,7 +49,6 @@ public class VariableSetsPlan: Plan {
         if let savedPlan = inPlan as? VariableSetsPlan {
             return typeName == savedPlan.typeName &&
                 name == savedPlan.name &&
-                requiredReps == savedPlan.requiredReps &&
                 targetReps == savedPlan.targetReps
         } else {
             return false
@@ -60,7 +58,6 @@ public class VariableSetsPlan: Plan {
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.typeName = "VariableSetsPlan"
-        self.requiredReps = store.getInt("requiredReps")
         self.targetReps = store.getInt("targetReps")
         
         self.exerciseName = store.getStr("exerciseName")
@@ -70,7 +67,6 @@ public class VariableSetsPlan: Plan {
     
     public func save(_ store: Store) {
         store.addStr("name", name)
-        store.addInt("requiredReps", requiredReps)
         store.addInt("targetReps", targetReps)
         
         store.addStr("exerciseName", exerciseName)
@@ -108,16 +104,16 @@ public class VariableSetsPlan: Plan {
     }
     
     public func sublabel() -> String {
-        switch findWeight(exerciseName) {
-        case .right(let weight):
-            if weight > 0 {
-                return "\(repsStr(requiredReps)) @ \(Weight.friendlyStr(weight))"
-            } else {
-                return "\(requiredReps) reps"
-            }
+        switch findVariableRepsSetting(name) {
+            case .right(let setting):
+                if setting.weight > 0 {
+                    return "\(repsStr(setting.requestedReps)) @ \(Weight.friendlyStr(setting.weight))"
+                } else {
+                    return repsStr(setting.requestedReps)
+                }
 
-        case .left(let err):
-            return err
+            case .left(let err):
+                return err
         }
     }
     
@@ -151,21 +147,21 @@ public class VariableSetsPlan: Plan {
     public func current() -> Activity {
         frontend.assert(!finished(), "VariableSetsPlan finished in current")
         
-        switch findWeight(exerciseName) {
-        case .right(let weight):
+        switch findVariableRepsSetting(name) {
+        case .right(let setting):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-            let suffix = weight > 0 ? " @ \(Weight.friendlyStr(weight))" : ""
+            let suffix = setting.weight > 0 ? " @ \(Weight.friendlyStr(setting.weight))" : ""
             
             var subtitle = ""
             if reps.count > 1 {
                 let a = reps.map {"\($0)"}
                 let s = a.joined(separator: ", ")
-                subtitle = "\(completed) of \(requiredReps) (\(s))"
+                subtitle = "\(completed) of \(setting.requestedReps) (\(s))"
             } else {
-                subtitle = "\(completed) of \(requiredReps)"
+                subtitle = "\(completed) of \(setting.requestedReps)"
             }
             
-            let delta = requiredReps - completed
+            let delta = setting.requestedReps - completed
             let amount = delta > 1 ? "1-\(delta) reps\(suffix)" : "1 rep"
             return Activity(
                 title: "Set \(reps.count + 1)",
@@ -195,14 +191,20 @@ public class VariableSetsPlan: Plan {
     }
     
     public func completions() -> [Completion] {
-        let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-        let delta = requiredReps - completed
-        
         var options: [Completion] = []
         
-        for i in 0..<delta {
-            let title = i == 0 ? "1 rep" : "\(i+1) reps"
-            options.append(Completion(title: title, isDefault: false, callback: {() -> Void in self.do_complete(i+1)}))
+        switch findVariableRepsSetting(name) {
+        case .right(let setting):
+            let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
+            let delta = setting.requestedReps - completed
+            
+            for i in 0..<delta {
+                let title = i == 0 ? "1 rep" : "\(i+1) reps"
+                options.append(Completion(title: title, isDefault: false, callback: {() -> Void in self.do_complete(i+1)}))
+            }
+
+        case .left(_):
+            options.append(Completion(title: "Done", isDefault: true, callback: {() -> Void in self.do_complete(100)})) // really shouldnt hit this case
         }
         
         return options
@@ -213,8 +215,14 @@ public class VariableSetsPlan: Plan {
     }
     
     public func finished() -> Bool {
-        let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-        return completed >= requiredReps
+        switch findVariableRepsSetting(name) {
+        case .right(let setting):
+            let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
+            return completed >= setting.requestedReps
+
+        case .left(_):
+            return true
+        }
     }
     
     public func reset() {
@@ -253,7 +261,6 @@ public class VariableSetsPlan: Plan {
         }
     }
     
-    private let requiredReps: Int
     private let targetReps: Int
     
     private var exerciseName: String = ""

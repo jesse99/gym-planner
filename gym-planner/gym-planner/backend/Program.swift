@@ -135,6 +135,11 @@ public func createFixed(_ name: String, _ formalName: String, _ plan: Plan, rest
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
+public func createReps(_ name: String, _ formalName: String, _ plan: Plan, restSecs: Double, requestedReps: Int) -> Exercise {
+    let setting = VariableRepsSetting(requestedReps: requestedReps, restSecs: Int(restSecs*60.0))
+    return Exercise(name, formalName, plan, .variableReps(setting))
+}
+
 extension Program.Tags: Storable {
     public init(from store: Store) {
         let tname = store.getStr("tag")

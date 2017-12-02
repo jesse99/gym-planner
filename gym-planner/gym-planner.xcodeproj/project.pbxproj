@@ -15,7 +15,7 @@
 		377C11F61FC276300063A324 /* LabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377C11F51FC276300063A324 /* LabelExtension.swift */; };
 		377F054E1FC0B5980015D7EF /* LinearPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F054D1FC0B5980015D7EF /* LinearPlan.swift */; };
 		377F05501FC0D9CE0015D7EF /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F054F1FC0D9CE0015D7EF /* Program.swift */; };
-		377F05591FC0DDA10015D7EF /* HML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F05581FC0DDA10015D7EF /* HML.swift */; };
+		377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F05581FC0DDA10015D7EF /* HLM2.swift */; };
 		377F055B1FC0E1000015D7EF /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F055A1FC0E1000015D7EF /* Helpers.swift */; };
 		377F055D1FC11E1B0015D7EF /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F055C1FC11E1B0015D7EF /* Either.swift */; };
 		378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */; };
@@ -59,7 +59,7 @@
 		377C11F51FC276300063A324 /* LabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelExtension.swift; sourceTree = "<group>"; };
 		377F054D1FC0B5980015D7EF /* LinearPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearPlan.swift; sourceTree = "<group>"; };
 		377F054F1FC0D9CE0015D7EF /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
-		377F05581FC0DDA10015D7EF /* HML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HML.swift; sourceTree = "<group>"; };
+		377F05581FC0DDA10015D7EF /* HLM2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLM2.swift; sourceTree = "<group>"; };
 		377F055A1FC0E1000015D7EF /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		377F055C1FC11E1B0015D7EF /* Either.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableSetsPlan.swift; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 		377F05571FC0DD8F0015D7EF /* programs */ = {
 			isa = PBXGroup;
 			children = (
-				377F05581FC0DDA10015D7EF /* HML.swift */,
+				377F05581FC0DDA10015D7EF /* HLM2.swift */,
 			);
 			path = programs;
 			sourceTree = "<group>";
@@ -336,7 +336,7 @@
 				37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */,
 				37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */,
 				377C11F61FC276300063A324 /* LabelExtension.swift in Sources */,
-				377F05591FC0DDA10015D7EF /* HML.swift in Sources */,
+				377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */,
 				3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
 			);

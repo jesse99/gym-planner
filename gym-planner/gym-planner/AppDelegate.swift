@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         
         if program == nil {
             os_log("failed to load program from %@", type: .info, path)
-            program = HML() // TODO: use a better default
+            program = HLM2() // TODO: use a better default
         }
     }
     
@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         center.add(request, withCompletionHandler: nil)
     }
     
-    let programPrefix = "program4-"
+    let programPrefix = "program5-"
     
     private func loadProgram(_ name: String) -> Program? {
 //        print("-----------------------------------------")
@@ -117,7 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
 //                print("---- loading ---------------------------------------")
 //                print(store)
                 let savedProgram = Program(from: store)
-                let builtin = HML()      // TODO: do a lookup of built-in programs
+                let builtin = HLM2()      // TODO: do a lookup of built-in programs
                 if savedProgram.name == builtin.name {
                     os_log("syncing %@", type: .info, builtin.name)
                     builtin.sync(savedProgram)
