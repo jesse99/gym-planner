@@ -33,5 +33,31 @@ public func findSetting(_ name: String) -> Either<String, VariableWeightSetting>
     }
 }
 
+public func findRestSecs(_ name: String) -> Either<String, Int> {
+    if let exercise = frontend.findExercise(name) {
+        switch exercise.settings {
+        case .variableWeight(let setting): return .right(setting.restSecs)
+        case .derivedWeight(let setting): return .right(setting.restSecs)
+        case .fixedWeight(let setting): return .right(setting.restSecs)
+        }
+    } else {
+        return .left("Couldn't find exercise '\(name)'")
+    }
+}
+
+public func findApparatus(_ name: String) -> Either<String, Apparatus> {
+    if let exercise = frontend.findExercise(name) {
+        switch exercise.settings {
+        case .variableWeight(let setting): return .right(setting.apparatus)
+        case .derivedWeight(let setting): return .right(setting.apparatus)
+        case .fixedWeight(_): return .left("Exercise '\(name)' is using fixed weight not variable or derived weight")
+        }
+    } else {
+        return .left("Couldn't find exercise '\(name)'")
+    }
+}
+
+
+
 
 

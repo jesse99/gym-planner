@@ -5,6 +5,7 @@ import os.log
 public class LinearPlan : Plan {
     struct Set: Storable {
         let title: String      // "Workset 3 of 4"
+        let subtitle: String
         let numReps: Int
         let weight: Weight.Info
         let warmup: Bool
@@ -14,10 +15,15 @@ public class LinearPlan : Plan {
             self.weight = Weight(percent*weight, apparatus).closest(below: weight)
             self.numReps = numReps
             self.warmup = true
+
+            let info = Weight(weight, apparatus).closest()
+            let p = String(format: "%.0f", 100.0*percent)
+            self.subtitle = "\(p)% of \(info.text)"
         }
         
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, weight: Double) {
             self.title = "Workset \(phase) of \(phaseCount)"
+            self.subtitle = ""
             self.weight = Weight(weight, apparatus).closest()
             self.numReps = numReps
             self.warmup = false
@@ -25,6 +31,7 @@ public class LinearPlan : Plan {
 
         init(from store: Store) {
             self.title = store.getStr("title")
+            self.subtitle = store.getStr("subtitle", ifMissing: "")
             self.numReps = store.getInt("numReps")
             self.weight = store.getObj("weight")
             self.warmup = store.getBool("warmup")
@@ -32,6 +39,7 @@ public class LinearPlan : Plan {
         
         func save(_ store: Store) {
             store.addStr("title", title)
+            store.addStr("subtitle", subtitle)
             store.addInt("numReps", numReps)
             store.addObj("weight", weight)
             store.addBool("warmup", warmup)
@@ -210,7 +218,7 @@ public class LinearPlan : Plan {
         let info = sets[setIndex].weight
         return Activity(
             title: sets[setIndex].title,
-            subtitle: "",
+            subtitle: sets[setIndex].subtitle,
             amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
             details: info.plates,
             secs: nil)               // this is used for timed exercises
