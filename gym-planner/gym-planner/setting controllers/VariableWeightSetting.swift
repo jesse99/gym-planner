@@ -53,6 +53,8 @@ class VariableWeightController: UIViewController {
         }
     }
     
+    // TODO: setting the weight to zero should startup the NRepsMax plan. This kind of works but you
+    // have to reset the exercise, exit it, and then re-enter it.
     @IBAction func donePressed(_ sender: Any) {
         if setting != nil {
             setting.changeWeight(Double(weightTextbox.text!)!)  // TODO: use something like toWeight
