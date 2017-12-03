@@ -1,9 +1,9 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;}
 {\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red14\green14\blue255;\red233\green233\blue233;
-\red170\green13\blue145;\red0\green0\blue0;\red63\green110\blue116;\red92\green38\blue153;}
+\red170\green13\blue145;\red0\green0\blue0;\red92\green38\blue153;}
 {\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c5500\c5500\c100000;\csgenericrgb\c91180\c91178\c91179;
-\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c35900\c14900\c60100;}
+\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;\csgenericrgb\c35900\c14900\c60100;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/126365/ios-frameworks-tutorial"}}{\fldrslt 
 \f0\fs48 \cf2 https://www.raywenderlich.com/126365/ios-frameworks-tutorial}}
@@ -77,18 +77,29 @@ ohp		5.7\
 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\f1\fs36 \cf5 public\cf6  \cf5 class\cf6  DerivedWeightSetting: \cf7 Storable\cf6  \{	
+\f1\fs36 \cf5 public\cf6  \cf5 enum\cf6  Apparatus		
 \f0\fs24 \cf0 \
 
-\f1\fs36 \cf6     \cf5 var\cf6  restSecs: \cf8 Int
+\f1\fs36 \cf6 \{
 \f0\fs24 \cf0 \
+
+\f1\fs36 \cf6     \cf5 case\cf6  barbell(bar: \cf7 Double\cf6 , collar: \cf7 Double\cf6 , \
+    	plates: [\cf7 Double\cf6 ], bumpers: [\cf7 Double\cf6 ], magnets: [\cf7 Double\cf6 ], \
+    	warmupsWithBar: \cf7 Int\cf6 )\
+    	\
+    	\
+collar   doesn\'92t participate in view restoration\
+\
+bar\
+\
+[Done]		[Plates] [Bumpers] [Magnets]\
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
-\fs48 \cf2 \
+\f0\fs48 \cf2 \
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 \cf2 * Get edit settings working\
-	- derived weight setting\
 	- barbell apparatus\
 	- plates selecting\
 * Try it out\

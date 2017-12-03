@@ -43,6 +43,9 @@ class VariableWeightController: UIViewController {
         }
     }
     
+    @IBAction func unwindToVariableWeight(_ segue: UIStoryboardSegue) {
+    }
+    
     @IBAction func viewTapped(_ sender: Any) {
         if setting != nil {
             restTextbox.resignFirstResponder()
@@ -66,7 +69,16 @@ class VariableWeightController: UIViewController {
     }
     
     @IBAction func apparatusPressed(_ sender: Any) {
-        // TODO
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        switch setting.apparatus {
+        case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: _):
+            let view = storyboard.instantiateViewController(withIdentifier: "BarbellID") as! BarbellController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
+            
+        case .dumbbells(weights: _, magnets: _):
+            break   // TODO:
+        }
     }
     
     @IBOutlet var breadcrumbLabel: UILabel!
