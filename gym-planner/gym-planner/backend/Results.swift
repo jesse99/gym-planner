@@ -8,8 +8,8 @@ protocol VariableWeightResult {
     // This is set for the exercise instance that really matters, e.g. the one where weight progresses.
     var primary: Bool {get}
     
-    var weight: Double {get set}    // TODO: should this be inside an enum? (so we can have one result type)
-    var missed: Bool {get set}      // TODO: should we use an enum here?
+    var weight: Double {get}    // TODO: should this be inside an enum? (so we can have one result type)
+    var missed: Bool {get}      // TODO: should we use an enum here?
 }
 
 protocol DerivedWeightResult {
@@ -32,6 +32,10 @@ public func makeHistoryLabel(_ weights: [Double]) -> String {
         }
     }
     
+    return makeHistoryFromLabels(labels)
+}
+
+public func makeHistoryFromLabels(_ labels: [String]) -> String {
     var entries: [String] = []
     var i = labels.count - 1
     while entries.count < 4 && i >= 0 {
@@ -39,7 +43,7 @@ public func makeHistoryLabel(_ weights: [Double]) -> String {
         while i-count >= 0 && labels[i-count] == labels[i] {
             count += 1
         }
-        frontend.assert(count >= 1, "count is \(count) in makeHistoryLabel with \(weights)")
+        frontend.assert(count >= 1, "count is \(count) in makeHistoryFromLabels with \(labels)")
         
         if count == 1 {
             entries.append(labels[i])

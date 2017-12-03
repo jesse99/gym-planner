@@ -45,6 +45,18 @@ public func findVariableRepsSetting(_ name: String) -> Either<String, VariableRe
     }
 }
 
+public func findTimedSetting(_ name: String) -> Either<String, TimedSetting> {
+    if let exercise = frontend.findExercise(name) {
+        if case let .timed(setting) = exercise.settings {
+            return .right(setting)
+        } else {
+            return .left("Exercise '\(name)' isn't a timed exercise")
+        }
+    } else {
+        return .left("Couldn't find exercise '\(name)'")
+    }
+}
+
 /// Returns the base-line weight the user is expected to lift. Note that the user may not have
 /// have actually done this weight yet and cycles mean that the user may be asked to do a percentage
 /// of this.
@@ -55,6 +67,7 @@ public func findCurrentWeight(_ name: String) -> Either<String, Double> {
         case .derivedWeight(let setting): return findCurrentWeight(setting.otherName)
         case .fixedWeight(let setting): return .right(setting.weight)
         case .variableReps(let setting): return .right(setting.weight)
+        case .timed(let setting): return .right(setting.weight)
         }
     } else {
         return .left("Couldn't find exercise '\(name)'")
@@ -68,6 +81,7 @@ public func findRestSecs(_ name: String) -> Either<String, Int> {
         case .derivedWeight(let setting): return .right(setting.restSecs)
         case .fixedWeight(let setting): return .right(setting.restSecs)
         case .variableReps(let setting): return .right(setting.restSecs)
+        case .timed(let setting): return .right(setting.restSecs)
         }
     } else {
         return .left("Couldn't find exercise '\(name)'")

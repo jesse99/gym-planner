@@ -236,6 +236,9 @@ class ExerciseController: UIViewController {
             let view = storyboard.instantiateViewController(withIdentifier: "VariableWeightID") as! VariableWeightController
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
+
+        case .timed(_):
+            break   // TODO: implement this
         }
     }
     

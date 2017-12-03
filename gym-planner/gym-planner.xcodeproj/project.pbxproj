@@ -28,6 +28,7 @@
 		37B3ECF51FD38B2E00F7D8EF /* DerivedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */; };
 		37B3ECF71FD38FDB00F7D8EF /* BarbellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3ECF61FD38FDB00F7D8EF /* BarbellController.swift */; };
 		37B3ECF91FD395F900F7D8EF /* WeightsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3ECF81FD395F900F7D8EF /* WeightsController.swift */; };
+		37B3ECFB1FD48DE800F7D8EF /* TimedPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3ECFA1FD48DE800F7D8EF /* TimedPlan.swift */; };
 		37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C5D18E1FC9F25400951FA8 /* Store.swift */; };
 		37C5D1911FCB578F00951FA8 /* storableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C5D1901FCB578F00951FA8 /* storableTests.swift */; };
 		37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46B1FAE289100244ADD /* AppDelegate.swift */; };
@@ -77,6 +78,7 @@
 		37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DerivedWeightController.swift; sourceTree = "<group>"; };
 		37B3ECF61FD38FDB00F7D8EF /* BarbellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarbellController.swift; sourceTree = "<group>"; };
 		37B3ECF81FD395F900F7D8EF /* WeightsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightsController.swift; sourceTree = "<group>"; };
+		37B3ECFA1FD48DE800F7D8EF /* TimedPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedPlan.swift; sourceTree = "<group>"; };
 		37C5D18E1FC9F25400951FA8 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		37C5D1901FCB578F00951FA8 /* storableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storableTests.swift; sourceTree = "<group>"; };
 		37CED4681FAE289100244ADD /* gym-planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gym-planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,6 +231,7 @@
 				37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */,
 				378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */,
 				3778CE971FBE730D0042111C /* PercentOfPlan.swift */,
+				37B3ECFA1FD48DE800F7D8EF /* TimedPlan.swift */,
 				378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */,
 			);
 			path = plans;
@@ -338,6 +341,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37CED4A61FB15E7300244ADD /* Weight.swift in Sources */,
+				37B3ECFB1FD48DE800F7D8EF /* TimedPlan.swift in Sources */,
 				377F055B1FC0E1000015D7EF /* Helpers.swift in Sources */,
 				377F054E1FC0B5980015D7EF /* LinearPlan.swift in Sources */,
 				378FC14B1FBD3B6A00A3C66E /* DateExtension.swift in Sources */,
