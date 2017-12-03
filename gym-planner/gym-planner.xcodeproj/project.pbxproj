@@ -23,6 +23,7 @@
 		378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */; };
 		37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B308D91FC3234F00556E8F /* ExerciseController.swift */; };
 		37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B308DB1FC3BFFB00556E8F /* FontExtension.swift */; };
+		37B3ECF11FD370CA00F7D8EF /* VariableRepsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */; };
 		37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C5D18E1FC9F25400951FA8 /* Store.swift */; };
 		37C5D1911FCB578F00951FA8 /* storableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C5D1901FCB578F00951FA8 /* storableTests.swift */; };
 		37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46B1FAE289100244ADD /* AppDelegate.swift */; };
@@ -67,6 +68,7 @@
 		378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NRepMaxPlan.swift; sourceTree = "<group>"; };
 		37B308D91FC3234F00556E8F /* ExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseController.swift; sourceTree = "<group>"; };
 		37B308DB1FC3BFFB00556E8F /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
+		37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableRepsController.swift; sourceTree = "<group>"; };
 		37C5D18E1FC9F25400951FA8 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		37C5D1901FCB578F00951FA8 /* storableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storableTests.swift; sourceTree = "<group>"; };
 		37CED4681FAE289100244ADD /* gym-planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gym-planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +125,14 @@
 			path = programs;
 			sourceTree = "<group>";
 		};
+		37B3ECEF1FD370A600F7D8EF /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */,
+			);
+			path = settings;
+			sourceTree = "<group>";
+		};
 		37CED45F1FAE289100244ADD = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +165,7 @@
 				37CED4711FAE289100244ADD /* Main.storyboard */,
 				377F05571FC0DD8F0015D7EF /* programs */,
 				37CED46F1FAE289100244ADD /* SecondViewController.swift */,
+				37B3ECEF1FD370A600F7D8EF /* settings */,
 				377C11F21FC26BD20063A324 /* WorkoutController.swift */,
 				37CED46D1FAE289100244ADD /* WorkoutsTabController.swift */,
 			);
@@ -325,6 +336,7 @@
 				37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */,
 				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
 				37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */,
+				37B3ECF11FD370CA00F7D8EF /* VariableRepsController.swift in Sources */,
 				376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */,
 				377F05501FC0D9CE0015D7EF /* Program.swift in Sources */,
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,

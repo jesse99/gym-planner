@@ -150,7 +150,7 @@ public class VariableSetsPlan: Plan {
         switch findVariableRepsSetting(name) {
         case .right(let setting):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-            let suffix = setting.weight > 0 ? " @ \(Weight.friendlyStr(setting.weight))" : ""
+            let suffix = setting.weight > 0 ? " @ \(Weight.friendlyUnitsStr(setting.weight, plural: true))" : ""
             
             var subtitle = ""
             if reps.count > 1 {

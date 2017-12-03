@@ -11,10 +11,10 @@ public enum Apparatus
     //    case machine(weights: [Double], extra: [Double])
     //
     //    /// Used with plates attached to a machine two at a time (e.g. a Leg Press machine).
-    //    case pairedPlates(plates: [(Int, Double)])
+    //    case pairedPlates(plates: [Double])
     //
-    //    /// Used with plates attached to a machine one at a time (e.g. a T Bar Row machine).
-    //    case singlePlates(plates: [(Int, Double)])
+    //    /// Used with plates attached to a machine one at a time (e.g. a T-Bar Row machine).
+    //    case singlePlates(plates: [Double])
 }
 
 /// Used for exercises that use plates, or dumbbells, or machines with variable weights.
@@ -117,7 +117,7 @@ public class VariableRepsSetting: Storable {
 
 /// Used for exercises where the user controls how much weight is used (which can be
 /// zero for a body weight exercise).
-public class FixedWeightSetting: Storable {
+public class FixedWeightSetting: Storable {     // TODO: do we actually need this? if so make sure that there is a setting screen for it
     var weight: Double  // starts out at 0.0
     var restSecs: Int
     
@@ -198,6 +198,8 @@ extension Settings: Storable {
             self = .derivedWeight(store.getObj("setting"))
         case "fixed":
             self = .fixedWeight(store.getObj("setting"))
+        case "variableReps":
+            self = .variableReps(store.getObj("setting"))
         default:
             frontend.assert(false, "loading settings had unknown type: \(tname)"); abort()
         }

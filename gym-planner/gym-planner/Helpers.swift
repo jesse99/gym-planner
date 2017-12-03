@@ -27,6 +27,34 @@ func defaultBumpers() -> [Double] {
 //    }
 }
 
+func secsToStr(_ secs: Int) -> String {
+    if secs <= 60 {
+        return "\(secs)s"
+    } else {
+        return String(format: "%0.1fm", arguments: [Double(secs)/60.0])
+    }
+}
+
+func strToSecs(_ inText: String) -> Int? {
+    var multiplier = 1.0
+    
+    var text = inText.trimmingCharacters(in: CharacterSet.whitespaces)
+    if text.hasSuffix("s") {
+        text.remove(at: text.index(before: text.endIndex))
+    } else if text.hasSuffix("m") {
+        multiplier = 60.0
+        text.remove(at: text.index(before: text.endIndex))
+    } else if text.hasSuffix("h") {
+        multiplier = 60.0*60.0
+        text.remove(at: text.index(before: text.endIndex))
+    }
+    
+    if let value = Double(text) {
+        return Int(multiplier*value)
+    }
+    return nil
+}
+
 func grayColor(_ gray: Int, _ alpha: Float) -> UIColor {
     return UIColor(red: CGFloat(gray)/255.0, green: CGFloat(gray)/255.0, blue: CGFloat(gray)/255.0, alpha: CGFloat(alpha))
 }

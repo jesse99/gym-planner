@@ -1,7 +1,7 @@
-import os.log
 import AVFoundation // for vibrate
 import UIKit
 import UserNotifications
+import os.log
 
 class ExerciseController: UIViewController {
     override func viewDidLoad() {
@@ -89,8 +89,7 @@ class ExerciseController: UIViewController {
         titleLabel.font = font.makeBold()
     }
     
-    override func viewWillAppear(_ animated: Bool)
-    {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         breadcrumbLabel.text = breadcrumb
@@ -108,8 +107,7 @@ class ExerciseController: UIViewController {
         notify.addObserver(self, selector: #selector(ExerciseController.leavingForeground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool)
-    {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
 //        var shown = false
@@ -137,8 +135,7 @@ class ExerciseController: UIViewController {
 //        }
     }
     
-    @IBAction func unwindToWeightedWorkout(_ segue: UIStoryboardSegue)
-    {
+    @IBAction func unwindToExercise(_ segue: UIStoryboardSegue) {
         //restorePosition()
         updateUI()
     }
@@ -217,13 +214,18 @@ class ExerciseController: UIViewController {
     }
     
     @IBAction func optionsPressed(_ sender: Any) {
-//        savePosition()
 //        dismissTooltip()
-//
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let view = storyboard.instantiateViewController(withIdentifier: "WeightedSettingsID") as! WeightedSettingController
-//        view.initialize(workout, exercise, exercise, setting, maxPercent, cycleIndex, breadcrumbLabel.text!)
-//        present(view, animated: true, completion: nil)
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        switch exercise.settings {
+        case .derivedWeight(_): break   // TODO: implement this
+        case .fixedWeight(_): break   // TODO: implement this
+        case .variableReps(let setting):
+            let view = storyboard.instantiateViewController(withIdentifier: "VariableRepsID") as! VariableRepsController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
+        case .variableWeight(_): break   // TODO: implement this
+        }
     }
     
 //    private func savePosition()
