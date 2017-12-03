@@ -219,8 +219,10 @@ class ExerciseController: UIViewController {
 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         switch exercise.settings {
-        case .derivedWeight(_):
-            break   // TODO: implement this
+        case .derivedWeight(let setting):
+            let view = storyboard.instantiateViewController(withIdentifier: "DerivedWeightID") as! DerivedWeightController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
 
         case .fixedWeight(_):
             break   // TODO: implement this

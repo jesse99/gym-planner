@@ -1,8 +1,8 @@
 import UIKit
 import os.log
 
-class VariableWeightController: UIViewController {
-    func initialize(_ exercise: Exercise, _ setting: VariableWeightSetting, _ breadcrumb: String) {
+class DerivedWeightController: UIViewController {
+    func initialize(_ exercise: Exercise, _ setting: DerivedWeightSetting, _ breadcrumb: String) {
         self.exercise = exercise
         self.setting = setting
         self.breadcrumb = "\(breadcrumb) • Options"
@@ -22,7 +22,7 @@ class VariableWeightController: UIViewController {
         if let e = app.program.findExercise(name) {
             exercise = e
             switch exercise.settings {
-            case .variableWeight(let setting): self.setting = setting
+            case .derivedWeight(let setting): self.setting = setting
             default: os_log("%@ isn't using derived weight", type: .error, name)
             }
         } else {
@@ -36,24 +36,20 @@ class VariableWeightController: UIViewController {
         super.viewWillAppear(animated)
         
         breadcrumbLabel.text = breadcrumb
-
+        
         if setting != nil {
             restTextbox.text = secsToStr(setting.restSecs)
-            weightTextbox.text = Weight.friendlyStr(setting.weight)
         }
     }
     
     @IBAction func viewTapped(_ sender: Any) {
         if setting != nil {
             restTextbox.resignFirstResponder()
-            weightTextbox.resignFirstResponder()
         }
     }
     
     @IBAction func donePressed(_ sender: Any) {
         if setting != nil {
-            setting.changeWeight(Double(weightTextbox.text!)!)  // TODO: use something like toWeight
-            
             if let text = restTextbox.text, let value = strToSecs(text) {
                 setting.restSecs = value
             }
@@ -65,18 +61,10 @@ class VariableWeightController: UIViewController {
         self.performSegue(withIdentifier: "unwindToExerciseID", sender: self)
     }
     
-    @IBAction func apparatusPressed(_ sender: Any) {
-        // TODO
-    }
-    
-    @IBOutlet var breadcrumbLabel: UILabel!
-    @IBOutlet var restTextbox: UITextField!
-    @IBOutlet var weightTextbox: UITextField!
+    @IBOutlet private var breadcrumbLabel: UILabel!
+    @IBOutlet private var restTextbox: UITextField!
     
     private var exercise: Exercise!
-    private var setting: VariableWeightSetting!
+    private var setting: DerivedWeightSetting!
     private var breadcrumb = ""
 }
-
-
-

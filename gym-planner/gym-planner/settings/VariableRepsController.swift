@@ -21,9 +21,9 @@ class VariableRepsController: UIViewController {
         let name = coder.decodeObject(forKey: "exercise.name") as! String
         if let e = app.program.findExercise(name) {
             exercise = e
-            switch findVariableRepsSetting(name) {
-            case .right(let setting): self.setting = setting
-            case .left(let err): os_log("couldn't load setting '%@' for program '%@': %@", type: .error, name, app.program.name, err)
+            switch exercise.settings {
+            case .variableReps(let setting): self.setting = setting
+            default: os_log("%@ isn't using derived weight", type: .error, name)
             }
         } else {
             os_log("couldn't load exercise '%@' for program '%@'", type: .error, name, app.program.name)

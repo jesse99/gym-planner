@@ -25,6 +25,7 @@
 		37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B308DB1FC3BFFB00556E8F /* FontExtension.swift */; };
 		37B3ECF11FD370CA00F7D8EF /* VariableRepsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */; };
 		37B3ECF31FD3818000F7D8EF /* VariableWeightSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3ECF21FD3818000F7D8EF /* VariableWeightSetting.swift */; };
+		37B3ECF51FD38B2E00F7D8EF /* DerivedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */; };
 		37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C5D18E1FC9F25400951FA8 /* Store.swift */; };
 		37C5D1911FCB578F00951FA8 /* storableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C5D1901FCB578F00951FA8 /* storableTests.swift */; };
 		37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED46B1FAE289100244ADD /* AppDelegate.swift */; };
@@ -71,6 +72,7 @@
 		37B308DB1FC3BFFB00556E8F /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableRepsController.swift; sourceTree = "<group>"; };
 		37B3ECF21FD3818000F7D8EF /* VariableWeightSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableWeightSetting.swift; sourceTree = "<group>"; };
+		37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DerivedWeightController.swift; sourceTree = "<group>"; };
 		37C5D18E1FC9F25400951FA8 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		37C5D1901FCB578F00951FA8 /* storableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storableTests.swift; sourceTree = "<group>"; };
 		37CED4681FAE289100244ADD /* gym-planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gym-planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +132,7 @@
 		37B3ECEF1FD370A600F7D8EF /* settings */ = {
 			isa = PBXGroup;
 			children = (
+				37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */,
 				37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */,
 				37B3ECF21FD3818000F7D8EF /* VariableWeightSetting.swift */,
 			);
@@ -355,6 +358,7 @@
 				377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */,
 				3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
+				37B3ECF51FD38B2E00F7D8EF /* DerivedWeightController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

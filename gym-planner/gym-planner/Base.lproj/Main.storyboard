@@ -609,6 +609,82 @@
             </objects>
             <point key="canvasLocation" x="1399" y="360"/>
         </scene>
+        <!--Derived Weight Controller-->
+        <scene sceneID="wot-Ee-u4a">
+            <objects>
+                <viewController storyboardIdentifier="DerivedWeightID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PfZ-2t-qeX" customClass="DerivedWeightController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="K1L-yD-3Uc">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e9b-ba-rwy">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="y5u-Bt-hG5">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="UPQ-J1-aOo">
+                                            <connections>
+                                                <action selector="donePressed:" destination="PfZ-2t-qeX" id="J0d-W2-JXw"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7h-Kt-XwU">
+                                <rect key="frame" x="170.5" y="20" width="33" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rest:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTT-pR-jUu">
+                                <rect key="frame" x="10" y="70.5" width="39" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LDJ-Uk-mcW">
+                                <rect key="frame" x="59" y="66" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="sVV-GX-KuZ"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="Y7h-Kt-XwU" firstAttribute="top" secondItem="BPi-CF-ceu" secondAttribute="top" id="4Pv-Ph-cuk"/>
+                            <constraint firstItem="e9b-ba-rwy" firstAttribute="leading" secondItem="K1L-yD-3Uc" secondAttribute="leading" id="Cwh-hQ-ewm"/>
+                            <constraint firstItem="pTT-pR-jUu" firstAttribute="leading" secondItem="BPi-CF-ceu" secondAttribute="leading" constant="10" id="PFr-Z5-fWf"/>
+                            <constraint firstItem="e9b-ba-rwy" firstAttribute="bottom" secondItem="BPi-CF-ceu" secondAttribute="bottom" id="RL1-ta-Hq9"/>
+                            <constraint firstItem="LDJ-Uk-mcW" firstAttribute="leading" secondItem="pTT-pR-jUu" secondAttribute="trailing" constant="10" id="gTC-q8-nIp"/>
+                            <constraint firstItem="LDJ-Uk-mcW" firstAttribute="centerY" secondItem="pTT-pR-jUu" secondAttribute="centerY" id="qks-x4-Igl"/>
+                            <constraint firstItem="Y7h-Kt-XwU" firstAttribute="centerX" secondItem="K1L-yD-3Uc" secondAttribute="centerX" id="tpd-ay-0zy"/>
+                            <constraint firstItem="LDJ-Uk-mcW" firstAttribute="top" secondItem="Y7h-Kt-XwU" secondAttribute="bottom" constant="30" id="wUm-Nc-RwC"/>
+                            <constraint firstItem="BPi-CF-ceu" firstAttribute="trailing" secondItem="e9b-ba-rwy" secondAttribute="trailing" id="ykg-o0-j3l"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="BPi-CF-ceu"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="G80-Fj-01B" appends="YES" id="oqv-5f-56Q"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="breadcrumbLabel" destination="Y7h-Kt-XwU" id="V4h-6O-mYw"/>
+                        <outlet property="restTextbox" destination="LDJ-Uk-mcW" id="dBd-mM-ktK"/>
+                        <segue destination="iu6-XB-usG" kind="unwind" identifier="unwindToExerciseID" unwindAction="unwindToExercise:" id="1pU-VK-7s6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="62j-Sm-XWl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="iu6-XB-usG" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="G80-Fj-01B">
+                    <connections>
+                        <action selector="viewTapped:" destination="PfZ-2t-qeX" id="Ii1-1S-e9e"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2048" y="355"/>
+        </scene>
     </scenes>
     <resources>
         <image name="first" width="30" height="30"/>
