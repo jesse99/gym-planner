@@ -4,6 +4,19 @@ import UIKit
 
 // Good resource for what sort of plates are typically available is http://www.roguefitness.com/weightlifting-bars-plates/plates/metal-plates?gclid=CN7rt9bpgNACFQqPfgod-5IObw
 // Also http://forum.bodybuilding.com/showthread.php?t=123528451
+func availablePlates() -> [Double] {
+//    let app = UIApplication.shared.delegate as! AppDelegate
+//    switch app.units() {
+//    case .imperial:
+        return [0.25, 0.5, 1.0, 1.25, 2.5, 5, 10, 15, 25, 35, 45, 55, 100, 125, 140, 150, 175, 200]
+        
+//    case .metric:
+//        let plates = [0.25, 0.5, 1.0, 1.25, 2.5, 5, 10, 15, 20, 25, 50, 75, 100]
+//        return plates.map {$0*Double.kgToLb}
+//    }
+}
+
+
 func defaultPlates() -> [Double] {
     //    switch units {
     //    case .imperial:
@@ -15,6 +28,18 @@ func defaultPlates() -> [Double] {
     //    }
 }
 
+func availableBumpers() -> [Double] {
+//    let app = UIApplication.shared.delegate as! AppDelegate
+//    switch app.units() {
+//    case .imperial:
+        return [10.0, 15, 25, 35, 45, 55, 100]
+        
+//    case .metric:
+//        let plates = [5.0, 10, 15, 20, 25, 50]
+//        return plates.map {$0*Double.kgToLb}
+//    }
+}
+
 func defaultBumpers() -> [Double] {
 //    switch units
 //    {
@@ -23,6 +48,18 @@ func defaultBumpers() -> [Double] {
         
 //    case .metric:
 //        let plates = [5.0, 10, 20]
+//        return plates.map {$0*Double.kgToLb}
+//    }
+}
+
+func availableMagnets() -> [Double] {
+//    let app = UIApplication.shared.delegate as! AppDelegate
+//    switch app.units() {
+//    case .imperial:
+        return [0.25, 0.5, 0.625, 0.75, 1.0, 1.25, 2.0, 2.5]
+        
+//    case .metric:
+//        let plates = [0.25, 0.5, 0.75, 1.0]
 //        return plates.map {$0*Double.kgToLb}
 //    }
 }

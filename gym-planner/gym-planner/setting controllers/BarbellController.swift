@@ -54,15 +54,114 @@ class BarbellController: UIViewController {
     }
     
     @IBAction func platesPressed(_ sender: Any) {
-        // TODO
+        if setting != nil {
+            switch setting.apparatus {
+            case .barbell(bar: _, collar: _, plates: let plates, bumpers: _, magnets: _, warmupsWithBar: _):
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let view = storyboard.instantiateViewController(withIdentifier: "WeightsID") as! WeightsController
+                view.initialize(
+                    available: availablePlates(),
+                    used: plates,
+                    emptyOK: false,
+                    {self.updatePlates($0)},
+                    breadcrumbLabel.text! + " • Plates",
+                    "unwindToBarbellID")
+                present(view, animated: true, completion: nil)
+            default:
+                frontend.assert(false, "BarbellController was called without a barbell")
+            }
+        }
     }
     
     @IBAction func bumpersPressed(_ sender: Any) {
-        // TODO
+        if setting != nil {
+            switch setting.apparatus {
+            case .barbell(bar: _, collar: _, plates: _, bumpers: let bumpers, magnets: _, warmupsWithBar: _):
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let view = storyboard.instantiateViewController(withIdentifier: "WeightsID") as! WeightsController
+                view.initialize(
+                    available: availableBumpers(),
+                    used: bumpers,
+                    emptyOK: true,
+                    {self.updateBumpers($0)},
+                    breadcrumbLabel.text! + " • Bumpers",
+                    "unwindToBarbellID")
+                present(view, animated: true, completion: nil)
+            default:
+                frontend.assert(false, "BarbellController was called without a barbell")
+            }
+        }
     }
     
     @IBAction func magnetsPressed(_ sender: Any) {
-        // TODO
+        if setting != nil {
+            switch setting.apparatus {
+            case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: let magnets, warmupsWithBar: _):
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let view = storyboard.instantiateViewController(withIdentifier: "WeightsID") as! WeightsController
+                view.initialize(
+                    available: availableMagnets(),
+                    used: magnets,
+                    emptyOK: true,
+                    {self.updateMagnets($0)},
+                    breadcrumbLabel.text! + " • Magnets",
+                    "unwindToBarbellID")
+                present(view, animated: true, completion: nil)
+            default:
+                frontend.assert(false, "BarbellController was called without a barbell")
+            }
+        }
+    }
+    
+    private func updatePlates(_ newPlates: [Double]) {
+        if setting != nil {
+            switch setting.apparatus {
+            case .barbell(bar: let oldBar, collar: let oldCollar, plates: _, bumpers: let oldBumpers, magnets: let oldMagnets, warmupsWithBar: let oldWarmups):
+                setting.apparatus = .barbell(
+                    bar: oldBar,
+                    collar: oldCollar,
+                    plates: newPlates,
+                    bumpers: oldBumpers,
+                    magnets: oldMagnets,
+                    warmupsWithBar: oldWarmups)
+            default:
+                frontend.assert(false, "BarbellController was called without a barbell")
+            }
+        }
+    }
+    
+    private func updateBumpers(_ newBumpers: [Double]) {
+        if setting != nil {
+            switch setting.apparatus {
+            case .barbell(bar: let oldBar, collar: let oldCollar, plates: let oldPlates, bumpers: _, magnets: let oldMagnets, warmupsWithBar: let oldWarmups):
+                setting.apparatus = .barbell(
+                    bar: oldBar,
+                    collar: oldCollar,
+                    plates: oldPlates,
+                    bumpers: newBumpers,
+                    magnets: oldMagnets,
+                    warmupsWithBar: oldWarmups)
+            default:
+                frontend.assert(false, "BarbellController was called without a barbell")
+            }
+        }
+    }
+    
+    private func updateMagnets(_ newMagnets: [Double]) {
+        if setting != nil {
+            switch setting.apparatus {
+            case .barbell(bar: let oldBar, collar: let oldCollar, plates: let oldPlates, bumpers: let oldBumpers, magnets: _, warmupsWithBar: let oldWarmups):
+                setting.apparatus = .barbell(
+                    bar: oldBar,
+                    collar: oldCollar,
+                    plates: oldPlates,
+                    bumpers: oldBumpers,
+                    magnets: newMagnets,
+                    warmupsWithBar: oldWarmups)
+            default:
+                frontend.assert(false, "BarbellController was called without a barbell")
+            }
+        }
     }
     
     @IBOutlet var breadcrumbLabel: UILabel!
