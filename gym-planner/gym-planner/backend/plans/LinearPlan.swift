@@ -178,6 +178,10 @@ public class LinearPlan : Plan {
         return !sets.isEmpty && !finished()
     }
     
+    public func underway() -> Bool {
+        return isStarted() && setIndex > 0
+    }
+    
     public func label() -> String {
         return exerciseName
     }

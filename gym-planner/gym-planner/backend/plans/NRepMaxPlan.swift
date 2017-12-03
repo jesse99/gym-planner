@@ -81,6 +81,10 @@ public class NRepMaxPlan : Plan {
         return setNum > 0 && !finished()
     }
     
+    public func underway() -> Bool {
+        return isStarted() && setNum > 1
+    }
+    
     public func label() -> String {
         return exerciseName
     }

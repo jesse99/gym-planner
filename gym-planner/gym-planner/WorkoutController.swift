@@ -145,8 +145,10 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
             if exercise.plan.isStarted() {
                 cell.textLabel!.text = exercise.plan.label()
                 cell.detailTextLabel!.text = exercise.plan.sublabel()
-                cell.textLabel?.setColor(.red)
-                cell.detailTextLabel?.setColor(.red)    // TODO: use targetColor
+                
+                let color: UIColor = exercise.plan.underway() ? .red : .black
+                cell.textLabel?.setColor(color)
+                cell.detailTextLabel?.setColor(color)    // TODO: use targetColor
 
             } else {
                 let p = exercise.plan.clone()

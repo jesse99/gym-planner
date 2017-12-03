@@ -103,6 +103,10 @@ public class VariableSetsPlan: Plan {
         return !exerciseName.isEmpty && !reps.isEmpty && !finished()
     }
     
+    public func underway() -> Bool {
+        return isStarted() && !reps.isEmpty
+    }
+    
     public func label() -> String {
         return exerciseName
     }

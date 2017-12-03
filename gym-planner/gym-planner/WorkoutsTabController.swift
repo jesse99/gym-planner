@@ -173,22 +173,40 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
     
+    // Returns the workouts being executed atm (but not those that have finished executing).
     private func findTodaysWorkouts() -> [Int] {
-        var todays: [Int] = []
-        
-        let app = UIApplication.shared.delegate as! AppDelegate
-        let calendar = Calendar.current
-        for (i, workout) in app.program.workouts.enumerated() {
+        func isUnderway(_ workout: Workout) -> Bool {
+            let app = UIApplication.shared.delegate as! AppDelegate
             for name in workout.exercises {
                 if let exercise = app.program.findExercise(name) {
-                    if exercise.plan.isStarted() {
-                        todays.append(i)
-                        break
-                    } else if let completed = exercise.completed, calendar.isDate(completed, inSameDayAs: Date()) {
-                        todays.append(i)
-                        break
+                    if exercise.plan.underway() {
+                        return true
                     }
                 }
+            }
+            return false
+        }
+        
+        func numCompleted(_ workout: Workout) -> Int {
+            var count = 0
+            let app = UIApplication.shared.delegate as! AppDelegate
+            let calendar = Calendar.current
+            for name in workout.exercises {
+                if let exercise = app.program.findExercise(name) {
+                    if let completed = exercise.completed, calendar.isDate(completed, inSameDayAs: Date()) {
+                        count += 1
+                    }
+                }
+            }
+            return count
+        }
+        
+        var todays: [Int] = []
+        let app = UIApplication.shared.delegate as! AppDelegate
+        for (i, workout) in app.program.workouts.enumerated() {
+            let completed = numCompleted(workout)
+            if isUnderway(workout) || (completed > 0 && completed < workout.exercises.count) {
+                todays.append(i)
             }
         }
         return todays
