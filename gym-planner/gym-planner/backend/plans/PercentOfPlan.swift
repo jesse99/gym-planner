@@ -338,10 +338,13 @@ public class PercentOfPlan : Plan {
                 let p = otherExercise.plan.clone()
                 switch p.start(otherName) {
                 case .ok:
+                    // We want to use whatever the user last lifted,
                     if let weight = p.findLastWeight() {
                         return .right(weight)
                     } else {
-                        return .left("Execute \(otherName) first")
+                        // but if all they have run is NRepsMax then we'll settle for what they should lift next time.
+                        os_log("falling back onto settings weight for %@", type: .info, otherName)
+                        return findCurrentWeight(otherName)
                     }
                 case .newPlan(_): return .left("Execute \(otherName) first")
                 case .error(let err): return .left(err)

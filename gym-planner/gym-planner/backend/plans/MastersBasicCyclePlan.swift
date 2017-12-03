@@ -168,7 +168,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         store.addDbl("maxWeight", maxWeight)
         store.addInt("mbc-setIndex", setIndex)
     }
-    
+
     public var debugDescription: String {
         return name
     }
