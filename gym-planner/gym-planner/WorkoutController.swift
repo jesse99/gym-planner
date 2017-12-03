@@ -145,10 +145,8 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
             if exercise.plan.underway() {
                 cell.textLabel!.text = exercise.plan.label()
                 cell.detailTextLabel!.text = exercise.plan.sublabel()
-                
-                let color: UIColor = exercise.plan.underway() ? .red : .black
-                cell.textLabel?.setColor(color)
-                cell.detailTextLabel?.setColor(color)    // TODO: use targetColor
+                cell.textLabel?.setColor(.red)
+                cell.detailTextLabel?.setColor(.red)    // TODO: use targetColor
 
             } else {
                 let p = exercise.plan.clone()
@@ -268,10 +266,12 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         let name = workout.exercises[index]
         let app = UIApplication.shared.delegate as! AppDelegate
         if let exercise = app.program.findExercise(name) {
-            if exercise.plan.isStarted() {
+            if exercise.plan.underway() {
                 presentExercise(exercise)
 
             } else {
+                // If we're started but not underway we want to re-start to ensure that we pickup
+                // on any changes from a base exercise.
                 switch exercise.plan.start(name) {
                 case .ok:
                     presentExercise(exercise)
