@@ -256,6 +256,7 @@ public class LinearPlan : Plan {
     
     public func reset() {
         setIndex = 0
+        refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
     
