@@ -65,6 +65,9 @@ public protocol Plan: Storable {
 
     func start(_ exerciseName: String) -> StartResult
     
+    /// Called when settings change.
+    func refresh()
+    
     func isStarted() -> Bool
     
     /// "Light Squat".

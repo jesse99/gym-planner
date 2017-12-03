@@ -505,6 +505,110 @@
             </objects>
             <point key="canvasLocation" x="754" y="358"/>
         </scene>
+        <!--Variable Weight Controller-->
+        <scene sceneID="oyW-Cc-so5">
+            <objects>
+                <viewController storyboardIdentifier="VariableWeightID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lhM-tS-lq5" customClass="VariableWeightController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Dm1-76-JKc">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OsH-bo-ZkV">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="1PJ-vu-N8y">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="rwu-r9-tXb">
+                                            <connections>
+                                                <action selector="donePressed:" destination="lhM-tS-lq5" id="nkn-mc-bHr"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Apparatus" id="PWd-fK-qoG">
+                                            <connections>
+                                                <action selector="apparatusPressed:" destination="lhM-tS-lq5" id="3fF-Bx-VqF"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breadcrumb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25l-21-LjF">
+                                <rect key="frame" x="150" y="20" width="75" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rest:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BFx-d7-iQi">
+                                <rect key="frame" x="10" y="70.5" width="58.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weight:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkw-HB-d1X">
+                                <rect key="frame" x="10" y="130.5" width="58.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dXf-nq-Wpn">
+                                <rect key="frame" x="78.5" y="66" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Jl9-sg-9pm"/>
+                                    <constraint firstAttribute="width" constant="100" id="xaG-hE-xed"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" spellCheckingType="no" keyboardType="numbersAndPunctuation" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lj5-hp-qrq">
+                                <rect key="frame" x="78.5" y="126" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="uXK-Mm-Bft"/>
+                                    <constraint firstAttribute="width" constant="100" id="xCQ-zV-A91"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" spellCheckingType="no" keyboardType="decimalPad" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="Lj5-hp-qrq" firstAttribute="leading" secondItem="dXf-nq-Wpn" secondAttribute="leading" id="9td-Li-9T1"/>
+                            <constraint firstItem="gkw-HB-d1X" firstAttribute="leading" secondItem="BFx-d7-iQi" secondAttribute="leading" id="ACm-je-eJd"/>
+                            <constraint firstItem="25l-21-LjF" firstAttribute="centerX" secondItem="Dm1-76-JKc" secondAttribute="centerX" id="MNU-wE-eUq"/>
+                            <constraint firstItem="25l-21-LjF" firstAttribute="top" secondItem="Pr2-ix-oHt" secondAttribute="top" id="NOX-qn-q2h"/>
+                            <constraint firstItem="OsH-bo-ZkV" firstAttribute="leading" secondItem="Pr2-ix-oHt" secondAttribute="leading" id="TcR-1f-mQ5"/>
+                            <constraint firstItem="OsH-bo-ZkV" firstAttribute="trailing" secondItem="Pr2-ix-oHt" secondAttribute="trailing" id="f5u-Pd-2y2"/>
+                            <constraint firstItem="dXf-nq-Wpn" firstAttribute="centerY" secondItem="BFx-d7-iQi" secondAttribute="centerY" id="hIa-5C-TcV"/>
+                            <constraint firstItem="Lj5-hp-qrq" firstAttribute="leading" secondItem="gkw-HB-d1X" secondAttribute="trailing" constant="10" id="itr-S1-OF8"/>
+                            <constraint firstItem="dXf-nq-Wpn" firstAttribute="top" secondItem="25l-21-LjF" secondAttribute="bottom" constant="30" id="n3Z-Oz-UOv"/>
+                            <constraint firstItem="OsH-bo-ZkV" firstAttribute="bottom" secondItem="Pr2-ix-oHt" secondAttribute="bottom" id="pou-Ve-D9r"/>
+                            <constraint firstItem="Lj5-hp-qrq" firstAttribute="top" secondItem="dXf-nq-Wpn" secondAttribute="bottom" constant="30" id="svJ-B6-Why"/>
+                            <constraint firstItem="BFx-d7-iQi" firstAttribute="leading" secondItem="Pr2-ix-oHt" secondAttribute="leading" constant="10" id="vfN-av-ccG"/>
+                            <constraint firstItem="gkw-HB-d1X" firstAttribute="trailing" secondItem="BFx-d7-iQi" secondAttribute="trailing" id="yOw-Hl-qtf"/>
+                            <constraint firstItem="Lj5-hp-qrq" firstAttribute="centerY" secondItem="gkw-HB-d1X" secondAttribute="centerY" id="zdL-7k-jRi"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Pr2-ix-oHt"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="fDm-7t-i8s" appends="YES" id="5x4-J9-dAX"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="breadcrumbLabel" destination="25l-21-LjF" id="iaS-4M-hjd"/>
+                        <outlet property="restTextbox" destination="dXf-nq-Wpn" id="kRc-KD-34x"/>
+                        <outlet property="weightTextbox" destination="Lj5-hp-qrq" id="Bd3-06-Ti6"/>
+                        <segue destination="JMi-l1-OV7" kind="unwind" identifier="unwindToExerciseID" unwindAction="unwindToExercise:" id="ZCQ-B5-oak"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bFe-MF-TS6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="JMi-l1-OV7" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="fDm-7t-i8s">
+                    <connections>
+                        <action selector="viewTapped:" destination="lhM-tS-lq5" id="ZPp-ec-D8P"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1399" y="360"/>
+        </scene>
     </scenes>
     <resources>
         <image name="first" width="30" height="30"/>

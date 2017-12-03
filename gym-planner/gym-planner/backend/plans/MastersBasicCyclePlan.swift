@@ -197,48 +197,24 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
                 return .newPlan(NRepMaxPlan("Rep Max", workReps: cycles.first?.workReps ?? 5))
             }
             
-            let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
-            let cycle = cycles[cycleIndex]
-            
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            self.maxWeight = deload.weight;
-            
-            var workingSetWeight = cycle.percent*self.maxWeight;
-            if let percent = deload.percent {
-                os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
-            } else if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex), cycleIndex > 0 && result.missed {    // missed first cycle is dealt with in handleAdvance
-                os_log("using previous weight since this cycle was missed last time", type: .info)
-                workingSetWeight = result.weight
-            }
-            os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
-            
-            var warmupsWithBar = 0
-            switch setting.apparatus {
-            case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
-            default: break
-            }
-            
-            let numWarmups = 5 + warmupsWithBar
-            for i in 0..<warmupsWithBar {
-                sets.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: 5, percent: 0.0, weight: workingSetWeight))   // could also use max reps from all the executes, but 5 is probably better than 10 or whatever
-            }
-            
-            sets.append(Set(setting.apparatus, phase: numWarmups-4, phaseCount: numWarmups, numReps: 5, percent: 0.5, weight: workingSetWeight))
-            sets.append(Set(setting.apparatus, phase: numWarmups-3, phaseCount: numWarmups, numReps: 3, percent: 0.6, weight: workingSetWeight))
-            sets.append(Set(setting.apparatus, phase: numWarmups-2, phaseCount: numWarmups, numReps: 1, percent: 0.7, weight: workingSetWeight))
-            sets.append(Set(setting.apparatus, phase: numWarmups-1, phaseCount: numWarmups, numReps: 1, percent: 0.8, weight: workingSetWeight))
-            sets.append(Set(setting.apparatus, phase: numWarmups,   phaseCount: numWarmups, numReps: 1, percent: 0.9, weight: workingSetWeight))
-            frontend.assert(sets.count == numWarmups, "MastersBasicCyclePlan sets.count is \(sets.count) but numWarmups is \(numWarmups)")
-            
-            for i in 0..<cycle.workSets {
-                sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, weight: workingSetWeight))
-            }
+            buildSets(setting)
             frontend.saveExercise(exerciseName)
             
             return .ok
             
         case .left(let err):
             return .error(err)
+        }
+    }
+    
+    public func refresh() {
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            if setting.weight > 0.0 {
+                buildSets(setting)
+            }
+        case .left(_):
+            break
         }
     }
     
@@ -416,6 +392,47 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         history.append(result)
     }
     
+    private func buildSets(_ setting: VariableWeightSetting) {
+        let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
+        let cycle = cycles[cycleIndex]
+        
+        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+        self.maxWeight = deload.weight;
+        
+        var workingSetWeight = cycle.percent*self.maxWeight;
+        if let percent = deload.percent {
+            os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
+        } else if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex), cycleIndex > 0 && result.missed {    // missed first cycle is dealt with in handleAdvance
+            os_log("using previous weight since this cycle was missed last time", type: .info)
+            workingSetWeight = result.weight
+        }
+        os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
+        
+        var warmupsWithBar = 0
+        switch setting.apparatus {
+        case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
+        default: break
+        }
+        
+        self.sets = []
+        
+        let numWarmups = 5 + warmupsWithBar
+        for i in 0..<warmupsWithBar {
+            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: 5, percent: 0.0, weight: workingSetWeight))   // could also use max reps from all the executes, but 5 is probably better than 10 or whatever
+        }
+        
+        sets.append(Set(setting.apparatus, phase: numWarmups-4, phaseCount: numWarmups, numReps: 5, percent: 0.5, weight: workingSetWeight))
+        sets.append(Set(setting.apparatus, phase: numWarmups-3, phaseCount: numWarmups, numReps: 3, percent: 0.6, weight: workingSetWeight))
+        sets.append(Set(setting.apparatus, phase: numWarmups-2, phaseCount: numWarmups, numReps: 1, percent: 0.7, weight: workingSetWeight))
+        sets.append(Set(setting.apparatus, phase: numWarmups-1, phaseCount: numWarmups, numReps: 1, percent: 0.8, weight: workingSetWeight))
+        sets.append(Set(setting.apparatus, phase: numWarmups,   phaseCount: numWarmups, numReps: 1, percent: 0.9, weight: workingSetWeight))
+        frontend.assert(sets.count == numWarmups, "MastersBasicCyclePlan sets.count is \(sets.count) but numWarmups is \(numWarmups)")
+        
+        for i in 0..<cycle.workSets {
+            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, weight: workingSetWeight))
+        }
+    }
+
     private static func getCycle(_ cycles: [Execute], _ history: [Result]) -> Int {
         if let last = history.last {
             return (last.cycleIndex + 1) % cycles.count

@@ -147,29 +147,7 @@ public class PercentOfPlan : Plan {
         case .right(let apparatus):
             switch getOtherWeight() {
             case .right(let otherWeight):
-                let workingSetWeight = percent*otherWeight;
-                os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
-                
-                var warmupsWithBar = 0
-                switch apparatus {
-                case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
-                default: break
-                }
-                
-                let numWarmups = warmupsWithBar + warmupReps.count
-                for i in 0..<warmupsWithBar {
-                    sets.append(Set(apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
-                }
-                
-                let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
-                for (i, reps) in warmupReps.enumerated() {
-                    let percent = firstWarmup + Double(i)*delta
-                    sets.append(Set(apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
-                }
-                
-                for i in 0..<workSets {
-                    sets.append(Set(apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: workingSetWeight))
-                }
+                buildSets(apparatus, otherWeight)
                 frontend.saveExercise(exerciseName)
 
             case .left(let message):
@@ -180,6 +158,21 @@ public class PercentOfPlan : Plan {
             
         case .left(let err):
             return .error(err)
+        }
+    }
+    
+    public func refresh() {
+        switch findApparatus(exerciseName) {
+        case .right(let apparatus):
+            switch getOtherWeight() {
+            case .right(let otherWeight):
+                buildSets(apparatus, otherWeight)
+            case .left(_):
+                break
+            }
+            
+        case .left(_):
+            break
         }
     }
     
@@ -299,6 +292,33 @@ public class PercentOfPlan : Plan {
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
         let result = Result(title: title, weight: sets.last!.weight.weight)
         history.append(result)
+    }
+    
+    private func buildSets(_ apparatus: Apparatus, _ otherWeight: Double) {
+        let workingSetWeight = percent*otherWeight;
+        os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
+        
+        var warmupsWithBar = 0
+        switch apparatus {
+        case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
+        default: break
+        }
+        
+        sets = []
+        let numWarmups = warmupsWithBar + warmupReps.count
+        for i in 0..<warmupsWithBar {
+            sets.append(Set(apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
+        }
+        
+        let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
+        for (i, reps) in warmupReps.enumerated() {
+            let percent = firstWarmup + Double(i)*delta
+            sets.append(Set(apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
+        }
+        
+        for i in 0..<workSets {
+            sets.append(Set(apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: workingSetWeight))
+        }
     }
     
     private func getOtherWeight() -> Either<String, Double> {

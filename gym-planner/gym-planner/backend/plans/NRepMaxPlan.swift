@@ -73,6 +73,10 @@ public class NRepMaxPlan : Plan {
         }
     }
     
+    public func refresh() {
+        // nothing to do
+    }
+    
     public func isStarted() -> Bool {
         return setNum > 0 && !finished()
     }

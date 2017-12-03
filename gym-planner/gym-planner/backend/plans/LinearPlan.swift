@@ -153,40 +153,24 @@ public class LinearPlan : Plan {
                 return .newPlan(NRepMaxPlan("Rep Max", workReps: workReps))
             }
             
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            let weight = deload.weight;
-            
-            if let percent = deload.percent {
-                os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
-            }
-            os_log("weight = %.3f", type: .info, weight)
-            
-            var warmupsWithBar = 0
-            switch setting.apparatus {
-            case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
-            default: break
-            }
-            
-            let numWarmups = warmupsWithBar + warmupReps.count // TODO: some duplication here with other plans
-            for i in 0..<warmupsWithBar {
-                sets.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: weight))
-            }
-            
-            let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
-            for (i, reps) in warmupReps.enumerated() {
-                let percent = firstWarmup + Double(i)*delta
-                sets.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: weight))
-            }
-            
-            for i in 0..<workSets {
-                sets.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: weight))
-            }
+            buildSets(setting)
             frontend.saveExercise(exerciseName)
 
             return .ok
 
         case .left(let err):
             return .error(err)
+        }
+    }
+    
+    public func refresh() {
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            if setting.weight > 0.0 {
+                buildSets(setting)
+            }
+        case .left(_):
+            break
         }
     }
     
@@ -329,6 +313,38 @@ public class LinearPlan : Plan {
         let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
         let result = Result(title: title, missed: missed, weight: sets.last!.weight.weight)
         history.append(result)
+    }
+    
+    private func buildSets(_ setting: VariableWeightSetting) {
+        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+        let weight = deload.weight;
+        
+        if let percent = deload.percent {
+            os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
+        }
+        os_log("weight = %.3f", type: .info, weight)
+        
+        var warmupsWithBar = 0
+        switch setting.apparatus {
+        case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
+        default: break
+        }
+        
+        sets = []
+        let numWarmups = warmupsWithBar + warmupReps.count // TODO: some duplication here with other plans
+        for i in 0..<warmupsWithBar {
+            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: weight))
+        }
+        
+        let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
+        for (i, reps) in warmupReps.enumerated() {
+            let percent = firstWarmup + Double(i)*delta
+            sets.append(Set(setting.apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: weight))
+        }
+        
+        for i in 0..<workSets {
+            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: weight))
+        }
     }
     
     private let firstWarmup: Double

@@ -1,8 +1,8 @@
 import UIKit
 import os.log
 
-class VariableRepsController: UIViewController {
-    func initialize(_ exercise: Exercise, _ setting: VariableRepsSetting, _ breadcrumb: String) {
+class VariableWeightController: UIViewController {
+    func initialize(_ exercise: Exercise, _ setting: VariableWeightSetting, _ breadcrumb: String) {
         self.exercise = exercise
         self.setting = setting
         self.breadcrumb = "\(breadcrumb) • Options"
@@ -21,7 +21,7 @@ class VariableRepsController: UIViewController {
         let name = coder.decodeObject(forKey: "exercise.name") as! String
         if let e = app.program.findExercise(name) {
             exercise = e
-            switch findVariableRepsSetting(name) {
+            switch findVariableWeightSetting(name) {
             case .right(let setting): self.setting = setting
             case .left(let err): os_log("couldn't load setting '%@' for program '%@': %@", type: .error, name, app.program.name, err)
             }
@@ -36,9 +36,8 @@ class VariableRepsController: UIViewController {
         super.viewWillAppear(animated)
         
         breadcrumbLabel.text = breadcrumb
-        
+
         if setting != nil {
-            repsTextbox.text = String(setting.requestedReps)
             restTextbox.text = secsToStr(setting.restSecs)
             weightTextbox.text = Weight.friendlyStr(setting.weight)
         }
@@ -46,7 +45,6 @@ class VariableRepsController: UIViewController {
     
     @IBAction func viewTapped(_ sender: Any) {
         if setting != nil {
-            repsTextbox.resignFirstResponder()
             restTextbox.resignFirstResponder()
             weightTextbox.resignFirstResponder()
         }
@@ -54,8 +52,7 @@ class VariableRepsController: UIViewController {
     
     @IBAction func donePressed(_ sender: Any) {
         if setting != nil {
-            setting.requestedReps = Int(repsTextbox.text!)!
-            setting.weight = Double(weightTextbox.text!)! // TODO: use something like toWeight
+            setting.changeWeight(Double(weightTextbox.text!)!)  // TODO: use something like toWeight
             
             if let text = restTextbox.text, let value = strToSecs(text) {
                 setting.restSecs = value
@@ -67,15 +64,19 @@ class VariableRepsController: UIViewController {
         
         self.performSegue(withIdentifier: "unwindToExerciseID", sender: self)
     }
-
-    @IBOutlet private var breadcrumbLabel: UILabel!
-    @IBOutlet private var repsTextbox: UITextField!
-    @IBOutlet private var restTextbox: UITextField!
-    @IBOutlet private var weightTextbox: UITextField!
-
+    
+    @IBAction func apparatusPressed(_ sender: Any) {
+        // TODO
+    }
+    
+    @IBOutlet var breadcrumbLabel: UILabel!
+    @IBOutlet var restTextbox: UITextField!
+    @IBOutlet var weightTextbox: UITextField!
+    
     private var exercise: Exercise!
-    private var setting: VariableRepsSetting!
+    private var setting: VariableWeightSetting!
     private var breadcrumb = ""
 }
+
 
 

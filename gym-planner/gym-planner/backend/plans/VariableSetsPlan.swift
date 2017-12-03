@@ -95,6 +95,10 @@ public class VariableSetsPlan: Plan {
         return .ok
     }
     
+    public func refresh() {
+        // nothing to do
+    }
+    
     public func isStarted() -> Bool {
         return !exerciseName.isEmpty && !reps.isEmpty && !finished()
     }

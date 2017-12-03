@@ -137,6 +137,7 @@ class ExerciseController: UIViewController {
     
     @IBAction func unwindToExercise(_ segue: UIStoryboardSegue) {
         //restorePosition()
+        exercise.plan.refresh()
         updateUI()
     }
     
@@ -218,59 +219,23 @@ class ExerciseController: UIViewController {
 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         switch exercise.settings {
-        case .derivedWeight(_): break   // TODO: implement this
-        case .fixedWeight(_): break   // TODO: implement this
+        case .derivedWeight(_):
+            break   // TODO: implement this
+
+        case .fixedWeight(_):
+            break   // TODO: implement this
+            
         case .variableReps(let setting):
             let view = storyboard.instantiateViewController(withIdentifier: "VariableRepsID") as! VariableRepsController
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
-        case .variableWeight(_): break   // TODO: implement this
+            
+        case .variableWeight(let setting):
+            let view = storyboard.instantiateViewController(withIdentifier: "VariableWeightID") as! VariableWeightController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
         }
     }
-    
-//    private func savePosition()
-//    {
-//        // We only save our state if the user actually started the lift (this way
-//        // RandomExercise can tell which lift the user is on).
-//        if let lifts = lifts
-//        {
-//            if !lifts.atStart()
-//            {
-//                var state: [String: NSObject] = [
-//                    "startTime": startTime as NSObject,
-//                    "timerRunning": NSNumber(value: timer != nil),
-//                    "startedTimer": NSNumber(value: startedTimer as Bool),
-//                    "trailingTimer": NSNumber(value: trailingTimer as Bool)]
-//                lifts.saveState(&state)
-//
-//                let app = UIApplication.shared.delegate as! AppDelegate
-//                app.saveLift(workout.name, exercise, state)
-//            }
-//        }
-//    }
-//
-//    private func restorePosition()
-//    {
-//        if let lifts = lifts
-//        {
-//            let app = UIApplication.shared.delegate as! AppDelegate
-//            if let state = app.getLift(workout.name, exercise)
-//            {
-//                startTime = state["startTime"] as! Date
-//                startedTimer = (state["startedTimer"] as! NSNumber).boolValue
-//                trailingTimer = (state["trailingTimer"] as! NSNumber).boolValue
-//                lifts.restoreState(state)
-//
-//                if startedTimer && setting.restSecs(maxPercent, cycleIndex) > 0
-//                {
-//                    if (state["timerRunning"] as! NSNumber).boolValue
-//                    {
-//                        startTimer(force: true)
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     private func startTimer(force: Bool) {
         let restSecs = exercise.plan.restSecs().secs
