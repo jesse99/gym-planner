@@ -184,6 +184,10 @@ public class NRepMaxPlan : Plan {
         return "Used to find a \(numReps) rep max."
     }
     
+    public func findLastWeight() -> Double? {
+        return nil
+    }
+    
     // Internal items
     private func doNext(_ nextWeight: Double) {
         weight = nextWeight

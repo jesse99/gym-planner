@@ -142,7 +142,7 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         let name = workout.exercises[index]
         let app = UIApplication.shared.delegate as! AppDelegate
         if let exercise = app.program.findExercise(name) {
-            if exercise.plan.isStarted() {
+            if exercise.plan.underway() {
                 cell.textLabel!.text = exercise.plan.label()
                 cell.detailTextLabel!.text = exercise.plan.sublabel()
                 

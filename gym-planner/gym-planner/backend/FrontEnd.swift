@@ -45,11 +45,14 @@ public func findVariableRepsSetting(_ name: String) -> Either<String, VariableRe
     }
 }
 
-public func findWeight(_ name: String) -> Either<String, Double> {
+/// Returns the base-line weight the user is expected to lift. Note that the user may not have
+/// have actually done this weight yet and cycles mean that the user may be asked to do a percentage
+/// of this.
+public func findCurrentWeight(_ name: String) -> Either<String, Double> {
     if let exercise = frontend.findExercise(name) {
         switch exercise.settings {
         case .variableWeight(let setting): return .right(setting.weight)
-        case .derivedWeight(let setting): return findWeight(setting.otherName)
+        case .derivedWeight(let setting): return findCurrentWeight(setting.otherName)
         case .fixedWeight(let setting): return .right(setting.weight)
         case .variableReps(let setting): return .right(setting.weight)
         }

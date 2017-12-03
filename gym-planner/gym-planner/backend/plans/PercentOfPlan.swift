@@ -274,6 +274,10 @@ public class PercentOfPlan : Plan {
         return "This does an exercise at a percentage of another exercises workset. It's typically used to perform a light or medium version of an exercise."
     }
     
+    public func findLastWeight() -> Double? {
+        return history.last?.weight
+    }
+    
     // Internal items
     private func doNext() {
         setIndex += 1
@@ -331,8 +335,14 @@ public class PercentOfPlan : Plan {
         case .right(let otherName):
             switch findExercise(otherName) {
             case .right(let otherExercise):
-                switch otherExercise.plan.clone().start(otherName) {
-                case .ok: break
+                let p = otherExercise.plan.clone()
+                switch p.start(otherName) {
+                case .ok:
+                    if let weight = p.findLastWeight() {
+                        return .right(weight)
+                    } else {
+                        return .left("Execute \(otherName) first")
+                    }
                 case .newPlan(_): return .left("Execute \(otherName) first")
                 case .error(let err): return .left(err)
                 }
@@ -343,9 +353,6 @@ public class PercentOfPlan : Plan {
         case .left(let err):
             return .left(err)
         }
-        
-        // If the base exercise can be started as is then iy'll have a weight that we can use.
-        return findWeight(name)
     }
     
     private let firstWarmup: Double

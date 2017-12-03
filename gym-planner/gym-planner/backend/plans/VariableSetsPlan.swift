@@ -242,6 +242,10 @@ public class VariableSetsPlan: Plan {
         return "Used to perform an exercise for a number of reps using as many sets as needed. Often used with pullups and chinups."
     }
     
+    public func findLastWeight() -> Double? {
+        return history.last?.weight
+    }
+    
     // Internal items
     private func do_complete(_ count: Int) {
         reps.append(count)
@@ -257,7 +261,7 @@ public class VariableSetsPlan: Plan {
     }
     
     private func addResult() {
-        switch findWeight(exerciseName) {
+        switch findCurrentWeight(exerciseName) {
         case .right(let weight):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let title = "\(repsStr(completed)) @ \(Weight.friendlyStr(weight))"

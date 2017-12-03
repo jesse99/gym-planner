@@ -334,6 +334,11 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         return "This is designed for lifters in their 40s and 50s. Typically it's used with three week cycles where the first week is sets of five, the second week sets of three, and the third week sets of one with the second week using 5% more weight and the third week 10% more weight. If all reps were completed for the sets of five then the weight is increased after the third week."
     }
     
+    /// TODO: Think we can have a global that just does this.
+    public func findLastWeight() -> Double? {
+        return (history.findLast {$0.primary})?.weight
+    }
+    
     // Internal items
     private func doNext() {
         setIndex += 1
