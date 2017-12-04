@@ -28,6 +28,10 @@ class ExerciseController: UIViewController {
         coder.encode(workout.name, forKey: "workout.name")
         coder.encode(exercise.name, forKey: "exercise.name")
         
+        coder.encode(startTime, forKey: "startTime")
+        coder.encode(timer != nil, forKey: "timerRunning")
+        coder.encode(startedTimer, forKey: "startedTimer")
+        
         super.encodeRestorableState(with: coder)
     }
     
@@ -49,6 +53,16 @@ class ExerciseController: UIViewController {
             exercise = e
         } else {
             os_log("couldn't load exercise '%@' for program '%@'", type: .error, name, app.program.name)
+        }
+
+        if let date = coder.decodeObject(forKey: "startTime") as? Date {
+            startTime = date
+            startedTimer = coder.decodeBool(forKey: "startedTimer")
+            let timerRunning = coder.decodeBool(forKey: "timerRunning")
+            
+            if startedTimer && timerRunning && exercise.plan.restSecs().secs > 0 {
+                startTimer(force: true)
+            }
         }
 
         super.decodeRestorableState(with: coder)
