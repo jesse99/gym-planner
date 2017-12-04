@@ -176,7 +176,8 @@ public class VariableSetsPlan: Plan {
                 subtitle: subtitle,
                 amount: amount,
                 details: "",
-                secs: nil)               // this is used for timed exercises
+                buttonName: "Next",
+                showStartButton: true)
 
         case .left(let err):
             return Activity(
@@ -184,7 +185,8 @@ public class VariableSetsPlan: Plan {
                 subtitle: err,
                 amount: "",
                 details: "",
-                secs: nil)
+                buttonName: "Next",
+                showStartButton: true)
         }
     }
     

@@ -112,7 +112,8 @@ public class NRepMaxPlan : Plan {
                 subtitle: "Finding \(numReps) rep max",
                 amount: "\(repsStr(numReps)) @ \(info.text)",
                 details: info.plates,
-                secs: nil)               // this is used for timed exercises
+                buttonName: "Next",
+                showStartButton: true)
 
         case .left(let err):
             return Activity(
@@ -120,7 +121,8 @@ public class NRepMaxPlan : Plan {
                 subtitle: "Finding \(numReps) rep max",
                 amount: "",
                 details: err,
-                secs: nil)
+                buttonName: "Next",
+                showStartButton: true)
         }
     }
     

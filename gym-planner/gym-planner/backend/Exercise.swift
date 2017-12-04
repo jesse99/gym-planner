@@ -31,6 +31,7 @@ public class Exercise: Storable {
         case "NRepMaxPlan":           let p: NRepMaxPlan = store.getObj("plan"); self.plan = p
         case "PercentOfPlan":         let p: PercentOfPlan = store.getObj("plan"); self.plan = p
         case "VariableSetsPlan":      let p: VariableSetsPlan = store.getObj("plan"); self.plan = p
+        case "TimedPlan":             let p: TimedPlan = store.getObj("plan"); self.plan = p
         default: frontend.assert(false, "loading exercise \(name) had unknown plan: \(pname)"); abort()
         }
     }

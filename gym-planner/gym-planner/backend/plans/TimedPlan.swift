@@ -117,9 +117,9 @@ public class TimedPlan : Plan {
     }
     
     public func sublabel() -> String {
-        switch findTimedSetting(exerciseName) {
-        case .right(let setting):
-            return "\(numSets)% sets @ \(secsToStr(setting.durationSecs))"
+        switch findRestSecs(exerciseName) {
+        case .right(let secs):
+            return "\(numSets) sets @ \(secsToStr(secs))"
         case .left(let err):
             return err
         }
@@ -141,36 +141,26 @@ public class TimedPlan : Plan {
     public func current() -> Activity {
         frontend.assert(!finished(), "TimedPlan is finished in current")
         
-        switch findTimedSetting(exerciseName) {
-        case .right(let setting):
-            return Activity(
-                title: "Set \(setIndex)",
-                subtitle: "",
-                amount: "",
-                details: "",
-                secs: setting.durationSecs)
-
-        case .left(let err):
-            return Activity(
-                title: "Set \(setIndex)",
-                subtitle: err,
-                amount: "",
-                details: "",
-                secs: 0)
-        }
+        return Activity(
+            title: "Set \(setIndex) of \(numSets)",
+            subtitle: "",
+            amount: "",
+            details: "",
+            buttonName: "Start",
+            showStartButton: setIndex > 1)
     }
     
     public func restSecs() -> RestTime {
         switch findRestSecs(exerciseName) {
         case .right(let secs):
-            return RestTime(autoStart: !finished(), secs: secs)
+            return RestTime(autoStart: true, secs: secs)
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
         }
     }
     
     public func completions() -> [Completion] {
-        if setIndex+1 < numSets {
+        if setIndex+1 <= numSets {
             return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]
         } else {
             return [Completion(title: "",  isDefault: true,  callback: {() -> Void in self.doFinish()})]
@@ -218,10 +208,10 @@ public class TimedPlan : Plan {
     }
     
     private func addResult() {
-        switch findTimedSetting(exerciseName) {
+        switch findFixedSetting(exerciseName) {
         case .right(let setting):
-            let title = "\(numSets)% sets @ \(secsToStr(setting.durationSecs))"
-            let result = Result(title: title, secs: setting.durationSecs, weight: setting.weight)
+            let title = "\(numSets)% sets @ \(secsToStr(setting.restSecs))"
+            let result = Result(title: title, secs: setting.restSecs, weight: setting.weight)
             history.append(result)
 
         case .left(_):

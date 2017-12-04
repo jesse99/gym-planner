@@ -117,27 +117,32 @@ public class Program: Storable {
 }
 
 /// Helper used when constructing programs.
-public func createBarBell(_ name: String, _ formalName: String, _ plan: Plan, restSecs: Double, warmupsWithBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = [], derivedFrom: String? = nil) -> Exercise {
+public func createBarBell(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double, warmupsWithBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = [], derivedFrom: String? = nil) -> Exercise {
     let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets, warmupsWithBar: warmupsWithBar)
     if let otherName = derivedFrom {
-        let setting = DerivedWeightSetting(otherName, restSecs: Int(restSecs*60.0))
+        let setting = DerivedWeightSetting(otherName, restSecs: Int(restMins*60.0))
         return Exercise(name, formalName, plan, .derivedWeight(setting))
 
     } else {
-        let setting = VariableWeightSetting(apparatus, restSecs: Int(restSecs*60.0))
+        let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
         return Exercise(name, formalName, plan, .variableWeight(setting))
     }
 }
 
 /// Helper used when constructing programs.
-public func createFixed(_ name: String, _ formalName: String, _ plan: Plan, restSecs: Double) -> Exercise {
-    let setting = FixedWeightSetting(restSecs: Int(restSecs*60.0))
+public func createFixed(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
+    let setting = FixedWeightSetting(restSecs: Int(restMins*60.0))
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
-public func createReps(_ name: String, _ formalName: String, _ plan: Plan, restSecs: Double, requestedReps: Int) -> Exercise {
-    let setting = VariableRepsSetting(requestedReps: requestedReps, restSecs: Int(restSecs*60.0))
+public func createReps(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double, requestedReps: Int) -> Exercise {
+    let setting = VariableRepsSetting(requestedReps: requestedReps, restSecs: Int(restMins*60.0))
     return Exercise(name, formalName, plan, .variableReps(setting))
+}
+
+public func createTimed(_ name: String, _ formalName: String, _ plan: Plan, duration: Int) -> Exercise {
+    let setting = FixedWeightSetting(restSecs: duration)
+    return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
 extension Program.Tags: Storable {

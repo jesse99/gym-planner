@@ -39,17 +39,24 @@ func HLM2() -> Program {
         return VariableSetsPlan("Chinups", targetReps: 50)
     }
     
+    func plan3Squat() -> Plan {
+        return TimedPlan("Third World Squat", numSets: 2, targetTime: nil)
+    }
+
     let exercises = [
-        createBarBell("Squat",          "Low bar Squat",  planSquat(),  restSecs: 3.0, warmupsWithBar: 3),
-        createBarBell("Bench Press",    "Bench Press",    plan531(),    restSecs: 3.0),
-        createBarBell("Deadlift",       "Deadlift",       planDead(),   restSecs: 3.5, useBumpers: true),
-        createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restSecs: 2.0, warmupsWithBar: 3, derivedFrom: "Squat"),
-        createBarBell("Overhead Press", "Overhead Press", plan53(),     restSecs: 3.0, magnets: [1.25]),
-        createReps   ("Chinups",        "Chinup",         planChin(),   restSecs: 2.0, requestedReps: 10),
-        createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restSecs: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
-        createBarBell("Medium Bench",   "Bench Press",    planMBench(), restSecs: 3.0, derivedFrom: "Bench Press")]
+        createBarBell("Squat",          "Low bar Squat",  planSquat(),  restMins: 3.0, warmupsWithBar: 3),
+        createBarBell("Bench Press",    "Bench Press",    plan531(),    restMins: 3.0),
+        createBarBell("Deadlift",       "Deadlift",       planDead(),   restMins: 3.5, useBumpers: true),
+        createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restMins: 2.0, warmupsWithBar: 3, derivedFrom: "Squat"),
+        createBarBell("Overhead Press", "Overhead Press", plan53(),     restMins: 3.0, magnets: [1.25]),
+        createReps   ("Chinups",        "Chinup",         planChin(),   restMins: 2.0, requestedReps: 10),
+        createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
+        createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
+        
+        createTimed("Third World Squat", "Third World Squat", plan3Squat(), duration: 60)]
 
     let workouts = [
+        Workout("Mobility",   ["Third World Squat"], scheduled: false),
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
         Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"], scheduled: true),
         Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true)]

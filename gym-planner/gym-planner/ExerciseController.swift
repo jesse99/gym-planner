@@ -83,11 +83,13 @@ class ExerciseController: UIViewController {
             amountLabel.text = current.amount
             detailsLabel.text = current.details
 
-            nextButton.setTitle("Next", for: .normal)
+            nextButton.setTitle(current.buttonName, for: .normal)
+            startTimerButton.isHidden = !current.showStartButton
 
         } else {
             //titleLabel.text = "All Done"
             nextButton.setTitle("All Done", for: .normal)
+            startTimerButton.isHidden = false
         }
         
         previousLabel.text = exercise.plan.prevLabel()
@@ -195,7 +197,7 @@ class ExerciseController: UIViewController {
     private func maybeStartTimer() {
         let rest = exercise.plan.restSecs()
         if rest.autoStart && rest.secs > 0 {
-            startTimer(force: false)    // TODO: do we really need a force argument?
+            startTimer(force: false) 
             startedTimer = true
         }
     }
@@ -250,9 +252,6 @@ class ExerciseController: UIViewController {
             let view = storyboard.instantiateViewController(withIdentifier: "VariableWeightID") as! VariableWeightController
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
-
-        case .timed(_):
-            break   // TODO: implement this
         }
     }
     

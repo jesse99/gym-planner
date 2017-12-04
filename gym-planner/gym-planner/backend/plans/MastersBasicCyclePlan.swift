@@ -285,7 +285,8 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
             subtitle: sets[setIndex].subtitle,
             amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
             details: info.plates,
-            secs: nil)               // this is used for timed exercises
+            buttonName: "Next",
+            showStartButton: true)
     }
 
     // Note that this is called after advancing.

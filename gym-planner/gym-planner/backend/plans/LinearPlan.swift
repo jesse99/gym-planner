@@ -223,7 +223,8 @@ public class LinearPlan : Plan {
             subtitle: sets[setIndex].subtitle,
             amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
             details: info.plates,
-            secs: nil)               // this is used for timed exercises
+            buttonName: "Next",
+            showStartButton: true)
     }
     
     public func restSecs() -> RestTime {

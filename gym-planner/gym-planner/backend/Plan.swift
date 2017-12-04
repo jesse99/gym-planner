@@ -28,9 +28,12 @@ public struct Activity {
     
     /// "45 + 10 lbs"
     public let details: String
+        
+    /// Usually "Next"
+    public let buttonName: String
     
-    /// Secs is set if the lift is timed, eg for stuff like as many reps as possible in 30s.
-    public let secs: Int?
+    /// Usually true
+    public let showStartButton: Bool
 }
 
 public struct RestTime {

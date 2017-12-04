@@ -137,36 +137,11 @@ public class FixedWeightSetting: Storable {     // TODO: do we actually need thi
     }
 }
 
-public class TimedSetting: Storable {
-    var durationSecs: Int
-    var restSecs: Int
-    var weight: Double  // starts out at 0.0
-
-    init(durationSecs: Int, restSecs: Int) {
-        self.durationSecs = durationSecs
-        self.restSecs = restSecs
-        self.weight = 0.0
-    }
-    
-    public required init(from store: Store) {
-        self.durationSecs = store.getInt("durationSecs")
-        self.restSecs = store.getInt("restSecs")
-        self.weight = store.getDbl("weight")
-    }
-    
-    public func save(_ store: Store) {
-        store.addInt("durationSecs", durationSecs)
-        store.addInt("restSecs", restSecs)
-        store.addDbl("weight", weight)
-    }
-}
-
 public enum Settings {
     case variableWeight(VariableWeightSetting)
     case derivedWeight(DerivedWeightSetting)
     case fixedWeight(FixedWeightSetting)
     case variableReps(VariableRepsSetting)
-    case timed(TimedSetting)
 }
 
 // TODO: CardioSetting
@@ -226,7 +201,7 @@ extension Settings: Storable {
         case "variableReps":
             self = .variableReps(store.getObj("setting"))
         case "timed":
-            self = .timed(store.getObj("setting"))
+            self = .fixedWeight(FixedWeightSetting(restSecs: 60))   // TODO: remove this
         default:
             frontend.assert(false, "loading settings had unknown type: \(tname)"); abort()
         }
@@ -245,9 +220,6 @@ extension Settings: Storable {
             store.addObj("setting", setting)
         case .variableReps(let setting):
             store.addStr("type", "variableReps")
-            store.addObj("setting", setting)
-        case .timed(let setting):
-            store.addStr("type", "timed")
             store.addObj("setting", setting)
         }
     }
