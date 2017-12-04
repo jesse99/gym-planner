@@ -277,7 +277,7 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
                     presentExercise(exercise)
                     
                 case .newPlan(let p):
-                    let newName = exercise.name + "-" + p.name
+                    let newName = exercise.name + "-" + p.planName
                     let newExercise = exercise.withPlan(newName, p)
                     app.program.setExercise(newExercise)
                     
@@ -285,7 +285,7 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
                     case .ok:
                         presentExercise(newExercise)
                     case .newPlan(let q):
-                        err = "Plan \(exercise.plan.name) started plan \(p.name) which started \(q.name)"
+                        err = "Plan \(exercise.plan.planName) started plan \(p.planName) which started \(q.planName)"
                     case .error(let mesg):
                         err = mesg
                     }

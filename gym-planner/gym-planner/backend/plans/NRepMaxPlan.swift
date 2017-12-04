@@ -9,7 +9,7 @@ public class NRepMaxPlan : Plan {
     // This is a bit of a weird plan because it uses a different plan's setting.
     init(_ name: String, workReps: Int) {
         os_log("init NRepMaxPlan for %@", type: .info, name)
-        self.name = name
+        self.planName = name
         self.typeName = "NRepMaxPlan"
         self.numReps = workReps
     }
@@ -18,7 +18,7 @@ public class NRepMaxPlan : Plan {
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? NRepMaxPlan {
             return typeName == savedPlan.typeName &&
-                name == savedPlan.name &&
+                planName == savedPlan.planName &&
                 numReps == savedPlan.numReps
         } else {
             return false
@@ -26,7 +26,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public required init(from store: Store) {
-        self.name = store.getStr("name")
+        self.planName = store.getStr("name")
         self.typeName = "NRepMaxPlan"
         self.numReps = store.getInt("numReps")
         self.exerciseName = store.getStr("exerciseName")
@@ -36,7 +36,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public func save(_ store: Store) {
-        store.addStr("name", name)
+        store.addStr("name", planName)
         store.addInt("numReps", numReps)
         store.addStr("exerciseName", exerciseName)
         store.addDbl("weight", weight)
@@ -45,7 +45,7 @@ public class NRepMaxPlan : Plan {
     }
     
     // Plan methods
-    public let name: String
+    public let planName: String
     public let typeName: String
     
     public func clone() -> Plan {
@@ -56,7 +56,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public func start(_ exerciseName: String) -> StartResult {
-        os_log("starting NRepMaxPlan for %@ and %@", type: .info, name, exerciseName)
+        os_log("starting NRepMaxPlan for %@ and %@", type: .info, planName, exerciseName)
         self.exerciseName = exerciseName
 
         switch findApparatus(exerciseName) {
@@ -215,7 +215,7 @@ public class NRepMaxPlan : Plan {
             os_log("set weight to = %.3f", type: .info, setting.weight)
             
         case .left(let err):
-            os_log("%@ updateWeight failed: %@", type: .error, name, err)
+            os_log("%@ updateWeight failed: %@", type: .error, planName, err)
         }
     }
 

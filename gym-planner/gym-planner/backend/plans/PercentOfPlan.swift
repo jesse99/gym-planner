@@ -72,7 +72,7 @@ public class PercentOfPlan : Plan {
     
     init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
         os_log("init PercentOfPlan for %@", type: .info, name)
-        self.name = name
+        self.planName = name
         self.typeName = "PercentOfPlan"
         self.firstWarmup = firstWarmup
         self.warmupReps = warmupReps
@@ -85,7 +85,7 @@ public class PercentOfPlan : Plan {
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? PercentOfPlan {
             return typeName == savedPlan.typeName &&
-                name == savedPlan.name &&
+                planName == savedPlan.planName &&
                 firstWarmup == savedPlan.firstWarmup &&
                 warmupReps == savedPlan.warmupReps &&
                 workSets == savedPlan.workSets &&
@@ -97,7 +97,7 @@ public class PercentOfPlan : Plan {
     }
     
     public required init(from store: Store) {
-        self.name = store.getStr("name")
+        self.planName = store.getStr("name")
         self.typeName = "PercentOfPlan"
         self.firstWarmup = store.getDbl("firstWarmup")
         self.warmupReps = store.getIntArray("warmupReps")
@@ -112,7 +112,7 @@ public class PercentOfPlan : Plan {
     }
     
     public func save(_ store: Store) {
-        store.addStr("name", name)
+        store.addStr("name", planName)
         store.addDbl("firstWarmup", firstWarmup)
         store.addIntArray("warmupReps", warmupReps)
         store.addInt("workSets", workSets)
@@ -126,7 +126,7 @@ public class PercentOfPlan : Plan {
     }
     
     // Plan methods
-    public let name: String
+    public let planName: String
     public let typeName: String
     
     public func clone() -> Plan {
@@ -137,7 +137,7 @@ public class PercentOfPlan : Plan {
     }
     
     public func start(_ exerciseName: String) -> StartResult {
-        os_log("starting PercentOfPlan for %@ and %@", type: .info, name, exerciseName)
+        os_log("starting PercentOfPlan for %@ and %@", type: .info, planName, exerciseName)
 
         self.sets = []
         self.setIndex = 0
@@ -197,7 +197,7 @@ public class PercentOfPlan : Plan {
             break
         }
         
-        switch findBaseExerciseName(name) {
+        switch findBaseExerciseName(exerciseName) {
             case .right(let otherName):
                 if let weight = sets.last?.weight {
                     let p = Int(100.0*self.percent)
@@ -333,7 +333,7 @@ public class PercentOfPlan : Plan {
     
     private func getOtherWeight() -> Either<String, Double> {
         // We do this bit just so that we can produce a better error message for the user.
-        switch findBaseExerciseName(name) {
+        switch findBaseExerciseName(exerciseName) {
         case .right(let otherName):
             switch findExercise(otherName) {
             case .right(let otherExercise):

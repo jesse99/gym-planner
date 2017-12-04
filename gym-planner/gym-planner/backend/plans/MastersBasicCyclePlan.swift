@@ -126,7 +126,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     
     init(_ name: String, _ cycles: [Execute]) {
         os_log("init MastersBasicCyclePlan for %@", type: .info, name)
-        self.name = name
+        self.planName = name
         self.typeName = "MastersBasicCyclePlan"
         self.cycles = cycles
         self.deloads = [1.0, 1.0, 0.9, 0.85, 0.8];
@@ -137,7 +137,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? MastersBasicCyclePlan {
             return typeName == savedPlan.typeName &&
-                name == savedPlan.name &&
+                planName == savedPlan.planName &&
                 cycles == savedPlan.cycles
         } else {
             return false
@@ -145,7 +145,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
 
     public required init(from store: Store) {
-        self.name = store.getStr("name")
+        self.planName = store.getStr("name")
         self.typeName = "MastersBasicCyclePlan"
         self.cycles = store.getObjArray("cycles")
         self.deloads = store.getDblArray("deloads")
@@ -158,7 +158,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
     
     public func save(_ store: Store) {
-        store.addStr("name", name)
+        store.addStr("name", planName)
         store.addObjArray("cycles", cycles)
         store.addDblArray("deloads", deloads)
         
@@ -170,11 +170,11 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
 
     public var debugDescription: String {
-        return name
+        return planName
     }
     
     // Plan methods
-    public let name: String
+    public let planName: String
     public let typeName: String
     
     public func clone() -> Plan {
@@ -185,7 +185,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
     
     public func start(_ exerciseName: String) -> StartResult {
-        os_log("starting MastersBasicCyclePlan for %@ and %@", type: .info, name, exerciseName)
+        os_log("starting MastersBasicCyclePlan for %@ and %@", type: .info, planName, exerciseName)
         
         self.sets = []
         self.setIndex = 0

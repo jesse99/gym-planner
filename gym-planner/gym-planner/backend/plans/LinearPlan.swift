@@ -78,7 +78,7 @@ public class LinearPlan : Plan {
     
     init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int) {
         os_log("init LinearPlan for %@", type: .info, name)
-        self.name = name
+        self.planName = name
         self.typeName = "LinearPlan"
         self.firstWarmup = firstWarmup
         self.warmupReps = warmupReps
@@ -91,7 +91,7 @@ public class LinearPlan : Plan {
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? LinearPlan {
             return typeName == savedPlan.typeName &&
-                name == savedPlan.name &&
+                planName == savedPlan.planName &&
                 firstWarmup == savedPlan.firstWarmup &&
                 warmupReps == savedPlan.warmupReps &&
                 workSets == savedPlan.workSets &&
@@ -102,7 +102,7 @@ public class LinearPlan : Plan {
     }
 
     public required init(from store: Store) {
-        self.name = store.getStr("name")
+        self.planName = store.getStr("name")
         self.typeName = "LinearPlan"
         self.firstWarmup = store.getDbl("firstWarmup")
         self.warmupReps = store.getIntArray("warmupReps")
@@ -117,7 +117,7 @@ public class LinearPlan : Plan {
     }
 
     public func save(_ store: Store) {
-        store.addStr("name", name)
+        store.addStr("name", planName)
         store.addDbl("firstWarmup", firstWarmup)
         store.addIntArray("warmupReps", warmupReps)
         store.addInt("workSets", workSets)
@@ -131,7 +131,7 @@ public class LinearPlan : Plan {
     }
     
     // Plan methods
-    public let name: String
+    public let planName: String
     public let typeName: String
     
     public func clone() -> Plan {
@@ -142,7 +142,7 @@ public class LinearPlan : Plan {
     }
     
     public func start(_ exerciseName: String) -> StartResult {
-        os_log("starting LinearPlan for %@ and %@", type: .info, name, exerciseName)
+        os_log("starting LinearPlan for %@ and %@", type: .info, planName, exerciseName)
         self.sets = []
         self.setIndex = 0
         self.exerciseName = exerciseName
@@ -313,7 +313,7 @@ public class LinearPlan : Plan {
 
         case .left(let err):
             // Not sure if this can happen, maybe if the user edits the program after the plan starts.
-            os_log("%@ advance failed: %@", type: .error, name, err)
+            os_log("%@ advance failed: %@", type: .error, planName, err)
             setIndex = sets.count
         }
     }

@@ -36,7 +36,7 @@ public class TimedPlan : Plan {
     
     init(_ name: String, numSets: Int, targetTime: Int?) {
         os_log("init TimedPlan for %@", type: .info, name)
-        self.name = name
+        self.planName = name
         self.typeName = "TimedPlan"
         self.numSets = numSets
         self.targetTime = targetTime
@@ -46,7 +46,7 @@ public class TimedPlan : Plan {
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? TimedPlan {
             return typeName == savedPlan.typeName &&
-                name == savedPlan.name &&
+                planName == savedPlan.planName &&
                 numSets == savedPlan.numSets &&
                 targetTime == savedPlan.targetTime
         } else {
@@ -55,7 +55,7 @@ public class TimedPlan : Plan {
     }
     
     public required init(from store: Store) {
-        self.name = store.getStr("name")
+        self.planName = store.getStr("name")
         self.typeName = "TimedPlan"
         self.numSets = store.getInt("numSets")
 
@@ -72,7 +72,7 @@ public class TimedPlan : Plan {
     }
     
     public func save(_ store: Store) {
-        store.addStr("name", name)
+        store.addStr("name", planName)
         store.addInt("numSets", numSets)
         store.addInt("targetTime", targetTime ?? 0)
         
@@ -82,7 +82,7 @@ public class TimedPlan : Plan {
     }
     
     // Plan methods
-    public let name: String
+    public let planName: String
     public let typeName: String
     
     public func clone() -> Plan {
@@ -93,7 +93,7 @@ public class TimedPlan : Plan {
     }
     
     public func start(_ exerciseName: String) -> StartResult {
-        os_log("starting TimedPlan for %@ and %@", type: .info, name, exerciseName)
+        os_log("starting TimedPlan for %@ and %@", type: .info, planName, exerciseName)
         self.setIndex = 1
         self.exerciseName = exerciseName
         
