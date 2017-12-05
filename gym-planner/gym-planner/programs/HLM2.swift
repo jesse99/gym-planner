@@ -43,6 +43,10 @@ func HLM2() -> Program {
         return TimedPlan("Third World Squat", numSets: 2, targetTime: nil)
     }
 
+    func planFixed(_ numSets: Int, _ numReps: Int) -> Plan {
+        return FixedSetsPlan("fixed \(numSets)x\(numReps)", numSets: numSets, numReps: numReps)
+    }
+    
     let exercises = [
         createBarBell("Squat",          "Low bar Squat",  planSquat(),  restMins: 3.0, warmupsWithBar: 3),
         createBarBell("Bench Press",    "Bench Press",    plan531(),    restMins: 3.0),
@@ -53,10 +57,13 @@ func HLM2() -> Program {
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
         
-        createTimed("Third World Squat", "Third World Squat", plan3Squat(), duration: 60)]
+        createTimed("Third World Squat",   "Third World Squat",  plan3Squat(), duration: 60),
+        createFixed("Wall Extensions",     "Wall Extensions",    planFixed(1, 10), restMins: 0.0),
+        createFixed("Shoulder Dislocates", "Shoulder Dislocate", planFixed(1, 12), restMins: 0.0),
+        createFixed("Leg Raises",          "Hanging Leg Raise",  planFixed(3, 12), restMins: 1.0)]
 
     let workouts = [
-        Workout("Mobility",   ["Third World Squat"], scheduled: false),
+        Workout("Mobility",   ["Third World Squat", "Wall Extensions", "Shoulder Dislocates", "Leg Raises"], scheduled: false),
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
         Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"], scheduled: true),
         Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true)]
