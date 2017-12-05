@@ -607,7 +607,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1399" y="360"/>
+            <point key="canvasLocation" x="1401" y="358"/>
         </scene>
         <!--Barbell Controller-->
         <scene sceneID="IJ4-Db-thr">
@@ -875,6 +875,103 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2048" y="355"/>
+        </scene>
+        <!--Fixed Weight Controller-->
+        <scene sceneID="Wqs-Lk-lZx">
+            <objects>
+                <viewController storyboardIdentifier="FixedWeightID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SSX-25-tTm" customClass="FixedWeightController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="suC-EX-ZtG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cZ1-mz-9DT">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="QFq-zc-Cd3">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="L2b-T2-zdi">
+                                            <connections>
+                                                <action selector="donePressed:" destination="SSX-25-tTm" id="13M-uZ-CCc"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breadcrumb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aJg-63-5dJ">
+                                <rect key="frame" x="150.5" y="20" width="74.5" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rest:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xY9-rd-OA1">
+                                <rect key="frame" x="10" y="70.5" width="59" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weight:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pLa-14-1le">
+                                <rect key="frame" x="10" y="130.5" width="59" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ulF-iY-tA7">
+                                <rect key="frame" x="79" y="66" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Xbt-ui-m4a"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PrH-9U-oaI">
+                                <rect key="frame" x="79" y="126" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="56Z-0I-j6l"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="cZ1-mz-9DT" firstAttribute="leading" secondItem="TC5-Ev-eW2" secondAttribute="leading" id="2CY-dd-BTA"/>
+                            <constraint firstItem="aJg-63-5dJ" firstAttribute="top" secondItem="TC5-Ev-eW2" secondAttribute="top" id="CEZ-49-5Fb"/>
+                            <constraint firstItem="PrH-9U-oaI" firstAttribute="centerY" secondItem="pLa-14-1le" secondAttribute="centerY" id="F8V-h3-rw6"/>
+                            <constraint firstItem="ulF-iY-tA7" firstAttribute="top" secondItem="aJg-63-5dJ" secondAttribute="bottom" constant="30" id="HeR-21-bTo"/>
+                            <constraint firstItem="pLa-14-1le" firstAttribute="leading" secondItem="xY9-rd-OA1" secondAttribute="leading" id="KR7-dN-Iyi"/>
+                            <constraint firstItem="cZ1-mz-9DT" firstAttribute="bottom" secondItem="TC5-Ev-eW2" secondAttribute="bottom" id="SOy-GW-W0a"/>
+                            <constraint firstItem="cZ1-mz-9DT" firstAttribute="trailing" secondItem="TC5-Ev-eW2" secondAttribute="trailing" id="SZd-db-7lR"/>
+                            <constraint firstItem="xY9-rd-OA1" firstAttribute="leading" secondItem="TC5-Ev-eW2" secondAttribute="leading" constant="10" id="U4D-KC-hXH"/>
+                            <constraint firstItem="aJg-63-5dJ" firstAttribute="centerX" secondItem="suC-EX-ZtG" secondAttribute="centerX" id="WaQ-e9-iDA"/>
+                            <constraint firstItem="PrH-9U-oaI" firstAttribute="leading" secondItem="ulF-iY-tA7" secondAttribute="leading" id="cXV-lk-CO4"/>
+                            <constraint firstItem="PrH-9U-oaI" firstAttribute="top" secondItem="ulF-iY-tA7" secondAttribute="bottom" constant="30" id="igW-nu-2ew"/>
+                            <constraint firstItem="ulF-iY-tA7" firstAttribute="centerY" secondItem="xY9-rd-OA1" secondAttribute="centerY" id="v17-g7-mKR"/>
+                            <constraint firstItem="PrH-9U-oaI" firstAttribute="leading" secondItem="pLa-14-1le" secondAttribute="trailing" constant="10" id="wLp-1N-Gga"/>
+                            <constraint firstItem="pLa-14-1le" firstAttribute="trailing" secondItem="xY9-rd-OA1" secondAttribute="trailing" id="wki-4S-Tnh"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="TC5-Ev-eW2"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="FUg-71-qUa" appends="YES" id="8LD-Fn-m3k"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="breadcrumbLabel" destination="aJg-63-5dJ" id="Vt4-Tg-bOz"/>
+                        <outlet property="restTextbox" destination="ulF-iY-tA7" id="YTh-UU-WJV"/>
+                        <outlet property="weightTextbox" destination="PrH-9U-oaI" id="3QO-3L-hGn"/>
+                        <segue destination="RSh-5d-zUu" kind="unwind" identifier="unwindToExerciseID" unwindAction="unwindToExercise:" id="8Jd-IT-t1w"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jwK-Hm-0FP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="RSh-5d-zUu" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="FUg-71-qUa">
+                    <connections>
+                        <action selector="viewTapped:" destination="SSX-25-tTm" id="MAp-92-nNz"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2703" y="354"/>
         </scene>
     </scenes>
     <resources>

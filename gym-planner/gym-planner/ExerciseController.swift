@@ -240,9 +240,11 @@ class ExerciseController: UIViewController {
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
 
-        case .fixedWeight(_):
-            break   // TODO: implement this
-            
+        case .fixedWeight(let setting):
+            let view = storyboard.instantiateViewController(withIdentifier: "FixedWeightID") as! FixedWeightController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
+
         case .variableReps(let setting):
             let view = storyboard.instantiateViewController(withIdentifier: "VariableRepsID") as! VariableRepsController
             view.initialize(exercise, setting, breadcrumbLabel.text!)

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */; };
+		370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFADA1FD6450400CDE63D /* FixedWeightController.swift */; };
 		3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743E2B81FB824CC00787CB3 /* FrontEnd.swift */; };
 		376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9C1FB7923F006EEAC3 /* Settings.swift */; };
 		376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9E1FB7C7F9006EEAC3 /* Results.swift */; };
@@ -59,6 +60,7 @@
 
 /* Begin PBXFileReference section */
 		370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSetsPlan.swift; sourceTree = "<group>"; };
+		370EFADA1FD6450400CDE63D /* FixedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWeightController.swift; sourceTree = "<group>"; };
 		3743E2B81FB824CC00787CB3 /* FrontEnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEnd.swift; sourceTree = "<group>"; };
 		376E3C9C1FB7923F006EEAC3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		376E3C9E1FB7C7F9006EEAC3 /* Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				37B3ECF61FD38FDB00F7D8EF /* BarbellController.swift */,
+				370EFADA1FD6450400CDE63D /* FixedWeightController.swift */,
 				37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */,
 				37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */,
 				37B3ECF21FD3818000F7D8EF /* VariableWeightSetting.swift */,
@@ -353,6 +356,7 @@
 				37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */,
 				370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */,
 				37B3ECF31FD3818000F7D8EF /* VariableWeightSetting.swift in Sources */,
+				370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */,
 				377F055D1FC11E1B0015D7EF /* Either.swift in Sources */,
 				37CED4701FAE289100244ADD /* SecondViewController.swift in Sources */,
 				37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */,
