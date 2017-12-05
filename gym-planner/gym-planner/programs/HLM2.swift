@@ -39,8 +39,8 @@ func HLM2() -> Program {
         return VariableSetsPlan("Chinups", targetReps: 50)
     }
     
-    func plan3Squat() -> Plan {
-        return TimedPlan("Third World Squat", numSets: 2, targetTime: nil)
+    func planTimed(_ numSets: Int) -> Plan {
+        return TimedPlan("\(numSets) timed sets", numSets: numSets, targetTime: nil)
     }
 
     func planFixed(_ numSets: Int, _ numReps: Int) -> Plan {
@@ -57,13 +57,18 @@ func HLM2() -> Program {
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
         
-        createTimed("Third World Squat",   "Third World Squat",  plan3Squat(), duration: 60),
-        createFixed("Wall Extensions",     "Wall Extensions",    planFixed(1, 10), restMins: 0.0),
-        createFixed("Shoulder Dislocates", "Shoulder Dislocate", planFixed(1, 12), restMins: 0.0),
-        createFixed("Leg Raises",          "Hanging Leg Raise",  planFixed(3, 12), restMins: 1.0)]
+        createFixed("Shoulder Dislocates",     "Shoulder Dislocate",        planFixed(1, 12), restMins: 0.0),
+        createFixed("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      planFixed(1, 10), restMins: 0.0),
+        createFixed("Roll-over into V-sit",    "Roll-over into V-sit",      planFixed(1, 15), restMins: 0.0),
+        createFixed("Rocking Frog Stretch",    "Rocking Frog Stretch",      planFixed(1, 10), restMins: 0.0),
+        createFixed("Fire Hydrant Hip Circle", "Fire Hydrant Hip Circle",   planFixed(1, 10), restMins: 0.0),
+        createFixed("Mountain Climber",        "Mountain Climber",          planFixed(1, 10), restMins: 0.0),
+        createFixed("Cossack Squat",           "Cossack Squat",             planFixed(1, 10), restMins: 0.0),
+        createTimed("Piriformis Stretch",      "Seated Piriformis Stretch", planTimed(1), duration: 30),
+        createFixed("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", planFixed(1, 10), restMins: 0.0)]
 
     let workouts = [
-        Workout("Mobility",   ["Third World Squat", "Wall Extensions", "Shoulder Dislocates", "Leg Raises"], scheduled: false),
+        Workout("Mobility",   ["Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false),
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
         Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"], scheduled: true),
         Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true)]
