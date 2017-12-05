@@ -332,6 +332,78 @@
             </objects>
             <point key="canvasLocation" x="2032.8" y="-324.28785607196403"/>
         </scene>
+        <!--Notes Controller-->
+        <scene sceneID="2tV-MU-ktw">
+            <objects>
+                <viewController storyboardIdentifier="NotesID" id="4YX-f3-nLN" customClass="NotesController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JhP-su-1gX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o5k-eu-2sZ">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="cyC-wM-q3i">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="Ar0-jm-P3u">
+                                            <connections>
+                                                <action selector="donePressed:" destination="4YX-f3-nLN" id="CfY-Hq-KiL"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <rightBarButtonItems>
+                                            <barButtonItem title="Edit" id="ZuB-1N-Ukz">
+                                                <connections>
+                                                    <action selector="editPressed:" destination="4YX-f3-nLN" id="ikO-2E-TcU"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem title="Revert" id="ZQO-bM-cWu">
+                                                <connections>
+                                                    <action selector="revertPressed:" destination="4YX-f3-nLN" id="r9s-6A-Orl"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </rightBarButtonItems>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breadcrumb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nlj-1D-x10">
+                                <rect key="frame" x="150.5" y="20" width="74.5" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5Oj-GV-eXf">
+                                <rect key="frame" x="0.0" y="56" width="375" height="567"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="o5k-eu-2sZ" firstAttribute="trailing" secondItem="kgz-Nd-BLf" secondAttribute="trailing" id="Egl-Mb-f6c"/>
+                            <constraint firstItem="o5k-eu-2sZ" firstAttribute="leading" secondItem="kgz-Nd-BLf" secondAttribute="leading" id="LJK-xu-9GW"/>
+                            <constraint firstItem="o5k-eu-2sZ" firstAttribute="top" secondItem="5Oj-GV-eXf" secondAttribute="bottom" id="QET-OM-Ah6"/>
+                            <constraint firstItem="Nlj-1D-x10" firstAttribute="top" secondItem="kgz-Nd-BLf" secondAttribute="top" id="UYm-4t-b6U"/>
+                            <constraint firstItem="o5k-eu-2sZ" firstAttribute="bottom" secondItem="kgz-Nd-BLf" secondAttribute="bottom" id="oiC-Vz-ouf"/>
+                            <constraint firstItem="5Oj-GV-eXf" firstAttribute="leading" secondItem="kgz-Nd-BLf" secondAttribute="leading" id="pSB-Ha-Xwb"/>
+                            <constraint firstItem="Nlj-1D-x10" firstAttribute="centerX" secondItem="JhP-su-1gX" secondAttribute="centerX" id="qhF-pw-hhq"/>
+                            <constraint firstItem="kgz-Nd-BLf" firstAttribute="trailing" secondItem="5Oj-GV-eXf" secondAttribute="trailing" id="rpS-AW-nuc"/>
+                            <constraint firstItem="5Oj-GV-eXf" firstAttribute="top" secondItem="Nlj-1D-x10" secondAttribute="bottom" constant="20" id="uYc-5c-p4X"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="kgz-Nd-BLf"/>
+                    </view>
+                    <connections>
+                        <outlet property="breadcrumbLabel" destination="Nlj-1D-x10" id="teO-a6-Y2z"/>
+                        <outlet property="revertButton" destination="ZQO-bM-cWu" id="WH2-SV-Gud"/>
+                        <outlet property="textView" destination="5Oj-GV-eXf" id="UPJ-Jg-Uag"/>
+                        <segue destination="RaT-5z-g0d" kind="unwind" identifier="unwindToExerciseID" unwindAction="unwindToExercise:" id="oQP-8C-YHQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nB7-9b-YcY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="RaT-5z-g0d" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2698" y="-323"/>
+        </scene>
         <!--Second-->
         <scene sceneID="wg7-f3-ORb">
             <objects>

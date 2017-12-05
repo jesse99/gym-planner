@@ -223,11 +223,11 @@ class ExerciseController: UIViewController {
     @IBAction func notesPressed(_ sender: Any) {
 //        savePosition()
 //        dismissTooltip()
-//
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let view = storyboard.instantiateViewController(withIdentifier: "ShowNoteControllerID") as! ShowNoteController
-//        view.initialize("unwindToWeightedWorkoutID", exercise.formalName, breadcrumbLabel.text!)
-//        present(view, animated: true, completion: nil)
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let view = storyboard.instantiateViewController(withIdentifier: "NotesID") as! NotesController
+        view.initialize(exercise, breadcrumbLabel.text!)
+        present(view, animated: true, completion: nil)
     }
     
     @IBAction func optionsPressed(_ sender: Any) {

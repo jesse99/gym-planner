@@ -10,6 +10,9 @@
 		370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */; };
 		370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFADA1FD6450400CDE63D /* FixedWeightController.swift */; };
 		3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743E2B81FB824CC00787CB3 /* FrontEnd.swift */; };
+		374556EB1FD669ED0005020B /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EA1FD669ED0005020B /* Notes.swift */; };
+		374556ED1FD66ADC0005020B /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EC1FD66ADC0005020B /* NotesController.swift */; };
+		374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */; };
 		376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9C1FB7923F006EEAC3 /* Settings.swift */; };
 		376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9E1FB7C7F9006EEAC3 /* Results.swift */; };
 		3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3778CE971FBE730D0042111C /* PercentOfPlan.swift */; };
@@ -62,6 +65,9 @@
 		370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSetsPlan.swift; sourceTree = "<group>"; };
 		370EFADA1FD6450400CDE63D /* FixedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWeightController.swift; sourceTree = "<group>"; };
 		3743E2B81FB824CC00787CB3 /* FrontEnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEnd.swift; sourceTree = "<group>"; };
+		374556EA1FD669ED0005020B /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
+		374556EC1FD66ADC0005020B /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
+		374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyMarkdown.swift; sourceTree = "<group>"; };
 		376E3C9C1FB7923F006EEAC3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		376E3C9E1FB7C7F9006EEAC3 /* Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
 		3778CE971FBE730D0042111C /* PercentOfPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentOfPlan.swift; sourceTree = "<group>"; };
@@ -122,6 +128,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		374556EE1FD66F600005020B /* Third Party */ = {
+			isa = PBXGroup;
+			children = (
+				374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */,
+			);
+			path = "Third Party";
+			sourceTree = "<group>";
+		};
 		377C11F41FC2761A0063A324 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				37CED46A1FAE289100244ADD /* gym-planner */,
+				374556EE1FD66F600005020B /* Third Party */,
 				37CED4811FAE289100244ADD /* gym-plannerTests */,
 				37CED4741FAE289100244ADD /* Assets.xcassets */,
 				37CED4691FAE289100244ADD /* Products */,
@@ -182,6 +197,8 @@
 				37CED4791FAE289100244ADD /* Info.plist */,
 				37CED4761FAE289100244ADD /* LaunchScreen.storyboard */,
 				37CED4711FAE289100244ADD /* Main.storyboard */,
+				374556EA1FD669ED0005020B /* Notes.swift */,
+				374556EC1FD66ADC0005020B /* NotesController.swift */,
 				377F05571FC0DD8F0015D7EF /* programs */,
 				37CED46F1FAE289100244ADD /* SecondViewController.swift */,
 				37B3ECEF1FD370A600F7D8EF /* setting controllers */,
@@ -362,10 +379,12 @@
 				37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */,
 				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
 				37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */,
+				374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */,
 				37B3ECF71FD38FDB00F7D8EF /* BarbellController.swift in Sources */,
 				37B3ECF11FD370CA00F7D8EF /* VariableRepsController.swift in Sources */,
 				376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */,
 				377F05501FC0D9CE0015D7EF /* Program.swift in Sources */,
+				374556ED1FD66ADC0005020B /* NotesController.swift in Sources */,
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,
 				378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */,
 				37CED48F1FAE29E000244ADD /* Plan.swift in Sources */,
@@ -375,6 +394,7 @@
 				37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */,
 				37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */,
 				377C11F61FC276300063A324 /* LabelExtension.swift in Sources */,
+				374556EB1FD669ED0005020B /* Notes.swift in Sources */,
 				377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */,
 				3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
