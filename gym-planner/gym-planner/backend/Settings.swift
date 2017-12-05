@@ -117,7 +117,7 @@ public class VariableRepsSetting: Storable {
 
 /// Used for exercises where the user controls how much weight is used (which can be
 /// zero for a body weight exercise).
-public class FixedWeightSetting: Storable {     // TODO: do we actually need this? if so make sure that there is a setting screen for it
+public class FixedWeightSetting: Storable {  
     var weight: Double  // starts out at 0.0
     var restSecs: Int
     

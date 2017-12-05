@@ -141,9 +141,14 @@ public class TimedPlan : Plan {
     public func current() -> Activity {
         frontend.assert(!finished(), "TimedPlan is finished in current")
         
+        var subtitle = ""
+        if let target = targetTime {
+            subtitle = "Target is \(secsToStr(target))"
+        }
+        
         return Activity(
             title: "Set \(setIndex) of \(numSets)",
-            subtitle: "",
+            subtitle: subtitle,
             amount: "",
             details: "",
             buttonName: "Start",
