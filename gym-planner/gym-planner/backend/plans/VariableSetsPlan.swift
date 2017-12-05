@@ -149,7 +149,7 @@ public class VariableSetsPlan: Plan {
     }
     
     public func historyLabel() -> String {
-        return "Target is \(targetReps) reps"
+        return ""
     }
     
     public func current() -> Activity {
@@ -160,13 +160,15 @@ public class VariableSetsPlan: Plan {
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let suffix = setting.weight > 0 ? " @ \(Weight.friendlyUnitsStr(setting.weight, plural: true))" : ""
             
+            let subSuffix = " (target is \(targetReps))"
+            
             var subtitle = ""
             if reps.count > 1 {
                 let a = reps.map {"\($0)"}
                 let s = a.joined(separator: ", ")
-                subtitle = "\(completed) of \(setting.requestedReps) (\(s))"
+                subtitle = "\(completed) of \(setting.requestedReps) (\(s))\(subSuffix)"
             } else {
-                subtitle = "\(completed) of \(setting.requestedReps)"
+                subtitle = "\(completed) of \(setting.requestedReps)\(subSuffix)"
             }
             
             let delta = setting.requestedReps - completed
