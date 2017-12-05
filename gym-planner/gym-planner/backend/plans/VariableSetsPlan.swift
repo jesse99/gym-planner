@@ -37,7 +37,7 @@ public class VariableSetsPlan: Plan {
         }
     }
     
-    init(_ name: String, targetReps: Int) {
+    init(_ name: String, targetReps: Int?) {
         os_log("init VariableSetsPlan for %@ and %@", type: .info, name)
         self.planName = name
         self.typeName = "VariableSetsPlan"
@@ -58,7 +58,12 @@ public class VariableSetsPlan: Plan {
     public required init(from store: Store) {
         self.planName = store.getStr("name")
         self.typeName = "VariableSetsPlan"
-        self.targetReps = store.getInt("targetReps")
+        let target = store.getInt("targetReps")
+        if target > 0 {
+            self.targetReps = target
+        } else {
+            self.targetReps = nil
+        }
         
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
@@ -67,7 +72,7 @@ public class VariableSetsPlan: Plan {
     
     public func save(_ store: Store) {
         store.addStr("name", planName)
-        store.addInt("targetReps", targetReps)
+        store.addInt("targetReps", targetReps ?? 0)
         
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
@@ -160,7 +165,10 @@ public class VariableSetsPlan: Plan {
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let suffix = setting.weight > 0 ? " @ \(Weight.friendlyUnitsStr(setting.weight, plural: true))" : ""
             
-            let subSuffix = " (target is \(targetReps))"
+            var subSuffix = ""
+            if let target = targetReps {
+                subSuffix = " (target is \(target))"
+            }
             
             var subtitle = ""
             if reps.count > 1 {
@@ -277,7 +285,7 @@ public class VariableSetsPlan: Plan {
         }
     }
     
-    private let targetReps: Int
+    private let targetReps: Int?
     
     private var exerciseName: String = ""
     private var history: [Result] = []
