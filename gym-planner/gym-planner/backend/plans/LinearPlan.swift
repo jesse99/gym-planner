@@ -233,7 +233,7 @@ public class LinearPlan : Plan {
     public func restSecs() -> RestTime {
         switch findRestSecs(exerciseName) {
         case .right(let secs):
-            return RestTime(autoStart: !finished() && !sets[setIndex].warmup, secs: secs)
+            return RestTime(autoStart: !finished() && setIndex > 0 && !sets[setIndex-1].warmup, secs: secs)
 
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
