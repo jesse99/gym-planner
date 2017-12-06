@@ -4,6 +4,8 @@ import Foundation
 public protocol FrontEnd {
     func saveExercise(_ name: String)
 
+    func findWorkout(_ name: String) -> Workout?
+
     func findExercise(_ name: String) -> Exercise?
 
     func assert(_ predicate: Bool, _ message: String)

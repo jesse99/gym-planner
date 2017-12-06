@@ -110,6 +110,7 @@ public class LinearPlan : Plan {
         self.workReps = store.getInt("workReps")
         self.deloads = store.getDblArray("deloads")
 
+        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
         self.sets = store.getObjArray("sets")
         self.history = store.getObjArray("history")
@@ -124,6 +125,7 @@ public class LinearPlan : Plan {
         store.addInt("workReps", workReps)
         store.addDblArray("deloads", deloads)
         
+        store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("sets", sets)
         store.addObjArray("history", history)
@@ -141,10 +143,11 @@ public class LinearPlan : Plan {
         return result
     }
     
-    public func start(_ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting LinearPlan for %@ and %@", type: .info, planName, exerciseName)
         self.sets = []
         self.setIndex = 0
+        self.workoutName = workout.name
         self.exerciseName = exerciseName
 
         switch findVariableWeightSetting(exerciseName) {
@@ -280,7 +283,7 @@ public class LinearPlan : Plan {
         frontend.assert(finished(), "LinearPlan is not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
-            exercise.completed = Date()
+            exercise.completed[workoutName] = Date()
         }
         
         addResult(missed)
@@ -363,6 +366,7 @@ public class LinearPlan : Plan {
     private let workReps: Int
     private let deloads: [Double]
 
+    private var workoutName: String = ""
     private var exerciseName: String = ""
     private var sets: [Set] = []
     private var history: [Result] = []

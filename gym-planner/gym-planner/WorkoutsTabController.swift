@@ -193,7 +193,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             let calendar = Calendar.current
             for name in workout.exercises {
                 if let exercise = app.program.findExercise(name) {
-                    if let completed = exercise.completed, calendar.isDate(completed, inSameDayAs: Date()) {
+                    if let completed = exercise.completed[workout.name], calendar.isDate(completed, inSameDayAs: Date()) {
                         count += 1
                     }
                 }
@@ -219,7 +219,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             let app = UIApplication.shared.delegate as! AppDelegate
             for name in workout.exercises {
                 if let exercise = app.program.findExercise(name) {
-                    if let completed = exercise.completed {
+                    if let completed = exercise.completed[workout.name] {
                         if date == nil || completed.compare(date!) == .orderedDescending {
                             date = completed
                         }
@@ -237,7 +237,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             let calendar = Calendar.current
             for name in workout.exercises {
                 if let exercise = app.program.findExercise(name) {
-                    if let completed = exercise.completed {
+                    if let completed = exercise.completed[workout.name] {
                         if !calendar.isDate(completed, inSameDayAs: latest) {   // this won't be exactly right if anyone is crazy enough to do workouts at midnight
                             partial = true
                         }
@@ -256,7 +256,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         for (i, workout) in app.program.workouts.enumerated() {
             if workout.scheduled && workout.exercises.all({
                 if let exercise = app.program.findExercise($0) {
-                    if exercise.completed == nil {
+                    if exercise.completed[workout.name] == nil {
                         return true
                     }
                 }

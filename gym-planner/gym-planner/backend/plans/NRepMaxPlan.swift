@@ -29,6 +29,8 @@ public class NRepMaxPlan : Plan {
         self.planName = store.getStr("name")
         self.typeName = "NRepMaxPlan"
         self.numReps = store.getInt("numReps")
+
+        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
         self.weight = store.getDbl("weight")
         self.setNum = store.getInt("setNum")
@@ -38,6 +40,7 @@ public class NRepMaxPlan : Plan {
     public func save(_ store: Store) {
         store.addStr("name", planName)
         store.addInt("numReps", numReps)
+        store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addDbl("weight", weight)
         store.addInt("setNum", setNum)
@@ -55,8 +58,9 @@ public class NRepMaxPlan : Plan {
         return result
     }
     
-    public func start(_ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting NRepMaxPlan for %@ and %@", type: .info, planName, exerciseName)
+        self.workoutName = workout.name
         self.exerciseName = exerciseName
 
         switch findApparatus(exerciseName) {
@@ -199,7 +203,7 @@ public class NRepMaxPlan : Plan {
     
     private func doFinish() {
         if case let .right(exercise) = findExercise(exerciseName) {
-            exercise.completed = Date()
+            exercise.completed[workoutName] = Date()
         }
         
         done = true
@@ -221,6 +225,7 @@ public class NRepMaxPlan : Plan {
 
     private let numReps: Int
 
+    private var workoutName: String = ""
     private var exerciseName: String = ""
     private var weight: Double = 0.0
     private var setNum: Int = 0

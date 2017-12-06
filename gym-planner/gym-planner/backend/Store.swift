@@ -28,6 +28,13 @@ public class Store: Codable, CustomStringConvertible {
         store[key] = .date(value)
     }
     
+    public func addDateArray(_ key: String, _ value: [Date]) {
+        frontend.assert(!key.isEmpty, "addDateArray key was empty")
+        assert(!store.keys.contains(key), "store already contains \(key)")
+        let v = value.map {Value.date($0)}
+        store[key] = .array(v)
+    }
+    
     public func addDbl(_ key: String, _ value: Double) {
         frontend.assert(!key.isEmpty, "addDbl key was empty")
         assert(!store.keys.contains(key), "store already contains \(key)")
@@ -111,6 +118,27 @@ public class Store: Codable, CustomStringConvertible {
     public func getDate(_ key: String, ifMissing: Date? = nil) -> Date {
         if let e = store[key], case let .date(v) = e {
             return v
+        } else if let d = ifMissing {
+            return d
+        } else {
+            assert(false, "\(key) is missing"); abort()
+        }
+    }
+    
+    public func getDateArray(_ key: String, ifMissing: [Date]? = nil) -> [Date] {
+        if let e = store[key], case let .array(v) = e {
+            var result: [Date] = []
+            result.reserveCapacity(v.count)
+            for x in v {
+                if case let .date(y) = x {
+                    result.append(y)
+                } else if let d = ifMissing {
+                    return d
+                } else {
+                    assert(false); abort()
+                }
+            }
+            return result
         } else if let d = ifMissing {
             return d
         } else {

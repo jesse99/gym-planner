@@ -66,7 +66,7 @@ public protocol Plan: Storable {
     
     func clone() -> Plan
 
-    func start(_ exerciseName: String) -> StartResult
+    func start(_ workout: Workout, _ exerciseName: String) -> StartResult
     
     /// Called when settings change.
     func refresh()

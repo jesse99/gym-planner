@@ -66,6 +66,7 @@ public class TimedPlan : Plan {
             self.targetTime = nil
         }
         
+        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
@@ -76,6 +77,7 @@ public class TimedPlan : Plan {
         store.addInt("numSets", numSets)
         store.addInt("targetTime", targetTime ?? 0)
         
+        store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
@@ -92,9 +94,10 @@ public class TimedPlan : Plan {
         return result
     }
     
-    public func start(_ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting TimedPlan for %@ and %@", type: .info, planName, exerciseName)
         self.setIndex = 1
+        self.workoutName = workout.name
         self.exerciseName = exerciseName
         
         return .ok
@@ -205,7 +208,7 @@ public class TimedPlan : Plan {
         frontend.assert(finished(), "TimedPlan is not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
-            exercise.completed = Date()
+            exercise.completed[workoutName] = Date()
         }
         
         addResult()
@@ -227,6 +230,7 @@ public class TimedPlan : Plan {
     private let numSets: Int
     private let targetTime: Int?
     
+    private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var setIndex: Int = 0

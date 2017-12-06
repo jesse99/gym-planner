@@ -65,6 +65,7 @@ public class VariableSetsPlan: Plan {
             self.targetReps = nil
         }
         
+        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.reps = store.getIntArray("reps")
@@ -74,6 +75,7 @@ public class VariableSetsPlan: Plan {
         store.addStr("name", planName)
         store.addInt("targetReps", targetReps ?? 0)
         
+        store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addIntArray("reps", reps)
@@ -90,10 +92,11 @@ public class VariableSetsPlan: Plan {
         return result
     }
     
-    public func start(_ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting VariableSetsPlan for %@ and %@", type: .info, planName, exerciseName)
 
         self.reps = []
+        self.workoutName = workout.name
         self.exerciseName = exerciseName
         frontend.saveExercise(exerciseName)
 
@@ -264,7 +267,7 @@ public class VariableSetsPlan: Plan {
         
         if finished() {
             if case let .right(exercise) = findExercise(exerciseName) {
-                exercise.completed = Date()
+                exercise.completed[workoutName] = Date()
             }
             
             addResult()
@@ -287,6 +290,7 @@ public class VariableSetsPlan: Plan {
     
     private let targetReps: Int?
     
+    private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var reps: [Int] = []

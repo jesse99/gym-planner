@@ -56,6 +56,7 @@ public class FixedSetsPlan : Plan {
         self.numSets = store.getInt("numSets")
         self.numReps = store.getInt("numReps")
         
+        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
@@ -66,6 +67,7 @@ public class FixedSetsPlan : Plan {
         store.addInt("numSets", numSets)
         store.addInt("numReps", numReps)
         
+        store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
@@ -82,9 +84,10 @@ public class FixedSetsPlan : Plan {
         return result
     }
     
-    public func start(_ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting FixedSetsPlan for %@ and %@", type: .info, planName, exerciseName)
         self.setIndex = 1
+        self.workoutName = workout.name
         self.exerciseName = exerciseName
         
         frontend.saveExercise(exerciseName)
@@ -207,7 +210,7 @@ public class FixedSetsPlan : Plan {
         frontend.assert(finished(), "FixedSetsPlan is not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
-            exercise.completed = Date()
+            exercise.completed[workoutName] = Date()
         }
         
         addResult()
@@ -229,6 +232,7 @@ public class FixedSetsPlan : Plan {
     private let numSets: Int
     private let numReps: Int
     
+    private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var setIndex: Int = 0

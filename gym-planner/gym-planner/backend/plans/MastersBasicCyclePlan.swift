@@ -150,6 +150,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.cycles = store.getObjArray("cycles")
         self.deloads = store.getDblArray("deloads")
         
+        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.sets = store.getObjArray("sets")
@@ -162,6 +163,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         store.addObjArray("cycles", cycles)
         store.addDblArray("deloads", deloads)
         
+        store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addObjArray("sets", sets)
@@ -184,11 +186,12 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         return result
     }
     
-    public func start(_ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting MastersBasicCyclePlan for %@ and %@", type: .info, planName, exerciseName)
         
         self.sets = []
         self.setIndex = 0
+        self.workoutName = workout.name
         self.exerciseName = exerciseName
 
         switch findVariableWeightSetting(exerciseName) {
@@ -352,7 +355,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         frontend.assert(finished(), "MastersBasicCyclePlan not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
-            exercise.completed = Date()
+            exercise.completed[workoutName] = Date()
         }
         
         let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
@@ -455,6 +458,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     private let cycles: [Execute]
     private let deloads: [Double]
     
+    private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var sets: [Set] = []

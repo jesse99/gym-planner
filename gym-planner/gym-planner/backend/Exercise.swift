@@ -8,7 +8,7 @@ public class Exercise: Storable {
         self.formalName = formalName
         self.plan = plan
         self.settings = settings
-        self.completed = nil
+        self.completed = [:]
         self.hidden = hidden
     }
     
@@ -18,10 +18,14 @@ public class Exercise: Storable {
         self.settings = store.getObj("settings")
         self.hidden = store.getBool("hidden")
         
-        if store.hasKey("completed") {
-            self.completed = store.getDate("completed")
-        } else {
-            self.completed = nil
+        self.completed = [:]
+        if store.hasKey("completed-names") {
+            let names = store.getStrArray("completed-names")
+            let dates = store.getDateArray("completed-dates")
+            
+            for (i, name) in names.enumerated() {
+                self.completed[name] = dates[i]
+            }
         }
         
         let pname = store.getStr("plan-type")
@@ -45,9 +49,8 @@ public class Exercise: Storable {
         store.addObj("settings", settings)
         store.addBool("hidden", hidden)
         
-        if let c = completed {
-            store.addDate("completed", c)
-        }
+        store.addStrArray("completed-names", Array(completed.keys))
+        store.addDateArray("completed-dates", Array(completed.values))
     }
     
     /// This is used for plans that have to run a different plan first, e.g. NRepMaxPlan.
@@ -70,8 +73,8 @@ public class Exercise: Storable {
     public var plan: Plan
     public var settings: Settings
     
-    /// Date the exercise was last completed.
-    public var completed: Date?
+    /// Date the exercise was last completed keyed by workout name (exercises can be shared across workouts).
+    public var completed: [String: Date]
     
     /// If true don't display the plan in UI.
     public var hidden: Bool

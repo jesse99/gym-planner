@@ -127,14 +127,12 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
 //        present(view, animated: true, completion: nil)
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return filtered.count
         return workout.exercises.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt path: IndexPath) -> UITableViewCell
-    {
+    func tableView(_ tableView: UITableView, cellForRowAt path: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "WorkoutCellID")!
         cell.backgroundColor = tableView.backgroundColor
         
@@ -150,12 +148,12 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
 
             } else {
                 let p = exercise.plan.clone()
-                switch p.start(name) {
+                switch p.start(workout, name) {
                 case .ok:
                     cell.textLabel!.text = p.label()
                     cell.detailTextLabel!.text = p.sublabel()
                     let calendar = Calendar.current
-                    if let completed = exercise.completed, calendar.isDate(completed, inSameDayAs: Date()) {
+                    if let completed = exercise.completed[workout.name], calendar.isDate(completed, inSameDayAs: Date()) {
                         cell.textLabel?.setColor(.lightGray)
                         cell.detailTextLabel?.setColor(.lightGray)
                     } else {
@@ -272,7 +270,7 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
             } else {
                 // If we're started but not underway we want to re-start to ensure that we pickup
                 // on any changes from a base exercise.
-                switch exercise.plan.start(name) {
+                switch exercise.plan.start(workout, name) {
                 case .ok:
                     presentExercise(exercise)
                     
@@ -281,7 +279,7 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
                     let newExercise = exercise.withPlan(newName, p)
                     app.program.setExercise(newExercise)
                     
-                    switch p.start(newName) {
+                    switch p.start(workout, newName) {
                     case .ok:
                         presentExercise(newExercise)
                     case .newPlan(let q):

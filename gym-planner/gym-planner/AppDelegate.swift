@@ -64,6 +64,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         saveProgram(program)
     }
     
+    func findWorkout(_ name: String) -> Workout? {
+        return program.findWorkout(name)
+    }
+
     func findExercise(_ name: String) -> Exercise? {
         return program.findExercise(name)
     }

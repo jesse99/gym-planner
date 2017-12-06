@@ -119,6 +119,8 @@ public class PercentOfPlan : Plan {
         store.addInt("workReps", workReps)
         store.addDbl("percent", percent)
 
+        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
+        store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addObjArray("sets", sets)
@@ -136,11 +138,12 @@ public class PercentOfPlan : Plan {
         return result
     }
     
-    public func start(_ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting PercentOfPlan for %@ and %@", type: .info, planName, exerciseName)
 
         self.sets = []
         self.setIndex = 0
+        self.workoutName = workout.name
         self.exerciseName = exerciseName
 
         switch findApparatus(exerciseName) {
@@ -288,7 +291,7 @@ public class PercentOfPlan : Plan {
     
     private func doFinish() {
         if case let .right(exercise) = findExercise(exerciseName) {
-            exercise.completed = Date()
+            exercise.completed[workoutName] = Date()
         }
         
         setIndex += 1
@@ -338,18 +341,22 @@ public class PercentOfPlan : Plan {
             switch findExercise(otherName) {
             case .right(let otherExercise):
                 let p = otherExercise.plan.clone()
-                switch p.start(otherName) {
-                case .ok:
-                    // We want to use whatever the user last lifted,
-                    if let weight = p.findLastWeight() {
-                        return .right(weight)
-                    } else {
-                        // but if all they have run is NRepsMax then we'll settle for what they should lift next time.
-                        os_log("falling back onto settings weight for %@", type: .info, otherName)
-                        return findCurrentWeight(otherName)
+                if let workout = frontend.findWorkout(workoutName) {
+                    switch p.start(workout, otherName) {
+                    case .ok:
+                        // We want to use whatever the user last lifted,
+                        if let weight = p.findLastWeight() {
+                            return .right(weight)
+                        } else {
+                            // but if all they have run is NRepsMax then we'll settle for what they should lift next time.
+                            os_log("falling back onto settings weight for %@", type: .info, otherName)
+                            return findCurrentWeight(otherName)
+                        }
+                    case .newPlan(_): return .left("Execute \(otherName) first")
+                    case .error(let err): return .left(err)
                     }
-                case .newPlan(_): return .left("Execute \(otherName) first")
-                case .error(let err): return .left(err)
+                } else {
+                    return .left("Couldn't find workout \(workoutName)")
                 }
             case .left(let err):
                 return .left(err)
@@ -366,6 +373,7 @@ public class PercentOfPlan : Plan {
     private let workReps: Int
     private let percent: Double
 
+    private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var sets: [Set] = []
