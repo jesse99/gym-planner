@@ -57,6 +57,7 @@ func HLM2() -> Program {
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
         
+        createFixed("Foam Rolling",            "IT-Band Foam Roll",         planFixed(1, 15), restMins: 0.0),
         createFixed("Shoulder Dislocates",     "Shoulder Dislocate",        planFixed(1, 12), restMins: 0.0),
         createFixed("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      planFixed(1, 10), restMins: 0.0),
         createFixed("Roll-over into V-sit",    "Roll-over into V-sit",      planFixed(1, 15), restMins: 0.0),
@@ -68,10 +69,10 @@ func HLM2() -> Program {
         createFixed("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", planFixed(1, 10), restMins: 0.0)]
 
     let workouts = [
-        Workout("Mobility",   ["Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false),
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
         Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"], scheduled: true),
-        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true)]
+        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true),
+        Workout("Mobility",   ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
 
     let tags: [Program.Tags] = [.intermediate, .strength, .age40s, .age50s]
     let description = """
