@@ -102,8 +102,8 @@ public class FixedSetsPlan : Plan {
         return setIndex > 0 && !finished()
     }
     
-    public func underway() -> Bool {
-        return isStarted() && setIndex > 1
+    public func underway(_ workout: Workout) -> Bool {
+        return isStarted() && setIndex > 1 && workout.name == workoutName
     }
     
     public func label() -> String {

@@ -111,8 +111,8 @@ public class VariableSetsPlan: Plan {
         return !exerciseName.isEmpty && !reps.isEmpty && !finished()
     }
     
-    public func underway() -> Bool {
-        return isStarted() && !reps.isEmpty
+    public func underway(_ workout: Workout) -> Bool {
+        return isStarted() && !reps.isEmpty && workout.name == workoutName
     }
     
     public func label() -> String {

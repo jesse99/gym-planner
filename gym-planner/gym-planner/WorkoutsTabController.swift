@@ -179,7 +179,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             let app = UIApplication.shared.delegate as! AppDelegate
             for name in workout.exercises {
                 if let exercise = app.program.findExercise(name) {
-                    if exercise.plan.underway() {
+                    if exercise.plan.underway(workout) {
                         return true
                     }
                 }

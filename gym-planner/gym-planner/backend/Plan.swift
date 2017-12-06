@@ -74,7 +74,7 @@ public protocol Plan: Storable {
     func isStarted() -> Bool
 
     /// Returns true if the plan has been started and is past the very first activity.
-    func underway() -> Bool
+    func underway(_ workout: Workout) -> Bool
     
     /// "Light Squat".
     func label() -> String

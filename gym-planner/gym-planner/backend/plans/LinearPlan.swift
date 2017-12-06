@@ -181,8 +181,8 @@ public class LinearPlan : Plan {
         return !sets.isEmpty && !finished()
     }
     
-    public func underway() -> Bool {
-        return isStarted() && setIndex > 0
+    public func underway(_ workout: Workout) -> Bool {
+        return isStarted() && setIndex > 0 && workout.name == workoutName
     }
     
     public func label() -> String {
