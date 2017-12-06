@@ -65,8 +65,8 @@ func HLM2() -> Program {
         createFixed("Fire Hydrant Hip Circle", "Fire Hydrant Hip Circle",   planFixed(1, 10), restMins: 0.0),
         createFixed("Mountain Climber",        "Mountain Climber",          planFixed(1, 10), restMins: 0.0),
         createFixed("Cossack Squat",           "Cossack Squat",             planFixed(1, 10), restMins: 0.0),
-        createTimed("Piriformis Stretch",      "Seated Piriformis Stretch", planTimed(1), duration: 30),
-        createFixed("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", planFixed(1, 10), restMins: 0.0)]
+        createTimed("Piriformis Stretch",      "Seated Piriformis Stretch", planTimed(2), duration: 30),
+        createTimed("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", planTimed(2), duration: 30)]
 
     let workouts = [
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
