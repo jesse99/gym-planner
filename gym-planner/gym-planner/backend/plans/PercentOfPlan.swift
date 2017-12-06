@@ -107,6 +107,7 @@ public class PercentOfPlan : Plan {
         
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
+        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.sets = store.getObjArray("sets")
         self.setIndex = store.getInt("setIndex")
     }
@@ -119,7 +120,6 @@ public class PercentOfPlan : Plan {
         store.addInt("workReps", workReps)
         store.addDbl("percent", percent)
 
-        self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
