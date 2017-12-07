@@ -145,6 +145,25 @@ public func createTimed(_ name: String, _ formalName: String, _ plan: Plan, dura
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
+public func makeProgression(_ exercises: [Exercise], _ names: String...) {
+    func setNext(_ name: String, _ other: String) {
+        let exercise = exercises.first {$0.name == name}!
+        exercise.nextExercise = other
+    }
+
+    func setPrev(_ name: String, _ other: String) {
+        let exercise = exercises.first {$0.name == name}!
+        exercise.prevExercise = other
+    }
+    
+    for (i, name) in names.enumerated() {
+        if i > 0 {
+            setNext(names[i-1], name)
+            setPrev(name, names[i-1])
+        }
+    }
+}
+
 extension Program.Tags: Storable {
     public init(from store: Store) {
         let tname = store.getStr("tag")

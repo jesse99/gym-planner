@@ -7,6 +7,8 @@ public class Exercise: Storable {
         self.name = name
         self.formalName = formalName
         self.plan = plan
+        self.nextExercise = nil
+        self.prevExercise = nil
         self.settings = settings
         self.completed = [:]
         self.hidden = hidden
@@ -28,6 +30,17 @@ public class Exercise: Storable {
             }
         }
         
+        if store.hasKey("nextExercise") {
+            self.nextExercise = store.getStr("nextExercise")
+        } else {
+            self.nextExercise = nil
+        }
+        if store.hasKey("prevExercise") {
+            self.prevExercise = store.getStr("prevExercise")
+        } else {
+            self.prevExercise = nil
+        }
+
         let pname = store.getStr("plan-type")
         switch pname {
         case "LinearPlan":            let p: LinearPlan = store.getObj("plan"); self.plan = p
@@ -49,13 +62,23 @@ public class Exercise: Storable {
         store.addObj("settings", settings)
         store.addBool("hidden", hidden)
         
+        if let next = nextExercise {
+            store.addStr("nextExercise", next)
+        }
+        if let prev = prevExercise {
+            store.addStr("prevExercise", prev)
+        }
+        
         store.addStrArray("completed-names", Array(completed.keys))
         store.addDateArray("completed-dates", Array(completed.values))
     }
     
     /// This is used for plans that have to run a different plan first, e.g. NRepMaxPlan.
     public func withPlan(_ newName: String, _ newPlan: Plan) -> Exercise {
-        return Exercise(newName, formalName, newPlan, settings, hidden: true)
+        let result = Exercise(newName, formalName, newPlan, settings, hidden: true)
+        result.nextExercise = self.nextExercise
+        result.prevExercise = self.prevExercise
+        return result
     }
     
     public func sync(_ savedExercise: Exercise) {
@@ -75,6 +98,11 @@ public class Exercise: Storable {
     
     /// Date the exercise was last completed keyed by workout name (exercises can be shared across workouts).
     public var completed: [String: Date]
+    
+    /// These are used for exercises that support progression. For example, progressively harder planks. Users
+    /// can use the Options screens to choose which version they want to perform.
+    public var prevExercise: String?
+    public var nextExercise: String?
     
     /// If true don't display the plan in UI.
     public var hidden: Bool

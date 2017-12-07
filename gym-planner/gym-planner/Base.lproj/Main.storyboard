@@ -213,6 +213,11 @@
                                                     <action selector="notesPressed:" destination="nx1-py-5k7" id="ZnY-Tc-cXQ"/>
                                                 </connections>
                                             </barButtonItem>
+                                            <barButtonItem title="Progression" id="RxL-fq-hDv">
+                                                <connections>
+                                                    <action selector="progressionPressed:" destination="nx1-py-5k7" id="jzr-xi-Lrz"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
@@ -320,6 +325,7 @@
                         <outlet property="nextButton" destination="coG-ge-F0I" id="Y9K-4X-cIG"/>
                         <outlet property="notesButton" destination="mef-Wp-WER" id="6EP-le-4io"/>
                         <outlet property="previousLabel" destination="7h6-hg-ZrQ" id="vJe-qu-0fx"/>
+                        <outlet property="progressionButton" destination="RxL-fq-hDv" id="1Ed-rR-ZjU"/>
                         <outlet property="resetButton" destination="ThH-d0-0mN" id="HQP-4M-YJS"/>
                         <outlet property="secsLabel" destination="wmO-fY-3he" id="vhu-el-CII"/>
                         <outlet property="startTimerButton" destination="XKy-op-eDL" id="PxP-zc-eDW"/>

@@ -39,8 +39,8 @@ func HLM2() -> Program {
         return VariableSetsPlan("Chinups", targetReps: 50)
     }
     
-    func planTimed(_ numSets: Int) -> Plan {
-        return TimedPlan("\(numSets) timed sets", numSets: numSets, targetTime: nil)
+    func planTimed(_ numSets: Int, targetTime: Int? = nil) -> Plan {
+        return TimedPlan("\(numSets) timed sets", numSets: numSets, targetTime: targetTime)
     }
 
     func planFixed(_ numSets: Int, _ numReps: Int) -> Plan {
@@ -57,6 +57,18 @@ func HLM2() -> Program {
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
         
+        createTimed("Kneeling Front Plank",  "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
+        createTimed("Front Plank",           "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
+        createTimed("Side Plank",            "Side Plank",            planTimed(2, targetTime: 60), duration: 30),
+        createTimed("Leg Lift Plank",        "Leg Lift Plank",        planTimed(2, targetTime: 60), duration: 30),
+        createTimed("Arm & Leg Lift Front Plank", "Arm & Leg Lift Front Plank", planTimed(2, targetTime: 60), duration: 30),
+        createTimed("Decline Plank",         "Decline Plank",         planTimed(1, targetTime: 60), duration: 30),
+        createTimed("Decline & March Plank", "Decline & March Plank", planTimed(1, targetTime: 60), duration: 30),
+        createTimed("Wall Plank",            "Wall Plank",            planTimed(1, targetTime: 60), duration: 30),
+        createTimed("Wall March Plank",      "Wall March Plank",      planTimed(1, targetTime: 60), duration: 30),
+        createFixed("Dragon Flag",           "Dragon Flag",           planFixed(3, 8), restMins: 1.0),
+        createTimed("Hanging Dragon Flag",   "Hanging Dragon Flag",   planTimed(1, targetTime: 60), duration: 30),
+
         createFixed("Foam Rolling",            "IT-Band Foam Roll",         planFixed(1, 15), restMins: 0.0),
         createFixed("Shoulder Dislocates",     "Shoulder Dislocate",        planFixed(1, 12), restMins: 0.0),
         createFixed("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      planFixed(1, 10), restMins: 0.0),
@@ -67,11 +79,12 @@ func HLM2() -> Program {
         createFixed("Cossack Squat",           "Cossack Squat",             planFixed(1, 10), restMins: 0.0),
         createTimed("Piriformis Stretch",      "Seated Piriformis Stretch", planTimed(2), duration: 30),
         createTimed("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", planTimed(2), duration: 30)]
+    makeProgression(exercises, "Kneeling Front Plank", "Front Plank", "Side Plank", "Leg Lift Plank", "Arm & Leg Lift Front Plank", "Decline Plank", "Decline & March Plank", "Wall Plank", "Wall March Plank", "Dragon Flag", "Hanging Dragon Flag")
 
     let workouts = [
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
-        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups"], scheduled: true),
-        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups"], scheduled: true),
+        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups", "Side Plank"], scheduled: true),
+        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups", "Side Plank"], scheduled: true),
         Workout("Mobility",   ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
 
     let tags: [Program.Tags] = [.intermediate, .strength, .age40s, .age50s]

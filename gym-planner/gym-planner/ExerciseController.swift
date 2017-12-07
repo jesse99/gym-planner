@@ -92,6 +92,12 @@ class ExerciseController: UIViewController {
             startTimerButton.isHidden = false
         }
         
+        if exercise.prevExercise != nil || exercise.nextExercise != nil {
+            progressionButton.title = "Progression"
+        } else {
+            progressionButton.title = ""
+        }
+
         previousLabel.text = exercise.plan.prevLabel()
         historyLabel.text = exercise.plan.historyLabel()
 
@@ -228,6 +234,101 @@ class ExerciseController: UIViewController {
         let view = storyboard.instantiateViewController(withIdentifier: "NotesID") as! NotesController
         view.initialize(exercise, breadcrumbLabel.text!)
         present(view, animated: true, completion: nil)
+    }
+    
+    @IBAction func progressionPressed(_ sender: Any) {
+        func getProgression() -> [String] {
+            var progression: [String] = []
+            
+            var name = exercise.name
+            while true {
+                if let e = frontend.findExercise(name) {
+                    progression.insert(name, at: 0)
+                    if let newName = e.prevExercise {
+                        name = newName
+                    } else {
+                        break
+                    }
+                } else {
+                    break
+                }
+            }
+            
+            name = exercise.name
+            while true {
+                if let e = frontend.findExercise(name) {
+                    if let newName = e.nextExercise {
+                        progression.append(newName)
+                        name = newName
+                    } else {
+                        break
+                    }
+                } else {
+                    break
+                }
+            }
+            
+            return progression
+        }
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        
+        let progression = getProgression()
+        for (i, name) in progression.enumerated() {
+            let action = UIAlertAction(title: "\(i+1) \(name)", style: .default) {_ in self.changeProgression(name)}
+            alert.addAction(action)
+            
+            if name == exercise.name {
+                alert.preferredAction = action
+            }
+        }
+        
+        let action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func changeProgression(_ toName: String) {
+        print("changing progression to \(toName)")
+
+        let app = UIApplication.shared.delegate as! AppDelegate
+        for workout in app.program.workouts {
+            for (i, name) in workout.exercises.enumerated() {
+                if name == exercise.name {
+                    workout.exercises[i] = toName
+                }
+            }
+        }
+        
+        breadcrumb = breadcrumb.replacingOccurrences(of: exercise.name, with: toName)
+        exercise = frontend.findExercise(toName)!
+        
+        switch exercise.plan.start(workout, toName) {
+        case .ok:
+            breadcrumbLabel.text = breadcrumb
+
+        case .newPlan(let p):
+            let newName = exercise.name + "-" + p.planName
+            let newExercise = exercise.withPlan(newName, p)
+            app.program.setExercise(newExercise)
+            
+            switch p.start(workout, newName) {
+            case .ok:
+                breadcrumb = breadcrumb.replacingOccurrences(of: toName, with: newName)
+                exercise = newExercise
+            case .newPlan(let q):
+                breadcrumbLabel.text = "Plan \(exercise.plan.planName) started plan \(p.planName) which started \(q.planName)"
+            case .error(let mesg):
+                breadcrumbLabel.text = mesg
+            }
+            
+        case .error(let mesg):
+            breadcrumbLabel.text = mesg
+        }
+        frontend.saveExercise(exercise.name)
+
+        resetPressed(self)
     }
     
     @IBAction func optionsPressed(_ sender: Any) {
@@ -379,6 +480,7 @@ class ExerciseController: UIViewController {
     @IBOutlet private var startTimerButton: UIButton!
     @IBOutlet private var resetButton: UIBarButtonItem!
     @IBOutlet private var notesButton: UIBarButtonItem!
+    @IBOutlet private var progressionButton: UIBarButtonItem!
     
     private var timer: Timer? = nil
     private var startTime = Date()
