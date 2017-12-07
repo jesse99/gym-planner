@@ -1995,14 +1995,14 @@ let builtInNotes: [String: String] = [
     "Wall Plank": createNote(
         notes: [
             "Put your feet up against a wall and do a plank hold.",
-            "Don't allow your hips to sag.",
+            "Don't allow your hips to sag: dig your soles hard into the wall.",
             "Work on getting your feet higher and higher."],
         links: ["Link": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/handstand", "Handstands": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/handstand", "Progression": "http://www.instructables.com/id/How-to-achieve-the-hanging-dragon-flag/"]),
     
     "Wall March Plank": createNote(
         notes: [
             "Put your feet up against a wall and do a plank hold.",
-            "Don't allow your hips to sag.",
+            "Don't allow your hips to sag: dig your soles hard into the wall.",
             "Work on getting your feet higher and higher.",
         "Alternate between bringing each knee forward."],
         links: ["Progression": "http://www.instructables.com/id/How-to-achieve-the-hanging-dragon-flag/"]),
