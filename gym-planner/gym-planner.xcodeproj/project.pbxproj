@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */; };
 		370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFADA1FD6450400CDE63D /* FixedWeightController.swift */; };
+		37163DEE1FD8DA23008EB47D /* VariableRepsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */; };
 		3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743E2B81FB824CC00787CB3 /* FrontEnd.swift */; };
 		374556EB1FD669ED0005020B /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EA1FD669ED0005020B /* Notes.swift */; };
 		374556ED1FD66ADC0005020B /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EC1FD66ADC0005020B /* NotesController.swift */; };
@@ -64,6 +65,7 @@
 /* Begin PBXFileReference section */
 		370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSetsPlan.swift; sourceTree = "<group>"; };
 		370EFADA1FD6450400CDE63D /* FixedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWeightController.swift; sourceTree = "<group>"; };
+		37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableRepsPlan.swift; sourceTree = "<group>"; };
 		3743E2B81FB824CC00787CB3 /* FrontEnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEnd.swift; sourceTree = "<group>"; };
 		374556EA1FD669ED0005020B /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		374556EC1FD66ADC0005020B /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */,
 				3778CE971FBE730D0042111C /* PercentOfPlan.swift */,
 				37B3ECFA1FD48DE800F7D8EF /* TimedPlan.swift */,
+				37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */,
 				378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */,
 			);
 			path = plans;
@@ -385,6 +388,7 @@
 				376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */,
 				377F05501FC0D9CE0015D7EF /* Program.swift in Sources */,
 				374556ED1FD66ADC0005020B /* NotesController.swift in Sources */,
+				37163DEE1FD8DA23008EB47D /* VariableRepsPlan.swift in Sources */,
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,
 				378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */,
 				37CED48F1FAE29E000244ADD /* Plan.swift in Sources */,

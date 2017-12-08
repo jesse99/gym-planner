@@ -88,7 +88,7 @@ public class DerivedWeightSetting: Storable {
     }
 }
 
-/// Used with VariableRepsPlan.
+/// Used with VariableSetsPlan.
 public class VariableRepsSetting: Storable {
     var weight: Double  // starts out at 0.0
     var restSecs: Int
