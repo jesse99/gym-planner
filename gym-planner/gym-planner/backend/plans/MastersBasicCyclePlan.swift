@@ -156,6 +156,14 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.sets = store.getObjArray("sets")
         self.maxWeight = store.getDbl("maxWeight")
         self.setIndex = store.getInt("mbc-setIndex", ifMissing: 0)
+        
+        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+        let calendar = Calendar.current
+        if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
+            sets = []
+            setIndex = 0
+            maxWeight = 0.0
+        }
     }
     
     public func save(_ store: Store) {
@@ -169,6 +177,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         store.addObjArray("sets", sets)
         store.addDbl("maxWeight", maxWeight)
         store.addInt("mbc-setIndex", setIndex)
+        store.addDate("savedOn", Date())
     }
 
     public var debugDescription: String {

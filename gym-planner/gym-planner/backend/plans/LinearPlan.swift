@@ -115,6 +115,13 @@ public class LinearPlan : Plan {
         self.sets = store.getObjArray("sets")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
+        
+        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+        let calendar = Calendar.current
+        if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
+            sets = []
+            setIndex = 0
+        }
     }
 
     public func save(_ store: Store) {
@@ -130,6 +137,7 @@ public class LinearPlan : Plan {
         store.addObjArray("sets", sets)
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
+        store.addDate("savedOn", Date())
     }
     
     // Plan methods

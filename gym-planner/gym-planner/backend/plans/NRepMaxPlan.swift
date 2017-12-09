@@ -35,6 +35,14 @@ public class NRepMaxPlan : Plan {
         self.weight = store.getDbl("weight")
         self.setNum = store.getInt("setNum")
         self.done = store.getBool("done")
+        
+        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+        let calendar = Calendar.current
+        if !calendar.isDate(savedOn, inSameDayAs: Date()) && setNum > 0 {
+            setNum = 0
+            weight = 0.0
+            done = false
+        }
     }
     
     public func save(_ store: Store) {
@@ -45,6 +53,7 @@ public class NRepMaxPlan : Plan {
         store.addDbl("weight", weight)
         store.addInt("setNum", setNum)
         store.addBool("done", done)
+        store.addDate("savedOn", Date())
     }
     
     // Plan methods

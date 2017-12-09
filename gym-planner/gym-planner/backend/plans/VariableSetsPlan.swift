@@ -69,6 +69,12 @@ public class VariableSetsPlan: Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.reps = store.getIntArray("reps")
+        
+        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+        let calendar = Calendar.current
+        if !calendar.isDate(savedOn, inSameDayAs: Date()) && !reps.isEmpty {
+            reps = []
+        }
     }
     
     public func save(_ store: Store) {
@@ -79,6 +85,7 @@ public class VariableSetsPlan: Plan {
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addIntArray("reps", reps)
+        store.addDate("savedOn", Date())
     }
     
     // Plan methods

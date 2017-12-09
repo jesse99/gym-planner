@@ -110,6 +110,13 @@ public class PercentOfPlan : Plan {
         self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.sets = store.getObjArray("sets")
         self.setIndex = store.getInt("setIndex")
+        
+        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+        let calendar = Calendar.current
+        if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
+            sets = []
+            setIndex = 0
+        }
     }
     
     public func save(_ store: Store) {
@@ -125,6 +132,7 @@ public class PercentOfPlan : Plan {
         store.addObjArray("history", history)
         store.addObjArray("sets", sets)
         store.addInt("setIndex", setIndex)
+        store.addDate("savedOn", Date())
     }
     
     // Plan methods

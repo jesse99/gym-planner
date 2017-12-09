@@ -60,6 +60,12 @@ public class FixedSetsPlan : Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
+        
+        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+        let calendar = Calendar.current
+        if !calendar.isDate(savedOn, inSameDayAs: Date()) && setIndex > 0 {
+            setIndex = 0
+        }
     }
     
     public func save(_ store: Store) {
@@ -71,6 +77,7 @@ public class FixedSetsPlan : Plan {
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
+        store.addDate("savedOn", Date())
     }
     
     // Plan methods

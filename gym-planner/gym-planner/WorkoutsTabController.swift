@@ -143,10 +143,10 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         if todays.contains(index) {
             // Highlight any workouts the user is currently performing (can be multiple if he is switching between
             // something like mobility and a lifting workout).
+            cell.detailTextLabel!.text = "in progress"
             let color = UIColor.red             // TODO: use targetColor
             cell.textLabel!.setColor(color)
             cell.detailTextLabel!.setColor(color)
-            cell.detailTextLabel!.text = "in progress"
 
         } else {
             // Otherwise highlight the first workout the user hasn't completed or the oldest completed workout.
