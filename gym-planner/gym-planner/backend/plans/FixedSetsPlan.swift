@@ -61,13 +61,18 @@ public class FixedSetsPlan : Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
-        self.done = store.getBool("done", ifMissing: false)
+        self.state = store.getObj("state", ifMissing: .waiting)
         
-        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-        let calendar = Calendar.current
-        if !calendar.isDate(savedOn, inSameDayAs: Date()) && setIndex > 0 {
-            setIndex = 0
-            done = false
+        switch state {
+        case .waiting:
+            break
+        default:
+            let calendar = Calendar.current
+            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+                setIndex = 1
+                state = .waiting
+            }
         }
     }
     
@@ -81,13 +86,14 @@ public class FixedSetsPlan : Plan {
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
-        store.addBool("done", done)
+        store.addObj("state", state)
     }
     
     // Plan methods
     public let planName: String
     public let typeName: String
-    
+    public var state = PlanState.waiting
+
     public func clone() -> Plan {
         let store = Store()
         store.addObj("self", self)
@@ -95,27 +101,22 @@ public class FixedSetsPlan : Plan {
         return result
     }
     
-    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> Plan? {
         os_log("starting FixedSetsPlan for %@ and %@", type: .info, planName, exerciseName)
         self.setIndex = 1
-        self.done = false
+        self.state = .started
         self.workoutName = workout.name
         self.exerciseName = exerciseName
-        
         frontend.saveExercise(exerciseName)
-        return .ok
+        return nil
+    }
+    
+    public func on(_ workout: Workout) -> Bool {
+        return workoutName == workout.name
     }
     
     public func refresh() {
         // nothing to do
-    }
-    
-    public func isStarted() -> Bool {
-        return setIndex > 0 && !finished()
-    }
-    
-    public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 1 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -173,7 +174,11 @@ public class FixedSetsPlan : Plan {
     public func restSecs() -> RestTime {
         switch findRestSecs(exerciseName) {
         case .right(let secs):
-            return RestTime(autoStart: !finished(), secs: secs)
+            if case .finished = state {
+                return RestTime(autoStart: false, secs: secs)
+            } else {
+                return RestTime(autoStart: true, secs: secs)
+            }
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
         }
@@ -184,24 +189,16 @@ public class FixedSetsPlan : Plan {
     }
     
     public func completions() -> [Completion] {
-        if setIndex < numSets {
+        if setIndex+1 < numSets {
             return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]
         } else {
             return [Completion(title: "Done", isDefault: true, callback: {() -> Void in self.doFinish()})]
         }
     }
     
-    public func atStart() -> Bool {
-        return setIndex == 1
-    }
-    
-    public func finished() -> Bool {
-        return done
-    }
-    
     public func reset() {
         setIndex = 1
-        done = false
+        state = .started
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -217,13 +214,12 @@ public class FixedSetsPlan : Plan {
     // Internal items
     private func doNext() {
         setIndex += 1
+        state = .underway
         frontend.saveExercise(exerciseName)
     }
     
     private func doFinish() {
-        done = true
-        frontend.assert(finished(), "FixedSetsPlan is not finished in doFinish")
-        
+        state = .finished
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
         }
@@ -250,6 +246,5 @@ public class FixedSetsPlan : Plan {
     private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []
-    private var setIndex: Int = 0
-    private var done = false
+    private var setIndex = 1
 }

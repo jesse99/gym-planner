@@ -70,13 +70,18 @@ public class VariableSetsPlan: Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.reps = store.getIntArray("reps")
-        self.done = store.getBool("done", ifMissing: false)
+        self.state = store.getObj("state", ifMissing: .waiting)
 
-        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-        let calendar = Calendar.current
-        if !calendar.isDate(savedOn, inSameDayAs: Date()) && !reps.isEmpty {
-            reps = []
-            done = false
+        switch state {
+        case .waiting:
+            break
+        default:
+            let calendar = Calendar.current
+            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+                reps = []
+                state = .waiting
+            }
         }
     }
     
@@ -89,13 +94,14 @@ public class VariableSetsPlan: Plan {
         store.addObjArray("history", history)
         store.addIntArray("reps", reps)
         store.addDate("savedOn", Date())
-        store.addBool("done", done)
+        store.addObj("state", state)
     }
     
     // Plan methods
     public let planName: String
     public let typeName: String
-    
+    public var state = PlanState.waiting
+
     public func clone() -> Plan {
         let store = Store()
         store.addObj("self", self)
@@ -103,28 +109,24 @@ public class VariableSetsPlan: Plan {
         return result
     }
     
-    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> Plan? {
         os_log("starting VariableSetsPlan for %@ and %@", type: .info, planName, exerciseName)
 
         self.reps = []
-        self.done = false
+        self.state = .started
         self.workoutName = workout.name
         self.exerciseName = exerciseName
         frontend.saveExercise(exerciseName)
 
-        return .ok
+        return nil
+    }
+    
+    public func on(_ workout: Workout) -> Bool {
+        return workoutName == workout.name
     }
     
     public func refresh() {
         // nothing to do
-    }
-    
-    public func isStarted() -> Bool {
-        return !exerciseName.isEmpty && !reps.isEmpty && !finished()
-    }
-    
-    public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && !reps.isEmpty && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -216,7 +218,11 @@ public class VariableSetsPlan: Plan {
     public func restSecs() -> RestTime {
         switch findRestSecs(exerciseName) {
         case .right(let secs):
-            return RestTime(autoStart: !finished(), secs: secs)
+            if case .finished = state {
+                return RestTime(autoStart: false, secs: secs)
+            } else {
+                return RestTime(autoStart: true, secs: secs)
+            }
 
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
@@ -247,17 +253,9 @@ public class VariableSetsPlan: Plan {
         return options
     }
     
-    public func atStart() -> Bool {
-        return reps.isEmpty
-    }
-    
-    public func finished() -> Bool {
-        return done
-    }
-    
     public func reset() {
         reps = []
-        done = false
+        state = .started
         frontend.saveExercise(exerciseName)
     }
     
@@ -281,11 +279,14 @@ public class VariableSetsPlan: Plan {
                     exercise.completed[workoutName] = Date()
                 }
                 
+                state = .finished
                 addResult()
+            } else {
+                state = .underway
             }
 
-        case .left(_):
-            done = true
+        case .left(let err):
+            state = .error(err)
         }
         frontend.saveExercise(exerciseName)
     }
@@ -309,5 +310,4 @@ public class VariableSetsPlan: Plan {
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var reps: [Int] = []
-    private var done = false
 }

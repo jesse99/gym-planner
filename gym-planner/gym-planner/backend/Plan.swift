@@ -42,15 +42,29 @@ public struct RestTime {
     public let secs: Int
 }
 
-public enum StartResult {
-    /// Plan started up OK.
-    case ok
-
-    /// Startup the new plan instead of the original plan. Typically the new plan will be
-    /// NRepMaxPlan.
-    case newPlan(Plan)
-
-    /// Arbitrary error, e.g. need to perform another exercise first.
+/// Lifecycle for plans. Typically plans transition from waiting -> started -> underway -> finished
+/// though some plans skip underway.
+public enum PlanState {
+    /// The plan has been initialized but not started yet. Note that plans also enter this state
+    /// when they are loaded from disk if it's been more than a day since they were started.
+    case waiting
+    
+    /// Start has been called and the plan was able to start OK but the user hasn't advanced within
+    /// the plan (e.g. by pressing the Next button).
+    case started
+    
+    /// The plan was in started but the user has advanced past started, but isn't yet finished.
+    case underway
+    
+    /// The user has advanced so far that there is nothing left to do for this iteration of the plan.
+    case finished
+    
+    /// Start was called but the plan cannot be executed until another exercise is executed. For example,
+    /// PercentOfPlan requires that its base plan be executed before it can execute.
+    case blocked
+    
+    /// Start was called but there was some fatal error that prevents the plan from executing. For example,
+    /// PercentOfPlan cannot find the base plan.
     case error(String)
 }
 
@@ -62,19 +76,21 @@ public protocol Plan: Storable {
     /// This is used by Exercise to deserialize plans.
     var typeName: String {get}
     
+    var state: PlanState {get}
+
     func shouldSync(_ savedPlan: Plan) -> Bool
     
     func clone() -> Plan
 
-    func start(_ workout: Workout, _ exerciseName: String) -> StartResult
+    /// If the plan requires another plan to be executed then the new plan will be returned
+    /// and state will be set to blocked.
+    func start(_ workout: Workout, _ exerciseName: String) -> Plan?
+    
+    /// Returns true if the plan was started for workout.
+    func on(_ workout: Workout) -> Bool
     
     /// Called when settings change.
     func refresh()
-    
-    func isStarted() -> Bool
-
-    /// Returns true if the plan has been started and is past the very first activity.
-    func underway(_ workout: Workout) -> Bool
     
     /// "Light Squat".
     func label() -> String
@@ -101,12 +117,6 @@ public protocol Plan: Storable {
     /// user and then call the callback for whichever completion the user chose.
     func completions() -> [Completion]
     
-    /// Returns true if the user hasn't done anything yet.
-    func atStart() -> Bool
-    
-    /// Returns true if there are no more activities to perform.
-    func finished() -> Bool
-    
     /// Start over from the beginning.
     func reset()
         
@@ -116,6 +126,33 @@ public protocol Plan: Storable {
     /// Returns the weight the user last lifted. Note that this is the base-line weight, e.g.
     /// for a plan with cycles it'll typically be the weight of the first cycle.
     func findLastWeight() -> Double?
+}
+
+extension PlanState: Storable {
+    public init(from store: Store) {
+        let name = store.getStr("plan-state")
+        switch name {
+        case "waiting": self = .waiting
+        case "started": self = .started
+        case "underway": self = .underway
+        case "finished": self = .finished
+        case "blocked": self = .blocked
+        case "error": self = .error(store.getStr("plan-state-err"))
+            
+        default: frontend.assert(false, "loading program had unknown plan state: \(name)"); abort()
+        }
+    }
+    
+    public func save(_ store: Store) {
+        switch self {
+        case .waiting: store.addStr("plan-state", "waiting")
+        case .started: store.addStr("plan-state", "started")
+        case .underway: store.addStr("plan-state", "underway")
+        case .finished: store.addStr("plan-state", "finished")
+        case .blocked: store.addStr("plan-state", "blocked")
+        case .error(let s): store.addStr("plan-state", "error"); store.addStr("plan-state-err", s)
+        }
+    }
 }
 
 // Phrak could be LinearAMRAP

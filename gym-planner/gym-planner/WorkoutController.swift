@@ -140,36 +140,37 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         let name = workout.exercises[index]
         let app = UIApplication.shared.delegate as! AppDelegate
         if let exercise = app.program.findExercise(name) {
-            if exercise.plan.underway(workout) {
+            if case .underway = exercise.plan.state, exercise.plan.on(workout) {
                 cell.textLabel!.text = exercise.plan.label()
                 cell.detailTextLabel!.text = exercise.plan.sublabel()
                 cell.textLabel?.setColor(.red)
                 cell.detailTextLabel?.setColor(.red)    // TODO: use targetColor
 
             } else {
-                let p = exercise.plan.clone()
-                switch p.start(workout, name) {
-                case .ok:
-                    cell.textLabel!.text = p.label()
-                    cell.detailTextLabel!.text = p.sublabel()
-                    let calendar = Calendar.current
-                    if let completed = exercise.completed[workout.name], calendar.isDate(completed, inSameDayAs: Date()) {
-                        cell.textLabel?.setColor(.lightGray)
-                        cell.detailTextLabel?.setColor(.lightGray)
-                    } else {
+                let cloned = exercise.plan.clone()
+                if cloned.start(workout, name) == nil {
+                    if case let .error(err) = cloned.state {
+                        cell.textLabel!.text = name
+                        cell.detailTextLabel!.text = err
                         cell.textLabel?.setColor(.black)
                         cell.detailTextLabel?.setColor(.black)
+
+                    } else {
+                        cell.textLabel!.text = cloned.label()
+                        cell.detailTextLabel!.text = cloned.sublabel()
+                        let calendar = Calendar.current
+                        if let completed = exercise.completed[workout.name], calendar.isDate(completed, inSameDayAs: Date()) {
+                            cell.textLabel?.setColor(.lightGray)
+                            cell.detailTextLabel?.setColor(.lightGray)
+                        } else {
+                            cell.textLabel?.setColor(.black)
+                            cell.detailTextLabel?.setColor(.black)
+                        }
                     }
 
-                case .newPlan(_):
-                    cell.textLabel!.text = p.label()
+                } else {
+                    cell.textLabel!.text = cloned.label()
                     cell.detailTextLabel!.text = "Not completed"
-                    cell.textLabel?.setColor(.black)
-                    cell.detailTextLabel?.setColor(.black)
-
-                case .error(let mesg):
-                    cell.textLabel!.text = name
-                    cell.detailTextLabel!.text = mesg
                     cell.textLabel?.setColor(.black)
                     cell.detailTextLabel?.setColor(.black)
                 }
@@ -192,32 +193,35 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         let name = workout.exercises[index]
         let app = UIApplication.shared.delegate as! AppDelegate
         if let exercise = app.program.findExercise(name) {
-            if exercise.plan.underway(workout) {
+            if case .underway = exercise.plan.state, exercise.plan.on(workout) {
                 presentExercise(exercise)
 
             } else {
                 // If we're started but not underway we want to re-start to ensure that we pickup
                 // on any changes from a base exercise.
-                switch exercise.plan.start(workout, name) {
-                case .ok:
-                    presentExercise(exercise)
-                    
-                case .newPlan(let p):
-                    let newName = exercise.name + "-" + p.planName
-                    let newExercise = exercise.withPlan(newName, p)
+                if let newPlan = exercise.plan.start(workout, name) {
+                    let newName = exercise.name + "-" + newPlan.planName
+                    let newExercise = exercise.withPlan(newName, newPlan)
                     app.program.setExercise(newExercise)
                     
-                    switch p.start(workout, newName) {
-                    case .ok:
-                        presentExercise(newExercise)
-                    case .newPlan(let q):
-                        err = "Plan \(exercise.plan.planName) started plan \(p.planName) which started \(q.planName)"
+                    if let newerPlan = newPlan.start(workout, newName) {
+                        err = "Plan \(exercise.plan.planName) started plan \(newPlan.planName) which started \(newerPlan.planName)"
+                    } else {
+                        switch newPlan.state {
+                        case .error(let mesg):
+                            err = mesg
+                        default:
+                            presentExercise(newExercise)
+                        }
+                    }
+
+                } else {
+                    switch exercise.plan.state {
                     case .error(let mesg):
                         err = mesg
+                    default:
+                        presentExercise(exercise)
                     }
-                    
-                case .error(let mesg):
-                    err = mesg
                 }
             }
         }

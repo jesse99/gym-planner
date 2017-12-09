@@ -93,14 +93,19 @@ public class VariableRepsPlan : Plan {
         self.sets = store.getObjArray("sets")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
-        self.done = store.getBool("done", ifMissing: false)
+        self.state = store.getObj("state", ifMissing: .waiting)
 
-        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-        let calendar = Calendar.current
-        if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
-            sets = []
-            setIndex = 0
-            done = false
+        switch state {
+        case .waiting:
+            break
+        default:
+            let calendar = Calendar.current
+            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+                sets = []
+                setIndex = 0
+                state = .waiting
+            }
         }
     }
     
@@ -116,13 +121,14 @@ public class VariableRepsPlan : Plan {
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
-        store.addBool("done", done)
+        store.addObj("state", state)
     }
     
     // Plan methods
     public let planName: String
     public let typeName: String
-    
+    public var state = PlanState.waiting
+
     public func clone() -> Plan {
         let store = Store()
         store.addObj("self", self)
@@ -130,23 +136,28 @@ public class VariableRepsPlan : Plan {
         return result
     }
     
-    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> Plan? {
         os_log("starting VariableRepsPlan for %@ and %@", type: .info, planName, exerciseName)
         self.sets = []
         self.setIndex = 0
-        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
         
         switch findVariableRepsSetting(exerciseName) {
         case .right(let setting):
+            self.state = .started
             buildSets(setting)
             frontend.saveExercise(exerciseName)
-            return .ok
             
         case .left(let err):
-            return .error(err)
+            self.state = .error(err)
         }
+
+        return nil
+    }
+    
+    public func on(_ workout: Workout) -> Bool {
+        return workoutName == workout.name
     }
     
     public func refresh() {
@@ -156,14 +167,6 @@ public class VariableRepsPlan : Plan {
         case .left(_):
             break
         }
-    }
-    
-    public func isStarted() -> Bool {
-        return !sets.isEmpty && !finished()
-    }
-    
-    public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 0 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -213,7 +216,11 @@ public class VariableRepsPlan : Plan {
     public func restSecs() -> RestTime {
         switch findRestSecs(exerciseName) {
         case .right(let secs):
-            return RestTime(autoStart: !finished() && setIndex > 0, secs: secs)
+            if case .finished = state {
+                return RestTime(autoStart: false, secs: secs)
+            } else {
+                return RestTime(autoStart: setIndex > 0, secs: secs)
+            }
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
         }
@@ -240,17 +247,9 @@ public class VariableRepsPlan : Plan {
         }
     }
     
-    public func atStart() -> Bool {
-        return setIndex == 0
-    }
-    
-    public func finished() -> Bool {
-        return done
-    }
-    
     public func reset() {
         setIndex = 0
-        done = false
+        state = .started
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -266,13 +265,12 @@ public class VariableRepsPlan : Plan {
     // Internal items
     private func doNext() {
         setIndex += 1
+        state = .underway
         frontend.saveExercise(exerciseName)
     }
     
     private func doFinish(_ stalled: Bool) {
-        done = true
-        frontend.assert(finished(), "VariableRepsPlan is not finished in doFinish")
-        
+        state = .finished
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
         }
@@ -340,6 +338,5 @@ public class VariableRepsPlan : Plan {
     private var exerciseName: String = ""
     private var sets: [Set] = []
     private var history: [Result] = []
-    private var setIndex: Int = 0
-    private var done = false
+    private var setIndex = 0
 }

@@ -35,14 +35,19 @@ public class NRepMaxPlan : Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.weight = store.getDbl("weight")
         self.setNum = store.getInt("setNum")
-        self.done = store.getBool("done")
-        
-        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-        let calendar = Calendar.current
-        if !calendar.isDate(savedOn, inSameDayAs: Date()) && setNum > 0 {
-            setNum = 0
-            weight = 0.0
-            done = false
+        self.state = store.getObj("state", ifMissing: .waiting)
+
+        switch state {
+        case .waiting:
+            break
+        default:
+            let calendar = Calendar.current
+            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+                setNum = 1
+                weight = 0.0
+                state = .waiting
+            }
         }
     }
     
@@ -53,14 +58,15 @@ public class NRepMaxPlan : Plan {
         store.addStr("exerciseName", exerciseName)
         store.addDbl("weight", weight)
         store.addInt("setNum", setNum)
-        store.addBool("done", done)
+        store.addObj("state", state)
         store.addDate("savedOn", Date())
     }
     
     // Plan methods
     public let planName: String
     public let typeName: String
-    
+    public var state = PlanState.waiting
+
     public func clone() -> Plan {
         let store = Store()
         store.addObj("self", self)
@@ -68,7 +74,7 @@ public class NRepMaxPlan : Plan {
         return result
     }
     
-    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> Plan? {
         os_log("starting NRepMaxPlan for %@ and %@", type: .info, planName, exerciseName)
         self.workoutName = workout.name
         self.exerciseName = exerciseName
@@ -77,26 +83,22 @@ public class NRepMaxPlan : Plan {
         case .right(let apparatus):
             self.weight = Weight(0.0, apparatus).closest().weight
             self.setNum = 1
-            self.done = false
+            self.state = .started
             frontend.saveExercise(exerciseName)
-
-            return .ok
             
         case .left(let err):
-            return .error(err)
+            self.state = .error(err)
         }
+
+        return nil
+    }
+    
+    public func on(_ workout: Workout) -> Bool {
+        return workoutName == workout.name
     }
     
     public func refresh() {
         // nothing to do
-    }
-    
-    public func isStarted() -> Bool {
-        return setNum > 0 && !finished()
-    }
-    
-    public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setNum > 1 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -175,25 +177,17 @@ public class NRepMaxPlan : Plan {
         return result
     }
     
-    public func atStart() -> Bool {
-        return setNum == 1
-    }
-    
-    public func finished() -> Bool {
-        return done
-    }
-    
     public func reset() {
         switch findApparatus(exerciseName) {
         case .right(let apparatus):
             self.weight = Weight(0.0, apparatus).closest().weight
             setNum = 1
-            done = false
+            state = .started
 
-        case .left(_):
+        case .left(let err):
             self.weight = 0.0
             setNum = 1
-            done = true
+            state = .error(err)
         }
         frontend.saveExercise(exerciseName)
     }
@@ -208,8 +202,9 @@ public class NRepMaxPlan : Plan {
     
     // Internal items
     private func doNext(_ nextWeight: Double) {
-        weight = nextWeight
         setNum += 1
+        weight = nextWeight
+        state = .underway
         frontend.saveExercise(exerciseName)
     }
     
@@ -218,7 +213,7 @@ public class NRepMaxPlan : Plan {
             exercise.completed[workoutName] = Date()
         }
         
-        done = true
+        state = .finished
         updateWeight()
         frontend.saveExercise(exerciseName)
     }
@@ -240,6 +235,5 @@ public class NRepMaxPlan : Plan {
     private var workoutName: String = ""
     private var exerciseName: String = ""
     private var weight: Double = 0.0
-    private var setNum: Int = 0
-    private var done = false
+    private var setNum = 1
 }

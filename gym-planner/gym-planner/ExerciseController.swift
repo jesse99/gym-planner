@@ -82,12 +82,12 @@ class ExerciseController: UIViewController {
         amountLabel.text = current.amount
         detailsLabel.text = current.details
         
-        if !exercise.plan.finished() {
-            nextButton.setTitle(current.buttonName, for: .normal)
-            startTimerButton.isHidden = !current.showStartButton
-        } else {
+        if case .finished = exercise.plan.state {
             nextButton.setTitle("All Done", for: .normal)
             startTimerButton.isHidden = false
+        } else {
+            nextButton.setTitle(current.buttonName, for: .normal)
+            startTimerButton.isHidden = !current.showStartButton
         }
         
         if exercise.prevExercise != nil || exercise.nextExercise != nil {
@@ -99,7 +99,11 @@ class ExerciseController: UIViewController {
         previousLabel.text = exercise.plan.prevLabel()
         historyLabel.text = exercise.plan.historyLabel()
 
-        resetButton.isEnabled = !exercise.plan.atStart()
+        if case .underway = exercise.plan.state {
+            resetButton.isEnabled = true
+        } else {
+            resetButton.isEnabled = false
+        }
         startTimerButton.isEnabled = exercise.plan.restSecs().secs > 0
 
         nextButton.titleLabel?.font = UIFont.systemFont(ofSize: 32)
@@ -165,7 +169,7 @@ class ExerciseController: UIViewController {
         //dismissTooltip()
         stopTimer()
         
-        if exercise.plan.finished() {
+        if case .finished = exercise.plan.state {
             self.performSegue(withIdentifier: unwindTo, sender: self)
         } else {
             let results = exercise.plan.completions()
@@ -189,7 +193,7 @@ class ExerciseController: UIViewController {
     }
     
     private func handleNext(_ action: String) {
-        if exercise.plan.finished() {
+        if case .finished = exercise.plan.state {
             updateUI()
             maybeStartTimer()
         } else {
@@ -302,27 +306,31 @@ class ExerciseController: UIViewController {
         breadcrumb = breadcrumb.replacingOccurrences(of: exercise.name, with: toName)
         exercise = frontend.findExercise(toName)!
         
-        switch exercise.plan.start(workout, toName) {
-        case .ok:
-            breadcrumbLabel.text = breadcrumb
-
-        case .newPlan(let p):
-            let newName = exercise.name + "-" + p.planName
-            let newExercise = exercise.withPlan(newName, p)
+        if let newPlan = exercise.plan.start(workout, toName) {
+            let newName = exercise.name + "-" + newPlan.planName
+            let newExercise = exercise.withPlan(newName, newPlan)
             app.program.setExercise(newExercise)
             
-            switch p.start(workout, newName) {
-            case .ok:
-                breadcrumb = breadcrumb.replacingOccurrences(of: toName, with: newName)
-                exercise = newExercise
-            case .newPlan(let q):
-                breadcrumbLabel.text = "Plan \(exercise.plan.planName) started plan \(p.planName) which started \(q.planName)"
+            if let newerPlan = newPlan.start(workout, newName) {
+                breadcrumbLabel.text = "Plan \(exercise.plan.planName) started plan \(newPlan.planName) which started \(newerPlan.planName)"
+
+            } else {
+                switch newPlan.state {
+                case .error(let mesg):
+                    breadcrumbLabel.text = mesg
+                default:
+                    breadcrumb = breadcrumb.replacingOccurrences(of: toName, with: newName)
+                    exercise = newExercise
+                }
+            }
+
+        } else {
+            switch exercise.plan.state {
             case .error(let mesg):
                 breadcrumbLabel.text = mesg
+            default:
+                breadcrumbLabel.text = breadcrumb
             }
-            
-        case .error(let mesg):
-            breadcrumbLabel.text = mesg
         }
         frontend.saveExercise(exercise.name)
 

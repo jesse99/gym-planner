@@ -156,15 +156,20 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.sets = store.getObjArray("sets")
         self.maxWeight = store.getDbl("maxWeight")
         self.setIndex = store.getInt("setIndex", ifMissing: 0)
-        self.done = store.getBool("done", ifMissing: false)
+        self.state = store.getObj("state", ifMissing: .waiting)
 
-        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-        let calendar = Calendar.current
-        if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
-            sets = []
-            setIndex = 0
-            maxWeight = 0.0
-            done = false
+        switch state {
+        case .waiting:
+            break
+        default:
+            let calendar = Calendar.current
+            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+                sets = []
+                setIndex = 0
+                maxWeight = 0.0
+                state = .waiting
+            }
         }
     }
     
@@ -180,7 +185,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         store.addDbl("maxWeight", maxWeight)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
-        store.addBool("done", done)
+        store.addObj("state", state)
     }
 
     public var debugDescription: String {
@@ -190,7 +195,8 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     // Plan methods
     public let planName: String
     public let typeName: String
-    
+    public var state = PlanState.waiting
+
     public func clone() -> Plan {
         let store = Store()
         store.addObj("self", self)
@@ -198,29 +204,35 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         return result
     }
     
-    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> Plan? {
         os_log("starting MastersBasicCyclePlan for %@ and %@", type: .info, planName, exerciseName)
         
         self.sets = []
         self.setIndex = 0
-        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
 
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             if setting.weight == 0.0 {
-                return .newPlan(NRepMaxPlan("Rep Max", workReps: cycles.first?.workReps ?? 5))
+                self.state = .blocked
+                return NRepMaxPlan("Rep Max", workReps: cycles.first?.workReps ?? 5)
             }
             
             buildSets(setting)
             frontend.saveExercise(exerciseName)
             
-            return .ok
+            self.state = .started
+            return nil
             
         case .left(let err):
-            return .error(err)
+            self.state = .error(err)
+            return nil
         }
+    }
+    
+    public func on(_ workout: Workout) -> Bool {
+        return workoutName == workout.name
     }
     
     public func refresh() {
@@ -232,14 +244,6 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         case .left(_):
             break
         }
-    }
-    
-    public func isStarted() -> Bool {
-        return !sets.isEmpty && !finished()
-    }
-    
-    public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 0 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -307,7 +311,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     public func restSecs() -> RestTime {
         switch findRestSecs(exerciseName) {
         case .right(let secs):
-            if finished() {
+            if case .finished = state {
                 return RestTime(autoStart: true, secs: secs)   // TODO: make this an option?
             } else if setIndex > 0 && sets[setIndex-1].warmup && !sets[setIndex].warmup {
                 return RestTime(autoStart: true, secs: secs/2)
@@ -336,17 +340,9 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         }
     }
 
-    public func atStart() -> Bool {
-        return setIndex == 0
-    }
-    
-    public func finished() -> Bool {
-        return done
-    }
-
     public func reset() {
         setIndex = 0
-        done = false
+        state = .started
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -363,13 +359,12 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     // Internal items
     private func doNext() {
         setIndex += 1
+        state = .underway
         frontend.saveExercise(exerciseName)
     }
     
     private func doFinish(_ missed: Bool) {
-        done = true
-        frontend.assert(finished(), "MastersBasicCyclePlan not finished in doFinish")
-        
+        state = .finished
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
         }
@@ -480,6 +475,5 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     private var sets: [Set] = []
     private var maxWeight: Double = 0.0
     private var setIndex = 0
-    private var done = false
 }
 

@@ -111,14 +111,19 @@ public class PercentOfPlan : Plan {
         self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.sets = store.getObjArray("sets")
         self.setIndex = store.getInt("setIndex")
-        self.done = store.getBool("done", ifMissing: false)
+        self.state = store.getObj("state", ifMissing: .waiting)
 
-        let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-        let calendar = Calendar.current
-        if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
-            sets = []
-            setIndex = 0
-            done = false
+        switch state {
+        case .waiting:
+            break
+        default:
+            let calendar = Calendar.current
+            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
+            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+                sets = []
+                setIndex = 0
+                state = .waiting
+            }
         }
     }
     
@@ -136,13 +141,14 @@ public class PercentOfPlan : Plan {
         store.addObjArray("sets", sets)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
-        store.addBool("done", done)
+        store.addObj("state", state)
     }
     
     // Plan methods
     public let planName: String
     public let typeName: String
-    
+    public var state = PlanState.waiting
+
     public func clone() -> Plan {
         let store = Store()
         store.addObj("self", self)
@@ -150,12 +156,11 @@ public class PercentOfPlan : Plan {
         return result
     }
     
-    public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
+    public func start(_ workout: Workout, _ exerciseName: String) -> Plan? {
         os_log("starting PercentOfPlan for %@ and %@", type: .info, planName, exerciseName)
 
         self.sets = []
         self.setIndex = 0
-        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
 
@@ -163,18 +168,23 @@ public class PercentOfPlan : Plan {
         case .right(let apparatus):
             switch getOtherWeight() {
             case .right(let otherWeight):
+                self.state = .started
                 buildSets(apparatus, otherWeight)
                 frontend.saveExercise(exerciseName)
 
-            case .left(let message):
-                return .error(message)
+            case .left(let err):
+                self.state = .error(err)
             }
             
-            return .ok
-            
         case .left(let err):
-            return .error(err)
+            self.state = .error(err)
         }
+        
+        return nil
+    }
+    
+    public func on(_ workout: Workout) -> Bool {
+        return workoutName == workout.name
     }
     
     public func refresh() {
@@ -190,14 +200,6 @@ public class PercentOfPlan : Plan {
         case .left(_):
             break
         }
-    }
-    
-    public func isStarted() -> Bool {
-        return !sets.isEmpty && !finished()
-    }
-    
-    public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 0 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -256,7 +258,11 @@ public class PercentOfPlan : Plan {
     public func restSecs() -> RestTime {
         switch findRestSecs(exerciseName) {
         case .right(let secs):
-            return RestTime(autoStart: !finished() && setIndex > 0 && !sets[setIndex-1].warmup, secs: secs)
+            if case .finished = state {
+                return RestTime(autoStart: false, secs: secs)
+            } else {
+                return RestTime(autoStart: setIndex > 0 && !sets[setIndex-1].warmup, secs: secs)
+            }
 
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
@@ -276,17 +282,9 @@ public class PercentOfPlan : Plan {
         }
     }
     
-    public func atStart() -> Bool {
-        return setIndex == 0
-    }
-    
-    public func finished() -> Bool {
-        return done
-    }
-    
     public func reset() {
         setIndex = 0
-        done = false
+        state = .started
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -302,16 +300,16 @@ public class PercentOfPlan : Plan {
     // Internal items
     private func doNext() {
         setIndex += 1
+        state = .underway
         frontend.saveExercise(exerciseName)
     }
     
     private func doFinish() {
+        state = .finished
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
         }
         
-        done = true
-        frontend.assert(finished(), "PercentOfPlan not finished in doFinish")
         addResult()
         frontend.saveExercise(exerciseName)
     }
@@ -358,8 +356,13 @@ public class PercentOfPlan : Plan {
             case .right(let otherExercise):
                 let p = otherExercise.plan.clone()
                 if let workout = frontend.findWorkout(workoutName) {
-                    switch p.start(workout, otherName) {
-                    case .ok:
+                    _ = p.start(workout, otherName)
+                    switch p.state {
+                    case .blocked:
+                        return .left("Execute \(otherName) first")
+                    case .error(let err):
+                        return .left(err)
+                    default:
                         // We want to use whatever the user last lifted,
                         if let weight = p.findLastWeight() {
                             return .right(weight)
@@ -368,8 +371,6 @@ public class PercentOfPlan : Plan {
                             os_log("falling back onto settings weight for %@", type: .info, otherName)
                             return findCurrentWeight(otherName)
                         }
-                    case .newPlan(_): return .left("Execute \(otherName) first")
-                    case .error(let err): return .left(err)
                     }
                 } else {
                     return .left("Couldn't find workout \(workoutName)")
@@ -394,5 +395,4 @@ public class PercentOfPlan : Plan {
     private var history: [Result] = []
     private var sets: [Set] = []
     private var setIndex: Int = 0
-    private var done = false
 }
