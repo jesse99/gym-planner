@@ -151,14 +151,15 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             // Otherwise highlight the first workout the user hasn't completed or the oldest completed workout.
             let selectedIndex = findFirstMissingWorkout() ?? findOldestWorkout() ?? app.program.workouts.count
-            let color = selectedIndex == index && todays.isEmpty ? UIColor.red : UIColor.black
-            cell.textLabel!.setColor(color)
-            cell.detailTextLabel!.setColor(color)
+            var color = selectedIndex == index && todays.isEmpty ? UIColor.red : UIColor.black
 
             if let (date, partial) = dateWorkoutWasCompleted(workout) {
                 let calendar = Calendar.current
-                if calendar.isDate(date, inSameDayAs: Date()) {
-                    cell.detailTextLabel!.text = partial ? "in progress" : "finished today"
+                if calendar.isDate(date, inSameDayAs: Date()) && partial {
+                    cell.detailTextLabel!.text = "in progress"
+                } else if calendar.isDate(date, inSameDayAs: Date()) && !partial {
+                    cell.detailTextLabel!.text = "finished today"
+                    color = .lightGray
                 } else if partial {
                     cell.detailTextLabel!.text = "partially completed \(date.daysName())"
                 } else {
@@ -168,6 +169,9 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 cell.detailTextLabel!.text = "not completed"
             }
+
+            cell.textLabel!.setColor(color)
+            cell.detailTextLabel!.setColor(color)
         }
         
         return cell
