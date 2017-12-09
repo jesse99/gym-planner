@@ -70,11 +70,13 @@ public class TimedPlan : Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
-        
+        self.done = store.getBool("done", ifMissing: false)
+
         let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
         let calendar = Calendar.current
         if !calendar.isDate(savedOn, inSameDayAs: Date()) && setIndex > 0 {
             setIndex = 0
+            done = false
         }
     }
     
@@ -88,6 +90,7 @@ public class TimedPlan : Plan {
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
+        store.addBool("done", done)
     }
     
     // Plan methods
@@ -104,6 +107,7 @@ public class TimedPlan : Plan {
     public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting TimedPlan for %@ and %@", type: .info, planName, exerciseName)
         self.setIndex = 1
+        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
         
@@ -119,7 +123,7 @@ public class TimedPlan : Plan {
     }
     
     public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 1 && workout.name == workoutName
+        return isStarted() && setIndex > 1 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -149,8 +153,6 @@ public class TimedPlan : Plan {
     }
     
     public func current() -> Activity {
-        frontend.assert(!finished(), "TimedPlan is finished in current")
-        
         var subtitle = ""
         if let target = targetTime {
             subtitle = "Target is \(secsToStr(target))"
@@ -191,11 +193,12 @@ public class TimedPlan : Plan {
     }
     
     public func finished() -> Bool {
-        return setIndex > numSets
+        return done
     }
     
     public func reset() {
         setIndex = 1
+        done = false
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -215,7 +218,7 @@ public class TimedPlan : Plan {
     }
     
     private func doFinish() {
-        setIndex += 1
+        done = true
         frontend.assert(finished(), "TimedPlan is not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
@@ -245,4 +248,5 @@ public class TimedPlan : Plan {
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var setIndex: Int = 0
+    private var done = false
 }

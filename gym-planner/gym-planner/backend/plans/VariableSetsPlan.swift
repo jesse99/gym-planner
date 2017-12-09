@@ -70,11 +70,13 @@ public class VariableSetsPlan: Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.reps = store.getIntArray("reps")
-        
+        self.done = store.getBool("done", ifMissing: false)
+
         let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
         let calendar = Calendar.current
         if !calendar.isDate(savedOn, inSameDayAs: Date()) && !reps.isEmpty {
             reps = []
+            done = false
         }
     }
     
@@ -87,6 +89,7 @@ public class VariableSetsPlan: Plan {
         store.addObjArray("history", history)
         store.addIntArray("reps", reps)
         store.addDate("savedOn", Date())
+        store.addBool("done", done)
     }
     
     // Plan methods
@@ -104,6 +107,7 @@ public class VariableSetsPlan: Plan {
         os_log("starting VariableSetsPlan for %@ and %@", type: .info, planName, exerciseName)
 
         self.reps = []
+        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
         frontend.saveExercise(exerciseName)
@@ -120,7 +124,7 @@ public class VariableSetsPlan: Plan {
     }
     
     public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && !reps.isEmpty && workout.name == workoutName
+        return isStarted() && !reps.isEmpty && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -169,8 +173,6 @@ public class VariableSetsPlan: Plan {
     }
     
     public func current() -> Activity {
-        frontend.assert(!finished(), "VariableSetsPlan finished in current")
-        
         switch findVariableRepsSetting(exerciseName) {
         case .right(let setting):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
@@ -250,18 +252,12 @@ public class VariableSetsPlan: Plan {
     }
     
     public func finished() -> Bool {
-        switch findVariableRepsSetting(exerciseName) {
-        case .right(let setting):
-            let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-            return completed >= setting.requestedReps
-
-        case .left(_):
-            return true
-        }
+        return done
     }
     
     public func reset() {
         reps = []
+        done = false
         frontend.saveExercise(exerciseName)
     }
     
@@ -277,12 +273,19 @@ public class VariableSetsPlan: Plan {
     private func do_complete(_ count: Int) {
         reps.append(count)
         
-        if finished() {
-            if case let .right(exercise) = findExercise(exerciseName) {
-                exercise.completed[workoutName] = Date()
+        switch findVariableRepsSetting(exerciseName) {
+        case .right(let setting):
+            let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
+            if completed >= setting.requestedReps {
+                if case let .right(exercise) = findExercise(exerciseName) {
+                    exercise.completed[workoutName] = Date()
+                }
+                
+                addResult()
             }
-            
-            addResult()
+
+        case .left(_):
+            done = true
         }
         frontend.saveExercise(exerciseName)
     }
@@ -306,6 +309,5 @@ public class VariableSetsPlan: Plan {
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var reps: [Int] = []
+    private var done = false
 }
-
-

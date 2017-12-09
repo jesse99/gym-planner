@@ -76,18 +76,16 @@ class ExerciseController: UIViewController {
     }
 
     private func updateUI() {
+        let current = exercise.plan.current()
+        titleLabel.text = current.title
+        subtitleLabel.text = current.subtitle
+        amountLabel.text = current.amount
+        detailsLabel.text = current.details
+        
         if !exercise.plan.finished() {
-            let current = exercise.plan.current()    // TODO: plan can be nil
-            titleLabel.text = current.title
-            subtitleLabel.text = current.subtitle
-            amountLabel.text = current.amount
-            detailsLabel.text = current.details
-
             nextButton.setTitle(current.buttonName, for: .normal)
             startTimerButton.isHidden = !current.showStartButton
-
         } else {
-            //titleLabel.text = "All Done"
             nextButton.setTitle("All Done", for: .normal)
             startTimerButton.isHidden = false
         }

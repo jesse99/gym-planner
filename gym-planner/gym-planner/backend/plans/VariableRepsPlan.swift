@@ -93,12 +93,14 @@ public class VariableRepsPlan : Plan {
         self.sets = store.getObjArray("sets")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
-        
+        self.done = store.getBool("done", ifMissing: false)
+
         let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
         let calendar = Calendar.current
         if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
             sets = []
             setIndex = 0
+            done = false
         }
     }
     
@@ -114,6 +116,7 @@ public class VariableRepsPlan : Plan {
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
+        store.addBool("done", done)
     }
     
     // Plan methods
@@ -131,6 +134,7 @@ public class VariableRepsPlan : Plan {
         os_log("starting VariableRepsPlan for %@ and %@", type: .info, planName, exerciseName)
         self.sets = []
         self.setIndex = 0
+        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
         
@@ -159,7 +163,7 @@ public class VariableRepsPlan : Plan {
     }
     
     public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 0 && workout.name == workoutName
+        return isStarted() && setIndex > 0 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -197,8 +201,6 @@ public class VariableRepsPlan : Plan {
     }
     
     public func current() -> Activity {
-        frontend.assert(!finished(), "VariableRepsPlan is finished in current")
-        
         return Activity(
             title: sets[setIndex].title,
             subtitle: "target is \(maxReps) reps",
@@ -243,11 +245,12 @@ public class VariableRepsPlan : Plan {
     }
     
     public func finished() -> Bool {
-        return setIndex == sets.count
+        return done
     }
     
     public func reset() {
         setIndex = 0
+        done = false
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -267,7 +270,7 @@ public class VariableRepsPlan : Plan {
     }
     
     private func doFinish(_ stalled: Bool) {
-        setIndex += 1
+        done = true
         frontend.assert(finished(), "VariableRepsPlan is not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
@@ -338,7 +341,5 @@ public class VariableRepsPlan : Plan {
     private var sets: [Set] = []
     private var history: [Result] = []
     private var setIndex: Int = 0
+    private var done = false
 }
-
-
-

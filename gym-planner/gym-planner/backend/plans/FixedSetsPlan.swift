@@ -61,11 +61,13 @@ public class FixedSetsPlan : Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
+        self.done = store.getBool("done", ifMissing: false)
         
         let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
         let calendar = Calendar.current
         if !calendar.isDate(savedOn, inSameDayAs: Date()) && setIndex > 0 {
             setIndex = 0
+            done = false
         }
     }
     
@@ -79,6 +81,7 @@ public class FixedSetsPlan : Plan {
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
+        store.addBool("done", done)
     }
     
     // Plan methods
@@ -95,6 +98,7 @@ public class FixedSetsPlan : Plan {
     public func start(_ workout: Workout, _ exerciseName: String) -> StartResult {
         os_log("starting FixedSetsPlan for %@ and %@", type: .info, planName, exerciseName)
         self.setIndex = 1
+        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
         
@@ -111,7 +115,7 @@ public class FixedSetsPlan : Plan {
     }
     
     public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 1 && workout.name == workoutName
+        return isStarted() && setIndex > 1 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -152,8 +156,6 @@ public class FixedSetsPlan : Plan {
     }
     
     public func current() -> Activity {
-        frontend.assert(!finished(), "FixedSetsPlan is finished in current")
-        
         var suffix = ""
         if case let .right(weight) = findCurrentWeight(exerciseName), weight > 0.0 {
             suffix = " @ \(Weight.friendlyUnitsStr(weight, plural: true))"
@@ -194,11 +196,12 @@ public class FixedSetsPlan : Plan {
     }
     
     public func finished() -> Bool {
-        return setIndex == numSets+1
+        return done
     }
     
     public func reset() {
         setIndex = 1
+        done = false
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -218,7 +221,7 @@ public class FixedSetsPlan : Plan {
     }
     
     private func doFinish() {
-        setIndex += 1
+        done = true
         frontend.assert(finished(), "FixedSetsPlan is not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
@@ -248,5 +251,5 @@ public class FixedSetsPlan : Plan {
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var setIndex: Int = 0
+    private var done = false
 }
-

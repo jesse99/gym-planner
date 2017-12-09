@@ -111,12 +111,14 @@ public class PercentOfPlan : Plan {
         self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.sets = store.getObjArray("sets")
         self.setIndex = store.getInt("setIndex")
-        
+        self.done = store.getBool("done", ifMissing: false)
+
         let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
         let calendar = Calendar.current
         if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
             sets = []
             setIndex = 0
+            done = false
         }
     }
     
@@ -134,6 +136,7 @@ public class PercentOfPlan : Plan {
         store.addObjArray("sets", sets)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
+        store.addBool("done", done)
     }
     
     // Plan methods
@@ -152,6 +155,7 @@ public class PercentOfPlan : Plan {
 
         self.sets = []
         self.setIndex = 0
+        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
 
@@ -193,7 +197,7 @@ public class PercentOfPlan : Plan {
     }
     
     public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 0 && workout.name == workoutName
+        return isStarted() && setIndex > 0 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -239,8 +243,6 @@ public class PercentOfPlan : Plan {
     }
     
     public func current() -> Activity {
-        frontend.assert(!finished(), "PercentOfPlan finished in current")
-        
         let info = sets[setIndex].weight
         return Activity(
             title: sets[setIndex].title,
@@ -279,11 +281,12 @@ public class PercentOfPlan : Plan {
     }
     
     public func finished() -> Bool {
-        return setIndex == sets.count
+        return done
     }
     
     public func reset() {
         setIndex = 0
+        done = false
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -307,7 +310,7 @@ public class PercentOfPlan : Plan {
             exercise.completed[workoutName] = Date()
         }
         
-        setIndex += 1
+        done = true
         frontend.assert(finished(), "PercentOfPlan not finished in doFinish")
         addResult()
         frontend.saveExercise(exerciseName)
@@ -391,6 +394,5 @@ public class PercentOfPlan : Plan {
     private var history: [Result] = []
     private var sets: [Set] = []
     private var setIndex: Int = 0
+    private var done = false
 }
-
-

@@ -89,7 +89,6 @@ public protocol Plan: Storable {
     func historyLabel() -> String
     
     /// Returns a struct outlining what the user should currently be doing.
-    /// Note that finished must be false.
     func current() -> Activity
     
     /// How long for the user to rest after completing whatever current told him to do.

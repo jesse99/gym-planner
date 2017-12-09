@@ -96,7 +96,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setNum > 1 && workout.name == workoutName
+        return isStarted() && setNum > 1 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -116,8 +116,6 @@ public class NRepMaxPlan : Plan {
     }
     
     public func current() -> Activity {
-        frontend.assert(!finished(), "NRepMaxPlan finished in current")
-        
         switch findApparatus(exerciseName) {
         case .right(let apparatus):
             let info = Weight(weight, apparatus).closest()

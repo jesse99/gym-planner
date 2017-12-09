@@ -116,12 +116,14 @@ public class LinearPlan : Plan {
         self.sets = store.getObjArray("sets")
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
-        
+        self.done = store.getBool("done", ifMissing: false)
+
         let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
         let calendar = Calendar.current
         if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
             sets = []
             setIndex = 0
+            done = false
         }
     }
 
@@ -139,6 +141,7 @@ public class LinearPlan : Plan {
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
+        store.addBool("done", done)
     }
     
     // Plan methods
@@ -156,6 +159,7 @@ public class LinearPlan : Plan {
         os_log("starting LinearPlan for %@ and %@", type: .info, planName, exerciseName)
         self.sets = []
         self.setIndex = 0
+        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
 
@@ -191,7 +195,7 @@ public class LinearPlan : Plan {
     }
     
     public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 0 && workout.name == workoutName
+        return isStarted() && setIndex > 0 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -227,8 +231,6 @@ public class LinearPlan : Plan {
     }
     
     public func current() -> Activity {
-        frontend.assert(!finished(), "LinearPlan is finished in current")
-        
         let info = sets[setIndex].weight
         return Activity(
             title: sets[setIndex].title,
@@ -268,11 +270,12 @@ public class LinearPlan : Plan {
     }
     
     public func finished() -> Bool {
-        return setIndex == sets.count
+        return done
     }
     
     public func reset() {
         setIndex = 0
+        done = false
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -292,7 +295,7 @@ public class LinearPlan : Plan {
     }
     
     private func doFinish(_ missed: Bool) {
-        setIndex += 1
+        done = true
         frontend.assert(finished(), "LinearPlan is not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
@@ -330,7 +333,7 @@ public class LinearPlan : Plan {
         case .left(let err):
             // Not sure if this can happen, maybe if the user edits the program after the plan starts.
             os_log("%@ advance failed: %@", type: .error, planName, err)
-            setIndex = sets.count
+            done = true
         }
     }
     
@@ -384,6 +387,7 @@ public class LinearPlan : Plan {
     private var sets: [Set] = []
     private var history: [Result] = []
     private var setIndex: Int = 0
+    private var done = false
 }
 
 

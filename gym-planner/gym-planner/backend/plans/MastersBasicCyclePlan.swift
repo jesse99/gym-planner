@@ -131,7 +131,6 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.typeName = "MastersBasicCyclePlan"
         self.cycles = cycles
         self.deloads = [1.0, 1.0, 0.9, 0.85, 0.8];
-        self.setIndex = 0
     }
     
     // This should consider typeName and whatever was passed into the init above.
@@ -156,14 +155,16 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.history = store.getObjArray("history")
         self.sets = store.getObjArray("sets")
         self.maxWeight = store.getDbl("maxWeight")
-        self.setIndex = store.getInt("mbc-setIndex", ifMissing: 0)
-        
+        self.setIndex = store.getInt("setIndex", ifMissing: 0)
+        self.done = store.getBool("done", ifMissing: false)
+
         let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
         let calendar = Calendar.current
         if !calendar.isDate(savedOn, inSameDayAs: Date()) && !sets.isEmpty {
             sets = []
             setIndex = 0
             maxWeight = 0.0
+            done = false
         }
     }
     
@@ -177,8 +178,9 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         store.addObjArray("history", history)
         store.addObjArray("sets", sets)
         store.addDbl("maxWeight", maxWeight)
-        store.addInt("mbc-setIndex", setIndex)
+        store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
+        store.addBool("done", done)
     }
 
     public var debugDescription: String {
@@ -201,6 +203,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         
         self.sets = []
         self.setIndex = 0
+        self.done = false
         self.workoutName = workout.name
         self.exerciseName = exerciseName
 
@@ -236,7 +239,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
     
     public func underway(_ workout: Workout) -> Bool {
-        return isStarted() && setIndex > 0 && workout.name == workoutName
+        return isStarted() && setIndex > 0 && !done && workout.name == workoutName
     }
     
     public func label() -> String {
@@ -290,8 +293,6 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
     
     public func current() -> Activity {
-        frontend.assert(!finished(), "MastersBasicCyclePlan finished in current")
-
         let info = sets[setIndex].weight
         return Activity(
             title: sets[setIndex].title,
@@ -340,11 +341,12 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
     
     public func finished() -> Bool {
-        return !sets.isEmpty && setIndex == sets.count
+        return done
     }
 
     public func reset() {
         setIndex = 0
+        done = false
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
     }
@@ -365,7 +367,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
     
     private func doFinish(_ missed: Bool) {
-        setIndex += 1
+        done = true
         frontend.assert(finished(), "MastersBasicCyclePlan not finished in doFinish")
         
         if case let .right(exercise) = findExercise(exerciseName) {
@@ -477,6 +479,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     private var history: [Result] = []
     private var sets: [Set] = []
     private var maxWeight: Double = 0.0
-    private var setIndex: Int
+    private var setIndex = 0
+    private var done = false
 }
 
