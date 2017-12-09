@@ -95,6 +95,9 @@ public protocol Plan: Storable {
     /// How long for the user to rest after completing whatever current told him to do.
     func restSecs() -> RestTime
     
+    /// Which sound to play when done resting. Usually kSystemSoundID_Vibrate.
+    func restSound() -> UInt32
+    
     /// If there is only one completion then just call the callback. Otherwise prompt the
     /// user and then call the callback for whichever completion the user chose.
     func completions() -> [Completion]

@@ -333,7 +333,7 @@ class ExerciseController: UIViewController {
     
     @IBAction func optionsPressed(_ sender: Any) {
 //        dismissTooltip()
-
+        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         switch exercise.settings {
         case .derivedWeight(let setting):
@@ -350,7 +350,7 @@ class ExerciseController: UIViewController {
             let view = storyboard.instantiateViewController(withIdentifier: "VariableRepsID") as! VariableRepsController
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
-            
+
         case .variableWeight(let setting):
             let view = storyboard.instantiateViewController(withIdentifier: "VariableWeightID") as! VariableWeightController
             view.initialize(exercise, setting, breadcrumbLabel.text!)
@@ -425,7 +425,7 @@ class ExerciseController: UIViewController {
             }
             let color = newColor(0, 100, 0) // DarkGreen
             if label.textColor != color {
-                AudioServicesPlayAlertSound(UInt32(kSystemSoundID_Vibrate))
+                AudioServicesPlayAlertSound(exercise.plan.restSound())
                 label.textColor = color
             }
             

@@ -1,4 +1,5 @@
 /// Sets and reps are fixed with an optional weight (set by the user).
+import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
 import os.log
 
@@ -174,6 +175,10 @@ public class FixedSetsPlan : Plan {
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
         }
+    }
+
+    public func restSound() -> UInt32 {
+        return UInt32(kSystemSoundID_Vibrate)
     }
     
     public func completions() -> [Completion] {

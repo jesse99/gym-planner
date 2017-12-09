@@ -174,6 +174,10 @@ public class TimedPlan : Plan {
         }
     }
     
+    public func restSound() -> UInt32 {
+        return 1007       // see http://iphonedevwiki.net/index.php/AudioServices
+    }
+    
     public func completions() -> [Completion] {
         if setIndex+1 <= numSets {
             return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]

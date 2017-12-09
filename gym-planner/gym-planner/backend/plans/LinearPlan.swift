@@ -1,4 +1,5 @@
 /// Advance weight after each successful workout.
+import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
 import os.log
 
@@ -246,6 +247,10 @@ public class LinearPlan : Plan {
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
         }
+    }
+    
+    public func restSound() -> UInt32 {
+        return UInt32(kSystemSoundID_Vibrate)
     }
     
     public func completions() -> [Completion] {

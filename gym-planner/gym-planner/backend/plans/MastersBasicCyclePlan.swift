@@ -1,5 +1,6 @@
 /// N (typically three) week cycle where reps drop and weight goes up. Progression happens after the
 /// last cycle if the first cycle went OK.
+import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
 import os.log
 
@@ -320,6 +321,10 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         }
     }
 
+    public func restSound() -> UInt32 {
+        return UInt32(kSystemSoundID_Vibrate)
+    }
+    
     public func completions() -> [Completion] {
         if setIndex+1 < sets.count {
             return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]

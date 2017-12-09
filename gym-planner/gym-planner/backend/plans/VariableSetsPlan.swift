@@ -1,4 +1,5 @@
 /// Used for exercises where the user can perform as many sets as required to do a specified number of reps.
+import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
 import os.log
 
@@ -218,6 +219,10 @@ public class VariableSetsPlan: Plan {
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
         }
+    }
+    
+    public func restSound() -> UInt32 {
+        return UInt32(kSystemSoundID_Vibrate)
     }
     
     public func completions() -> [Completion] {
