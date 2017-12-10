@@ -188,11 +188,11 @@ public class FixedSetsPlan : Plan {
         return UInt32(kSystemSoundID_Vibrate)
     }
     
-    public func completions() -> [Completion] {
+    public func completions() -> Completions {
         if setIndex+1 < numSets {
-            return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]
+            return .normal([Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})])
         } else {
-            return [Completion(title: "Done", isDefault: true, callback: {() -> Void in self.doFinish()})]
+            return .normal([Completion(title: "Done", isDefault: true, callback: {() -> Void in self.doFinish()})])
         }
     }
     

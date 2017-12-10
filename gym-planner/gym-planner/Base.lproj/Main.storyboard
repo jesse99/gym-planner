@@ -878,6 +878,183 @@
             </objects>
             <point key="canvasLocation" x="1393" y="1109"/>
         </scene>
+        <!--Cardio Result Controller-->
+        <scene sceneID="vdW-nZ-spD">
+            <objects>
+                <viewController storyboardIdentifier="CardioResultID" id="Wp0-be-MMC" customClass="CardioResultController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DE0-UP-2zY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breadcrumb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvA-ex-6TV">
+                                <rect key="frame" x="150.5" y="20" width="74.5" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mins:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lre-V1-kPG">
+                                <rect key="frame" x="10" y="70.5" width="67" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calories:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SIY-MH-Eoz">
+                                <rect key="frame" x="10" y="130.5" width="67" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gZX-Pd-OTF">
+                                <rect key="frame" x="87" y="66" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Sil-Yy-ADV"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                <connections>
+                                    <action selector="minsEdited:" destination="Wp0-be-MMC" eventType="editingChanged" id="Uix-UJ-Zge"/>
+                                </connections>
+                            </textField>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FYn-kV-d2Y">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="amt-2S-zCd">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="Ssv-7s-owY">
+                                            <connections>
+                                                <action selector="donePressed:" destination="Wp0-be-MMC" id="BEY-Q3-Dz7"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vrq-lJ-UhV">
+                                <rect key="frame" x="87" y="126" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="PcQ-Ma-eZU"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="gZX-Pd-OTF" firstAttribute="centerY" secondItem="lre-V1-kPG" secondAttribute="centerY" id="0R6-Tf-2pH"/>
+                            <constraint firstItem="SIY-MH-Eoz" firstAttribute="trailing" secondItem="lre-V1-kPG" secondAttribute="trailing" id="0YN-5f-JQn"/>
+                            <constraint firstItem="lre-V1-kPG" firstAttribute="leading" secondItem="bGJ-0N-SZb" secondAttribute="leading" constant="10" id="CVt-ih-hjZ"/>
+                            <constraint firstAttribute="bottom" secondItem="FYn-kV-d2Y" secondAttribute="bottom" id="CuP-fN-RqT"/>
+                            <constraint firstItem="Vrq-lJ-UhV" firstAttribute="centerY" secondItem="SIY-MH-Eoz" secondAttribute="centerY" id="DJy-0f-H6M"/>
+                            <constraint firstItem="Vrq-lJ-UhV" firstAttribute="leading" secondItem="SIY-MH-Eoz" secondAttribute="trailing" constant="10" id="Dee-38-wF3"/>
+                            <constraint firstItem="SIY-MH-Eoz" firstAttribute="leading" secondItem="lre-V1-kPG" secondAttribute="leading" id="NmA-CI-feb"/>
+                            <constraint firstItem="CvA-ex-6TV" firstAttribute="top" secondItem="bGJ-0N-SZb" secondAttribute="top" id="Xme-xm-Z2h"/>
+                            <constraint firstItem="FYn-kV-d2Y" firstAttribute="trailing" secondItem="bGJ-0N-SZb" secondAttribute="trailing" id="YUY-Tl-oi1"/>
+                            <constraint firstItem="FYn-kV-d2Y" firstAttribute="leading" secondItem="bGJ-0N-SZb" secondAttribute="leading" id="aOz-BK-oOz"/>
+                            <constraint firstItem="CvA-ex-6TV" firstAttribute="centerX" secondItem="DE0-UP-2zY" secondAttribute="centerX" id="lai-Hk-RdY"/>
+                            <constraint firstItem="Vrq-lJ-UhV" firstAttribute="top" secondItem="gZX-Pd-OTF" secondAttribute="bottom" constant="30" id="t5c-y9-AvP"/>
+                            <constraint firstItem="gZX-Pd-OTF" firstAttribute="top" secondItem="CvA-ex-6TV" secondAttribute="bottom" constant="30" id="uHk-gf-7k0"/>
+                            <constraint firstItem="Vrq-lJ-UhV" firstAttribute="leading" secondItem="gZX-Pd-OTF" secondAttribute="leading" id="wRT-vL-urK"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="bGJ-0N-SZb"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="e5y-3x-owz" appends="YES" id="AaS-Fc-y4z"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="breadcrumbLabel" destination="CvA-ex-6TV" id="GNz-u1-jmG"/>
+                        <outlet property="caloriesTextbox" destination="Vrq-lJ-UhV" id="xfq-9A-NHu"/>
+                        <outlet property="doneButton" destination="Ssv-7s-owY" id="3Lr-cm-uMb"/>
+                        <outlet property="minsTextbox" destination="gZX-Pd-OTF" id="nky-B7-uI3"/>
+                        <segue destination="2N7-TE-Kfh" kind="unwind" identifier="unwindToExerciseID" unwindAction="unwindToExercise:" id="8kn-UJ-xmg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E9R-5K-Jaz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="2N7-TE-Kfh" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="e5y-3x-owz">
+                    <connections>
+                        <action selector="viewTapped:" destination="Wp0-be-MMC" id="xwx-tL-9Z6"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2036" y="1104"/>
+        </scene>
+        <!--Intensity Controller-->
+        <scene sceneID="6cA-oC-q9j">
+            <objects>
+                <viewController storyboardIdentifier="IntensityID" id="Q6o-Yh-dle" customClass="IntensityController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1QA-0A-G5Q">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NoB-om-hXh">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="QYj-Fs-aEL">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="Lvn-4b-QJj">
+                                            <connections>
+                                                <action selector="donePressed:" destination="Q6o-Yh-dle" id="Mxv-Ak-dd2"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breadcrumb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FTT-0O-aOA">
+                                <rect key="frame" x="150.5" y="20" width="74.5" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xfa-jy-ZEC">
+                                <rect key="frame" x="10" y="70.5" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PsK-Jc-jcY">
+                                <rect key="frame" x="62" y="66" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="b4m-Ya-tgK"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="FTT-0O-aOA" firstAttribute="top" secondItem="mQT-Cp-Jsz" secondAttribute="top" id="426-9w-afO"/>
+                            <constraint firstItem="NoB-om-hXh" firstAttribute="bottom" secondItem="mQT-Cp-Jsz" secondAttribute="bottom" id="FPP-N7-HjG"/>
+                            <constraint firstItem="NoB-om-hXh" firstAttribute="trailing" secondItem="mQT-Cp-Jsz" secondAttribute="trailing" id="JJG-fI-Exu"/>
+                            <constraint firstItem="xfa-jy-ZEC" firstAttribute="leading" secondItem="mQT-Cp-Jsz" secondAttribute="leading" constant="10" id="N4h-9R-vNX"/>
+                            <constraint firstItem="PsK-Jc-jcY" firstAttribute="centerY" secondItem="xfa-jy-ZEC" secondAttribute="centerY" id="Z0A-gz-Xzd"/>
+                            <constraint firstItem="FTT-0O-aOA" firstAttribute="centerX" secondItem="1QA-0A-G5Q" secondAttribute="centerX" id="aXn-PX-Wjw"/>
+                            <constraint firstItem="NoB-om-hXh" firstAttribute="leading" secondItem="mQT-Cp-Jsz" secondAttribute="leading" id="cfZ-Sp-7eQ"/>
+                            <constraint firstItem="PsK-Jc-jcY" firstAttribute="top" secondItem="FTT-0O-aOA" secondAttribute="bottom" constant="30" id="h8V-3m-d9f"/>
+                            <constraint firstItem="PsK-Jc-jcY" firstAttribute="leading" secondItem="xfa-jy-ZEC" secondAttribute="trailing" constant="10" id="lj8-zs-eq8"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="mQT-Cp-Jsz"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="bGq-nv-Ubg" appends="YES" id="ln3-77-SHj"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="breadcrumbLabel" destination="FTT-0O-aOA" id="ppm-mB-Aj2"/>
+                        <outlet property="intensityTextbox" destination="PsK-Jc-jcY" id="9HH-4a-9bl"/>
+                        <segue destination="D6P-Qr-3O8" kind="unwind" identifier="unwindToExerciseID" unwindAction="unwindToExercise:" id="ivr-XN-f3u"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZZ7-NL-M3k" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="D6P-Qr-3O8" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="bGq-nv-Ubg">
+                    <connections>
+                        <action selector="viewTapped:" destination="Q6o-Yh-dle" id="EtT-YT-iIm"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2700" y="1104"/>
+        </scene>
         <!--Derived Weight Controller-->
         <scene sceneID="wot-Ee-u4a">
             <objects>

@@ -2,10 +2,10 @@
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;}
 {\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red14\green14\blue255;\red233\green233\blue233;
 \red0\green0\blue0;\red38\green71\blue75;\red196\green26\blue22;\red28\green0\blue207;\red170\green13\blue145;
-\red92\green38\blue153;\red63\green110\blue116;\red46\green13\blue110;}
+}
 {\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c5500\c5500\c100000;\csgenericrgb\c91180\c91178\c91179;
 \csgenericrgb\c0\c0\c0;\csgenericrgb\c14900\c27800\c29400;\csgenericrgb\c77000\c10200\c8600;\csgenericrgb\c11000\c0\c81000;\csgenericrgb\c66500\c5200\c56900;
-\csgenericrgb\c35900\c14900\c60100;\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c18100\c5200\c43100;}
+}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/126365/ios-frameworks-tutorial"}}{\fldrslt 
 \f0\fs48 \cf2 https://www.raywenderlich.com/126365/ios-frameworks-tutorial}}
@@ -146,151 +146,39 @@ Hanging Dragon Flag
 \f1\b0\fs36 \cf7 "Hanging Dragon Flag"
 \f0\b\fs48 \cf2 	5-30s\
 \
+shower curtain\
+mail\
+\
 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
-\f1\b0\fs36 \cf9 public\cf5  \cf9 enum\cf5  PlanState \{
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5     \cf9 case\cf5  waiting
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5     \cf9 case\cf5  started
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5     \cf9 case\cf5  underway
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5     \cf9 case\cf5  finished
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5     \cf9 case\cf5  blocked
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5     \cf9 case\cf5  error(\cf10 String\cf5 )
-\f0\fs24 \cf0 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\b\fs48 \cf2 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f1\b0\fs36 \cf5     \cf9 public\cf5  \cf9 var\cf5  state = \cf11 PlanState\cf5 .\cf6 waiting
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5     
-\f0\fs24 \cf0 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f1\fs36 \cf11     \
+\f1\b0\fs36 \cf9 \
 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-\cf5         \cf9 self\cf5 .\cf11 state\cf5  = store.\cf6 getObj\cf5 (\cf7 "state"\cf5 , ifMissing: .\cf6 waiting\cf5 )
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5         store.addObj(\cf7 "state"\cf5 , state)
-\f0\fs24 \cf0 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f1\fs36 \cf11 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-\cf5         \cf9 switch\cf5  \cf11 state\cf5  \{
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5         \cf9 case\cf5  .\cf6 waiting\cf5 :
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5             \cf9 break
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5         \cf9 default\cf5 :
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5             \cf9 let\cf5  calendar = \cf10 Calendar\cf5 .\cf10 current
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5             \cf9 let\cf5  savedOn = store.\cf6 getDate\cf5 (\cf7 "savedOn"\cf5 , ifMissing: \cf10 Date\cf5 .\cf10 distantPast\cf5 )
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5             \cf9 if\cf5  !calendar.\cf12 isDate\cf5 (savedOn, inSameDayAs: \cf10 Date\cf5 ()) \{
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5                 \cf11 XXX
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5                 \cf11 state\cf5  = .\cf6 waiting
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5             \}
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5         \}
-\f0\fs24 \cf0 \
-
-\f1\fs36 \cf5 \
-\
-            \cf9 if\cf5  \cf9 case\cf5  .\cf6 underway\cf5  = exercise.\cf11 plan\cf5 .\cf11 state\cf5 , exercise.\cf11 plan\cf5 .\cf6 on\cf5 (\cf11 workout\cf5 ) \{
-\f0\fs24 \cf0 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f1\fs36 \cf11    
-\f0\fs24 \cf0 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\b\fs48 \cf2 \
-	\
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f1\b0\fs36 \cf9 func\cf5  isStarted() -> \cf10 Bool\
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f0\b\fs48 \cf2 started | underway
-\b0\fs24 \cf0 \
-\
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f1\fs36 \cf9 func\cf5  underway(\cf9 _\cf5  workout: \cf11 Workout\cf5 ) -> \cf10 Bool\
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f0\b\fs48 \cf2 underway && workout matches
-\b0\fs24 \cf0 \
-
-\b\fs48 \cf2 \
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f1\b0\fs36 \cf9 func\cf5  atStart() -> \cf10 Bool\
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f0\b\fs48 \cf2 started
-\b0\fs24 \cf0 \
-\
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f1\fs36 \cf9 func\cf5  finished() -> \cf10 Bool\
-\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
-
-\f0\b\fs48 \cf2 finished
-\b0\fs24 \cf0 \
-
-\b\fs48 \cf2 	\
-	
-\f1\b0\fs36 \cf5 \
+\cf5 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
-\f0\fs48 \cf2 * Add support for editing notes:\
+\f0\fs48 \cf2 * Make sure cardio rolls over: had 30 mins remaining\
+* Look into using multiple base result classes\
+* Add HIIT to light and medium days\
+	- might want to leave cardio workout in place until sure that it works properly\
+* Setting controllers shouldn\'92t be restorable\
+* Add support for editing notes:\
 	- also handle revert\
-* Add a cardio workout\
 * Add plank progressions to a workout or two\
 	- dragon flag should use a VariableRepsPlan (with 3x1-8)\
 		review VariableRepsPlan\
 		should we also have a VariableRepsWeightPlan?\
+* Plan descriptions should probably have more examples\
+* Make sure breadcrumb appending makes sense\
 * Hook up skip button\
 * Add support for program editing\
-	- need some sort of way to filter programs using tags\
+	- put the UI in a separate file\
 * Add notes support\
 	- swifty markdown is pretty limited, eg no support for lists\
 	  maybe {\field{\*\fldinst{HYPERLINK "https://github.com/ivanbruel/MarkdownKit"}}{\fldrslt \cf2 https://github.com/ivanbruel/MarkdownKit}}\
 * Add more programs\
 	- might want to do some of these on days off (at a really light weight)\
+	- need some sort of way to filter programs using tags\
 * FAQ\
 	- should I edit a beginner program: injury, cardio\
 	- should I edit an intermediate/advanced program: injury, cardio, mobility, accessories\

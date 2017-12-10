@@ -11,6 +11,9 @@
 		370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFADA1FD6450400CDE63D /* FixedWeightController.swift */; };
 		37163DEE1FD8DA23008EB47D /* VariableRepsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */; };
 		3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743E2B81FB824CC00787CB3 /* FrontEnd.swift */; };
+		37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C8D1FDCA98800A3CAA6 /* SteadyStateCardio.swift */; };
+		37452C901FDDA6B100A3CAA6 /* CardioResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */; };
+		37452C921FDDC01D00A3CAA6 /* IntensityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C911FDDC01D00A3CAA6 /* IntensityController.swift */; };
 		374556EB1FD669ED0005020B /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EA1FD669ED0005020B /* Notes.swift */; };
 		374556ED1FD66ADC0005020B /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EC1FD66ADC0005020B /* NotesController.swift */; };
 		374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */; };
@@ -67,6 +70,9 @@
 		370EFADA1FD6450400CDE63D /* FixedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWeightController.swift; sourceTree = "<group>"; };
 		37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableRepsPlan.swift; sourceTree = "<group>"; };
 		3743E2B81FB824CC00787CB3 /* FrontEnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEnd.swift; sourceTree = "<group>"; };
+		37452C8D1FDCA98800A3CAA6 /* SteadyStateCardio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteadyStateCardio.swift; sourceTree = "<group>"; };
+		37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioResultController.swift; sourceTree = "<group>"; };
+		37452C911FDDC01D00A3CAA6 /* IntensityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntensityController.swift; sourceTree = "<group>"; };
 		374556EA1FD669ED0005020B /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		374556EC1FD66ADC0005020B /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyMarkdown.swift; sourceTree = "<group>"; };
@@ -161,6 +167,7 @@
 				37B3ECF61FD38FDB00F7D8EF /* BarbellController.swift */,
 				370EFADA1FD6450400CDE63D /* FixedWeightController.swift */,
 				37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */,
+				37452C911FDDC01D00A3CAA6 /* IntensityController.swift */,
 				37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */,
 				37B3ECF21FD3818000F7D8EF /* VariableWeightSetting.swift */,
 				37B3ECF81FD395F900F7D8EF /* WeightsController.swift */,
@@ -193,6 +200,7 @@
 			children = (
 				37CED48D1FAE29CB00244ADD /* backend */,
 				37CED46B1FAE289100244ADD /* AppDelegate.swift */,
+				37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */,
 				37B308D91FC3234F00556E8F /* ExerciseController.swift */,
 				377C11F41FC2761A0063A324 /* extensions */,
 				377F055A1FC0E1000015D7EF /* Helpers.swift */,
@@ -256,6 +264,7 @@
 				37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */,
 				378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */,
 				3778CE971FBE730D0042111C /* PercentOfPlan.swift */,
+				37452C8D1FDCA98800A3CAA6 /* SteadyStateCardio.swift */,
 				37B3ECFA1FD48DE800F7D8EF /* TimedPlan.swift */,
 				37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */,
 				378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */,
@@ -397,9 +406,12 @@
 				378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */,
 				37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */,
 				37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */,
+				37452C921FDDC01D00A3CAA6 /* IntensityController.swift in Sources */,
 				377C11F61FC276300063A324 /* LabelExtension.swift in Sources */,
 				374556EB1FD669ED0005020B /* Notes.swift in Sources */,
+				37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */,
 				377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */,
+				37452C901FDDA6B100A3CAA6 /* CardioResultController.swift in Sources */,
 				3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
 				37B3ECF51FD38B2E00F7D8EF /* DerivedWeightController.swift in Sources */,

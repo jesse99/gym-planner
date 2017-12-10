@@ -18,6 +18,20 @@ func secsToShortDurationName(_ interval: Double) -> String {
     }
 }
 
+func minsToStr(_ mins: Int) -> String {
+    let interval = 60*Double(mins)
+    let hours = interval/3600.0
+    let days = round(hours/24.0)
+    
+    if mins <= 60 {
+        return String(format: "%d mins", arguments: [mins])
+    } else if hours < 24.0 {
+        return String(format: "%0.1f hours", arguments: [hours])
+    } else {
+        return String(format: "%0.1f days", arguments: [days])
+    }
+}
+
 extension Date {
     func minsSinceDate(_ rhs: Date) -> Double {
         let secs = self.timeIntervalSince(rhs)

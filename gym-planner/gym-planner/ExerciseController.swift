@@ -172,22 +172,30 @@ class ExerciseController: UIViewController {
         if case .finished = exercise.plan.state {
             self.performSegue(withIdentifier: unwindTo, sender: self)
         } else {
-            let results = exercise.plan.completions()
-            if results.count == 1 {
-                results[0].callback()
-                handleNext("default")
-            } else {
-                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-                
-                for result in results {
-                    let action = UIAlertAction(title: result.title, style: .default) {_ in result.callback(); self.handleNext(result.title)}
-                    alert.addAction(action)
-                    if result.isDefault {
-                        alert.preferredAction = action
+            switch exercise.plan.completions() {
+            case .normal(let results):
+                if results.count == 1 {
+                    results[0].callback()
+                    handleNext("default")
+                } else {
+                    let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+                    
+                    for result in results {
+                        let action = UIAlertAction(title: result.title, style: .default) {_ in result.callback(); self.handleNext(result.title)}
+                        alert.addAction(action)
+                        if result.isDefault {
+                            alert.preferredAction = action
+                        }
                     }
+                    
+                    self.present(alert, animated: true, completion: nil)
                 }
-                
-                self.present(alert, animated: true, completion: nil)
+
+            case .cardio(let callback):
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let view = storyboard.instantiateViewController(withIdentifier: "CardioResultID") as! CardioResultController
+                view.initialize(exercise, callback, breadcrumbLabel.text!)
+                present(view, animated: true, completion: nil)
             }
         }
     }
@@ -359,6 +367,11 @@ class ExerciseController: UIViewController {
 
         case .variableWeight(let setting):
             let view = storyboard.instantiateViewController(withIdentifier: "VariableWeightID") as! VariableWeightController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
+
+        case .intensity(let setting):
+            let view = storyboard.instantiateViewController(withIdentifier: "IntensityID") as! IntensityController
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
         }

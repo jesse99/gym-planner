@@ -230,19 +230,19 @@ public class VariableRepsPlan : Plan {
         return UInt32(kSystemSoundID_Vibrate)
     }
     
-    public func completions() -> [Completion] {
+    public func completions() -> Completions {
         if setIndex+1 < sets.count {
-            return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]
+            return .normal([Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})])
         } else {
             if case .right(let setting) = findVariableRepsSetting(exerciseName), setting.requestedReps < maxReps {
-                return [
+                return .normal([
                     // TODO: What we need to do instead is prompt the user to see if he wants to add or remove reps.
                     // But we need to make sure he doesn't go beyond min and maxReps.
                     Completion(title: "Finished OK",  isDefault: true,  callback: {() -> Void in self.doFinish(false)}),
-                    Completion(title: "Missed a rep", isDefault: false, callback: {() -> Void in self.doFinish(true)})]
+                    Completion(title: "Missed a rep", isDefault: false, callback: {() -> Void in self.doFinish(true)})])
 
             } else {
-                return [Completion(title: "Done", isDefault: false, callback: {() -> Void in self.doFinish(false)})]
+                return .normal([Completion(title: "Done", isDefault: false, callback: {() -> Void in self.doFinish(false)})])
             }
         }
     }

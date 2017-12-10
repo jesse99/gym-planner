@@ -137,14 +137,31 @@ public class FixedWeightSetting: Storable {
     }
 }
 
+/// Used stuff like SteadyStateCardio.
+public class IntensitySetting: Storable {
+    /// Arbitrary tag. Can be empty.
+    var intensity: String
+    
+    init(intensity: String = "") {
+        self.intensity = intensity
+    }
+    
+    public required init(from store: Store) {
+        self.intensity = store.getStr("intensity")
+    }
+    
+    public func save(_ store: Store) {
+        store.addStr("intensity", intensity)
+    }
+}
+
 public enum Settings {
     case variableWeight(VariableWeightSetting)
     case derivedWeight(DerivedWeightSetting)
     case fixedWeight(FixedWeightSetting)
     case variableReps(VariableRepsSetting)
+    case intensity(IntensitySetting)
 }
-
-// TODO: CardioSetting
 
 extension Apparatus: Storable {
     public init(from store: Store) {
@@ -202,6 +219,8 @@ extension Settings: Storable {
             self = .variableReps(store.getObj("setting"))
         case "timed":
             self = .fixedWeight(FixedWeightSetting(restSecs: 60))   // TODO: remove this
+        case "intensity":
+            self = .intensity(store.getObj("setting"))
         default:
             frontend.assert(false, "loading settings had unknown type: \(tname)"); abort()
         }
@@ -220,6 +239,9 @@ extension Settings: Storable {
             store.addObj("setting", setting)
         case .variableReps(let setting):
             store.addStr("type", "variableReps")
+            store.addObj("setting", setting)
+        case .intensity(let setting):
+            store.addStr("type", "intensity")
             store.addObj("setting", setting)
         }
     }

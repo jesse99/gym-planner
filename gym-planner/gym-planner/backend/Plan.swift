@@ -15,6 +15,13 @@ public struct Completion {
     public let callback: () -> Void
 }
 
+public typealias CardioCompletion = (_ mins: Int, _ calories: Int) -> Void
+
+public enum Completions {
+    case normal([Completion])
+    case cardio(CardioCompletion)
+}
+
 /// Generic description of what the user needs to do for a particular activity within a Plan.
 public struct Activity {
     /// "Warmup 3 of 6"
@@ -115,7 +122,7 @@ public protocol Plan: Storable {
     
     /// If there is only one completion then just call the callback. Otherwise prompt the
     /// user and then call the callback for whichever completion the user chose.
-    func completions() -> [Completion]
+    func completions() -> Completions
     
     /// Start over from the beginning.
     func reset()

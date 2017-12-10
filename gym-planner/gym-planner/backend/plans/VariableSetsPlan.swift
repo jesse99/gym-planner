@@ -233,7 +233,7 @@ public class VariableSetsPlan: Plan {
         return UInt32(kSystemSoundID_Vibrate)
     }
     
-    public func completions() -> [Completion] {
+    public func completions() -> Completions {
         var options: [Completion] = []
         
         switch findVariableRepsSetting(exerciseName) {
@@ -250,7 +250,7 @@ public class VariableSetsPlan: Plan {
             options.append(Completion(title: "Done", isDefault: true, callback: {() -> Void in self.do_complete(100)})) // really shouldnt hit this case
         }
         
-        return options
+        return .normal(options)
     }
     
     public func reset() {

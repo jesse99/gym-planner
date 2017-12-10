@@ -145,6 +145,11 @@ public func createTimed(_ name: String, _ formalName: String, _ plan: Plan, dura
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
+public func createCardio(_ name: String, _ plan: Plan) -> Exercise {
+    let setting = IntensitySetting()
+    return Exercise(name, "", plan, .intensity(setting))
+}
+
 public func makeProgression(_ exercises: [Exercise], _ names: String...) {
     func setNext(_ name: String, _ other: String) {
         let exercise = exercises.first {$0.name == name}!

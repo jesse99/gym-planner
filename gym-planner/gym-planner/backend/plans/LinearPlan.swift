@@ -176,9 +176,8 @@ public class LinearPlan : Plan {
             }
             
             buildSets(setting)
-            frontend.saveExercise(exerciseName)
-
             self.state = .started
+            frontend.saveExercise(exerciseName)
             return nil
 
         case .left(let err):
@@ -262,13 +261,13 @@ public class LinearPlan : Plan {
         return UInt32(kSystemSoundID_Vibrate)
     }
     
-    public func completions() -> [Completion] {
+    public func completions() -> Completions {
         if setIndex+1 < sets.count {
-            return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]
+            return .normal([Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})])
         } else {
-            return [
+            return .normal([
                 Completion(title: "Finished OK",  isDefault: true,  callback: {() -> Void in self.doFinish(false)}),
-                Completion(title: "Missed a rep", isDefault: false, callback: {() -> Void in self.doFinish(true)})]
+                Completion(title: "Missed a rep", isDefault: false, callback: {() -> Void in self.doFinish(true)})])
         }
     }
     

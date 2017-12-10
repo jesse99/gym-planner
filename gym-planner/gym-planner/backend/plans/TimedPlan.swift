@@ -116,7 +116,8 @@ public class TimedPlan : Plan {
         self.state = .started
         self.workoutName = workout.name
         self.exerciseName = exerciseName
-        
+        frontend.saveExercise(exerciseName)
+
         return nil
     }
     
@@ -182,11 +183,11 @@ public class TimedPlan : Plan {
         return 1007       // see http://iphonedevwiki.net/index.php/AudioServices
     }
     
-    public func completions() -> [Completion] {
+    public func completions() -> Completions {
         if setIndex+1 <= numSets {
-            return [Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})]
+            return .normal([Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})])
         } else {
-            return [Completion(title: "",  isDefault: true,  callback: {() -> Void in self.doFinish()})]
+            return .normal([Completion(title: "",  isDefault: true,  callback: {() -> Void in self.doFinish()})])
         }
     }
     

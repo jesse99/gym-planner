@@ -47,7 +47,13 @@ func HLM2() -> Program {
         return FixedSetsPlan("fixed \(numSets)x\(numReps)", numSets: numSets, numReps: numReps)
     }
     
+    func planCardio() -> Plan {
+        return SteadyStateCardioPlan("Cardio", daysPerWeek: 3, minsPerDay: 30, maxRollOverMins: 30)
+    }
+    
     let exercises = [
+        createCardio("Cardio",  planCardio()),
+
         createBarBell("Squat",          "Low bar Squat",  planSquat(),  restMins: 3.0, warmupsWithBar: 3),
         createBarBell("Bench Press",    "Bench Press",    plan531(),    restMins: 3.0),
         createBarBell("Deadlift",       "Deadlift",       planDead(),   restMins: 3.5, useBumpers: true),
@@ -82,6 +88,7 @@ func HLM2() -> Program {
     makeProgression(exercises, "Kneeling Front Plank", "Front Plank", "Side Plank", "Leg Lift Plank", "Arm & Leg Lift Front Plank", "Decline Plank", "Decline & March Plank", "Wall Plank", "Wall March Plank", "Dragon Flag", "Hanging Dragon Flag")
 
     let workouts = [
+        Workout("Cardio",     ["Cardio"], scheduled: false),
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
         Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups", "Side Plank"], scheduled: true),
         Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups", "Side Plank"], scheduled: true),
@@ -113,7 +120,7 @@ These should feel like you are working hard without being in danger of missing a
 All the reps should be fairly easy.
 
 **Notes**
-Chinps are done with as many sets as are required, once you can do fifty add weights. Weights on the barbell routines advance unless you stall on the set with five reps..
+Chinups are done with as many sets as are required, once you can do fifty add weight. Weights on the barbell routines advance unless you stall on the set with five reps.
 """
     return Program("HLM2", workouts, exercises, tags, description)
 }

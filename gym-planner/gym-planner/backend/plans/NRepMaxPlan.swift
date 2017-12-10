@@ -154,7 +154,7 @@ public class NRepMaxPlan : Plan {
         return UInt32(kSystemSoundID_Vibrate)
     }
     
-    public func completions() -> [Completion] {
+    public func completions() -> Completions {
         var result: [Completion] = []
         
         result.append(Completion(title: "Done", isDefault: false, callback: {self.doFinish()}))
@@ -174,7 +174,7 @@ public class NRepMaxPlan : Plan {
             break
         }
         
-        return result
+        return .normal(result)
     }
     
     public func reset() {
