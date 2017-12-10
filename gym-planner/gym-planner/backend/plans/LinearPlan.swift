@@ -47,33 +47,13 @@ public class LinearPlan : Plan {
         }
     }
     
-    struct Result: VariableWeightResult, Storable {
-        let title: String   // "135 lbs 3x5"
-        let date: Date
-        var missed: Bool
-        var weight: Double
-        
-        var primary: Bool {get {return true}}
-        
+    class Result: WeightedResult {
         init(title: String, missed: Bool, weight: Double) {
-            self.title = title
-            self.date = Date()
-            self.missed = missed
-            self.weight = weight
+            super.init(title, weight, primary: true, missed: missed)
         }
 
-        init(from store: Store) {
-            self.title = store.getStr("title")
-            self.date = store.getDate("date")
-            self.missed = store.getBool("missed")
-            self.weight = store.getDbl("weight")
-        }
-        
-        func save(_ store: Store) {
-            store.addStr("title", title)
-            store.addDate("date", date)
-            store.addBool("missed", missed)
-            store.addDbl("weight", weight)
+        required init(from store: Store) {
+            super.init(from: store)
         }
     }
     

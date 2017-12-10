@@ -137,7 +137,7 @@ public class FixedWeightSetting: Storable {
     }
 }
 
-/// Used stuff like SteadyStateCardio.
+/// Used by stuff like SteadyStateCardio.
 public class IntensitySetting: Storable {
     /// Arbitrary tag. Can be empty.
     var intensity: String

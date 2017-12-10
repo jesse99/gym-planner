@@ -1,25 +1,63 @@
 // Used to show a list or chart of what happened with a particular exercise.
 import Foundation
 
-protocol VariableWeightResult {
-    var date: Date {get}
-    var title: String {get}
+/// Results are used internally to do things like populate the previous and history labels.
+/// GUIs can also use results to show logbooks and charts and also to edit results (although
+/// not everything is exposed, e.g. rep ranges and cardio details).
+public class BaseResult: Storable {
+    let title: String
+    let date: Date
     
-    // This is set for the exercise instance that really matters, e.g. the one where weight progresses.
-    var primary: Bool {get}
+    init(_ title: String) {
+        self.title = title
+        self.date = Date()
+    }
     
-    var weight: Double {get}    // TODO: should this be inside an enum? (so we can have one result type)
-    var missed: Bool {get}      // TODO: should we use an enum here?
+    public required init(from store: Store) {
+        self.title = store.getStr("title")
+        self.date = store.getDate("date")
+    }
+    
+    public func save(_ store: Store) {
+        store.addStr("title", title)
+        store.addDate("date", date)
+    }
 }
 
-protocol DerivedWeightResult {
-    var date: Date {get}
-    var title: String {get}
-    var weight: Double {get set}
+public class WeightedResult: BaseResult {
+    /// This is set for the exercise instance that really matters, e.g. the one where weight progresses.
+    let primary: Bool
+    
+    /// True if the user was not able to complete what he was asked to do.
+    var missed: Bool
+
+    /// Can be zero.
+    var weight: Double
+    
+    init(_ title: String, _ weight: Double, primary: Bool, missed: Bool) {
+        self.weight = weight
+        self.primary = primary
+        self.missed = missed
+        super.init(title)
+    }
+    
+    public required init(from store: Store) {
+        self.weight = store.getDbl("weight")
+        self.primary = store.getBool("primary", ifMissing: false)
+        self.missed = store.getBool("missed", ifMissing: false)
+        super.init(from: store)
+    }
+    
+    public override func save(_ store: Store) {
+        super.save(store)
+        store.addDbl("weight", weight)
+        store.addBool("primary", primary)
+        store.addBool("missed", missed)
+    }
 }
 
-// Given something like [100.0, 100.0, 100.0, 110.0, 120]
-// returns "+10 lbs x2, same x2"
+/// Given something like [100.0, 100.0, 100.0, 110.0, 120]
+/// returns "+10 lbs x2, same x2"
 public func makeHistoryLabel(_ weights: [Double]) -> String {
     let deltas = weights.mapi {(i, weight) -> Double in i > 0 ? weight - weights[i-1] : 0.0}
     let labels = deltas.dropFirst().map {(weight) -> String in
@@ -56,7 +94,7 @@ public func makeHistoryFromLabels(_ labels: [String]) -> String {
     return entries.joined(separator: ", ")
 }
 
-func makePrevLabel(_ history: [VariableWeightResult]) -> String {
+func makePrevLabel(_ history: [WeightedResult]) -> String {
     if let result = history.last {
         let count = countMisses(history)
         if count == 0 {
@@ -71,7 +109,7 @@ func makePrevLabel(_ history: [VariableWeightResult]) -> String {
     }
 }
 
-internal func countMisses(_ history: [VariableWeightResult]) -> Int {
+internal func countMisses(_ history: [WeightedResult]) -> Int {
     var count = 0
     
     for result in history.reversed() {

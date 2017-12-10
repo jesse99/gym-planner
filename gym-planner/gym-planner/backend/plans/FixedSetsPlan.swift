@@ -4,30 +4,13 @@ import Foundation
 import os.log
 
 public class FixedSetsPlan : Plan {
-    struct Result: VariableWeightResult, Storable {
-        let title: String   // "3x5 @ 20 lbs"
-        let date: Date
-        var weight: Double
-        
-        var primary: Bool {get {return true}}
-        var missed: Bool {get {return false}}
-        
+    class Result: WeightedResult {
         init(title: String, weight: Double) {
-            self.title = title
-            self.date = Date()
-            self.weight = weight
+            super.init(title, weight, primary: true, missed: false)
         }
         
-        init(from store: Store) {
-            self.title = store.getStr("title")
-            self.date = store.getDate("date")
-            self.weight = store.getDbl("weight")
-        }
-        
-        func save(_ store: Store) {
-            store.addStr("title", title)
-            store.addDate("date", date)
-            store.addDbl("weight", weight)
+        required init(from store: Store) {
+            super.init(from: store)
         }
     }
     

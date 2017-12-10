@@ -87,41 +87,22 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         }
     }
     
-    struct Result: VariableWeightResult, Storable, CustomDebugStringConvertible {
-        let title: String   // "135 lbs 3x5"
-        let date: Date
+    class Result: WeightedResult {
         let cycleIndex: Int
-        var missed: Bool
-        var weight: Double
-
-        var debugDescription: String {
-            return title + " for cycle \(cycleIndex)" + (missed ? " (missed)" : "")
-        }
-
-        var primary: Bool {get {return cycleIndex == 0}}
 
         init(title: String, cycleIndex: Int, missed: Bool, weight: Double) {
-            self.title = title
-            self.date = Date()
             self.cycleIndex = cycleIndex
-            self.missed = missed
-            self.weight = weight
+            super.init(title, weight, primary: cycleIndex == 0, missed: missed)
         }
         
-        init(from store: Store) {
-            self.title = store.getStr("title")
-            self.date = store.getDate("date")
+        required init(from store: Store) {
             self.cycleIndex = store.getInt("cycleIndex")
-            self.missed = store.getBool("missed")
-            self.weight = store.getDbl("weight")
+            super.init(from: store)
         }
         
-        func save(_ store: Store) {
-            store.addStr("title", title)
-            store.addDate("date", date)
+        override func save(_ store: Store) {
+            super.save(store)
             store.addInt("cycleIndex", cycleIndex)
-            store.addBool("missed", missed)
-            store.addDbl("weight", weight)
         }
     }
     

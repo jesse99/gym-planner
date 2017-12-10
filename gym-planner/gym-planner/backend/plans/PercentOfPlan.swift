@@ -47,27 +47,13 @@ public class PercentOfPlan : Plan {
         }
     }
     
-    struct Result: DerivedWeightResult, Storable {
-        let title: String   // "135 lbs 3x5"
-        let date: Date
-        var weight: Double
-
+    class Result: WeightedResult {
         init(title: String, weight: Double) {
-            self.title = title
-            self.date = Date()
-            self.weight = weight
+            super.init(title, weight, primary: true, missed: false)
         }
         
-        init(from store: Store) {
-            self.title = store.getStr("title")
-            self.date = store.getDate("date")
-            self.weight = store.getDbl("weight")
-        }
-        
-        func save(_ store: Store) {
-            store.addStr("title", title)
-            store.addDate("date", date)
-            store.addDbl("weight", weight)
+        required init(from store: Store) {
+            super.init(from: store)
         }
     }
     

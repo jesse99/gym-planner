@@ -4,35 +4,30 @@ import Foundation
 import os.log
 
 public class SteadyStateCardioPlan : Plan {
-    struct Result: Storable {
-        let title: String   // "30 mins"
+    class Result: BaseResult {
         let mins: Int
         let calories: Int
         let intensity: String
-        let date: Date
         
         init(_ mins: Int, _ calories: Int, _ intensity: String) {
-            self.title = minsToStr(mins)
             self.mins = mins
             self.calories = calories
             self.intensity = intensity
-            self.date = Date()
+            super.init(minsToStr(mins))
         }
         
-        init(from store: Store) {
-            self.title = store.getStr("title")
+        required init(from store: Store) {
             self.mins = store.getInt("mins")
             self.calories = store.getInt("calories")
             self.intensity = store.getStr("intensity")
-            self.date = store.getDate("date")
+            super.init(from: store)
         }
         
-        func save(_ store: Store) {
-            store.addStr("title", title)
+        override func save(_ store: Store) {
+            super.save(store)
             store.addInt("mins", mins)
             store.addInt("calories", calories)
             store.addStr("intensity", intensity)
-            store.addDate("date", date)
         }
     }
     

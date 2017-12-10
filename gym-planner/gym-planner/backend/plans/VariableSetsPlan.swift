@@ -4,36 +4,21 @@ import Foundation
 import os.log
 
 public class VariableSetsPlan: Plan {
-    struct Result: VariableWeightResult, Storable {
-        let title: String   // "20 reps @ 135 lbs"
-        let date: Date
-        var weight: Double
-        var missed: Bool
-        var primary: Bool {get {return true}}
-        
+    class Result: WeightedResult {
         let reps: [Int]
 
         init(title: String, weight: Double, missed: Bool, reps: [Int]) {
-            self.title = title
-            self.date = Date()
-            self.weight = weight
-            self.missed = missed
             self.reps = reps
+            super.init(title, weight, primary: true, missed: missed)
         }
         
-        init(from store: Store) {
-            self.title = store.getStr("title")
-            self.date = store.getDate("date")
-            self.weight = store.getDbl("weight")
-            self.missed = store.getBool("missed")
+        required init(from store: Store) {
             self.reps = store.getIntArray("reps")
+            super.init(from: store)
         }
         
-        func save(_ store: Store) {
-            store.addStr("title", title)
-            store.addDate("date", date)
-            store.addDbl("weight", weight)
-            store.addBool("missed", missed)
+        override func save(_ store: Store) {
+            super.save(store)
             store.addIntArray("reps", reps)
         }
     }

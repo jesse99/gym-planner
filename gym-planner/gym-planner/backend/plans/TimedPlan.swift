@@ -3,34 +3,22 @@ import Foundation
 import os.log
 
 public class TimedPlan : Plan {
-    struct Result: VariableWeightResult, Storable {
-        let title: String   // "2 sets @ 60s"
-        let date: Date
+    class Result: WeightedResult {
         var secs: Int
-        var weight: Double
-        
-        var primary: Bool {get {return true}}
-        var missed: Bool {get {return false}}
-        
+
         init(title: String, secs: Int, weight: Double) {
-            self.title = title
-            self.date = Date()
             self.secs = secs
-            self.weight = weight
+            super.init(title, weight, primary: true, missed: false)
         }
         
-        init(from store: Store) {
-            self.title = store.getStr("title")
-            self.date = store.getDate("date")
+        required init(from store: Store) {
             self.secs = store.getInt("secs")
-            self.weight = store.getDbl("weight")
+            super.init(from: store)
         }
         
-        func save(_ store: Store) {
-            store.addStr("title", title)
-            store.addDate("date", date)
+        override func save(_ store: Store) {
+            super.save(store)
             store.addInt("secs", secs)
-            store.addDbl("weight", weight)
         }
     }
     
