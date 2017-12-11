@@ -395,7 +395,9 @@ class ExerciseController: UIViewController {
             present(view, animated: true, completion: nil)
 
         case .hiit(let setting):
-            break   // TODO
+            let view = storyboard.instantiateViewController(withIdentifier: "HIITID") as! HIITController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
         }
     }
     
