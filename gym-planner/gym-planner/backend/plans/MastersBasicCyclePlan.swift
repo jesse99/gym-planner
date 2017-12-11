@@ -284,7 +284,8 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
             amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
             details: info.plates,
             buttonName: "Next",
-            showStartButton: true)
+            showStartButton: true,
+            color: nil)
     }
 
     // Note that this is called after advancing.

@@ -195,7 +195,8 @@ public class VariableRepsPlan : Plan {
             amount: sets[setIndex].amount,
             details: "",
             buttonName: "Next",
-            showStartButton: true)
+            showStartButton: true,
+            color: nil)
     }
     
     public func restSecs() -> RestTime {

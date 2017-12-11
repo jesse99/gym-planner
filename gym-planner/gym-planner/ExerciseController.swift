@@ -82,6 +82,12 @@ class ExerciseController: UIViewController {
         amountLabel.text = current.amount
         detailsLabel.text = current.details
         
+        if let name = current.color {
+            view.backgroundColor = UIColor.fromName(name)
+        } else {
+            view.backgroundColor = originalColor
+        }
+
         if case .finished = exercise.plan.state {
             nextButton.setTitle("All Done", for: .normal)
             startTimerButton.isHidden = false
@@ -117,6 +123,7 @@ class ExerciseController: UIViewController {
         super.viewWillAppear(animated)
         
         breadcrumbLabel.text = breadcrumb
+        originalColor = view.backgroundColor
         
         updateUI()
         notesButton.isEnabled = exercise.formalName != ""
@@ -157,6 +164,16 @@ class ExerciseController: UIViewController {
 //        {
 //            _ = showTooltip(superview: view, forView: nextButton, "Pressing the background starts and stops the timer (but doesn't start the exercise).", .top, id: "table_presses")
 //        }
+
+        switch exercise.plan.state {
+        case .started, .underway:
+            // This is for HIIT where we want to auto-start.
+            if exercise.plan.current().buttonName.isEmpty {
+                startTimer(force: false)
+            }
+        default:
+            break
+        }
     }
     
     @IBAction func unwindToExercise(_ segue: UIStoryboardSegue) {
@@ -167,7 +184,9 @@ class ExerciseController: UIViewController {
     
     @IBAction func nextPressed(_ sender: Any) {
         //dismissTooltip()
-        stopTimer()
+        if timer != nil {
+            stopTimer(manual: true)
+        }
         
         if case .finished = exercise.plan.state {
             self.performSegue(withIdentifier: unwindTo, sender: self)
@@ -220,7 +239,7 @@ class ExerciseController: UIViewController {
     
     @IBAction func startTimerPressed(_ sender: Any) {
         if timer != nil {
-            stopTimer()
+            stopTimer(manual: true)
         } else {
             startTime = Date()
             startTimer(force: true)
@@ -230,9 +249,9 @@ class ExerciseController: UIViewController {
     @IBAction func resetPressed(_ sender: Any) {
         //dismissTooltip()
         
+        stopTimer(manual: true)
         exercise.plan.reset()
         self.startedTimer = false
-        stopTimer()
         updateUI()
     }
     
@@ -374,6 +393,9 @@ class ExerciseController: UIViewController {
             let view = storyboard.instantiateViewController(withIdentifier: "IntensityID") as! IntensityController
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
+
+        case .hiit(let setting):
+            break   // TODO
         }
     }
     
@@ -403,7 +425,7 @@ class ExerciseController: UIViewController {
         startTimerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
     }
     
-    private func stopTimer() {
+    private func stopTimer(manual: Bool) {
         if let t = timer {
             secsLabel.isHidden = true
             t.invalidate()
@@ -417,17 +439,41 @@ class ExerciseController: UIViewController {
         
         startTimerButton.setTitle("Start Timer", for: UIControlState())
         startTimerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        
+        if manual {
+            _ = autoAdvanced(manual: true)
+        }
     }
     
     // Note that this can't be private (or the selector doesn't work).
     @objc func timerFired(_ sender: AnyObject) {
         if UIApplication.shared.applicationState == .active {
             let secs = Double(exercise.plan.restSecs().secs) - Date().timeIntervalSince(startTime)
-            if updateTimerLabel(secsLabel, secs) {
+            
+            if secs <= 0.0 && autoAdvanced(manual: false) {
+                nextPressed(self)
+            } else if updateTimerLabel(secsLabel, secs) {
                 // We don't want to run the timer too long since it chews up the battery.
-                stopTimer()
+                stopTimer(manual: false)
             }
         }
+    }
+    
+    private func autoAdvanced(manual: Bool) -> Bool {
+        switch exercise.plan.state {
+        case .started, .underway:
+            // This is for HIIT where we want to auto-advance when the timer elapses.
+            if exercise.plan.current().buttonName.isEmpty{
+                if !manual {
+                    AudioServicesPlayAlertSound(exercise.plan.restSound())
+                }
+                nextPressed(self)
+                return true
+            }
+        default:
+            break
+        }
+        return false
     }
     
     // Returns true if the timer has run so long that it should be forcibly stopped.
@@ -503,6 +549,7 @@ class ExerciseController: UIViewController {
     
     private var timer: Timer? = nil
     private var startTime = Date()
+    private var originalColor: UIColor? = nil
 
     private var workout: Workout!
     private var exercise: Exercise!

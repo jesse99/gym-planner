@@ -36,11 +36,14 @@ public struct Activity {
     /// "45 + 10 lbs"
     public let details: String
         
-    /// Usually "Next"
+    /// Usually "Next". If empty then GUIs should auto-complete once restSecs expire.
     public let buttonName: String
     
     /// Usually true
     public let showStartButton: Bool
+    
+    /// X11 background color name. Note that case is ignored.
+    public let color: String?
 }
 
 public struct RestTime {

@@ -165,7 +165,8 @@ public class SteadyStateCardioPlan : Plan {
             amount: "",
             details: "",
             buttonName: "Done",
-            showStartButton: true)
+            showStartButton: true,
+            color: nil)
     }
     
     public func restSecs() -> RestTime {

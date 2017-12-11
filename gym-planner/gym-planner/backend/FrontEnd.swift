@@ -71,6 +71,18 @@ public func findIntensitySetting(_ name: String) -> Either<String, IntensitySett
     }
 }
 
+public func findHIITSetting(_ name: String) -> Either<String, HIITSetting> {
+    if let exercise = frontend.findExercise(name) {
+        if case let .hiit(setting) = exercise.settings {
+            return .right(setting)
+        } else {
+            return .left("Exercise '\(name)' isn't a HIIT exercise")
+        }
+    } else {
+        return .left("Couldn't find exercise '\(name)'")
+    }
+}
+
 /// Returns the base-line weight the user is expected to lift. Note that the user may not have
 /// have actually done this weight yet and cycles mean that the user may be asked to do a percentage
 /// of this.
@@ -82,6 +94,7 @@ public func findCurrentWeight(_ name: String) -> Either<String, Double> {
         case .fixedWeight(let setting): return .right(setting.weight)
         case .variableReps(let setting): return .right(setting.weight)
         case .intensity(_): return .left("Exercise '\(name)' doesn't have a weight")
+        case .hiit(_): return .left("Exercise '\(name)' doesn't have a weight")
         }
     } else {
         return .left("Couldn't find exercise '\(name)'")
@@ -96,6 +109,7 @@ public func findRestSecs(_ name: String) -> Either<String, Int> {
         case .fixedWeight(let setting): return .right(setting.restSecs)
         case .variableReps(let setting): return .right(setting.restSecs)
         case .intensity(_): return .left("Exercise '\(name)' doesn't have a rest secs")
+        case .hiit(_): return .left("Exercise '\(name)' doesn't have a rest secs")
         }
     } else {
         return .left("Couldn't find exercise '\(name)'")

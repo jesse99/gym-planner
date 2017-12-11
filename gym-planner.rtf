@@ -2,10 +2,10 @@
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;}
 {\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red14\green14\blue255;\red233\green233\blue233;
 \red0\green0\blue0;\red38\green71\blue75;\red196\green26\blue22;\red28\green0\blue207;\red170\green13\blue145;
-}
+\red63\green110\blue116;\red92\green38\blue153;}
 {\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c5500\c5500\c100000;\csgenericrgb\c91180\c91178\c91179;
 \csgenericrgb\c0\c0\c0;\csgenericrgb\c14900\c27800\c29400;\csgenericrgb\c77000\c10200\c8600;\csgenericrgb\c11000\c0\c81000;\csgenericrgb\c66500\c5200\c56900;
-}
+\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c35900\c14900\c60100;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/126365/ios-frameworks-tutorial"}}{\fldrslt 
 \f0\fs48 \cf2 https://www.raywenderlich.com/126365/ios-frameworks-tutorial}}
@@ -146,17 +146,69 @@ Hanging Dragon Flag
 \f1\b0\fs36 \cf7 "Hanging Dragon Flag"
 \f0\b\fs48 \cf2 	5-30s\
 \
+\
+HIIT\
+30-60s sprint\
+60s rest\
+4-8 cycles\
+\
 shower curtain\
+mago peach/body wash\
 mail\
+\
 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
 \f1\b0\fs36 \cf9 \
+public\cf5  \cf9 class\cf5  HIITSetting: \cf10 Storable\cf5  \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf9 var\cf5  numCycles: \cf11 Int
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5 \
+    \cf9 var\cf5  warmupSecs: \cf11 Int
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf9 var\cf5  highSecs: \cf11 Int
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf9 var\cf5  lowSecs: \cf11 Int
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf9 var\cf5  cooldownSecs: \cf11 Int
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf9 var\cf5  warmupIntensity: \cf11 String
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf9 var\cf5  highIntensity: \cf11 String
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf9 var\cf5  lowIntensity: \cf11 String
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf9 var\cf5  cooldownIntensity: \cf11 String
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \
+\
+\cf9 \
+\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
-\f0\fs48 \cf2 * Cardio should say \'93partially completed\'94 in workouts\
-* Add HIIT to light and medium days\
+\f0\fs48 \cf2 * Add HIIT to light and medium days\
+	- add setting screen(s)\
 	- might want to leave cardio workout in place until sure that it works properly\
+* Progression didn\'92t quite work with planks\
+* Shouldn\'92t refresh save the exercise?\
+* Partially completed workout should have been the red one\
 * Make sure cardio rolls over: had 30 mins remaining\
 * Setting controllers shouldn\'92t be restorable\
 * Add support for editing notes:\
@@ -176,6 +228,7 @@ mail\
 * Add more programs\
 	- might want to do some of these on days off (at a really light weight)\
 	- need some sort of way to filter programs using tags\
+* Would be nice if cardio only workout said \'93partially completed\'94 in workouts screen\
 * FAQ\
 	- should I edit a beginner program: injury, cardio\
 	- should I edit an intermediate/advanced program: injury, cardio, mobility, accessories\

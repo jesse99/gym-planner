@@ -155,12 +155,70 @@ public class IntensitySetting: Storable {
     }
 }
 
+public class HIITSetting: Storable {
+    var warmupSecs: Int
+    var highSecs: Int
+    var lowSecs: Int
+    var cooldownSecs: Int
+    
+    var numCycles: Int
+    
+    /// Arbitrary tags. Can be empty.
+    var warmupIntensity: String
+    var highIntensity: String
+    var lowIntensity: String
+    var cooldownIntensity: String
+    
+    init(warmupMins: Int, highSecs: Int, lowSecs: Int, cooldownMins: Int, numCycles: Int) {
+        self.warmupSecs = 60*warmupMins
+        self.highSecs = highSecs
+        self.lowSecs = lowSecs
+        self.cooldownSecs = 60*cooldownMins
+        
+        self.numCycles = numCycles
+        
+        self.warmupIntensity = ""
+        self.highIntensity = ""
+        self.lowIntensity = ""
+        self.cooldownIntensity = ""
+    }
+    
+    public required init(from store: Store) {
+        self.warmupSecs = store.getInt("warmupSecs")
+        self.highSecs = store.getInt("highSecs")
+        self.lowSecs = store.getInt("lowSecs")
+        self.cooldownSecs = store.getInt("cooldownSecs")
+
+        self.numCycles = store.getInt("numCycles")
+
+        self.warmupIntensity = store.getStr("warmupIntensity")
+        self.highIntensity = store.getStr("highIntensity")
+        self.lowIntensity = store.getStr("lowIntensity")
+        self.cooldownIntensity = store.getStr("cooldownIntensity")
+    }
+    
+    public func save(_ store: Store) {
+        store.addInt("warmupSecs", warmupSecs)
+        store.addInt("highSecs", highSecs)
+        store.addInt("lowSecs", lowSecs)
+        store.addInt("cooldownSecs", cooldownSecs)
+
+        store.addInt("numCycles", numCycles)
+
+        store.addStr("warmupIntensity", warmupIntensity)
+        store.addStr("highIntensity", highIntensity)
+        store.addStr("lowIntensity", lowIntensity)
+        store.addStr("cooldownIntensity", cooldownIntensity)
+    }
+}
+
 public enum Settings {
     case variableWeight(VariableWeightSetting)
     case derivedWeight(DerivedWeightSetting)
     case fixedWeight(FixedWeightSetting)
     case variableReps(VariableRepsSetting)
     case intensity(IntensitySetting)
+    case hiit(HIITSetting)
 }
 
 extension Apparatus: Storable {
@@ -221,6 +279,8 @@ extension Settings: Storable {
             self = .fixedWeight(FixedWeightSetting(restSecs: 60))   // TODO: remove this
         case "intensity":
             self = .intensity(store.getObj("setting"))
+        case "hiit":
+            self = .hiit(store.getObj("setting"))
         default:
             frontend.assert(false, "loading settings had unknown type: \(tname)"); abort()
         }
@@ -242,6 +302,9 @@ extension Settings: Storable {
             store.addObj("setting", setting)
         case .intensity(let setting):
             store.addStr("type", "intensity")
+            store.addObj("setting", setting)
+        case .hiit(let setting):
+            store.addStr("type", "hiit")
             store.addObj("setting", setting)
         }
     }

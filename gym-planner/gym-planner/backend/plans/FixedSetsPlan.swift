@@ -151,7 +151,8 @@ public class FixedSetsPlan : Plan {
             amount: "\(repsStr(numReps))\(suffix)",
             details: "",
             buttonName: "Next",
-            showStartButton: true)
+            showStartButton: true,
+            color: nil)
     }
     
     public func restSecs() -> RestTime {

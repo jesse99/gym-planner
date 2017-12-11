@@ -93,8 +93,8 @@ public class LinearPlan : Plan {
 
         self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
-        self.sets = store.getObjArray("sets")
         self.history = store.getObjArray("history")
+        self.sets = store.getObjArray("sets")
         self.setIndex = store.getInt("setIndex")
         self.state = store.getObj("state", ifMissing: .waiting)
 
@@ -122,8 +122,8 @@ public class LinearPlan : Plan {
         
         store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
-        store.addObjArray("sets", sets)
         store.addObjArray("history", history)
+        store.addObjArray("sets", sets)
         store.addInt("setIndex", setIndex)
         store.addDate("savedOn", Date())
         store.addObj("state", state)
@@ -221,7 +221,8 @@ public class LinearPlan : Plan {
             amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
             details: info.plates,
             buttonName: "Next",
-            showStartButton: true)
+            showStartButton: true,
+            color: nil)
     }
     
     public func restSecs() -> RestTime {
@@ -361,8 +362,8 @@ public class LinearPlan : Plan {
 
     private var workoutName: String = ""
     private var exerciseName: String = ""
-    private var sets: [Set] = []
     private var history: [Result] = []
+    private var sets: [Set] = []
     private var setIndex = 0
 }
 

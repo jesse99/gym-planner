@@ -238,7 +238,8 @@ public class PercentOfPlan : Plan {
             amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
             details: info.plates,
             buttonName: "Next",
-            showStartButton: true)
+            showStartButton: true,
+            color: nil)
     }
     
     public func restSecs() -> RestTime {

@@ -187,7 +187,8 @@ public class VariableSetsPlan: Plan {
                 amount: amount,
                 details: "",
                 buttonName: "Next",
-                showStartButton: true)
+                showStartButton: true,
+                color: nil)
 
         case .left(let err):
             return Activity(
@@ -196,7 +197,8 @@ public class VariableSetsPlan: Plan {
                 amount: "",
                 details: "",
                 buttonName: "Next",
-                showStartButton: true)
+                showStartButton: true,
+                color: nil)
         }
     }
     

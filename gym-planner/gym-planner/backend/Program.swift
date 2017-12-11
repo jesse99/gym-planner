@@ -150,6 +150,11 @@ public func createCardio(_ name: String, _ plan: Plan) -> Exercise {
     return Exercise(name, "", plan, .intensity(setting))
 }
 
+public func createHIIT(_ name: String, _ plan: Plan) -> Exercise {
+    let setting = HIITSetting(warmupMins: 5, highSecs: 30, lowSecs: 60, cooldownMins: 5, numCycles: 4)
+    return Exercise(name, "", plan, .hiit(setting))
+}
+
 public func makeProgression(_ exercises: [Exercise], _ names: String...) {
     func setNext(_ name: String, _ other: String) {
         let exercise = exercises.first {$0.name == name}!

@@ -127,7 +127,8 @@ public class NRepMaxPlan : Plan {
                 amount: "\(repsStr(numReps)) @ \(info.text)",
                 details: info.plates,
                 buttonName: "Next",
-                showStartButton: true)
+                showStartButton: true,
+                color: nil)
 
         case .left(let err):
             return Activity(
@@ -136,7 +137,8 @@ public class NRepMaxPlan : Plan {
                 amount: "",
                 details: err,
                 buttonName: "Next",
-                showStartButton: true)
+                showStartButton: true,
+                color: nil)
         }
     }
     

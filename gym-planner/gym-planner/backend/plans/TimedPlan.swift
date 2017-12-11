@@ -155,7 +155,8 @@ public class TimedPlan : Plan {
             amount: "",
             details: "",
             buttonName: "Start",
-            showStartButton: setIndex > 1)
+            showStartButton: setIndex > 1,
+            color: nil)
     }
     
     public func restSecs() -> RestTime {
