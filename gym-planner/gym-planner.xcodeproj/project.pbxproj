@@ -17,6 +17,7 @@
 		37452C941FDDDA2A00A3CAA6 /* HIITPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C931FDDDA2A00A3CAA6 /* HIITPlan.swift */; };
 		37452C961FDE3F3100A3CAA6 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C951FDE3F3100A3CAA6 /* ColorExtension.swift */; };
 		37452C981FDE4D7B00A3CAA6 /* HIITController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C971FDE4D7B00A3CAA6 /* HIITController.swift */; };
+		37452C9A1FDE540C00A3CAA6 /* HIITIntensityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C991FDE540C00A3CAA6 /* HIITIntensityController.swift */; };
 		374556EB1FD669ED0005020B /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EA1FD669ED0005020B /* Notes.swift */; };
 		374556ED1FD66ADC0005020B /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EC1FD66ADC0005020B /* NotesController.swift */; };
 		374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */; };
@@ -79,6 +80,7 @@
 		37452C931FDDDA2A00A3CAA6 /* HIITPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIITPlan.swift; sourceTree = "<group>"; };
 		37452C951FDE3F3100A3CAA6 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		37452C971FDE4D7B00A3CAA6 /* HIITController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIITController.swift; sourceTree = "<group>"; };
+		37452C991FDE540C00A3CAA6 /* HIITIntensityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIITIntensityController.swift; sourceTree = "<group>"; };
 		374556EA1FD669ED0005020B /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		374556EC1FD66ADC0005020B /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyMarkdown.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				370EFADA1FD6450400CDE63D /* FixedWeightController.swift */,
 				37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */,
 				37452C971FDE4D7B00A3CAA6 /* HIITController.swift */,
+				37452C991FDE540C00A3CAA6 /* HIITIntensityController.swift */,
 				37452C911FDDC01D00A3CAA6 /* IntensityController.swift */,
 				37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */,
 				37B3ECF21FD3818000F7D8EF /* VariableWeightSetting.swift */,
@@ -413,6 +416,7 @@
 				37CED48F1FAE29E000244ADD /* Plan.swift in Sources */,
 				3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */,
 				376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */,
+				37452C9A1FDE540C00A3CAA6 /* HIITIntensityController.swift in Sources */,
 				378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */,
 				37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */,
 				37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */,

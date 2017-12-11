@@ -1236,6 +1236,137 @@
             </objects>
             <point key="canvasLocation" x="3367" y="1104"/>
         </scene>
+        <!--Intensity Controller-->
+        <scene sceneID="7kM-4n-lYm">
+            <objects>
+                <viewController storyboardIdentifier="HIITIntensityID" id="kCr-T1-JFp" customClass="HIITIntensityController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fD3-Hf-R8Z">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h4R-MK-m9o">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="O3u-5W-nAD">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="TCV-0k-cSv">
+                                            <connections>
+                                                <action selector="donePressed:" destination="kCr-T1-JFp" id="NbD-wM-e5R"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breadcrumb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dYh-6D-9Kw">
+                                <rect key="frame" x="150.5" y="20" width="74.5" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Warmup:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Elo-n2-i3V">
+                                <rect key="frame" x="10" y="70.5" width="82" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="High:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5tq-vr-XBs">
+                                <rect key="frame" x="10" y="130.5" width="82" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Low:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TcB-bO-LzC">
+                                <rect key="frame" x="10" y="190.5" width="82" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cooldown:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KdV-ig-JmC">
+                                <rect key="frame" x="10" y="250.5" width="82" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="level 2" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XSN-vd-6gf">
+                                <rect key="frame" x="102" y="66" width="263" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="level 8" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kyx-Cd-80C">
+                                <rect key="frame" x="102" y="126" width="263" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="label 2" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="djt-vg-JJx">
+                                <rect key="frame" x="102" y="246" width="263" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="level 3" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L2V-SZ-nJE">
+                                <rect key="frame" x="102" y="186" width="263" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="f2G-1i-G1m" firstAttribute="trailing" secondItem="Kyx-Cd-80C" secondAttribute="trailing" constant="10" id="4Gb-EI-Q8F"/>
+                            <constraint firstItem="Kyx-Cd-80C" firstAttribute="centerY" secondItem="5tq-vr-XBs" secondAttribute="centerY" id="9aS-tw-key"/>
+                            <constraint firstItem="KdV-ig-JmC" firstAttribute="trailing" secondItem="Elo-n2-i3V" secondAttribute="trailing" id="AMM-RH-rBR"/>
+                            <constraint firstItem="L2V-SZ-nJE" firstAttribute="centerY" secondItem="TcB-bO-LzC" secondAttribute="centerY" id="B2h-Ex-h4o"/>
+                            <constraint firstItem="dYh-6D-9Kw" firstAttribute="centerX" secondItem="fD3-Hf-R8Z" secondAttribute="centerX" id="BfC-iG-dTQ"/>
+                            <constraint firstItem="TcB-bO-LzC" firstAttribute="trailing" secondItem="Elo-n2-i3V" secondAttribute="trailing" id="CSx-9G-dsP"/>
+                            <constraint firstItem="djt-vg-JJx" firstAttribute="centerY" secondItem="KdV-ig-JmC" secondAttribute="centerY" id="F03-Q0-Jdn"/>
+                            <constraint firstItem="KdV-ig-JmC" firstAttribute="leading" secondItem="Elo-n2-i3V" secondAttribute="leading" id="H6c-GP-xIw"/>
+                            <constraint firstItem="djt-vg-JJx" firstAttribute="top" secondItem="L2V-SZ-nJE" secondAttribute="bottom" constant="30" id="LOv-9v-8q9"/>
+                            <constraint firstItem="5tq-vr-XBs" firstAttribute="trailing" secondItem="Elo-n2-i3V" secondAttribute="trailing" id="Mo7-HF-KeX"/>
+                            <constraint firstItem="TcB-bO-LzC" firstAttribute="leading" secondItem="Elo-n2-i3V" secondAttribute="leading" id="N8D-FP-2E8"/>
+                            <constraint firstItem="Elo-n2-i3V" firstAttribute="leading" secondItem="f2G-1i-G1m" secondAttribute="leading" constant="10" id="OKu-U4-zcR"/>
+                            <constraint firstItem="f2G-1i-G1m" firstAttribute="trailing" secondItem="XSN-vd-6gf" secondAttribute="trailing" constant="10" id="Of6-P1-mTC"/>
+                            <constraint firstItem="djt-vg-JJx" firstAttribute="leading" secondItem="XSN-vd-6gf" secondAttribute="leading" id="Owp-Nj-OF9"/>
+                            <constraint firstItem="djt-vg-JJx" firstAttribute="leading" secondItem="KdV-ig-JmC" secondAttribute="trailing" constant="10" id="PBU-YX-Aw4"/>
+                            <constraint firstItem="XSN-vd-6gf" firstAttribute="top" secondItem="dYh-6D-9Kw" secondAttribute="bottom" constant="30" id="PiA-Ux-gHZ"/>
+                            <constraint firstItem="L2V-SZ-nJE" firstAttribute="leading" secondItem="XSN-vd-6gf" secondAttribute="leading" id="Snv-Oy-A3E"/>
+                            <constraint firstItem="h4R-MK-m9o" firstAttribute="bottom" secondItem="f2G-1i-G1m" secondAttribute="bottom" id="WwQ-TO-FYv"/>
+                            <constraint firstItem="Kyx-Cd-80C" firstAttribute="top" secondItem="XSN-vd-6gf" secondAttribute="bottom" constant="30" id="X1E-we-LUO"/>
+                            <constraint firstItem="h4R-MK-m9o" firstAttribute="trailing" secondItem="f2G-1i-G1m" secondAttribute="trailing" id="X7z-o0-Hus"/>
+                            <constraint firstItem="f2G-1i-G1m" firstAttribute="trailing" secondItem="djt-vg-JJx" secondAttribute="trailing" constant="10" id="XmV-6l-WMa"/>
+                            <constraint firstItem="5tq-vr-XBs" firstAttribute="leading" secondItem="Elo-n2-i3V" secondAttribute="leading" id="aoN-HB-ylO"/>
+                            <constraint firstItem="L2V-SZ-nJE" firstAttribute="top" secondItem="Kyx-Cd-80C" secondAttribute="bottom" constant="30" id="bOr-An-iLZ"/>
+                            <constraint firstItem="h4R-MK-m9o" firstAttribute="leading" secondItem="f2G-1i-G1m" secondAttribute="leading" id="cE9-kJ-681"/>
+                            <constraint firstItem="XSN-vd-6gf" firstAttribute="centerY" secondItem="Elo-n2-i3V" secondAttribute="centerY" id="kbc-ub-J6E"/>
+                            <constraint firstItem="Kyx-Cd-80C" firstAttribute="leading" secondItem="XSN-vd-6gf" secondAttribute="leading" id="v56-0Z-hkB"/>
+                            <constraint firstItem="f2G-1i-G1m" firstAttribute="trailing" secondItem="L2V-SZ-nJE" secondAttribute="trailing" constant="10" id="yGo-WE-d3r"/>
+                            <constraint firstItem="dYh-6D-9Kw" firstAttribute="top" secondItem="f2G-1i-G1m" secondAttribute="top" id="yvB-Tj-WvI"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="f2G-1i-G1m"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="0WX-QK-Qj6" appends="YES" id="LL7-sN-mtS"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="breadcrumbLabel" destination="dYh-6D-9Kw" id="P6P-Lb-N4I"/>
+                        <outlet property="cooldownTextbox" destination="djt-vg-JJx" id="At1-bL-MhH"/>
+                        <outlet property="highTextbox" destination="Kyx-Cd-80C" id="Uvg-DM-nAy"/>
+                        <outlet property="lowTextbox" destination="L2V-SZ-nJE" id="oKX-pL-AN3"/>
+                        <outlet property="warmupTextbox" destination="XSN-vd-6gf" id="gzz-h1-TlZ"/>
+                        <segue destination="TOV-L6-ZU9" kind="unwind" identifier="unwindToHIITID" unwindAction="unwindToHIIT:" id="lXh-Iw-Brv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TDI-66-3gT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="TOV-L6-ZU9" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="0WX-QK-Qj6">
+                    <connections>
+                        <action selector="viewTapped:" destination="kCr-T1-JFp" id="LVB-gK-Mfp"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="4036" y="1105"/>
+        </scene>
         <!--Derived Weight Controller-->
         <scene sceneID="wot-Ee-u4a">
             <objects>

@@ -22,6 +22,9 @@ class HIITController: UIViewController {
         }
     }
     
+    @IBAction func unwindToHIIT(_ segue: UIStoryboardSegue) {
+    }
+    
     @IBAction func viewTapped(_ sender: Any) {
         numCyclesTextbox.resignFirstResponder()
 
@@ -41,6 +44,10 @@ class HIITController: UIViewController {
     }
     
     @IBAction func intensityPressed(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let view = storyboard.instantiateViewController(withIdentifier: "HIITIntensityID") as! HIITIntensityController
+        view.initialize(exercise, setting, breadcrumbLabel.text!)
+        present(view, animated: true, completion: nil)
     }
     
     @IBAction func donePressed(_ sender: Any) {
