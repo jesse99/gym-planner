@@ -96,6 +96,25 @@ public class Program: Storable {
     /// program are settings and plan states (anything else requires a program edit
     /// which requires that the user re-name the program),
     public func sync(_ savedProgram: Program) {
+        func inProgression(_ name1: String, _ name2: String) -> Bool {
+            var name: String? = name1
+            while let candidate = name, let exercise = findExercise(candidate) {
+                if exercise.name == name2 {
+                    return true
+                }
+                name = exercise.prevExercise
+            }
+
+            name = name1
+            while let candidate = name, let exercise = findExercise(candidate) {
+                if exercise.name == name2 {
+                    return true
+                }
+                name = exercise.nextExercise
+            }
+            return false
+        }
+        
         frontend.assert(name == savedProgram.name, "attempt to sync programs \(name) and \(savedProgram.name)")
         for savedExercise in savedProgram.exercises {
             if let exercise = exercises.first(where: {$0.name == savedExercise.name}) {
@@ -104,6 +123,28 @@ public class Program: Storable {
                 exercises.append(savedExercise)
             } else {
                 os_log("dropping saved exercise %@", type: .info, savedExercise.name)
+            }
+        }
+        
+        // TODO: Progression is annoying: maybe we should ask the user to rename (and copy) the program?
+        for workout in workouts {
+            if let savedWorkout = savedProgram.findWorkout((workout.name)) {
+                for (i, exerciseName) in workout.exercises.enumerated() {
+                    if !savedWorkout.exercises.contains(exerciseName) {
+                        
+                        // We've found an exercise in a workout that isn't part of the saved workout.
+                        for savedExerciseName in savedWorkout.exercises {
+                            // If the saved workout has an exercise not in the builtin workout and that
+                            // exercise is part of the progression for the exercise we're missing then
+                            // we'll use the saved exercise. Otherwise we'll use the built-in exercise.
+                            if !workout.exercises.contains(savedExerciseName) && inProgression(exerciseName, savedExerciseName) {
+                                os_log("replacing built-in %@ with %@ for workout %@", type: .info, workout.exercises[i], savedExerciseName, workout.name)
+                                workout.exercises[i] = savedExerciseName
+                                break
+                            }
+                        }
+                    }
+                }
             }
         }
     }
