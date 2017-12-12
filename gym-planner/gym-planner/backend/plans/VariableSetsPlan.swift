@@ -24,7 +24,7 @@ public class VariableSetsPlan: Plan {
     }
     
     init(_ name: String, targetReps: Int?) {
-        os_log("init VariableSetsPlan for %@ and %@", type: .info, name)
+        os_log("init VariableSetsPlan for %@", type: .info, name)
         self.planName = name
         self.typeName = "VariableSetsPlan"
         self.targetReps = targetReps
@@ -56,14 +56,14 @@ public class VariableSetsPlan: Plan {
         self.history = store.getObjArray("history")
         self.reps = store.getIntArray("reps")
         self.state = store.getObj("state", ifMissing: .waiting)
+        self.modifiedOn = store.getDate("modifiedOn", ifMissing: Date.distantPast)
 
         switch state {
         case .waiting:
             break
         default:
             let calendar = Calendar.current
-            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+            if !calendar.isDate(modifiedOn, inSameDayAs: Date()) {
                 reps = []
                 state = .waiting
             }
@@ -78,7 +78,7 @@ public class VariableSetsPlan: Plan {
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addIntArray("reps", reps)
-        store.addDate("savedOn", Date())
+        store.addDate("modifiedOn", modifiedOn)
         store.addObj("state", state)
     }
     
@@ -101,6 +101,7 @@ public class VariableSetsPlan: Plan {
         self.state = .started
         self.workoutName = workout.name
         self.exerciseName = exerciseName
+        self.modifiedOn = Date.distantPast  // user hasn't really changed anything yet
         frontend.saveExercise(exerciseName)
 
         return nil
@@ -242,6 +243,7 @@ public class VariableSetsPlan: Plan {
     
     public func reset() {
         reps = []
+        modifiedOn = Date()
         state = .started
         frontend.saveExercise(exerciseName)
     }
@@ -256,6 +258,7 @@ public class VariableSetsPlan: Plan {
     
     // Internal items
     private func do_complete(_ count: Int) {
+        modifiedOn = Date()
         reps.append(count)
         
         switch findVariableRepsSetting(exerciseName) {
@@ -293,6 +296,7 @@ public class VariableSetsPlan: Plan {
     
     private let targetReps: Int?
     
+    private var modifiedOn = Date.distantPast
     private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []

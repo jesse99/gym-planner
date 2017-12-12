@@ -36,14 +36,14 @@ public class NRepMaxPlan : Plan {
         self.weight = store.getDbl("weight")
         self.setNum = store.getInt("setNum")
         self.state = store.getObj("state", ifMissing: .waiting)
+        self.modifiedOn = store.getDate("modifiedOn", ifMissing: Date.distantPast)
 
         switch state {
         case .waiting:
             break
         default:
             let calendar = Calendar.current
-            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+            if !calendar.isDate(modifiedOn, inSameDayAs: Date()) {
                 setNum = 1
                 weight = 0.0
                 state = .waiting
@@ -59,7 +59,7 @@ public class NRepMaxPlan : Plan {
         store.addDbl("weight", weight)
         store.addInt("setNum", setNum)
         store.addObj("state", state)
-        store.addDate("savedOn", Date())
+        store.addDate("modifiedOn", modifiedOn)
     }
     
     // Plan methods
@@ -78,6 +78,7 @@ public class NRepMaxPlan : Plan {
         os_log("starting NRepMaxPlan for %@ and %@", type: .info, planName, exerciseName)
         self.workoutName = workout.name
         self.exerciseName = exerciseName
+        self.modifiedOn = Date.distantPast  // user hasn't really changed anything yet
 
         switch findApparatus(exerciseName) {
         case .right(let apparatus):
@@ -180,6 +181,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public func reset() {
+        modifiedOn = Date()
         switch findApparatus(exerciseName) {
         case .right(let apparatus):
             self.weight = Weight(0.0, apparatus).closest().weight
@@ -206,6 +208,7 @@ public class NRepMaxPlan : Plan {
     private func doNext(_ nextWeight: Double) {
         setNum += 1
         weight = nextWeight
+        modifiedOn = Date()
         state = .underway
         frontend.saveExercise(exerciseName)
     }
@@ -215,6 +218,7 @@ public class NRepMaxPlan : Plan {
             exercise.completed[workoutName] = Date()
         }
         
+        modifiedOn = Date()
         state = .finished
         updateWeight()
         frontend.saveExercise(exerciseName)
@@ -234,6 +238,7 @@ public class NRepMaxPlan : Plan {
 
     private let numReps: Int
 
+    private var modifiedOn = Date.distantPast
     private var workoutName: String = ""
     private var exerciseName: String = ""
     private var weight: Double = 0.0

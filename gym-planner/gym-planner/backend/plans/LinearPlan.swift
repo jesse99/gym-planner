@@ -97,14 +97,14 @@ public class LinearPlan : Plan {
         self.sets = store.getObjArray("sets")
         self.setIndex = store.getInt("setIndex")
         self.state = store.getObj("state", ifMissing: .waiting)
+        self.modifiedOn = store.getDate("modifiedOn", ifMissing: Date.distantPast)
 
         switch state {
         case .waiting:
             break
         default:
             let calendar = Calendar.current
-            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+            if !calendar.isDate(modifiedOn, inSameDayAs: Date()) {
                 sets = []
                 setIndex = 0
                 state = .waiting
@@ -125,7 +125,7 @@ public class LinearPlan : Plan {
         store.addObjArray("history", history)
         store.addObjArray("sets", sets)
         store.addInt("setIndex", setIndex)
-        store.addDate("savedOn", Date())
+        store.addDate("modifiedOn", modifiedOn)
         store.addObj("state", state)
     }
     
@@ -147,6 +147,7 @@ public class LinearPlan : Plan {
         self.setIndex = 0
         self.workoutName = workout.name
         self.exerciseName = exerciseName
+        self.modifiedOn = Date.distantPast  // user hasn't really changed anything yet
 
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
@@ -254,6 +255,7 @@ public class LinearPlan : Plan {
     
     public func reset() {
         setIndex = 0
+        modifiedOn = Date()
         state = .started
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
@@ -270,11 +272,13 @@ public class LinearPlan : Plan {
     // Internal items
     private func doNext() {
         setIndex += 1
+        modifiedOn = Date()
         state = .underway
         frontend.saveExercise(exerciseName)
     }
     
     private func doFinish(_ missed: Bool) {
+        modifiedOn = Date()
         state = .finished        
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
@@ -360,11 +364,10 @@ public class LinearPlan : Plan {
     private let workReps: Int
     private let deloads: [Double]
 
+    private var modifiedOn = Date.distantPast
     private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []
     private var sets: [Set] = []
     private var setIndex = 0
 }
-
-

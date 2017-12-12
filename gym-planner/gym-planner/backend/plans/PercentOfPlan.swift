@@ -98,14 +98,14 @@ public class PercentOfPlan : Plan {
         self.sets = store.getObjArray("sets")
         self.setIndex = store.getInt("setIndex")
         self.state = store.getObj("state", ifMissing: .waiting)
+        self.modifiedOn = store.getDate("modifiedOn", ifMissing: Date.distantPast)
 
         switch state {
         case .waiting:
             break
         default:
             let calendar = Calendar.current
-            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+            if !calendar.isDate(modifiedOn, inSameDayAs: Date()) {
                 sets = []
                 setIndex = 0
                 state = .waiting
@@ -126,7 +126,7 @@ public class PercentOfPlan : Plan {
         store.addObjArray("history", history)
         store.addObjArray("sets", sets)
         store.addInt("setIndex", setIndex)
-        store.addDate("savedOn", Date())
+        store.addDate("modifiedOn", modifiedOn)
         store.addObj("state", state)
     }
     
@@ -149,6 +149,7 @@ public class PercentOfPlan : Plan {
         self.setIndex = 0
         self.workoutName = workout.name
         self.exerciseName = exerciseName
+        self.modifiedOn = Date.distantPast  // user hasn't really changed anything yet
 
         switch findApparatus(exerciseName) {
         case .right(let apparatus):
@@ -270,6 +271,7 @@ public class PercentOfPlan : Plan {
     
     public func reset() {
         setIndex = 0
+        modifiedOn = Date()
         state = .started
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
@@ -286,11 +288,13 @@ public class PercentOfPlan : Plan {
     // Internal items
     private func doNext() {
         setIndex += 1
+        modifiedOn = Date()
         state = .underway
         frontend.saveExercise(exerciseName)
     }
     
     private func doFinish() {
+        modifiedOn = Date()
         state = .finished
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
@@ -376,6 +380,7 @@ public class PercentOfPlan : Plan {
     private let workReps: Int
     private let percent: Double
 
+    private var modifiedOn = Date.distantPast
     private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []

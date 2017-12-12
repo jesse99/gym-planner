@@ -79,14 +79,14 @@ public class VariableRepsPlan : Plan {
         self.history = store.getObjArray("history")
         self.setIndex = store.getInt("setIndex")
         self.state = store.getObj("state", ifMissing: .waiting)
+        self.modifiedOn = store.getDate("modifiedOn", ifMissing: Date.distantPast)
 
         switch state {
         case .waiting:
             break
         default:
             let calendar = Calendar.current
-            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+            if !calendar.isDate(modifiedOn, inSameDayAs: Date()) {
                 sets = []
                 setIndex = 0
                 state = .waiting
@@ -105,7 +105,7 @@ public class VariableRepsPlan : Plan {
         store.addObjArray("sets", sets)
         store.addObjArray("history", history)
         store.addInt("setIndex", setIndex)
-        store.addDate("savedOn", Date())
+        store.addDate("modifiedOn", modifiedOn)
         store.addObj("state", state)
     }
     
@@ -127,7 +127,8 @@ public class VariableRepsPlan : Plan {
         self.setIndex = 0
         self.workoutName = workout.name
         self.exerciseName = exerciseName
-        
+        self.modifiedOn = Date.distantPast  // user hasn't really changed anything yet
+
         switch findVariableRepsSetting(exerciseName) {
         case .right(let setting):
             self.state = .started
@@ -235,6 +236,7 @@ public class VariableRepsPlan : Plan {
     
     public func reset() {
         setIndex = 0
+        modifiedOn = Date()
         state = .started
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
@@ -251,11 +253,13 @@ public class VariableRepsPlan : Plan {
     // Internal items
     private func doNext() {
         setIndex += 1
+        modifiedOn = Date()
         state = .underway
         frontend.saveExercise(exerciseName)
     }
     
     private func doFinish(_ stalled: Bool) {
+        modifiedOn = Date()
         state = .finished
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
@@ -320,6 +324,7 @@ public class VariableRepsPlan : Plan {
     private let minReps: Int
     private let maxReps: Int
     
+    private var modifiedOn = Date.distantPast
     private var workoutName: String = ""
     private var exerciseName: String = ""
     private var sets: [Set] = []

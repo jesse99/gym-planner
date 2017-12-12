@@ -64,14 +64,14 @@ public class SteadyStateCardioPlan : Plan {
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.state = store.getObj("state", ifMissing: .waiting)
-        
+        self.modifiedOn = store.getDate("modifiedOn", ifMissing: Date.distantPast)
+
         switch state {
         case .waiting:
             break
         default:
             let calendar = Calendar.current
-            let savedOn = store.getDate("savedOn", ifMissing: Date.distantPast)
-            if !calendar.isDate(savedOn, inSameDayAs: Date()) {
+            if !calendar.isDate(modifiedOn, inSameDayAs: Date()) {
                 state = .waiting
             }
         }
@@ -86,7 +86,7 @@ public class SteadyStateCardioPlan : Plan {
         store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
-        store.addDate("savedOn", Date())
+        store.addDate("modifiedOn", modifiedOn)
         store.addObj("state", state)
     }
     
@@ -106,7 +106,8 @@ public class SteadyStateCardioPlan : Plan {
         os_log("starting SteadyStateCardioPlan for %@ and %@", type: .info, planName, exerciseName)
         self.workoutName = workout.name
         self.exerciseName = exerciseName
-        
+        self.modifiedOn = Date.distantPast  // user hasn't really changed anything yet
+
         self.state = .started
         frontend.saveExercise(exerciseName)        
         return nil
@@ -182,6 +183,7 @@ public class SteadyStateCardioPlan : Plan {
     }
     
     public func reset() {
+        modifiedOn = Date()
         state = .started
         refresh()   // we do this to ensure that users always have a way to reset state to account for changes elsewhere
         frontend.saveExercise(exerciseName)
@@ -197,6 +199,7 @@ public class SteadyStateCardioPlan : Plan {
     
     // Internal items
     private func doFinish(_ mins: Int, _ calories: Int) {
+        modifiedOn = Date()
         state = .finished
         
         if mins > 0 {
@@ -261,10 +264,8 @@ public class SteadyStateCardioPlan : Plan {
     private let minsPerDay: Int
     private let maxRollOverMins: Int
     
+    private var modifiedOn = Date.distantPast
     private var workoutName: String = ""
     private var exerciseName: String = ""
     private var history: [Result] = []
 }
-
-
-
