@@ -279,8 +279,8 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         let app = UIApplication.shared.delegate as! AppDelegate
         for (i, workout) in app.program.workouts.enumerated() {
             if workout.scheduled {
-                if let (candidate, partial) = dateWorkoutWasCompleted(workout) {
-                    if !partial && candidate.compare(date) == .orderedAscending {
+                if let (candidate, _) = dateWorkoutWasCompleted(workout) {
+                    if candidate.compare(date) == .orderedAscending {
                         date = candidate
                         index = i
                     }
