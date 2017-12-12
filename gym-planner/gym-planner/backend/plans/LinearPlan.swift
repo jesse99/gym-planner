@@ -265,8 +265,15 @@ public class LinearPlan : Plan {
         return "In this plan weights are advanced each time the lifter successfully completes an exercise. If the lifter fails to do all reps three times in a row then the weight is reduced by 10%. This plan is used by beginner programs like StrongLifts."
     }
     
-    public func findLastWeight() -> Double? {
-        return history.last?.weight
+    public func currentWeight() -> Double? {
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+            return deload.weight
+
+        case .left(_):
+            return nil
+        }
     }
     
     // Internal items
@@ -328,7 +335,7 @@ public class LinearPlan : Plan {
     
     private func buildSets(_ setting: VariableWeightSetting) {
         let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-        let weight = deload.weight;
+        let weight = deload.weight
         
         if let percent = deload.percent {
             os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)

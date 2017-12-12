@@ -193,7 +193,7 @@ public class SteadyStateCardioPlan : Plan {
         return "Used for low intensity steady state cardio, e.g. a treadmill, an exercise bike, etc."
     }
     
-    public func findLastWeight() -> Double? {
+    public func currentWeight() -> Double? {
         return nil
     }
     

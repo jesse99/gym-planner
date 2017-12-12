@@ -193,8 +193,13 @@ public class TimedPlan : Plan {
         return "Do one or more sets for a period of time with an optional weight."
     }
     
-    public func findLastWeight() -> Double? {
-        return history.last?.weight
+    public func currentWeight() -> Double? {
+        switch findCurrentWeight(exerciseName) {
+        case .right(let weight):
+            return weight
+        case .left(_):
+            return nil
+        }
     }
     
     // Internal items

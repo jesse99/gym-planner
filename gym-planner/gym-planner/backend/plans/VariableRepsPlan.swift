@@ -246,8 +246,13 @@ public class VariableRepsPlan : Plan {
         return "In this plan weights are advanced each time the lifter successfully completes an exercise. If the lifter fails to do all reps three times in a row then the weight is reduced by 10%. This plan is used by beginner programs like StrongLifts."
     }
     
-    public func findLastWeight() -> Double? {
-        return history.last?.weight
+    public func currentWeight() -> Double? {
+        switch findCurrentWeight(exerciseName) {
+        case .right(let weight):
+            return weight
+        case .left(_):
+            return nil
+        }
     }
     
     // Internal items

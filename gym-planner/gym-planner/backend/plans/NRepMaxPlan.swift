@@ -200,7 +200,7 @@ public class NRepMaxPlan : Plan {
         return "Used to find a \(numReps) rep max."
     }
     
-    public func findLastWeight() -> Double? {
+    public func currentWeight() -> Double? {
         return nil
     }
     

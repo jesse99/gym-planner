@@ -268,7 +268,7 @@ public class HIITPlan : Plan {
         return "Used for high intensity interval training, e.g. sprints."
     }
     
-    public func findLastWeight() -> Double? {
+    public func currentWeight() -> Double? {
         return nil
     }
     

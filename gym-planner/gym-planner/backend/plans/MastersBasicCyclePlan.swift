@@ -335,8 +335,15 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
     
     /// TODO: Think we can have a global that just does this.
-    public func findLastWeight() -> Double? {
-        return (history.findLast {$0.primary})?.weight
+    public func currentWeight() -> Double? {
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+            return deload.weight;
+
+        case .left(_):
+            return nil
+        }
     }
     
     // Internal items

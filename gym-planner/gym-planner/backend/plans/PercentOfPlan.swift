@@ -281,8 +281,13 @@ public class PercentOfPlan : Plan {
         return "This does an exercise at a percentage of another exercises workset. It's typically used to perform a light or medium version of an exercise."
     }
     
-    public func findLastWeight() -> Double? {
-        return history.last?.weight
+    public func currentWeight() -> Double? {
+        switch getOtherWeight() {
+        case .right(let otherWeight):
+            return percent*otherWeight
+        case .left(_):
+            return nil
+        }
     }
     
     // Internal items
@@ -312,7 +317,7 @@ public class PercentOfPlan : Plan {
     }
     
     private func buildSets(_ apparatus: Apparatus, _ otherWeight: Double) {
-        let workingSetWeight = percent*otherWeight;
+        let workingSetWeight = percent*otherWeight
         os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
         
         var warmupsWithBar = 0
@@ -354,7 +359,7 @@ public class PercentOfPlan : Plan {
                         return .left(err)
                     default:
                         // We want to use whatever the user last lifted,
-                        if let weight = p.findLastWeight() {
+                        if let weight = p.currentWeight() {
                             return .right(weight)
                         } else {
                             // but if all they have run is NRepsMax then we'll settle for what they should lift next time.
