@@ -185,7 +185,7 @@ class ExerciseController: UIViewController {
     @IBAction func nextPressed(_ sender: Any) {
         //dismissTooltip()
         if timer != nil {
-            stopTimer(manual: true)
+            stopTimer(manual: (sender as? Plan) == nil)
         }
         
         if case .finished = exercise.plan.state {
@@ -232,7 +232,7 @@ class ExerciseController: UIViewController {
     private func maybeStartTimer() {
         let rest = exercise.plan.restSecs()
         if rest.autoStart && rest.secs > 0 {
-            startTimer(force: false) 
+            startTimer(force: false)
             startedTimer = true
         }
     }
@@ -453,7 +453,7 @@ class ExerciseController: UIViewController {
             let secs = Double(exercise.plan.restSecs().secs) - Date().timeIntervalSince(startTime)
             
             if secs <= 0.0 && autoAdvanced(manual: false) {
-                nextPressed(self)
+                return
             } else if updateTimerLabel(secsLabel, secs) {
                 // We don't want to run the timer too long since it chews up the battery.
                 stopTimer(manual: false)
@@ -469,7 +469,7 @@ class ExerciseController: UIViewController {
                 if !manual {
                     AudioServicesPlayAlertSound(exercise.plan.restSound())
                 }
-                nextPressed(self)
+                nextPressed(exercise.plan)
                 return true
             }
         default:
