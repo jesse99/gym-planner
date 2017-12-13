@@ -181,7 +181,7 @@ let builtInNotes: [String: String] = [
     
     "Bent-knee Iron Cross": createNote(
         notes: [
-            "Lie on your back with your legs tucked into your chest.",
+            "Lie on your back with your legs tucked into your chest and your arms spread outwards.",
             "Keeping legs tucked and shoulders on the floor rotate your legs from side to side."],
         links: ["Video": "https://www.youtube.com/watch?v=2HYWl009bq0"]),
     
@@ -415,12 +415,12 @@ let builtInNotes: [String: String] = [
     
     "Cossack Squat": createNote(
         notes: [
-            "Stand with legs stretched out wide.",
+            "Stand with legs stretched out wide and toes out a bit.",
             "Squat down on one leg so that the other leg is stretched straight out away from you.",
             "Stand up and squat down on the other leg.",
-            "Can help balance yourself with your hands.",
-            "Heels should remain on the floor..",
-            "Toes should be pointed out a bit.",
+            "Heels should remain on the floor though toes can come up.",
+            "Back should remain flat.",
+            "Difficulty can be lessened by balancing yourself with your hands on the ground.",
             "Difficulty can be increased by holding your hands over your chest."],
         links: ["Video": "https://www.youtube.com/watch?v=tpczTeSkHz0"]),
     
@@ -731,8 +731,8 @@ let builtInNotes: [String: String] = [
         notes: [
             "Get on your hands and knees.",
             "Keep arms straight.",
-            "Raise one leg and rotate your knee in a circle.",
-            "AFter circling in one direction do the same in the other direction.",
+            "Raise one leg, pull knee into your butt, and rotate your knee in a circle.",
+            "After circling in one direction do the same in the other direction.",
             "Try and make the biggest circle you can."],
         links: ["Video": "https://www.youtube.com/watch?v=f-GRxDrMC4Y"]),
     
@@ -1171,11 +1171,11 @@ let builtInNotes: [String: String] = [
     
     "Mountain Climber": createNote(
         notes: [
-            "Get on your hands and knees.",
+            "Get into a pushup position with hands a bit closer than normal.",
             "Keep arms straight.",
-            "Bring one leg up towards your shoulder and plant it.",
-            "Bring that leg back and the other forward."],
-        links: ["Video": "https://www.youtube.com/watch?v=aT6t2UBW47o"]),
+            "Bring one leg up and plant your foot outside your arm.",
+            "Sink back leg down and repeat with other leg."],
+        links: ["Video": "https://www.youtube.com/watch?v=flT4TIMYvzI"]),
     
     "Oblique Crunches": createNote(
         notes: [
@@ -1399,7 +1399,7 @@ let builtInNotes: [String: String] = [
             "Get on your knees.",
             "Prop one foot on a low support.",
             "Extend the other foot out in front of you.",
-            "Keep your back straight.",
+            "Keep your back straight and lean back slightly.",
             "Difficulty can be increased by placing your rear knee against a wall (couch stretch)."],
         links: ["Video": "https://www.youtube.com/watch?v=5rLRCSLbwjQ"]),
     
@@ -1487,8 +1487,9 @@ let builtInNotes: [String: String] = [
     "Rocking Frog Stretch": createNote(
         notes: [
             "Get on your hands and knees.",
+            "Raise your knees an inch off the ground.",
             "Rock your body forward and backward.",
-            "Difficulty can be increased by keeping your knees an inch off the floor."],
+            "Keep your back flat and your knees the same distance from the ground."],
         links: ["Video": "https://www.youtube.com/watch?v=RirF9aNKtQU"]),
     
     "Roll-over into V-sit": createNote(
@@ -1498,6 +1499,7 @@ let builtInNotes: [String: String] = [
             "Try to have your toes touch the ground behind your head.",
             "Roll forward extending your legs into a V.",
             "Bring your arms forward so that your palms rest on the ground between your legs.",
+            "Try to increase the range of motion with each rep.",
             "Difficulty can be reduced by pulling on your ankles as you roll back."],
         links: ["Video": "https://www.youtube.com/watch?v=NcBo0wRDCCE"]),
     
@@ -1625,7 +1627,7 @@ let builtInNotes: [String: String] = [
     "Seated Piriformis Stretch": createNote(
         notes: [
             "Sit down on a chair and cross your legs.",
-            "Pull your knee up and lean forward (or to the side).",
+            "Pull your knee up and lean your chest forward slightly.",
             "Back should remain straight."],
         links: ["Video": "https://www.youtube.com/watch?v=DE-GGsRtb6k"]),
     
