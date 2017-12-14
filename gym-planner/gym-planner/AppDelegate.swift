@@ -59,8 +59,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         return true
     }
 
+    func saveProgram() {
+        saveProgram(program)
+    }
+    
     func saveExercise(_ name: String) {
-//        print("-----------------------------------------")
         saveProgram(program)
     }
     

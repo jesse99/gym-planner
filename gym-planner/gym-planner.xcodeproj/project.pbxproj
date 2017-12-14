@@ -57,6 +57,7 @@
 		37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4A91FB1625700244ADD /* Exercise.swift */; };
 		37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AC1FB3FCED00244ADD /* SequenceExtension.swift */; };
 		37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */; };
+		37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,7 @@
 		37CED4A91FB1625700244ADD /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		37CED4AC1FB3FCED00244ADD /* SequenceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtension.swift; sourceTree = "<group>"; };
 		37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastersBasicCyclePlan.swift; sourceTree = "<group>"; };
+		37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 				37CED48D1FAE29CB00244ADD /* backend */,
 				37CED46B1FAE289100244ADD /* AppDelegate.swift */,
 				37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */,
+				37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */,
 				37B308D91FC3234F00556E8F /* ExerciseController.swift */,
 				377C11F41FC2761A0063A324 /* extensions */,
 				377F055A1FC0E1000015D7EF /* Helpers.swift */,
@@ -424,6 +427,7 @@
 				37452C961FDE3F3100A3CAA6 /* ColorExtension.swift in Sources */,
 				377C11F61FC276300063A324 /* LabelExtension.swift in Sources */,
 				374556EB1FD669ED0005020B /* Notes.swift in Sources */,
+				37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */,
 				37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */,
 				377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */,
 				37452C901FDDA6B100A3CAA6 /* CardioResultController.swift in Sources */,

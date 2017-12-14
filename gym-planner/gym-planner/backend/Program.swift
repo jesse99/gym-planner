@@ -57,6 +57,7 @@ public class Program: Storable {
         self.exercises = exercises
         self.tags = Set(tags)
         self.description = description
+        self.customNotes = [:]
     }
 
     public required init(from store: Store) {
@@ -65,6 +66,13 @@ public class Program: Storable {
         self.exercises = store.getObjArray("exercises")
         self.tags = Set(store.getObjArray("tags"))
         self.description = store.getStr("description")
+        
+        self.customNotes = [:]
+        let customNames = store.getStrArray("custom-names", ifMissing: [])
+        let customText = store.getStrArray("custom-text", ifMissing: [])
+        for (i, name) in customNames.enumerated() {
+            customNotes[name] = customText[i]
+        }
     }
     
     public func save(_ store: Store) {
@@ -73,6 +81,8 @@ public class Program: Storable {
         store.addObjArray("exercises", exercises)
         store.addObjArray("tags", Array(tags))
         store.addStr("description", description)
+        store.addStrArray("custom-names", Array(customNotes.keys))
+        store.addStrArray("custom-text", Array(customNotes.values))
     }
 
     public func findWorkout(_ name: String) -> Workout? {
@@ -112,6 +122,7 @@ public class Program: Storable {
                 }
                 name = exercise.nextExercise
             }
+
             return false
         }
         
@@ -147,6 +158,8 @@ public class Program: Storable {
                 }
             }
         }
+        
+        customNotes = savedProgram.customNotes
     }
    
     public var name: String             // "Mad Cow"
@@ -154,6 +167,7 @@ public class Program: Storable {
     public var exercises: [Exercise]
     public var tags: Set<Tags>
     public var description: String
+    public var customNotes: [String: String]    // formal name => markdown
     // TODO: may want a custom flag
 }
 

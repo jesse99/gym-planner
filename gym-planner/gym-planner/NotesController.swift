@@ -25,12 +25,11 @@ class NotesController: UIViewController, UITextViewDelegate {
 //    }
     
     private func reset() {
-//        let app = UIApplication.shared.delegate as! AppDelegate
-//        if let markup = app.customNotes[name] {   // TODO
-//            setText(markup)
-//            revertButton.isEnabled = true
-//        } else
-        if let markup = builtInNotes[exercise.formalName] {
+        let app = UIApplication.shared.delegate as! AppDelegate
+        if let markup = app.program.customNotes[exercise.formalName] {
+            setText(markup)
+            revertButton.isEnabled = true
+        } else if let markup = builtInNotes[exercise.formalName] {
             setText(markup)
             revertButton.isEnabled = false
         } else {
@@ -59,24 +58,32 @@ class NotesController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func revertPressed(_ sender: Any) {
-//        let alert = UIAlertController(title: "Restore original note?", message: nil, preferredStyle: .actionSheet)
-//
-//        var action = UIAlertAction(title: "Yes", style: .destructive) {_ in self.doRevert()}
-//        alert.addAction(action)
-//
-//        action = UIAlertAction(title: "No", style: .default, handler: nil)
-//        alert.addAction(action)
-//
-//        self.present(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: "Restore original note?", message: nil, preferredStyle: .actionSheet)
+
+        var action = UIAlertAction(title: "Yes", style: .destructive) {_ in self.doRevert()}
+        alert.addAction(action)
+
+        action = UIAlertAction(title: "No", style: .default, handler: nil)
+        alert.addAction(action)
+
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func editPressed(_ sender: Any) {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let view = storyboard.instantiateViewController(withIdentifier: "EditNoteControllerID") as! EditNoteController
-//        view.initialize(name, breadcrumbLabel.text!)
-//        self.present(view, animated: true, completion: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let view = storyboard.instantiateViewController(withIdentifier: "EditNoteID") as! EditNoteController
+        view.initialize(exercise.formalName, breadcrumbLabel.text!)
+        self.present(view, animated: true, completion: nil)
     }
     
+    private func doRevert()
+    {
+        let app = UIApplication.shared.delegate as! AppDelegate
+        app.program.customNotes[exercise.formalName] = nil
+        app.saveProgram()
+        reset()
+    }
+
     @IBOutlet private var breadcrumbLabel: UILabel!
     @IBOutlet private var textView: UITextView!
     @IBOutlet private var revertButton: UIBarButtonItem!

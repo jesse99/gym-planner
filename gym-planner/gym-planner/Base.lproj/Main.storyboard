@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -409,6 +409,87 @@
                 <exit id="RaT-5z-g0d" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2698" y="-323"/>
+        </scene>
+        <!--Edit Note Controller-->
+        <scene sceneID="0Re-ue-zf3">
+            <objects>
+                <viewController storyboardIdentifier="EditNoteID" id="bPe-Au-kWo" customClass="EditNoteController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="W3S-1k-r21">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Q3-xG-2OY">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="gUV-YU-fBI">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="lse-TY-VJX">
+                                            <connections>
+                                                <action selector="donePressed:" destination="bPe-Au-kWo" id="zug-H4-Kbc"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <rightBarButtonItems>
+                                            <barButtonItem title="Cancel" id="noC-I7-3LZ">
+                                                <connections>
+                                                    <action selector="cancelPressed:" destination="bPe-Au-kWo" id="Qps-oZ-AVl"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem title="Help" id="U29-FH-34b">
+                                                <connections>
+                                                    <action selector="helpPressed:" destination="bPe-Au-kWo" id="7XN-80-atV"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </rightBarButtonItems>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breadcrumb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jvp-Bl-tgK">
+                                <rect key="frame" x="150.5" y="20" width="74.5" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gUx-zZ-MRb">
+                                <rect key="frame" x="0.0" y="66" width="375" height="557"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="jvp-Bl-tgK" firstAttribute="centerX" secondItem="W3S-1k-r21" secondAttribute="centerX" id="2xX-gn-rTI"/>
+                            <constraint firstItem="6Q3-xG-2OY" firstAttribute="top" secondItem="gUx-zZ-MRb" secondAttribute="bottom" id="PPk-KN-wlX"/>
+                            <constraint firstItem="6Q3-xG-2OY" firstAttribute="leading" secondItem="Sdv-tQ-9YG" secondAttribute="leading" id="RHm-ig-2oe"/>
+                            <constraint firstItem="Sdv-tQ-9YG" firstAttribute="trailing" secondItem="gUx-zZ-MRb" secondAttribute="trailing" id="SHb-QD-DCF"/>
+                            <constraint firstItem="jvp-Bl-tgK" firstAttribute="top" secondItem="Sdv-tQ-9YG" secondAttribute="top" id="Vwi-rE-KF6"/>
+                            <constraint firstItem="6Q3-xG-2OY" firstAttribute="bottom" secondItem="Sdv-tQ-9YG" secondAttribute="bottom" id="W1b-a6-786"/>
+                            <constraint firstItem="gUx-zZ-MRb" firstAttribute="leading" secondItem="Sdv-tQ-9YG" secondAttribute="leading" id="fkh-C0-seN"/>
+                            <constraint firstItem="6Q3-xG-2OY" firstAttribute="trailing" secondItem="Sdv-tQ-9YG" secondAttribute="trailing" id="kZV-7c-syr"/>
+                            <constraint firstItem="gUx-zZ-MRb" firstAttribute="top" secondItem="jvp-Bl-tgK" secondAttribute="bottom" constant="30" id="qde-Yo-Bpr"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Sdv-tQ-9YG"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="E4S-MM-jzp" appends="YES" id="ge6-LQ-QNQ"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="bottomConstraint" destination="PPk-KN-wlX" id="2M5-hc-MlP"/>
+                        <outlet property="breadcrumbLabel" destination="jvp-Bl-tgK" id="GCU-sn-9d6"/>
+                        <outlet property="textView" destination="gUx-zZ-MRb" id="WX3-Xw-9NS"/>
+                        <segue destination="2Hr-Fe-Ncq" kind="unwind" identifier="unwindToNotesID" unwindAction="unwindToNotes:" id="h4h-QC-he9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IDk-Os-1HB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="2Hr-Fe-Ncq" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="E4S-MM-jzp">
+                    <connections>
+                        <action selector="tapped:" destination="bPe-Au-kWo" id="gWp-Ua-tmb"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="3342" y="-326"/>
         </scene>
         <!--Second-->
         <scene sceneID="wg7-f3-ORb">
