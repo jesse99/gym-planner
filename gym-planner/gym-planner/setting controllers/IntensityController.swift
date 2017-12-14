@@ -24,9 +24,6 @@ class IntensityController: UIViewController {
     @IBAction func donePressed(_ sender: Any) {
         if setting != nil {
             setting.intensity = intensityTextbox.text ?? ""
-            
-            let app = UIApplication.shared.delegate as! AppDelegate
-            app.saveExercise(exercise.name)
         }
         
         self.performSegue(withIdentifier: "unwindToExerciseID", sender: self)

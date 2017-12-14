@@ -33,9 +33,6 @@ class HIITIntensityController: UIViewController {
             setting.highIntensity = highTextbox?.text ?? ""
             setting.lowIntensity = lowTextbox?.text ?? ""
             setting.cooldownIntensity = cooldownTextbox?.text ?? ""
-            
-            let app = UIApplication.shared.delegate as! AppDelegate
-            app.saveExercise(exercise.name)
         }
         
         self.performSegue(withIdentifier: "unwindToHIITID", sender: self)

@@ -180,6 +180,9 @@ class ExerciseController: UIViewController {
         //restorePosition()
         exercise.plan.refresh()
         updateUI()
+        
+        let app = UIApplication.shared.delegate as! AppDelegate
+        app.saveExercise(exercise.name)
     }
     
     @IBAction func nextPressed(_ sender: Any) {

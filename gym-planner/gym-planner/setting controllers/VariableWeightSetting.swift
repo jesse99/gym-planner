@@ -62,9 +62,6 @@ class VariableWeightController: UIViewController {
             if let text = restTextbox.text, let value = strToSecs(text) {
                 setting.restSecs = value
             }
-            
-            let app = UIApplication.shared.delegate as! AppDelegate
-            app.saveExercise(exercise.name)
         }
         
         self.performSegue(withIdentifier: "unwindToExerciseID", sender: self)
