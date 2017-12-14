@@ -150,10 +150,15 @@ public class TimedPlan : Plan {
             subtitle = "Target is \(secsToStr(target))"
         }
         
+        var amount = ""
+        if case let .right(weight) = findCurrentWeight(exerciseName), weight > 0.0 {
+            amount = "\(Weight.friendlyUnitsStr(weight, plural: true))"
+        }
+        
         return Activity(
             title: "Set \(setIndex) of \(numSets)",
             subtitle: subtitle,
-            amount: "",
+            amount: amount,
             details: "",
             buttonName: "Start",
             showStartButton: setIndex > 1,
