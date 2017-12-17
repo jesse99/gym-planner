@@ -107,6 +107,15 @@ public class VariableSetsPlan: Plan {
         return nil
     }
     
+    public func getHistory() -> [BaseResult] {
+        return history
+    }
+    
+    public func deleteHistory(_ index: Int) {
+        history.remove(at: index)
+        frontend.saveExercise(exerciseName)
+    }
+    
     public func on(_ workout: Workout) -> Bool {
         return workoutName == workout.name
     }

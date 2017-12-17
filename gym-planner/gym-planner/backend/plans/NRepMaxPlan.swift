@@ -94,6 +94,14 @@ public class NRepMaxPlan : Plan {
         return nil
     }
     
+    public func getHistory() -> [BaseResult] {
+        return []
+    }
+    
+    public func deleteHistory(_ index: Int) {
+        frontend.assert(false, "NRepMaxPlan deleteHistory should not be called")
+    }
+    
     public func on(_ workout: Workout) -> Bool {
         return workoutName == workout.name
     }

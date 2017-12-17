@@ -10,6 +10,7 @@
 		370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */; };
 		370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFADA1FD6450400CDE63D /* FixedWeightController.swift */; };
 		37163DEE1FD8DA23008EB47D /* VariableRepsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */; };
+		372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14441FE708B700D8392A /* BaseHistoryController.swift */; };
 		3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743E2B81FB824CC00787CB3 /* FrontEnd.swift */; };
 		37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C8D1FDCA98800A3CAA6 /* SteadyStateCardio.swift */; };
 		37452C901FDDA6B100A3CAA6 /* CardioResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */; };
@@ -74,6 +75,7 @@
 		370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSetsPlan.swift; sourceTree = "<group>"; };
 		370EFADA1FD6450400CDE63D /* FixedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWeightController.swift; sourceTree = "<group>"; };
 		37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableRepsPlan.swift; sourceTree = "<group>"; };
+		372B14441FE708B700D8392A /* BaseHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHistoryController.swift; sourceTree = "<group>"; };
 		3743E2B81FB824CC00787CB3 /* FrontEnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEnd.swift; sourceTree = "<group>"; };
 		37452C8D1FDCA98800A3CAA6 /* SteadyStateCardio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteadyStateCardio.swift; sourceTree = "<group>"; };
 		37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioResultController.swift; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 			children = (
 				37CED48D1FAE29CB00244ADD /* backend */,
 				37CED46B1FAE289100244ADD /* AppDelegate.swift */,
+				372B14441FE708B700D8392A /* BaseHistoryController.swift */,
 				37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */,
 				37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */,
 				37B308D91FC3234F00556E8F /* ExerciseController.swift */,
@@ -405,6 +408,7 @@
 				377F055D1FC11E1B0015D7EF /* Either.swift in Sources */,
 				37CED4701FAE289100244ADD /* HistoryTabController.swift in Sources */,
 				37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */,
+				372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */,
 				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
 				37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */,
 				374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */,

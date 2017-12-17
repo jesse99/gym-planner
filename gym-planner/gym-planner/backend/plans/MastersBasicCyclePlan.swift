@@ -212,6 +212,15 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         }
     }
     
+    public func getHistory() -> [BaseResult] {
+        return history
+    }
+    
+    public func deleteHistory(_ index: Int) {
+        history.remove(at: index)
+        frontend.saveExercise(exerciseName)
+    }
+    
     public func on(_ workout: Workout) -> Bool {
         return workoutName == workout.name
     }

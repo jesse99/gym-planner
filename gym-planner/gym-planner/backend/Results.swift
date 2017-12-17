@@ -25,7 +25,7 @@ public class BaseResult: Storable {
 }
 
 public class WeightedResult: BaseResult {
-    /// This is set for the exercise instance that really matters, e.g. the one where weight progresses.
+    /// This is the set for the exercise instance that really matters, e.g. the one where weight progresses.
     let primary: Bool
     
     /// True if the user was not able to complete what he was asked to do.

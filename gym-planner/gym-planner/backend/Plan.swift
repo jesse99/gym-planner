@@ -133,6 +133,9 @@ public protocol Plan: Storable {
     /// Explanation of how sets/reps, progression, and deloads work.
     func description() -> String
 
+    func getHistory() -> [BaseResult]
+    func deleteHistory(_ index: Int)
+    
     /// Returns the weight the user is expected to lift. Note that this is the base-line weight, e.g.
     /// for a plan with cycles it'll typically be the weight for the first cycle.
     func currentWeight() -> Double?

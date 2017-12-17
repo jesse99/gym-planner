@@ -58,8 +58,15 @@ class HistoryTabController: UIViewController, UITableViewDataSource, UITableView
             cell.textLabel!.text = "No Results"
             cell.textLabel?.textColor = UIColor.gray
         } else {
-            cell.textLabel!.text = exerciseNames[(path as NSIndexPath).item]
-            cell.textLabel?.textColor = UIColor.black
+            let name = exerciseNames[(path as NSIndexPath).item]
+            cell.textLabel!.text = name
+            
+            let app = UIApplication.shared.delegate as! AppDelegate
+            if let exercise = app.program.exercises.first(where: {$0.name == name}) {
+                cell.textLabel?.textColor = exercise.plan.getHistory().isEmpty ? UIColor.gray : UIColor.black
+            } else {
+                cell.textLabel?.textColor = UIColor.gray
+            }
         }
         
         return cell
@@ -68,11 +75,31 @@ class HistoryTabController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt path: IndexPath) {
         if !exerciseNames.isEmpty {
             let name = exerciseNames[(path as NSIndexPath).item]
-            showDetails(name)   // TODO: pop an alert and ask for charts or details, maybe email too
+            
+            let app = UIApplication.shared.delegate as! AppDelegate
+            if let exercise = app.program.exercises.first(where: {$0.name == name}) {
+                // TODO: pop an alert and ask for charts or details, maybe email too
+                let history = exercise.plan.getHistory()
+                if let weighted = history as? [WeightedResult] {
+                    showWeighted(exercise, weighted)
+                } else {
+                    showBase(exercise, history)
+                }
+            }
         }
     }
     
-    private func showDetails(_ name: String) {
+    // Note that we don't expose all the different weird things plans put into their history:
+    // if a user really wants to edit one of those things they'll have to delete the result
+    // and redo the exercise.
+    private func showBase(_ exercise: Exercise, _ history: [BaseResult]) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let view = storyboard.instantiateViewController(withIdentifier: "BaseHistoryID") as! BaseHistoryController
+        view.initialize(exercise, "History")
+        present(view, animated: true, completion: nil)
+    }
+    
+    private func showWeighted(_ exercise: Exercise, _ history: [WeightedResult]) {
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
 //        let view = storyboard.instantiateViewController(withIdentifier: "LiftHistoryID") as! ExerciseHistoryController
 //        view.initialize(name, "History")
