@@ -1,9 +1,9 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;}
 {\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red14\green14\blue255;\red233\green233\blue233;
-\red0\green0\blue0;\red170\green13\blue145;}
+\red0\green0\blue0;\red170\green13\blue145;\red63\green110\blue116;\red92\green38\blue153;}
 {\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c5500\c5500\c100000;\csgenericrgb\c91180\c91178\c91179;
-\csgenericrgb\c0\c0\c0;\csgenericrgb\c66500\c5200\c56900;}
+\csgenericrgb\c0\c0\c0;\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c35900\c14900\c60100;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/126365/ios-frameworks-tutorial"}}{\fldrslt 
 \f0\fs48 \cf2 https://www.raywenderlich.com/126365/ios-frameworks-tutorial}}
@@ -19,12 +19,12 @@
 {\field{\*\fldinst{HYPERLINK "https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/"}}{\fldrslt \cf2 https://www.reddit.com/r/slowcooking/comments/7ah33a/a_sample_of_my_slow_cooking_recipe_collection/}}\
 \
 view restoration\
-	{\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/117471/state-restoration-tutorial"}}{\fldrslt \cf2 https://www.raywenderlich.com/117471/state-restoration-tutorial}}\
-	testing: {\field{\*\fldinst{HYPERLINK "https://stackoverflow.com/questions/19424670/state-restoration-in-ios"}}{\fldrslt \cf2 https://stackoverflow.com/questions/19424670/state-restoration-in-ios}}\
+	{\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/117471/state-restoration-tutorial"}}{\fldrslt https://www.raywenderlich.com/117471/state-restoration-tutorial}}\
+	testing: {\field{\*\fldinst{HYPERLINK "https://stackoverflow.com/questions/19424670/state-restoration-in-ios"}}{\fldrslt https://stackoverflow.com/questions/19424670/state-restoration-in-ios}}\
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 \cf2 serialization
 \f1\fs36 \cf3 \
-	{\field{\*\fldinst{HYPERLINK "http://benscheirman.com/2017/06/ultimate-guide-to-json-parsing-with-swift-4/"}}{\fldrslt \cf3 http://benscheirman.com/2017/06/ultimate-guide-to-json-parsing-with-swift-4/}}\cb4 \
+	{\field{\*\fldinst{HYPERLINK "http://benscheirman.com/2017/06/ultimate-guide-to-json-parsing-with-swift-4/"}}{\fldrslt http://benscheirman.com/2017/06/ultimate-guide-to-json-parsing-with-swift-4/}}\cb4 \
 
 \f0\fs48 \cf2 \cb1 	\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
@@ -55,7 +55,7 @@ Static Hold\
 
 \i 12% of last heavy set of 5\
 \
-hip mobility: {\field{\*\fldinst{HYPERLINK "https://www.youtube.com/watch?v=NG9qbvAN3gQ"}}{\fldrslt \cf2 https://www.youtube.com/watch?v=NG9qbvAN3gQ}}
+hip mobility: {\field{\*\fldinst{HYPERLINK "https://www.youtube.com/watch?v=NG9qbvAN3gQ"}}{\fldrslt https://www.youtube.com/watch?v=NG9qbvAN3gQ}}
 \i0 \
 \
 
@@ -79,13 +79,44 @@ subtract 50 from rent\
 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
+\f1\b0\fs36 \cf6 public\cf5  \cf6 class\cf5  BaseResult: \cf7 Storable\cf5  \{
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf5     \cf6 let\cf5  title: \cf8 String
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf6 let\cf5  date: \cf8 Date
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf6 \
+public\cf5  \cf6 class\cf5  WeightedResult: \cf7 BaseResult\cf5  \{
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf5     \cf6 let\cf5  primary: \cf8 Bool
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf6 var\cf5  missed: \cf8 Bool
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf6 var\cf5  weight: \cf8 Double
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\b\fs48 \cf2 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
 \f1\b0\fs36 \cf5 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 \cf6 \
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
-\f0\fs48 \cf2 * Plan descriptions should probably have more examples\
+\f0\fs48 \cf2 * Add real icons for the tabs\
 * Add history support\
+	- use second controller for the first gistory screen\
 	- delete a bunch of the hiit records\
 * Remove cardio from my workout\
 * Setting controllers shouldn\'92t be restorable\
@@ -96,7 +127,7 @@ subtract 50 from rent\
 	- put the UI in a separate file\
 * Add notes support\
 	- swifty markdown is pretty limited, eg no support for lists\
-	  maybe {\field{\*\fldinst{HYPERLINK "https://github.com/ivanbruel/MarkdownKit"}}{\fldrslt \cf2 https://github.com/ivanbruel/MarkdownKit}}\
+	  maybe {\field{\*\fldinst{HYPERLINK "https://github.com/ivanbruel/MarkdownKit"}}{\fldrslt https://github.com/ivanbruel/MarkdownKit}}\
 * Add more programs\
 	- might want to do some of these on days off (at a really light weight)\
 	- need some sort of way to filter programs using tags\
