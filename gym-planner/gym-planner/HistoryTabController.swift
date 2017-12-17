@@ -1,13 +1,6 @@
-//
-//  SecondViewController.swift
-//  gym-planner
-//
-//  Created by Jesse Jones on 11/4/17.
-//  Copyright © 2017 MushinApps. All rights reserved.
-//
 import UIKit
 
-class SecondViewController: UIViewController {
+class HistoryTabController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
