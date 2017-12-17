@@ -197,7 +197,7 @@ public class NRepMaxPlan : Plan {
     }
     
     public func description() -> String {
-        return "Used to find a \(numReps) rep max."
+        return "Used to find a \(numReps) rep max. Other plans like LinearPlan will use this until a weight has been found."
     }
     
     public func currentWeight() -> Double? {

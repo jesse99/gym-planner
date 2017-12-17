@@ -195,7 +195,7 @@ public class TimedPlan : Plan {
     }
     
     public func description() -> String {
-        return "Do one or more sets for a period of time with an optional weight."
+        return "Do one or more sets for a period of time with an optional weight, e.g. 2x30s of a couch stretch."
     }
     
     public func currentWeight() -> Double? {

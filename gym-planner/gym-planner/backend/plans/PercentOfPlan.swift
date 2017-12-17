@@ -278,7 +278,7 @@ public class PercentOfPlan : Plan {
     }
     
     public func description() -> String {
-        return "This does an exercise at a percentage of another exercises workset. It's typically used to perform a light or medium version of an exercise."
+        return "This does an exercise at a percentage of another exercises workset. It's typically used to perform a light or medium version of another exercise."
     }
     
     public func currentWeight() -> Double? {

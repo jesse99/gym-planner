@@ -261,7 +261,7 @@ public class LinearPlan : Plan {
     }
     
     public func description() -> String {
-        return "In this plan weights are advanced each time the lifter successfully completes an exercise. If the lifter fails to do all reps three times in a row then the weight is reduced by 10%. This plan is used by beginner programs like StrongLifts."
+        return "Weights are advanced each time the lifter successfully completes an exercise. If the lifter fails to do all reps three times in a row then the weight is reduced by 10%. This plan is used by beginner programs like StrongLifts."
     }
     
     public func currentWeight() -> Double? {

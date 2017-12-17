@@ -190,7 +190,7 @@ public class FixedSetsPlan : Plan {
     }
     
     public func description() -> String {
-        return "Very simple plan where the sets and reps are fixed and weight can be set via the Options screen."
+        return "Sets and reps are fixed and weight can be set via the Options screen, e.g. 1x15 of shoulder dislocates."
     }
     
     public func currentWeight() -> Double? {
