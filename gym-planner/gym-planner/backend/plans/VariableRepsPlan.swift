@@ -6,7 +6,7 @@ import os.log
 public class VariableRepsPlan : Plan {
     struct Set: Storable {
         let title: String      // "Set 3 of 4"
-        let amount: String
+        let amount: String     // "3 reps @ 200 lbs"
         
         init(set: Int, numSets: Int, numReps: Int, weight: Double) {
             self.title = "Set \(set) of \(numSets)"
@@ -222,14 +222,25 @@ public class VariableRepsPlan : Plan {
             return .normal([Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})])
         } else {
             if case .right(let setting) = findVariableRepsSetting(exerciseName), setting.requestedReps < maxReps {
-                return .normal([
-                    // TODO: What we need to do instead is prompt the user to see if he wants to add or remove reps.
-                    // But we need to make sure he doesn't go beyond min and maxReps.
-                    Completion(title: "Finished OK",  isDefault: true,  callback: {() -> Void in self.doFinish(false)}),
-                    Completion(title: "Missed a rep", isDefault: false, callback: {() -> Void in self.doFinish(true)})])
+                var completions: [Completion] = []
+                
+                if setting.requestedReps+2 <= maxReps {
+                    completions.append(Completion(title: "Add 2 Reps",  isDefault: false,  callback: {() -> Void in self.doFinish(2)}))
+                }
+                if setting.requestedReps+1 <= maxReps {
+                    completions.append(Completion(title: "Add 1 Rep",  isDefault: false,  callback: {() -> Void in self.doFinish(1)}))
+                }
+                completions.append(Completion(title: "Done",  isDefault: true,  callback: {() -> Void in self.doFinish(0)}))
+                if setting.requestedReps-1 >= minReps {
+                    completions.append(Completion(title: "Subtract 1 Rep",  isDefault: false,  callback: {() -> Void in self.doFinish(-1)}))
+                }
+                if setting.requestedReps-2 >= minReps {
+                    completions.append(Completion(title: "Subtract 2 Reps",  isDefault: false,  callback: {() -> Void in self.doFinish(-2)}))
+                }
+                return .normal(completions)
 
             } else {
-                return .normal([Completion(title: "Done", isDefault: false, callback: {() -> Void in self.doFinish(false)})])
+                return .normal([Completion(title: "Done", isDefault: false, callback: {() -> Void in self.doFinish(0)})])
             }
         }
     }
@@ -243,7 +254,7 @@ public class VariableRepsPlan : Plan {
     }
     
     public func description() -> String {
-        return "In this plan weights are advanced each time the lifter successfully completes an exercise. If the lifter fails to do all reps three times in a row then the weight is reduced by 10%. This plan is used by beginner programs like StrongLifts."
+        return "Do sets with reps where the reps can be adjusted after each workout. Includes an optional weight. Useful for exercises like dips."
     }
     
     public func currentWeight() -> Double? {
@@ -263,47 +274,32 @@ public class VariableRepsPlan : Plan {
         frontend.saveExercise(exerciseName)
     }
     
-    private func doFinish(_ stalled: Bool) {
+    private func doFinish(_ addedReps: Int) {
         modifiedOn = Date()
         state = .finished
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
         }
 
-        // TODO: handle advancing
+        if addedReps != 0 {
+            handleAdvance(addedReps)
+        }
         addResult()
         frontend.saveExercise(exerciseName)
     }
     
-//    private func handleAdvance(_ missed: Bool) {
-//        switch findVariableRepsSetting(exerciseName) {
-//        case .right(let setting):
-//            if !missed {
-//                let old = setting.weight
-//                let w = Weight(setting.weight, setting.apparatus)
-//                setting.changeWeight(w.nextWeight())
-//                setting.stalls = 0
-//                os_log("advanced from %.3f to %.3f", type: .info, old, setting.weight)
-//
-//            } else {
-//                setting.sameWeight()
-//                setting.stalls += 1
-//                os_log("stalled = %dx", type: .info, setting.stalls)
-//
-//                if setting.stalls >= 3 {
-//                    let info = Weight(0.9*setting.weight, setting.apparatus).closest(below: setting.weight)
-//                    setting.changeWeight(info.weight)
-//                    setting.stalls = 0
-//                    os_log("deloaded to = %.3f", type: .info, setting.weight)
-//                }
-//            }
-//
-//        case .left(let err):
-//            // Not sure if this can happen, maybe if the user edits the program after the plan starts.
-//            os_log("%@ advance failed: %@", type: .error, planName, err)
-//            setIndex = sets.count
-//        }
-//    }
+    private func handleAdvance(_ addedReps: Int) {
+        switch findVariableRepsSetting(exerciseName) {
+        case .right(let setting):
+            let old = setting.requestedReps
+            setting.requestedReps += addedReps
+            os_log("advanced from %d to %d reps", type: .info, old, setting.requestedReps)
+
+        case .left(let err):
+            // Not sure if this can happen, maybe if the user edits the program after the plan starts.
+            os_log("%@ advance failed: %@", type: .error, planName, err)
+        }
+    }
     
     private func addResult() {
         switch findVariableRepsSetting(exerciseName) {
@@ -332,7 +328,7 @@ public class VariableRepsPlan : Plan {
     private var modifiedOn = Date.distantPast
     private var workoutName: String = ""
     private var exerciseName: String = ""
-    private var sets: [Set] = []
     private var history: [Result] = []
+    private var sets: [Set] = []
     private var setIndex = 0
 }

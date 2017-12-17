@@ -52,6 +52,7 @@ public class Exercise: Storable {
         case "FixedSetsPlan":         let p: FixedSetsPlan = store.getObj("plan"); self.plan = p
         case "SteadyStateCardioPlan": let p: SteadyStateCardioPlan = store.getObj("plan"); self.plan = p
         case "HIITPlan":              let p: HIITPlan = store.getObj("plan"); self.plan = p
+        case "VariableRepsPlan":      let p: VariableRepsPlan = store.getObj("plan"); self.plan = p
         default: frontend.assert(false, "loading exercise \(name) had unknown plan: \(pname)"); abort()
         }
     }

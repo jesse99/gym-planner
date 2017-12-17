@@ -44,7 +44,11 @@ func HLM2() -> Program {
     }
 
     func planFixed(_ numSets: Int, _ numReps: Int) -> Plan {
-        return FixedSetsPlan("fixed \(numSets)x\(numReps)", numSets: numSets, numReps: numReps)
+        return FixedSetsPlan("\(numSets)x\(numReps)", numSets: numSets, numReps: numReps)
+    }
+    
+    func planVarying(_ numSets: Int, _ minReps: Int, _ maxReps: Int) -> Plan {
+        return VariableRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
     }
     
     func planCardio() -> Plan {
@@ -77,8 +81,8 @@ func HLM2() -> Program {
         createTimed("Decline & March Plank", "Decline & March Plank", planTimed(1, targetTime: 60), duration: 30),
         createTimed("Wall Plank",            "Wall Plank",            planTimed(1, targetTime: 60), duration: 30),
         createTimed("Wall March Plank",      "Wall March Plank",      planTimed(1, targetTime: 60), duration: 30),
-        createFixed("Dragon Flag",           "Dragon Flag",           planFixed(3, 8), restMins: 1.0),
-        createTimed("Hanging Dragon Flag",   "Hanging Dragon Flag",   planTimed(1, targetTime: 60), duration: 30),
+        createReps("Dragon Flag",            "Dragon Flag",           planVarying(3, 1, 8), restMins: 1.5, requestedReps: 3),
+        createTimed("Hanging Dragon Flag",   "Hanging Dragon Flag",   planTimed(1, targetTime: 20), duration: 5),
 
         createFixed("Foam Rolling",            "IT-Band Foam Roll",         planFixed(1, 15), restMins: 0.0),
         createFixed("Shoulder Dislocates",     "Shoulder Dislocate",        planFixed(1, 12), restMins: 0.0),
@@ -95,7 +99,7 @@ func HLM2() -> Program {
     let workouts = [
         Workout("Cardio",     ["Cardio"], scheduled: false),
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
-        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Chinups", "Side Plank", "HIIT"], scheduled: true),
+        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Side Plank", "HIIT"], scheduled: true),
         Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups", "Side Plank", "HIIT"], scheduled: true),
         Workout("Mobility",   ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
 

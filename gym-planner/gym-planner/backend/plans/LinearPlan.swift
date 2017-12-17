@@ -5,8 +5,8 @@ import os.log
 
 public class LinearPlan : Plan {
     struct Set: Storable {
-        let title: String      // "Workset 3 of 4"
-        let subtitle: String
+        let title: String       // "Workset 3 of 4"
+        let subtitle: String    // "10% of 200 lbs"
         let numReps: Int
         let weight: Weight.Info
         let warmup: Bool
@@ -159,12 +159,11 @@ public class LinearPlan : Plan {
             buildSets(setting)
             self.state = .started
             frontend.saveExercise(exerciseName)
-            return nil
 
         case .left(let err):
             self.state = .error(err)
-            return nil
         }
+        return nil
     }
     
     public func on(_ workout: Workout) -> Bool {
