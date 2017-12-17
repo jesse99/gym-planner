@@ -21,6 +21,7 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
+gym-planner/.DS_Store
 
 ## Obj-C/Swift specific
 *.hmap
