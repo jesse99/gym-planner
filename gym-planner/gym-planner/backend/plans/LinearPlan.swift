@@ -207,7 +207,7 @@ public class LinearPlan : Plan {
         case .right(let setting):
             let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads);
             if let percent = deload.percent {
-                return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
+                return "Deloaded by \(percent)% (last was \(deload.weeks) weeks ago)"
             } else {
                 return makePrevLabel(history)
             }
