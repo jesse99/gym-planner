@@ -100,10 +100,10 @@ class HistoryTabController: UIViewController, UITableViewDataSource, UITableView
     }
     
     private func showWeighted(_ exercise: Exercise, _ history: [WeightedResult]) {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let view = storyboard.instantiateViewController(withIdentifier: "LiftHistoryID") as! ExerciseHistoryController
-//        view.initialize(name, "History")
-//        present(view, animated: true, completion: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let view = storyboard.instantiateViewController(withIdentifier: "WeightedHistoryID") as! WeightedHistoryController
+        view.initialize(exercise, "History")
+        present(view, animated: true, completion: nil)
     }
     
     @IBOutlet private var tableView: UITableView!

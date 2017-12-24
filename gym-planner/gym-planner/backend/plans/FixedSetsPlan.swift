@@ -12,6 +12,11 @@ public class FixedSetsPlan : Plan {
         required init(from store: Store) {
             super.init(from: store)
         }
+        
+        public override func updateTitle() {
+            // need to have result generate the title
+            // can we use one of those fancy hooks to get notfied of when the weight changes?
+        }
     }
     
     init(_ name: String, numSets: Int, numReps: Int) {

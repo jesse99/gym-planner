@@ -11,6 +11,7 @@
 		370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFADA1FD6450400CDE63D /* FixedWeightController.swift */; };
 		37163DEE1FD8DA23008EB47D /* VariableRepsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */; };
 		372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14441FE708B700D8392A /* BaseHistoryController.swift */; };
+		372B14471FE7369200D8392A /* WeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14461FE7369200D8392A /* WeightedHistoryController.swift */; };
 		3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743E2B81FB824CC00787CB3 /* FrontEnd.swift */; };
 		37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C8D1FDCA98800A3CAA6 /* SteadyStateCardio.swift */; };
 		37452C901FDDA6B100A3CAA6 /* CardioResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */; };
@@ -22,6 +23,7 @@
 		374556EB1FD669ED0005020B /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EA1FD669ED0005020B /* Notes.swift */; };
 		374556ED1FD66ADC0005020B /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EC1FD66ADC0005020B /* NotesController.swift */; };
 		374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */; };
+		375E52E11FE8DFFF0040A975 /* EditWeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */; };
 		376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9C1FB7923F006EEAC3 /* Settings.swift */; };
 		376E3C9F1FB7C7F9006EEAC3 /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9E1FB7C7F9006EEAC3 /* Results.swift */; };
 		3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3778CE971FBE730D0042111C /* PercentOfPlan.swift */; };
@@ -76,6 +78,7 @@
 		370EFADA1FD6450400CDE63D /* FixedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWeightController.swift; sourceTree = "<group>"; };
 		37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableRepsPlan.swift; sourceTree = "<group>"; };
 		372B14441FE708B700D8392A /* BaseHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHistoryController.swift; sourceTree = "<group>"; };
+		372B14461FE7369200D8392A /* WeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightedHistoryController.swift; sourceTree = "<group>"; };
 		3743E2B81FB824CC00787CB3 /* FrontEnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEnd.swift; sourceTree = "<group>"; };
 		37452C8D1FDCA98800A3CAA6 /* SteadyStateCardio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteadyStateCardio.swift; sourceTree = "<group>"; };
 		37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioResultController.swift; sourceTree = "<group>"; };
@@ -87,6 +90,7 @@
 		374556EA1FD669ED0005020B /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		374556EC1FD66ADC0005020B /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyMarkdown.swift; sourceTree = "<group>"; };
+		375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWeightedHistoryController.swift; sourceTree = "<group>"; };
 		376E3C9C1FB7923F006EEAC3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		376E3C9E1FB7C7F9006EEAC3 /* Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
 		3778CE971FBE730D0042111C /* PercentOfPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentOfPlan.swift; sourceTree = "<group>"; };
@@ -218,6 +222,7 @@
 				372B14441FE708B700D8392A /* BaseHistoryController.swift */,
 				37452C8F1FDDA6B100A3CAA6 /* CardioResultController.swift */,
 				37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */,
+				375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */,
 				37B308D91FC3234F00556E8F /* ExerciseController.swift */,
 				377C11F41FC2761A0063A324 /* extensions */,
 				377F055A1FC0E1000015D7EF /* Helpers.swift */,
@@ -229,6 +234,7 @@
 				374556EC1FD66ADC0005020B /* NotesController.swift */,
 				377F05571FC0DD8F0015D7EF /* programs */,
 				37B3ECEF1FD370A600F7D8EF /* setting controllers */,
+				372B14461FE7369200D8392A /* WeightedHistoryController.swift */,
 				377C11F21FC26BD20063A324 /* WorkoutController.swift */,
 				37CED46D1FAE289100244ADD /* WorkoutsTabController.swift */,
 			);
@@ -399,6 +405,7 @@
 				377F055B1FC0E1000015D7EF /* Helpers.swift in Sources */,
 				377F054E1FC0B5980015D7EF /* LinearPlan.swift in Sources */,
 				378FC14B1FBD3B6A00A3C66E /* DateExtension.swift in Sources */,
+				372B14471FE7369200D8392A /* WeightedHistoryController.swift in Sources */,
 				377C11F31FC26BD20063A324 /* WorkoutController.swift in Sources */,
 				37B3ECF91FD395F900F7D8EF /* WeightsController.swift in Sources */,
 				37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */,
@@ -411,6 +418,7 @@
 				372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */,
 				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
 				37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */,
+				375E52E11FE8DFFF0040A975 /* EditWeightedHistoryController.swift in Sources */,
 				374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */,
 				37B3ECF71FD38FDB00F7D8EF /* BarbellController.swift in Sources */,
 				37B3ECF11FD370CA00F7D8EF /* VariableRepsController.swift in Sources */,

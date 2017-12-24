@@ -1,6 +1,8 @@
 import UIKit
 
-class BaseHistoryController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+// This is just like BaseHistoryController except that it supports selecting (and the accessory
+// indicator is different).
+class WeightedHistoryController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -8,7 +10,7 @@ class BaseHistoryController: UIViewController, UITableViewDataSource, UITableVie
         tableView.delegate = self
         
         tableView.reloadData()
-
+        
         //        tableView.backgroundColor = targetColor(.background)
         //        view.backgroundColor = tableView.backgroundColor
     }
@@ -31,6 +33,10 @@ class BaseHistoryController: UIViewController, UITableViewDataSource, UITableVie
     //        view.setNeedsDisplay()
     //    }
     
+    @IBAction func unwindToWeightedHistory(_ segue: UIStoryboardSegue) {
+        tableView.reloadData()
+    }
+    
     @IBAction func donePressed(_ sender: Any) {
         self.performSegue(withIdentifier: "unwindToHistoryID", sender: self)
     }
@@ -40,32 +46,49 @@ class BaseHistoryController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt path: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BaseHistoryCellID")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "WeightedHistoryCellID")!
         cell.backgroundColor = tableView.backgroundColor
         
-        let items = exercise.plan.getHistory()
-        let index = items.count - path.item - 1
-        cell.textLabel!.text = items[index].title
-
-        let date = DateFormatter.localizedString(from: items[index].date, dateStyle: .medium, timeStyle: .short)
+        let results = exercise.plan.getHistory()
+        let index = results.count - path.item - 1
+        cell.textLabel!.text = results[index].title
+        
+        let date = DateFormatter.localizedString(from: results[index].date, dateStyle: .medium, timeStyle: .short)
         cell.detailTextLabel!.text = "\(index): \(date)"
         
+        if let result = results[index] as? WeightedResult {
+            cell.textLabel?.textColor = result.missed ? UIColor.red : UIColor.black
+        }
+
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt path: IndexPath) {
         if editingStyle == .delete {
-            let items = exercise.plan.getHistory()
-            let index = items.count - path.item - 1
+            let results = exercise.plan.getHistory()
+            let index = results.count - path.item - 1
             exercise.plan.deleteHistory(index)
             tableView.reloadData()
         }
     }
-        
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt path: IndexPath) {
+        let results = exercise.plan.getHistory()
+        let index = results.count - path.item - 1
+
+        if let result = results[index] as? WeightedResult {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let view = storyboard.instantiateViewController(withIdentifier: "EditWeightedHistoryID") as! EditWeightedHistoryController
+            view.initialize(exercise, result, breadcrumb)
+            present(view, animated: true, completion: nil)
+        }
+    }
+
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var breadcrumbLabel: UILabel!
 
     private var exercise: Exercise!
     private var breadcrumb = ""
 }
+
 

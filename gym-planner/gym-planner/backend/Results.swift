@@ -54,6 +54,10 @@ public class WeightedResult: BaseResult {
         store.addBool("primary", primary)
         store.addBool("missed", missed)
     }
+    
+    public func updateTitle() {
+        
+    }
 }
 
 /// Given something like [100.0, 100.0, 100.0, 110.0, 120]
