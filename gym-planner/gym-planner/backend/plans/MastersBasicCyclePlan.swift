@@ -111,7 +111,8 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.planName = name
         self.typeName = "MastersBasicCyclePlan"
         self.cycles = cycles
-        self.deloads = [1.0, 1.0, 0.9, 0.85, 0.8];
+        self.deloads = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 0.85, 0.8]
+//        self.deloads = [1.0, 1.0, 0.9, 0.85, 0.8]
     }
     
     // This should consider typeName and whatever was passed into the init above.
@@ -264,7 +265,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     public func prevLabel() -> String {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads);
+            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
             if let percent = deload.percent {
                 return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
                 
@@ -348,7 +349,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            return deload.weight;
+            return deload.weight
 
         case .left(_):
             return nil
@@ -375,6 +376,8 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         
         if cycleIndex == cycles.count-1 {
             handleAdvance()
+        } else {
+            handleConstant()
         }
         frontend.saveExercise(exerciseName)
     }
@@ -396,7 +399,18 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
                     os_log("stalled = %d", type: .info, setting.stalls)
                 }
             }
-
+            
+        case .left(_):
+            break
+        }
+    }
+    
+    private func handleConstant() {
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            // We're on a cycle where the weights don't advance but we still need to indicate that
+            // we've done a lift so that deload by time doesn't kick in.
+            setting.sameWeight()
         case .left(_):
             break
         }
@@ -423,9 +437,9 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         let cycle = cycles[cycleIndex]
         
         let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-        self.maxWeight = deload.weight;
+        self.maxWeight = deload.weight
         
-        var workingSetWeight = cycle.percent*self.maxWeight;
+        var workingSetWeight = cycle.percent*self.maxWeight
         if let percent = deload.percent {
             os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
         } else if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex), cycleIndex > 0 && result.missed {    // missed first cycle is dealt with in handleAdvance
