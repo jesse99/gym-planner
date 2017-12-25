@@ -30,6 +30,9 @@ public class VariableRepsPlan : Plan {
     
     class Result: WeightedResult {
         init(numSets: Int, numReps: Int, weight: Double) {
+            self.numSets = numSets
+            self.numReps = numReps
+
             if weight > 0.0 {
                 let title = "\(numSets)x\(numReps) @ \(Weight.friendlyUnitsStr(weight, plural: true))"
                 super.init(title, weight, primary: true, missed: false)
@@ -40,8 +43,27 @@ public class VariableRepsPlan : Plan {
         }
         
         required init(from store: Store) {
+            self.numSets = store.getInt("numSets", ifMissing: 0)
+            self.numReps = store.getInt("numReps", ifMissing: 0)
             super.init(from: store)
         }
+        
+        public override func save(_ store: Store) {
+            super.save(store)
+            store.addInt("numSets", numSets)
+            store.addInt("numReps", numReps)
+        }
+        
+        internal override func updatedWeight(_ newWeight: Weight.Info) {
+            if newWeight.weight > 0.0 {
+                title = "\(numSets)x\(numReps) @ \(newWeight.text)"
+            } else {
+                title = "\(numSets)x\(numReps)"
+            }
+        }
+        
+        let numSets: Int
+        let numReps: Int
     }
     
     init(_ name: String, numSets: Int, minReps: Int, maxReps: Int) {
@@ -190,8 +212,8 @@ public class VariableRepsPlan : Plan {
     }
     
     public func historyLabel() -> String {
-        if let last = history.last, last.weight > 0.0 {
-            let weights = history.map {$0.weight}
+        if let last = history.last, last.getWeight() > 0.0 {
+            let weights = history.map {$0.getWeight()}
             return makeHistoryLabel(Array(weights))
         } else {
             return ""

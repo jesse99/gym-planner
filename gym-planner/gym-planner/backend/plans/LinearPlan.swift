@@ -48,13 +48,32 @@ public class LinearPlan : Plan {
     }
     
     class Result: WeightedResult {
-        init(title: String, missed: Bool, weight: Double) {
-            super.init(title, weight, primary: true, missed: missed)
+        init(_ numSets: Int, _ numReps: Int, _ missed: Bool, _ weight: Weight.Info) {
+            self.numSets = numSets
+            self.numReps = numReps
+            
+            let title = "\(weight.text) \(numSets)x\(numReps)"
+            super.init(title, weight.weight, primary: true, missed: missed)
         }
 
         required init(from store: Store) {
+            self.numSets = store.getInt("numSets", ifMissing: 0)
+            self.numReps = store.getInt("numReps", ifMissing: 0)
             super.init(from: store)
         }
+        
+        public override func save(_ store: Store) {
+            super.save(store)
+            store.addInt("numSets", numSets)
+            store.addInt("numReps", numReps)
+        }
+        
+        internal override func updatedWeight(_ newWeight: Weight.Info) {
+            title = "\(newWeight.text) \(numSets)x\(numReps)"
+        }
+        
+        let numSets: Int
+        let numReps: Int
     }
     
     init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int) {
@@ -218,7 +237,7 @@ public class LinearPlan : Plan {
     }
     
     public func historyLabel() -> String {
-        let weights = history.map {$0.weight}
+        let weights = history.map {$0.getWeight()}
         return makeHistoryLabel(Array(weights))
     }
     
@@ -335,9 +354,9 @@ public class LinearPlan : Plan {
     }
     
     private func addResult(_ missed: Bool) {
-        let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
-        let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
-        let result = Result(title: title, missed: missed, weight: sets.last!.weight.weight)
+        let weight = sets.last!.weight
+        let numSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
+        let result = Result(numSets, sets.last!.numReps, missed, weight)
         history.append(result)
     }
     
@@ -372,7 +391,7 @@ public class LinearPlan : Plan {
             sets.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: weight))
         }
     }
-    
+        
     private let firstWarmup: Double
     private let warmupReps: [Int]
     private let workSets: Int

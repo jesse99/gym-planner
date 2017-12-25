@@ -532,7 +532,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="O1u-W8-tvY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Second" image="chart" id="cPa-gy-q4n"/>
+                    <tabBarItem key="tabBarItem" title="History" image="chart" id="cPa-gy-q4n"/>
                     <connections>
                         <outlet property="tableView" destination="GNq-jz-gvS" id="Z6E-MU-06y"/>
                     </connections>

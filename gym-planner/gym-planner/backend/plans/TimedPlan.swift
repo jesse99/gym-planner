@@ -4,21 +4,30 @@ import os.log
 
 public class TimedPlan : Plan {
     class Result: WeightedResult {
+        var numSets: Int
         var secs: Int
 
-        init(title: String, secs: Int, weight: Double) {
+        init(_ numSets: Int, secs: Int, weight: Double) {
+            self.numSets = numSets
             self.secs = secs
+            let title = "\(numSets)% sets @ \(secsToStr(secs))"
             super.init(title, weight, primary: true, missed: false)
         }
         
         required init(from store: Store) {
+            self.numSets = store.getInt("numSets", ifMissing: 0)
             self.secs = store.getInt("secs")
             super.init(from: store)
         }
         
         override func save(_ store: Store) {
             super.save(store)
+            store.addInt("numSets", numSets)
             store.addInt("secs", secs)
+        }
+        
+        internal override func updatedWeight(_ newWeight: Weight.Info) {
+            title = "\(numSets)% sets @ \(secsToStr(secs))"
         }
     }
     
@@ -238,8 +247,7 @@ public class TimedPlan : Plan {
     private func addResult() {
         switch findFixedSetting(exerciseName) {
         case .right(let setting):
-            let title = "\(numSets)% sets @ \(secsToStr(setting.restSecs))"
-            let result = Result(title: title, secs: setting.restSecs, weight: setting.weight)
+            let result = Result(numSets, secs: setting.restSecs, weight: setting.weight)
             history.append(result)
 
         case .left(_):

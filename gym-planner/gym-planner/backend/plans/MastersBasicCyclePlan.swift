@@ -90,20 +90,34 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     class Result: WeightedResult {
         let cycleIndex: Int
 
-        init(title: String, cycleIndex: Int, missed: Bool, weight: Double) {
+        init(_ numSets: Int, _ numReps: Int, _ cycleIndex: Int, _ missed: Bool, _ info: Weight.Info) {
+            self.numSets = numSets
+            self.numReps = numReps            
             self.cycleIndex = cycleIndex
-            super.init(title, weight, primary: cycleIndex == 0, missed: missed)
+            let title = "\(info.text) \(numSets)x\(numReps)"
+            super.init(title, info.weight, primary: cycleIndex == 0, missed: missed)
         }
         
         required init(from store: Store) {
             self.cycleIndex = store.getInt("cycleIndex")
+            self.numSets = store.getInt("numSets", ifMissing: 0)
+            self.numReps = store.getInt("numReps", ifMissing: 0)
             super.init(from: store)
         }
         
         override func save(_ store: Store) {
             super.save(store)
             store.addInt("cycleIndex", cycleIndex)
+            store.addInt("numSets", numSets)
+            store.addInt("numReps", numReps)
         }
+        
+        internal override func updatedWeight(_ newWeight: Weight.Info) {
+            title = "\(newWeight.text) \(numSets)x\(numReps)"
+        }
+        
+        let numSets: Int
+        let numReps: Int
     }
     
     init(_ name: String, _ cycles: [Execute]) {
@@ -283,7 +297,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     public func historyLabel() -> String {
         let index = MastersBasicCyclePlan.getCycle(cycles, history)
         let results = history.filter {$0.cycleIndex == index}
-        let weights = results.map {$0.weight}
+        let weights = results.map {$0.getWeight()}
         return makeHistoryLabel(Array(weights))
     }
     
@@ -426,9 +440,10 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
 
     private func addResult(_ cycleIndex: Int, _ missed: Bool) {
-        let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
-        let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
-        let result = Result(title: title, cycleIndex: cycleIndex, missed: missed, weight: sets.last!.weight.weight)
+        let weight = sets.last!.weight
+        let numSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
+        let numReps = sets.last!.numReps
+        let result = Result(numSets, numReps,  cycleIndex, missed, weight)
         history.append(result)
     }
     
@@ -444,7 +459,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
             os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
         } else if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex), cycleIndex > 0 && result.missed {    // missed first cycle is dealt with in handleAdvance
             os_log("using previous weight since this cycle was missed last time", type: .info)
-            workingSetWeight = result.weight
+            workingSetWeight = result.getWeight()
         }
         os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
         

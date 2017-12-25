@@ -12,30 +12,30 @@ protocol WeightGenerator
 
 // TODO:
 // units
-internal struct Weight: CustomStringConvertible {
-    struct Info: Storable {
+public struct Weight: CustomStringConvertible {
+    public struct Info: Storable {
         // 145.0
-        let weight: Double
+        public let weight: Double
         
         // "145 lbs"
-        let text: String
+        public let text: String
         
         // "45 + 5"
-        let plates: String
+        public let plates: String
 
-        init(weight: Double, text: String, plates: String) {
+        public init(weight: Double, text: String, plates: String) {
             self.weight = weight
             self.text = text
             self.plates = plates
         }
         
-        init(from store: Store) {
+        public init(from store: Store) {
             self.weight = store.getDbl("weight")
             self.text = store.getStr("text")
             self.plates = store.getStr("plates")
         }
         
-        func save(_ store: Store) {
+        public func save(_ store: Store) {
             store.addDbl("weight", weight)
             store.addStr("text", text)
             store.addStr("plates", plates)
@@ -106,7 +106,7 @@ internal struct Weight: CustomStringConvertible {
         return temp.closest(above: weight).weight
     }
     
-    var description: String {
+    public var description: String {
         return String(format: "%.3f", weight)
     }
     

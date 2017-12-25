@@ -6,20 +6,29 @@ import os.log
 public class VariableSetsPlan: Plan {
     class Result: WeightedResult {
         let reps: [Int]
+        let completed: Int
 
-        init(title: String, weight: Double, missed: Bool, reps: [Int]) {
+        init(_ completed: Int, weight: Double, missed: Bool, reps: [Int]) {
             self.reps = reps
+            self.completed = completed
+            let title = "\(repsStr(completed)) @ \(Weight.friendlyUnitsStr(weight, plural: true))"
             super.init(title, weight, primary: true, missed: missed)
         }
         
         required init(from store: Store) {
             self.reps = store.getIntArray("reps")
+            self.completed = store.getInt("completed", ifMissing: 0)
             super.init(from: store)
         }
         
         override func save(_ store: Store) {
             super.save(store)
             store.addIntArray("reps", reps)
+            store.addInt("completed", completed)
+        }
+        
+        internal override func updatedWeight(_ newWeight: Weight.Info) {
+            title = "\(repsStr(completed)) @ \(newWeight.text)"
         }
     }
     
@@ -132,7 +141,7 @@ public class VariableSetsPlan: Plan {
         switch findVariableRepsSetting(exerciseName) {
             case .right(let setting):
                 if setting.weight > 0 {
-                    return "\(repsStr(setting.requestedReps)) @ \(Weight.friendlyStr(setting.weight))"
+                    return "\(repsStr(setting.requestedReps)) @ \(Weight.friendlyUnitsStr(setting.weight, plural: true))"
                 } else {
                     return repsStr(setting.requestedReps)
                 }
@@ -147,8 +156,8 @@ public class VariableSetsPlan: Plan {
             let c = result.reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let r = result.reps.map {"\($0)"}
             let rs = r.joined(separator: ", ")
-            if result.weight > 0 {
-                return "\(rs) (\(repsStr(c)) @ \(Weight.friendlyStr(result.weight))"
+            if result.getWeight() > 0 {
+                return "\(rs) (\(repsStr(c)) @ \(Weight.friendlyUnitsStr(result.getWeight(), plural: true))"
             } else {
                 return "\(rs) (\(c) reps)"
             }
@@ -299,8 +308,7 @@ public class VariableSetsPlan: Plan {
         switch findCurrentWeight(exerciseName) {
         case .right(let weight):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
-            let title = "\(repsStr(completed)) @ \(Weight.friendlyStr(weight))"
-            let result = Result(title: title, weight: weight, missed: false, reps: reps)
+            let result = Result(completed, weight: weight, missed: false, reps: reps)
             history.append(result)
 
         case .left(_):

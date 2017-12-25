@@ -48,13 +48,32 @@ public class PercentOfPlan : Plan {
     }
     
     class Result: WeightedResult {
-        init(title: String, weight: Double) {
-            super.init(title, weight, primary: true, missed: false)
+        init(_ numSets: Int, _ numReps: Int, _ info: Weight.Info) {
+            self.numSets = numSets
+            self.numReps = numReps
+
+            let title = "\(info.text) \(numSets)x\(numReps)"
+            super.init(title, info.weight, primary: true, missed: false)
         }
-        
+                
         required init(from store: Store) {
+            self.numSets = store.getInt("numSets", ifMissing: 0)
+            self.numReps = store.getInt("numReps", ifMissing: 0)
             super.init(from: store)
         }
+        
+        public override func save(_ store: Store) {
+            super.save(store)
+            store.addInt("numSets", numSets)
+            store.addInt("numReps", numReps)
+        }
+        
+        internal override func updatedWeight(_ newWeight: Weight.Info) {
+            title = "\(newWeight.text) \(numSets)x\(numReps)"
+        }
+        
+        let numSets: Int
+        let numReps: Int
     }
     
     init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
@@ -229,14 +248,14 @@ public class PercentOfPlan : Plan {
     
     public func prevLabel() -> String {
         if let result = history.last {
-            return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
+            return "Previous was \(Weight.friendlyUnitsStr(result.getWeight()))"
         } else {
             return ""
         }
     }
     
     public func historyLabel() -> String {
-        let weights = history.map {$0.weight}
+        let weights = history.map {$0.getWeight()}
         return makeHistoryLabel(Array(weights))
     }
     
@@ -319,9 +338,10 @@ public class PercentOfPlan : Plan {
     }
     
     private func addResult() {
-        let numWorkSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
-        let title = "\(sets.last!.weight.text) \(numWorkSets)x\(sets.last!.numReps)"
-        let result = Result(title: title, weight: sets.last!.weight.weight)
+        let info = sets.last!.weight
+        let numSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
+        let numReps = sets.last!.numReps
+        let result = Result(numSets, numReps, info)
         history.append(result)
     }
     

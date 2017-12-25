@@ -13,7 +13,7 @@ class EditWeightedHistoryController: UIViewController {
         //        dismissTooltip()
 
         breadcrumbLabel.text = breadcrumb
-        weightTextbox.text = Weight.friendlyStr(result.weight)
+        weightTextbox.text = Weight.friendlyStr(result.getWeight())
         primaryLabel.text = result.primary ? "primary" : ""
         updateMissed()
     }
@@ -25,9 +25,17 @@ class EditWeightedHistoryController: UIViewController {
     //    }
         
     @IBAction func donePressed(_ sender: Any) {
+        let weight = Double(weightTextbox.text!)!
+        switch findApparatus(exercise.name) {
+        case .right(let apparatus):
+            let info = Weight(weight, apparatus).closest()
+            result.changeWeight(info)
+
+        case .left(_):
+            let info = Weight.Info(weight: weight, text: Weight.friendlyUnitsStr(weight, plural: true), plates: "")
+            result.changeWeight(info)
+        }
         result.missed = missed
-        result.weight = Double(weightTextbox.text!)! // TODO: use something like toWeight
-        result.updateTitle()
         frontend.saveExercise(exercise.name)
 
         self.performSegue(withIdentifier: "unwindToWeightedHistoryID", sender: self)

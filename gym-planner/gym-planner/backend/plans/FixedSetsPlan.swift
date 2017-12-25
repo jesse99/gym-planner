@@ -5,18 +5,39 @@ import os.log
 
 public class FixedSetsPlan : Plan {
     class Result: WeightedResult {
-        init(title: String, weight: Double) {
+        init(_ numSets: Int, _ numReps: Int, _ weight: Double) {
+            self.numSets = numSets
+            self.numReps = numReps
+            
+            var title = "\(numSets)x\(numReps)"
+            if weight > 0.0 {
+                title += " @ \(Weight.friendlyUnitsStr(weight, plural: true))"
+            }
+
             super.init(title, weight, primary: true, missed: false)
         }
         
         required init(from store: Store) {
+            self.numSets = store.getInt("numSets", ifMissing: 0)
+            self.numReps = store.getInt("numReps", ifMissing: 0)
             super.init(from: store)
         }
         
-        public override func updateTitle() {
-            // need to have result generate the title
-            // can we use one of those fancy hooks to get notfied of when the weight changes?
+        public override func save(_ store: Store) {
+            super.save(store)
+            store.addInt("numSets", numSets)
+            store.addInt("numReps", numReps)
         }
+        
+        internal override func updatedWeight(_ newWeight: Weight.Info) {
+            title = "\(numSets)x\(numReps)"
+            if newWeight.weight > 0.0 {
+                title += " @ \(newWeight.text)"
+            }
+        }
+        
+        let numSets: Int
+        let numReps: Int
     }
     
     init(_ name: String, numSets: Int, numReps: Int) {
@@ -145,7 +166,7 @@ public class FixedSetsPlan : Plan {
     
     public func historyLabel() -> String {
         if case let .right(weight) = findCurrentWeight(exerciseName), weight > 0.0 {
-            let weights = history.map {$0.weight}
+            let weights = history.map {$0.getWeight()}
             return makeHistoryLabel(Array(weights))
         } else if !history.isEmpty {
             return "x\(history.count)"
@@ -236,13 +257,11 @@ public class FixedSetsPlan : Plan {
     }
     
     private func addResult() {
-        var title = "\(numSets)x\(numReps)"
-        if case let .right(weight) = findCurrentWeight(exerciseName), weight > 0.0 {
-            title += " @ \(Weight.friendlyUnitsStr(weight, plural: true))"
-            let result = Result(title: title, weight: weight)
+        if case let .right(weight) = findCurrentWeight(exerciseName) {
+            let result = Result(numSets, numReps, weight)
             history.append(result)
         } else {
-            let result = Result(title: title, weight: 0.0)
+            let result = Result(numSets, numReps, 0.0)
             history.append(result)
         }
     }

@@ -5,7 +5,7 @@ import Foundation
 /// GUIs can also use results to show logbooks and charts and also to edit results (although
 /// not everything is exposed, e.g. rep ranges and cardio details).
 public class BaseResult: Storable {
-    let title: String
+    var title: String
     let date: Date
     
     init(_ title: String) {
@@ -31,9 +31,6 @@ public class WeightedResult: BaseResult {
     /// True if the user was not able to complete what he was asked to do.
     var missed: Bool
 
-    /// Can be zero.
-    var weight: Double
-    
     init(_ title: String, _ weight: Double, primary: Bool, missed: Bool) {
         self.weight = weight
         self.primary = primary
@@ -55,9 +52,22 @@ public class WeightedResult: BaseResult {
         store.addBool("missed", missed)
     }
     
-    public func updateTitle() {
-        
+    /// Can be zero.
+    public func getWeight() -> Double {
+        return weight
     }
+
+    public func changeWeight(_ newWeight: Weight.Info) {
+        if newWeight.weight != weight {
+            weight = newWeight.weight
+            updatedWeight(newWeight)
+        }
+    }
+    
+    internal func updatedWeight(_ newWeight: Weight.Info) {
+    }
+
+    private var weight: Double
 }
 
 /// Given something like [100.0, 100.0, 100.0, 110.0, 120]
@@ -102,11 +112,11 @@ func makePrevLabel(_ history: [WeightedResult]) -> String {
     if let result = history.last {
         let count = countMisses(history)
         if count == 0 {
-            return "Previous was \(Weight.friendlyUnitsStr(result.weight))"
+            return "Previous was \(Weight.friendlyUnitsStr(result.getWeight()))"
         } else if count == 1 {
-            return "Previous missed \(Weight.friendlyUnitsStr(result.weight))"
+            return "Previous missed \(Weight.friendlyUnitsStr(result.getWeight()))"
         } else {
-            return "Previous missed \(Weight.friendlyUnitsStr(result.weight)) \(count)x"
+            return "Previous missed \(Weight.friendlyUnitsStr(result.getWeight())) \(count)x"
         }
     } else {
         return ""
