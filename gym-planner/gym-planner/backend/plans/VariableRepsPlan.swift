@@ -213,8 +213,11 @@ public class VariableRepsPlan : Plan {
     
     public func historyLabel() -> String {
         if let last = history.last, last.getWeight() > 0.0 {
-            let weights = history.map {$0.getWeight()}
-            return makeHistoryLabel(Array(weights))
+            var weights = Array(history.map {$0.getWeight()})
+            if case .right(let setting) = findVariableRepsSetting(exerciseName) {
+                weights.append(setting.weight)
+            }
+            return makeHistoryLabel(weights)
         } else {
             return ""
         }

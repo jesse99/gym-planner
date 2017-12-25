@@ -222,22 +222,18 @@ public class LinearPlan : Plan {
     }
     
     public func prevLabel() -> String {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads);
-            if let percent = deload.percent {
-                return "Deloaded by \(percent)% (last was \(deload.weeks) weeks ago)"
-            } else {
-                return makePrevLabel(history)
-            }
-
-        case .left(let err):
-            return err
+        if let deload = deloadedWeight(), let percent = deload.percent {
+            return "Deloaded by \(percent)% (last was \(deload.weeks) weeks ago)"
+        } else {
+            return makePrevLabel(history)
         }
     }
     
     public func historyLabel() -> String {
-        let weights = history.map {$0.getWeight()}
+        var weights = history.map {$0.getWeight()}
+        if let deload = deloadedWeight() {
+            weights.append(deload.weight)
+        }
         return makeHistoryLabel(Array(weights))
     }
     
@@ -293,12 +289,9 @@ public class LinearPlan : Plan {
     }
     
     public func currentWeight() -> Double? {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+        if let deload = deloadedWeight() {
             return deload.weight
-
-        case .left(_):
+        } else {
             return nil
         }
     }
@@ -391,7 +384,18 @@ public class LinearPlan : Plan {
             sets.append(Set(setting.apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: weight))
         }
     }
-        
+    
+    private func deloadedWeight() -> Deload? {
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+            return deload
+            
+        case .left(_):
+            return nil
+        }
+    }
+    
     private let firstWarmup: Double
     private let warmupReps: [Int]
     private let workSets: Int

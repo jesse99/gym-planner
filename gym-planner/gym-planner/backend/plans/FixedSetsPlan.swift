@@ -166,8 +166,9 @@ public class FixedSetsPlan : Plan {
     
     public func historyLabel() -> String {
         if case let .right(weight) = findCurrentWeight(exerciseName), weight > 0.0 {
-            let weights = history.map {$0.getWeight()}
-            return makeHistoryLabel(Array(weights))
+            var weights = Array(history.map {$0.getWeight()})
+            weights.append(weight)
+            return makeHistoryLabel(weights)
         } else if !history.isEmpty {
             return "x\(history.count)"
         } else {

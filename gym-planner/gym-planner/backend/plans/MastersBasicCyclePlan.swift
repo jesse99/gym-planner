@@ -277,28 +277,28 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     }
 
     public func prevLabel() -> String {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            if let percent = deload.percent {
-                return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
-                
-            } else {
-                let index = MastersBasicCyclePlan.getCycle(cycles, history)
-                let results = history.filter {$0.cycleIndex == index}
-                return makePrevLabel(results)
-            }
-
-        case .left(_):
-            return ""
+        if let deload = deloadedWeight(), let percent = deload.percent {
+            return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
+        } else {
+            let index = MastersBasicCyclePlan.getCycle(cycles, history)
+            let results = history.filter {$0.cycleIndex == index}
+            return makePrevLabel(results)
         }
     }
     
     public func historyLabel() -> String {
         let index = MastersBasicCyclePlan.getCycle(cycles, history)
         let results = history.filter {$0.cycleIndex == index}
-        let weights = results.map {$0.getWeight()}
-        return makeHistoryLabel(Array(weights))
+        var weights = Array(results.map {$0.getWeight()})
+        if case .right(let apparatus) = findApparatus(exerciseName) {
+            if let deload = deloadedWeight() {
+                let workingSetWeight = getWorkingSetWeight(deload, log: false)
+                let info = Weight(workingSetWeight, apparatus).closest()
+                weights.append(info.weight)
+            }
+        }
+        
+        return makeHistoryLabel(weights)
     }
     
     public func current() -> Activity {
@@ -360,14 +360,15 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     
     /// TODO: Think we can have a global that just does this.
     public func currentWeight() -> Double? {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            return deload.weight
-
-        case .left(_):
-            return nil
+        if case .right(let apparatus) = findApparatus(exerciseName) {
+            if let deload = deloadedWeight() {
+                let workingSetWeight = getWorkingSetWeight(deload, log: false)
+                let info = Weight(workingSetWeight, apparatus).closest()
+                return info.weight
+            }
         }
+
+        return nil
     }
     
     // Internal items
@@ -454,13 +455,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
         self.maxWeight = deload.weight
         
-        var workingSetWeight = cycle.percent*self.maxWeight
-        if let percent = deload.percent {
-            os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
-        } else if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex), cycleIndex > 0 && result.missed {    // missed first cycle is dealt with in handleAdvance
-            os_log("using previous weight since this cycle was missed last time", type: .info)
-            workingSetWeight = result.getWeight()
-        }
+        let workingSetWeight = getWorkingSetWeight(deload, log: true)
         os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
         
         var warmupsWithBar = 0
@@ -494,6 +489,35 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         } else {
             return 0
         }
+    }
+    
+    private func deloadedWeight() -> Deload? {
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+            return deload
+            
+        case .left(_):
+            return nil
+        }
+    }
+    
+    private func getWorkingSetWeight(_ deload: Deload, log: Bool) -> Double {
+        let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
+        let cycle = cycles[cycleIndex]
+        
+        var workingSetWeight = cycle.percent*deload.weight
+        if let percent = deload.percent {
+            if log {
+                os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
+            }
+        } else if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex), cycleIndex > 0 && result.missed {    // missed first cycle is dealt with in handleAdvance
+            if log {
+                os_log("using previous weight since this cycle was missed last time", type: .info)
+            }
+            workingSetWeight = result.getWeight()
+        }
+        return workingSetWeight
     }
 
     private let cycles: [Execute]

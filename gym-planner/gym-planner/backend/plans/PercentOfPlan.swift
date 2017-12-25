@@ -255,8 +255,14 @@ public class PercentOfPlan : Plan {
     }
     
     public func historyLabel() -> String {
-        let weights = history.map {$0.getWeight()}
-        return makeHistoryLabel(Array(weights))
+        var weights = Array(history.map {$0.getWeight()})
+        if case .right(let apparatus) = findApparatus(exerciseName) {
+            if case .right(let otherWeight) = getOtherWeight() {
+                let current = Weight(percent*otherWeight, apparatus).closest(below: otherWeight)
+                weights.append(current.weight)
+            }
+        }
+        return makeHistoryLabel(weights)
     }
     
     public func current() -> Activity {
