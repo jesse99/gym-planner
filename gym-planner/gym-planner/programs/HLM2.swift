@@ -51,16 +51,11 @@ func HLM2() -> Program {
         return VariableRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
     }
     
-    func planCardio() -> Plan {
-        return SteadyStateCardioPlan("Cardio", daysPerWeek: 3, minsPerDay: 30, maxRollOverMins: 30)
-    }
-
     func planHIIT() -> Plan {
         return HIITPlan("HIIT", targetCycles: 8, targetHighSecs: 60)
     }
     
     let exercises = [
-        createCardio("Cardio", planCardio()),
         createHIIT("HIIT",     planHIIT()),
 
         createBarBell("Squat",          "Low bar Squat",  planSquat(),  restMins: 3.0, warmupsWithBar: 3),
@@ -97,10 +92,10 @@ func HLM2() -> Program {
     makeProgression(exercises, "Kneeling Front Plank", "Front Plank", "Side Plank", "Leg Lift Plank", "Arm & Leg Lift Front Plank", "Decline Plank", "Decline & March Plank", "Wall Plank", "Wall March Plank", "Dragon Flag", "Hanging Dragon Flag")
 
     let workouts = [
-        Workout("Cardio",     ["Cardio"], scheduled: false),
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
-        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Side Plank", "HIIT"], scheduled: true),
-        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups", "Side Plank", "HIIT"], scheduled: true),
+        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Side Plank"], scheduled: true),
+        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups", "Side Plank"], scheduled: true),
+        Workout("HIIT",       ["HIIT"], scheduled: false),
         Workout("Mobility",   ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
 
     let tags: [Program.Tags] = [.intermediate, .strength, .age40s, .age50s]
