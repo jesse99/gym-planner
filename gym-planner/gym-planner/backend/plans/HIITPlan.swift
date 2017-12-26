@@ -227,7 +227,7 @@ public class HIITPlan : Plan {
             subtitle: "",
             amount: sets[setIndex].amount,
             details: "",
-            buttonName: "",
+            buttonName: setIndex == 0 ? "Start" : "",
             showStartButton: true,
             color: color)
     }
@@ -313,6 +313,7 @@ public class HIITPlan : Plan {
         switch findHIITSetting(exerciseName) {
         case .right(let setting):
             sets.append(Set("Warmup", setting.warmupIntensity, .warmup))
+            sets.append(Set("Warmup", setting.warmupIntensity, .warmup))    // start button enters this one
             
             for i in 0..<setting.numCycles {
                 sets.append(Set("High \(i+1) of \(setting.numCycles)", setting.highIntensity, .high))
