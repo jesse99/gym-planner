@@ -362,8 +362,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     public func currentWeight() -> Double? {
         if case .right(let apparatus) = findApparatus(exerciseName) {
             if let deload = deloadedWeight() {
-                let workingSetWeight = getWorkingSetWeight(deload, log: false)
-                let info = Weight(workingSetWeight, apparatus).closest()
+                let info = Weight(deload.weight, apparatus).closest()
                 return info.weight
             }
         }
