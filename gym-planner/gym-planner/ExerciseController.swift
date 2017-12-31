@@ -64,6 +64,13 @@ class ExerciseController: UIViewController {
                 startTimer(force: true)
             }
         }
+        
+        // When plans load they can reset to waiting if it's been too long so we need to re-start
+        // the plan if that happened.
+        if case .waiting = exercise.plan.state {
+            let newPlan = exercise.plan.start(workout, name)
+            frontend.assert(newPlan == nil, "newPlan should have been nil") // because we got here via starting the plan
+        }
 
         super.decodeRestorableState(with: coder)
     }
