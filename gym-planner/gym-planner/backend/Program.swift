@@ -190,9 +190,15 @@ public func createFixed(_ name: String, _ formalName: String, _ plan: Plan, rest
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
-public func createReps(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double, requestedReps: Int) -> Exercise {
+public func createVarReps(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double, requestedReps: Int) -> Exercise {
     let setting = VariableRepsSetting(requestedReps: requestedReps, restSecs: Int(restMins*60.0))
     return Exercise(name, formalName, plan, .variableReps(setting))
+}
+
+public func createCycleReps(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
+    let apparatus = Apparatus.machine(range1: defaultMachine(), range2: zeroMachine(), extra: [])
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
 public func createTimed(_ name: String, _ formalName: String, _ plan: Plan, duration: Int) -> Exercise {

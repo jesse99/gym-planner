@@ -64,6 +64,23 @@ func availableMagnets() -> [Double] {
 //    }
 }
 
+func defaultMachine() -> MachineRange
+{
+    //    switch units
+    //    {
+    //    case .imperial:
+    return MachineRange(min: 10, max: 200, step: 10)
+    
+    //    case .metric:
+    //        return (5.0, 5.0, 100.0)
+    //    }
+}
+
+func zeroMachine() -> MachineRange
+{
+    return MachineRange(min: 0, max: 0, step: 0)
+}
+
 func secsToStr(_ secs: Int) -> String {
     if secs <= 60 {
         return "\(secs)s"

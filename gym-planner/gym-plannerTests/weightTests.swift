@@ -67,7 +67,7 @@ class weightTests: XCTestCase {
     }
     
     func testMachine() {
-        let a: Apparatus = .machine(weights: [10.0, 20.0, 30.0, 40.0], extra: [0.0])
+        let a: Apparatus = .machine(range1: defaultMachine(), range2: zeroMachine(), extra: [0.0])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().text, "10 lbs")
         
@@ -83,12 +83,12 @@ class weightTests: XCTestCase {
         w = Weight(21.0, a)
         XCTAssertEqual(w.closest().text, "20 lbs")
         
-        w = Weight(100.0, a)
-        XCTAssertEqual(w.closest().text, "40 lbs")
+        w = Weight(500.0, a)
+        XCTAssertEqual(w.closest().text, "200 lbs")
     }
 
     func testMachine2() {
-        let a: Apparatus = .machine(weights: [10.0, 20.0, 30.0, 40.0], extra: [0.0, 2.5, 5.0])
+        let a: Apparatus = .machine(range1: defaultMachine(), range2: zeroMachine(), extra: [0.0, 2.5, 5.0])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().text, "10 lbs")
         
@@ -110,8 +110,29 @@ class weightTests: XCTestCase {
         w = Weight(26.0, a)
         XCTAssertEqual(w.closest().text, "25 lbs")
 
-        w = Weight(100.0, a)
-        XCTAssertEqual(w.closest().text, "45 lbs")
+        w = Weight(500.0, a)
+        XCTAssertEqual(w.closest().text, "205 lbs")
+    }
+    
+    func testMachin3() {
+        let a: Apparatus = .machine(range1: defaultMachine(), range2: MachineRange(min: 5, max: 20, step: 5), extra: [0.0])
+        var w = Weight(0.0, a)
+        XCTAssertEqual(w.closest().text, "5 lbs")
+        
+        w = Weight(9.0, a)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        
+        w = Weight(14.0, a)
+        XCTAssertEqual(w.closest().text, "15 lbs")
+        
+        w = Weight(18.0, a)
+        XCTAssertEqual(w.closest().text, "20 lbs")
+        
+        w = Weight(21.0, a)
+        XCTAssertEqual(w.closest().text, "20 lbs")
+        
+        w = Weight(500.0, a)
+        XCTAssertEqual(w.closest().text, "200 lbs")
     }
     
     private func checkRange(_ a: Apparatus) {

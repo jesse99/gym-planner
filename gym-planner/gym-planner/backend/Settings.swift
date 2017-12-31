@@ -1,14 +1,20 @@
 /// Exercise configuration that users are expected to change.
 import Foundation
 
+public struct MachineRange {
+    public let min: Double
+    public let max: Double
+    public let step: Double
+}
+
 public enum Apparatus
 {
     case barbell(bar: Double, collar: Double, plates: [Double], bumpers: [Double], magnets: [Double], warmupsWithBar: Int)
     
     case dumbbells(weights: [Double], magnets: [Double])
     
-    /// Used for stuff like cable machines with a stack of plates. Extra are small weights that can be optionally added.
-    case machine(weights: [Double], extra: [Double])
+    /// Used for stuff like cable machines with a stack of plates. Range2 is for machines that have weights like [5, 10, 15, 20, 30, ...]. Extra are small weights that can be optionally added.
+    case machine(range1: MachineRange, range2: MachineRange, extra: [Double])
     
     //    /// Used with plates attached to a machine two at a time (e.g. a Leg Press machine).
     //    case pairedPlates(plates: [Double])
@@ -246,9 +252,18 @@ extension Apparatus: Storable {
             self = .dumbbells(weights: weights, magnets: magnets)
             
         case "machine":
-            let weights = store.getDblArray("weights")
+            let min1 = store.getDbl("min1")
+            let max1 = store.getDbl("max1")
+            let step1 = store.getDbl("step1")
+            let range1 = MachineRange(min: min1, max: max1, step: step1)
+
+            let min2 = store.getDbl("min2")
+            let max2 = store.getDbl("max2")
+            let step2 = store.getDbl("step2")
+            let range2 = MachineRange(min: min2, max: max2, step: step2)
+
             let extra = store.getDblArray("extra")
-            self = .machine(weights: weights, extra: extra)
+            self = .machine(range1: range1, range2: range2, extra: extra)
             
         default:
             frontend.assert(false, "loading apparatus had unknown type: \(tname)"); abort()
@@ -271,9 +286,16 @@ extension Apparatus: Storable {
             store.addDblArray("weights", weights)
             store.addDblArray("magnets", magnets)
             
-        case .machine(let weights, let extra):
+        case .machine(let range1, let range2, let extra):
             store.addStr("type", "machine")
-            store.addDblArray("weights", weights)
+            store.addDbl("min1", range1.min)
+            store.addDbl("max1", range1.max)
+            store.addDbl("step1", range1.step)
+
+            store.addDbl("min2", range2.min)
+            store.addDbl("max2", range2.max)
+            store.addDbl("step2", range2.step)
+
             store.addDblArray("extra", extra)
         }
     }

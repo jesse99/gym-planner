@@ -51,6 +51,11 @@ func HLM2() -> Program {
         return VariableRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
     }
     
+    func planAccessory(_ minReps: Int, _ maxReps: Int) -> Plan {
+        let numSets = 3
+        return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
+    }
+    
     func planHIIT() -> Plan {
         return HIITPlan("HIIT", targetCycles: 8, targetHighSecs: 60)
     }
@@ -63,9 +68,11 @@ func HLM2() -> Program {
         createBarBell("Deadlift",       "Deadlift",       planDead(),   restMins: 3.5, useBumpers: true),
         createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restMins: 2.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Overhead Press", "Overhead Press", plan53(),     restMins: 3.0, magnets: [1.25]),
-        createReps   ("Chinups",        "Chinup",         planChin(),   restMins: 2.0, requestedReps: 10),
+        createVarReps("Chinups",        "Chinup",         planChin(),   restMins: 2.0, requestedReps: 10),
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
+
+        createCycleReps("Lat Pulldown", "Lat Pulldown",   planAccessory(5, 10), restMins: 3.0),
         
         createTimed("Kneeling Front Plank",  "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
         createTimed("Front Plank",           "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
@@ -76,7 +83,7 @@ func HLM2() -> Program {
         createTimed("Decline & March Plank", "Decline & March Plank", planTimed(1, targetTime: 60), duration: 30),
         createTimed("Wall Plank",            "Wall Plank",            planTimed(1, targetTime: 60), duration: 30),
         createTimed("Wall March Plank",      "Wall March Plank",      planTimed(1, targetTime: 60), duration: 30),
-        createReps("Dragon Flag",            "Dragon Flag",           planVarying(3, 1, 8), restMins: 1.5, requestedReps: 3),
+        createVarReps("Dragon Flag",         "Dragon Flag",           planVarying(3, 1, 8), restMins: 1.5, requestedReps: 3),
         createTimed("Hanging Dragon Flag",   "Hanging Dragon Flag",   planTimed(1, targetTime: 20), duration: 5),
 
         createFixed("Foam Rolling",            "IT-Band Foam Roll",         planFixed(1, 15), restMins: 0.0),
