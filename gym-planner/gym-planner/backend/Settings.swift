@@ -6,10 +6,10 @@ public enum Apparatus
     case barbell(bar: Double, collar: Double, plates: [Double], bumpers: [Double], magnets: [Double], warmupsWithBar: Int)
     
     case dumbbells(weights: [Double], magnets: [Double])
-    //
-    //    /// Used for stuff like cable machines with a stack of plates. Extra are small weights that can be optionally added.
-    //    case machine(weights: [Double], extra: [Double])
-    //
+    
+    /// Used for stuff like cable machines with a stack of plates. Extra are small weights that can be optionally added.
+    case machine(weights: [Double], extra: [Double])
+    
     //    /// Used with plates attached to a machine two at a time (e.g. a Leg Press machine).
     //    case pairedPlates(plates: [Double])
     //
@@ -245,6 +245,11 @@ extension Apparatus: Storable {
             let magnets = store.getDblArray("magnets")
             self = .dumbbells(weights: weights, magnets: magnets)
             
+        case "machine":
+            let weights = store.getDblArray("weights")
+            let extra = store.getDblArray("extra")
+            self = .machine(weights: weights, extra: extra)
+            
         default:
             frontend.assert(false, "loading apparatus had unknown type: \(tname)"); abort()
         }
@@ -265,6 +270,11 @@ extension Apparatus: Storable {
             store.addStr("type", "dumbbells")
             store.addDblArray("weights", weights)
             store.addDblArray("magnets", magnets)
+            
+        case .machine(let weights, let extra):
+            store.addStr("type", "machine")
+            store.addDblArray("weights", weights)
+            store.addDblArray("extra", extra)
         }
     }
 }

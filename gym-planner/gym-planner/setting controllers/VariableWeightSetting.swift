@@ -77,6 +77,10 @@ class VariableWeightController: UIViewController {
             
         case .dumbbells(weights: _, magnets: _):
             break   // TODO:
+            
+        case .machine(weights: _, extra: _):
+            break   // TODO:
+
         }
     }
     

@@ -170,7 +170,26 @@ public struct Weight: CustomStringConvertible {
             
         case .dumbbells(_, _):
             frontend.assert(false, "find doesn't support dumbbells"); abort()
+            
+        case .machine(weights: let weights, extra: let extra):
+            frontend.assert(!extra.isEmpty, "extra must include 0.0")
+            frontend.assert(extra[0] == 0.0, "extra must include 0.0")
+            return findMachine(weights, extra)
         }
+    }
+    
+    private func findMachine(_ weights: [Double], _ extra: [Double]) -> [Info] {
+        var infos: [Info] = []
+        
+        for w in weights {
+            for e in extra {
+                let candidate = w + e
+                infos.append(Info(weight: candidate, text: Weight.friendlyUnitsStr(candidate), plates: ""))
+            }
+        }
+        infos.sort {$0.weight < $1.weight}
+
+        return infos
     }
     
     private func findPairedPlates(_ target: Double, _ barWeight: Double, _ collarWeight: Double, _ plates: [Double], _ bumpers: [Double], _ magnets: [Double]) -> Info {

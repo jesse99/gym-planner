@@ -47,7 +47,7 @@ class weightTests: XCTestCase {
         let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: [5, 10, 25], bumpers: [], magnets: [0.5, 1.25], warmupsWithBar: 2)
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().plates, "no plates")
-
+        
         w = Weight(55.0, a)
         XCTAssertEqual(w.closest().plates, "5 lb plate")
         
@@ -59,11 +59,59 @@ class weightTests: XCTestCase {
         
         w = Weight(61.0, a)
         XCTAssertEqual(w.closest().plates, "5 + 1.25")
-
+        
         w = Weight(62.0, a)
         XCTAssertEqual(w.closest().plates, "10 lb plate")
         
         checkRange(a)
+    }
+    
+    func testMachine() {
+        let a: Apparatus = .machine(weights: [10.0, 20.0, 30.0, 40.0], extra: [0.0])
+        var w = Weight(0.0, a)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        
+        w = Weight(9.0, a)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        
+        w = Weight(14.0, a)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        
+        w = Weight(18.0, a)
+        XCTAssertEqual(w.closest().text, "20 lbs")
+        
+        w = Weight(21.0, a)
+        XCTAssertEqual(w.closest().text, "20 lbs")
+        
+        w = Weight(100.0, a)
+        XCTAssertEqual(w.closest().text, "40 lbs")
+    }
+
+    func testMachine2() {
+        let a: Apparatus = .machine(weights: [10.0, 20.0, 30.0, 40.0], extra: [0.0, 2.5, 5.0])
+        var w = Weight(0.0, a)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        
+        w = Weight(2.5, a)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+
+        w = Weight(9.0, a)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        
+        w = Weight(12.0, a)
+        XCTAssertEqual(w.closest().text, "12.5 lbs")
+        
+        w = Weight(14.0, a)
+        XCTAssertEqual(w.closest().text, "15 lbs")
+        
+        w = Weight(18.0, a)
+        XCTAssertEqual(w.closest().text, "20 lbs")
+        
+        w = Weight(26.0, a)
+        XCTAssertEqual(w.closest().text, "25 lbs")
+
+        w = Weight(100.0, a)
+        XCTAssertEqual(w.closest().text, "45 lbs")
     }
     
     private func checkRange(_ a: Apparatus) {
