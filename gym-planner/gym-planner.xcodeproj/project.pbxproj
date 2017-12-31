@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3707C2201FF22101000981D7 /* CycleRepsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3707C21F1FF22101000981D7 /* CycleRepsPlan.swift */; };
 		370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */; };
 		370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFADA1FD6450400CDE63D /* FixedWeightController.swift */; };
 		37163DEE1FD8DA23008EB47D /* VariableRepsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */; };
@@ -74,6 +75,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3707C21F1FF22101000981D7 /* CycleRepsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleRepsPlan.swift; sourceTree = "<group>"; };
 		370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSetsPlan.swift; sourceTree = "<group>"; };
 		370EFADA1FD6450400CDE63D /* FixedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWeightController.swift; sourceTree = "<group>"; };
 		37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableRepsPlan.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 		37CED4AE1FB52E1A00244ADD /* plans */ = {
 			isa = PBXGroup;
 			children = (
+				3707C21F1FF22101000981D7 /* CycleRepsPlan.swift */,
 				370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */,
 				37452C931FDDDA2A00A3CAA6 /* HIITPlan.swift */,
 				377F054D1FC0B5980015D7EF /* LinearPlan.swift */,
@@ -419,6 +422,7 @@
 				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
 				37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */,
 				375E52E11FE8DFFF0040A975 /* EditWeightedHistoryController.swift in Sources */,
+				3707C2201FF22101000981D7 /* CycleRepsPlan.swift in Sources */,
 				374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */,
 				37B3ECF71FD38FDB00F7D8EF /* BarbellController.swift in Sources */,
 				37B3ECF11FD370CA00F7D8EF /* VariableRepsController.swift in Sources */,

@@ -24,13 +24,15 @@ public class VariableWeightSetting: Storable {
     private(set) var updatedWeight: Date    // last time the weight was set, to either a new value or the same value and by the user or the app
     var restSecs: Int
     var stalls: Int
-    
-    init(_ apparatus: Apparatus, restSecs: Int) {
+    var reps: Int?
+
+    init(_ apparatus: Apparatus, restSecs: Int, reps: Int? = nil) {
         self.apparatus = apparatus
         self.weight = 0.0
         self.updatedWeight = Date()
         self.restSecs = restSecs
         self.stalls = 0
+        self.reps = reps
     }
     
     public required init(from store: Store) {
@@ -39,6 +41,9 @@ public class VariableWeightSetting: Storable {
         self.updatedWeight = store.getDate("updatedWeight")
         self.restSecs = store.getInt("restSecs")
         self.stalls = store.getInt("stalls")
+
+        let r = store.getInt("reps", ifMissing: 0)
+        self.reps = r != 0 ? r : nil
     }
     
     public func save(_ store: Store) {
@@ -47,6 +52,7 @@ public class VariableWeightSetting: Storable {
         store.addDate("updatedWeight", updatedWeight)
         store.addInt("restSecs", restSecs)
         store.addInt("stalls", stalls)
+        store.addInt("reps", reps ?? 0)
     }
     
     func changeWeight(_ weight: Double) {

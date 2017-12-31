@@ -43,6 +43,7 @@ public class Exercise: Storable {
 
         let pname = store.getStr("plan-type")
         switch pname {
+        case "CycleRepsPlan":         let p: CycleRepsPlan = store.getObj("plan"); self.plan = p
         case "LinearPlan":            let p: LinearPlan = store.getObj("plan"); self.plan = p
         case "MastersBasicCyclePlan": let p: MastersBasicCyclePlan = store.getObj("plan"); self.plan = p
         case "NRepMaxPlan":           let p: NRepMaxPlan = store.getObj("plan"); self.plan = p
