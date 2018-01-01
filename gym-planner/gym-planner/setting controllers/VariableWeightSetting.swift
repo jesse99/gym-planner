@@ -97,7 +97,9 @@ class VariableWeightController: UIViewController {
             break   // TODO:
             
         case .machine(range1: _, range2: _, extra: _):
-            break   // TODO:
+            let view = storyboard.instantiateViewController(withIdentifier: "MachineID") as! MachineController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
         }
     }
     

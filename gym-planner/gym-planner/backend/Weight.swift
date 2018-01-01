@@ -171,9 +171,11 @@ public struct Weight: CustomStringConvertible {
         case .dumbbells(_, _):
             frontend.assert(false, "find doesn't support dumbbells"); abort()
             
-        case .machine(range1: let range1, range2: let range2, extra: let extra):
-            frontend.assert(!extra.isEmpty, "extra must include 0.0")
-            frontend.assert(extra[0] == 0.0, "extra must include 0.0")
+        case .machine(range1: let range1, range2: let range2, extra: let inExtra):
+           var extra = inExtra
+           if !extra.contains(0.0) {
+            extra.append(0.0)
+           }
             
             var infos: [Info] = []
             if range1.step > 0.0 {

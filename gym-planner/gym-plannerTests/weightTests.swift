@@ -67,7 +67,7 @@ class weightTests: XCTestCase {
     }
     
     func testMachine() {
-        let a: Apparatus = .machine(range1: defaultMachine(), range2: zeroMachine(), extra: [0.0])
+        let a: Apparatus = .machine(range1: defaultMachine(), range2: zeroMachine(), extra: [])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().text, "10 lbs")
         
@@ -88,7 +88,7 @@ class weightTests: XCTestCase {
     }
 
     func testMachine2() {
-        let a: Apparatus = .machine(range1: defaultMachine(), range2: zeroMachine(), extra: [0.0, 2.5, 5.0])
+        let a: Apparatus = .machine(range1: defaultMachine(), range2: zeroMachine(), extra: [2.5, 5.0])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().text, "10 lbs")
         
@@ -115,7 +115,7 @@ class weightTests: XCTestCase {
     }
     
     func testMachin3() {
-        let a: Apparatus = .machine(range1: defaultMachine(), range2: MachineRange(min: 5, max: 20, step: 5), extra: [0.0])
+        let a: Apparatus = .machine(range1: defaultMachine(), range2: MachineRange(min: 5, max: 20, step: 5), extra: [])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().text, "5 lbs")
         
