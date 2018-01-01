@@ -2,9 +2,11 @@
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;\f2\fnil\fcharset0 Tahoma;
 }
 {\colortbl;\red255\green255\blue255;\red2\green2\blue2;\red14\green14\blue255;\red233\green233\blue233;
-\red0\green0\blue0;\red38\green38\blue38;\red255\green255\blue255;\red92\green38\blue153;}
+\red0\green0\blue0;\red170\green13\blue145;\red63\green110\blue116;\red92\green38\blue153;\red0\green116\blue0;
+\red38\green38\blue38;\red255\green255\blue255;}
 {\*\expandedcolortbl;;\csgenericrgb\c784\c784\c784;\csgenericrgb\c5500\c5500\c100000;\csgenericrgb\c91180\c91178\c91179;
-\csgenericrgb\c0\c0\c0;\cssrgb\c20000\c20000\c20000;\cssrgb\c100000\c100000\c100000;\csgenericrgb\c35900\c14900\c60100;}
+\csgenericrgb\c0\c0\c0;\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c35900\c14900\c60100;\csgenericrgb\c0\c45600\c0;
+\cssrgb\c20000\c20000\c20000;\cssrgb\c100000\c100000\c100000;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.raywenderlich.com/126365/ios-frameworks-tutorial"}}{\fldrslt 
 \f0\fs48 \cf2 https://www.raywenderlich.com/126365/ios-frameworks-tutorial}}
@@ -80,6 +82,34 @@ Pullups 3x8-10\
 \f0\b\fs48 \cf2 renw apple dev membership: {\field{\*\fldinst{HYPERLINK "https://developer.apple.com/program/renew/index.action"}}{\fldrslt Renew now}}\
 send weight and BP\
 subtract 50 from rent\
+\
+\
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\b0\fs36 \cf6 public\cf5  \cf6 class\cf5  VariableWeightSetting: \cf7 Storable\cf5  \{
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\f1\fs36 \cf5     \cf6 var\cf5  apparatus: \cf7 Apparatus
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf6 private(set)\cf5  \cf6 var\cf5  weight: \cf8 Double\cf5   \cf9 // starts out at 0.0
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf6 private(set)\cf5  \cf6 var\cf5  updatedWeight: \cf8 Date\cf5     \cf9 // last time the weight was set, to either a new value or the same value and by the user or the app
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf6 var\cf5  restSecs: \cf8 Int
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf6 var\cf5  stalls: \cf8 Int
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf5     \cf6 var\cf5  reps: \cf8 Int\cf5 ?
+\f0\fs24 \cf0 \
+\pard\tx864\pardeftab864\pardirnatural\partightenfactor0
+
+\b\fs48 \cf2 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
 \f1\b0\fs36 \cf5     \
@@ -89,17 +119,16 @@ subtract 50 from rent\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
 \b0 \cf2 * Add lat pulldown	\
-	- make sure that lat pulldown works ok\
 	- setting screen should be able to set reps\
 	- add a settings screen for machine apparatus\
+* Add good morning\
 * Add support for inactive exercises\
-* Maybe add good morning\
 * Use neutral grip with lat pulldown\
 * Look at adding base classes for plans\
 	- especially weighted\
 * Do 
-\f2\b \cf6 \expnd0\expndtw0\kerning0
-Medial epicondylitis\cb7 ?\
+\f2\b \cf10 \expnd0\expndtw0\kerning0
+Medial epicondylitis\cb11 ?\
 	{\field{\*\fldinst{HYPERLINK "https://www.uptodate.com/contents/elbow-tendinopathy-tennis-and-golf-elbow-beyond-the-basics"}}{\fldrslt \cb1 https://www.uptodate.com/contents/elbow-tendinopathy-tennis-and-golf-elbow-beyond-the-basics}}
 \f0\b0 \cf2 \cb1 \kerning1\expnd0\expndtw0 \
 	tennis elbow\

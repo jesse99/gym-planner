@@ -40,6 +40,16 @@ class VariableWeightController: UIViewController {
         if setting != nil {
             restTextbox.text = secsToStr(setting.restSecs)
             weightTextbox.text = Weight.friendlyStr(setting.weight)
+            
+            if let reps = setting.reps {
+                repsLabel.isHidden = false
+                repsTextbox.isHidden = false
+                repsTextbox.text = "\(reps)"
+            } else {
+                repsLabel.isHidden = true
+                repsTextbox.isHidden = true
+            }
+            doneButton.isEnabled = true
         }
     }
     
@@ -50,6 +60,7 @@ class VariableWeightController: UIViewController {
         if setting != nil {
             restTextbox.resignFirstResponder()
             weightTextbox.resignFirstResponder()
+            repsTextbox.resignFirstResponder()
         }
     }
     
@@ -61,6 +72,13 @@ class VariableWeightController: UIViewController {
             
             if let text = restTextbox.text, let value = strToSecs(text) {
                 setting.restSecs = value
+            }
+
+            if !repsLabel.isHidden {
+                let reps = Int(repsTextbox?.text ?? "0") ?? 0
+                setting.reps = reps
+            } else {
+                setting.reps = nil
             }
         }
         
@@ -80,18 +98,22 @@ class VariableWeightController: UIViewController {
             
         case .machine(range1: _, range2: _, extra: _):
             break   // TODO:
-
         }
     }
     
-    @IBOutlet var breadcrumbLabel: UILabel!
-    @IBOutlet var restTextbox: UITextField!
-    @IBOutlet var weightTextbox: UITextField!
+    @IBAction func repsChanged(_ sender: Any) {
+        let reps = Int(repsTextbox?.text ?? "0") ?? 0
+        doneButton.isEnabled = reps > 0
+    }
+    
+    @IBOutlet private var breadcrumbLabel: UILabel!
+    @IBOutlet private var restTextbox: UITextField!
+    @IBOutlet private var weightTextbox: UITextField!
+    @IBOutlet private var repsLabel: UILabel!
+    @IBOutlet private var repsTextbox: UITextField!
+    @IBOutlet private var doneButton: UIBarButtonItem!
     
     private var exercise: Exercise!
     private var setting: VariableWeightSetting!
     private var breadcrumb = ""
 }
-
-
-
