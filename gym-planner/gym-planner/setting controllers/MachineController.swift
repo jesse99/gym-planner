@@ -47,6 +47,10 @@ class MachineController: UIViewController {
         }
     }
     
+    @IBAction func cancepPrressed(_ sender: Any) {
+        self.performSegue(withIdentifier: "unwindToVariableWeightID", sender: self)
+    }
+    
     @IBAction func donePressed(_ sender: Any) {
         if setting != nil {
             switch setting.apparatus {

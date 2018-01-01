@@ -1942,6 +1942,11 @@
                                                 <action selector="donePressed:" destination="dgl-It-PWK" id="0Je-GB-Avp"/>
                                             </connections>
                                         </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="MEa-zO-ded">
+                                            <connections>
+                                                <action selector="cancepPrressed:" destination="dgl-It-PWK" id="LbE-cv-pKT"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
