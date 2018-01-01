@@ -262,7 +262,10 @@ extension Apparatus: Storable {
             let step2 = store.getDbl("step2")
             let range2 = MachineRange(min: min2, max: max2, step: step2)
 
-            let extra = store.getDblArray("extra")
+            var extra = store.getDblArray("extra")
+            if extra.isEmpty {
+                extra = [0.0]
+            }
             self = .machine(range1: range1, range2: range2, extra: extra)
             
         default:
