@@ -24,7 +24,6 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         print("viewDidLoad")
         super.viewDidLoad()
         
-        //filtered = workout.exercises.filter {presults.isActive(workout, $0) && !isSkipped(workout, $0)}
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -96,7 +95,6 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
     
     @IBAction func unwindToWorkout(_ segue:UIStoryboardSegue)
     {
-//        filtered = workout.exercises.filter {presults.isActive(workout, $0)}
         tableView.reloadData()
     }
         
@@ -120,24 +118,25 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
 
     @IBAction func optionsPressed(_ sender: Any) {
 //        dismissTooltip()
-//
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let view = storyboard.instantiateViewController(withIdentifier: "WorkoutOptionsControllerID") as! WorkoutOptionsController
-//        view.initialize(presults.program, workout, breadcrumbLabel.text!)
-//        present(view, animated: true, completion: nil)
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let view = storyboard.instantiateViewController(withIdentifier: "WorkoutOptionsID") as! WorkoutOptionsController
+        view.initialize(workout, breadcrumbLabel.text!)
+        present(view, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return filtered.count
-        return workout.exercises.count
+        let filtered = workout.exercises.filter {!workout.optional.contains($0)}
+        return filtered.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt path: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "WorkoutCellID")!
         cell.backgroundColor = tableView.backgroundColor
         
+        let filtered = workout.exercises.filter {!workout.optional.contains($0)}
         let index = (path as NSIndexPath).item
-        let name = workout.exercises[index]
+        let name = filtered[index]
         let app = UIApplication.shared.delegate as! AppDelegate
         if let exercise = app.program.findExercise(name) {
             if case .underway = exercise.plan.state, exercise.plan.on(workout) {
@@ -189,8 +188,8 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         var err = ""
         
         let index = (path as NSIndexPath).item
-        //        let name = filtered[index]
-        let name = workout.exercises[index]
+        let filtered = workout.exercises.filter {!workout.optional.contains($0)}
+        let name = filtered[index]
         let app = UIApplication.shared.delegate as! AppDelegate
         if let exercise = app.program.findExercise(name) {
             if case .underway = exercise.plan.state, exercise.plan.on(workout) {

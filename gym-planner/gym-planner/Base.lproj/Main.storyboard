@@ -2154,6 +2154,87 @@
             </objects>
             <point key="canvasLocation" x="3349.5999999999999" y="359.37031484257875"/>
         </scene>
+        <!--Workout Options Controller-->
+        <scene sceneID="Zp0-hY-DwA">
+            <objects>
+                <viewController storyboardIdentifier="WorkoutOptionsID" id="3L2-Pl-JFA" customClass="WorkoutOptionsController" customModule="gym_planner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KbZ-Ty-b2g">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ptq-ON-Uyh">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="9vI-0Z-HHO">
+                                        <barButtonItem key="leftBarButtonItem" title="Done" id="Kbi-fL-IaP">
+                                            <connections>
+                                                <action selector="donePressed:" destination="3L2-Pl-JFA" id="f0Q-ys-rab"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="sAv-YU-xV5">
+                                            <connections>
+                                                <action selector="cancelPressed:" destination="3L2-Pl-JFA" id="DH3-Ak-cYc"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breadcrumb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pxs-e8-QNu">
+                                <rect key="frame" x="150.5" y="20" width="74.5" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RDf-3m-Tfh">
+                                <rect key="frame" x="0.0" y="46" width="375" height="577"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="separatorColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WorkoutOptionsCellID" textLabel="u8O-RN-btT" style="IBUITableViewCellStyleDefault" id="T0H-mm-nou">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="T0H-mm-nou" id="rh9-9n-jVX">
+                                            <rect key="frame" x="0.0" y="0.0" width="308" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="u8O-RN-btT">
+                                                    <rect key="frame" x="15" y="0.0" width="293" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="RDf-3m-Tfh" firstAttribute="leading" secondItem="he1-7p-2Bg" secondAttribute="leading" id="8HB-9p-Teu"/>
+                            <constraint firstItem="RDf-3m-Tfh" firstAttribute="top" secondItem="Pxs-e8-QNu" secondAttribute="bottom" constant="10" id="HH1-Jz-GoF"/>
+                            <constraint firstItem="Pxs-e8-QNu" firstAttribute="centerX" secondItem="KbZ-Ty-b2g" secondAttribute="centerX" id="Lmw-uQ-OTh"/>
+                            <constraint firstItem="Ptq-ON-Uyh" firstAttribute="trailing" secondItem="he1-7p-2Bg" secondAttribute="trailing" id="Suq-wA-WGd"/>
+                            <constraint firstItem="Ptq-ON-Uyh" firstAttribute="top" secondItem="RDf-3m-Tfh" secondAttribute="bottom" id="TTj-K5-uIJ"/>
+                            <constraint firstItem="Pxs-e8-QNu" firstAttribute="top" secondItem="he1-7p-2Bg" secondAttribute="top" id="WxC-ab-76v"/>
+                            <constraint firstItem="he1-7p-2Bg" firstAttribute="trailing" secondItem="RDf-3m-Tfh" secondAttribute="trailing" id="eBD-Ic-xae"/>
+                            <constraint firstItem="Ptq-ON-Uyh" firstAttribute="leading" secondItem="he1-7p-2Bg" secondAttribute="leading" id="vvY-Pb-g6P"/>
+                            <constraint firstItem="Ptq-ON-Uyh" firstAttribute="bottom" secondItem="he1-7p-2Bg" secondAttribute="bottom" id="ycz-u5-aK1"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="he1-7p-2Bg"/>
+                    </view>
+                    <connections>
+                        <outlet property="breadcrumbLabel" destination="Pxs-e8-QNu" id="2ue-CL-eKQ"/>
+                        <outlet property="tableView" destination="RDf-3m-Tfh" id="umG-LT-hgg"/>
+                        <segue destination="FYL-kg-mL5" kind="unwind" identifier="unwindToWorkoutID" unwindAction="unwindToWorkout:" id="Ekv-aG-TWB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sPZ-JM-ImE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="FYL-kg-mL5" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="4025" y="358"/>
+        </scene>
     </scenes>
     <resources>
         <image name="chart" width="25" height="25"/>

@@ -156,6 +156,7 @@ public class Program: Storable {
                         }
                     }
                 }
+                workout.optional = savedWorkout.optional
             }
         }
         

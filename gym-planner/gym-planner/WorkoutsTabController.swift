@@ -130,14 +130,15 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         let workout = app.program.workouts[index]
         cell.textLabel!.text = workout.name
 
-//        if !hasActiveExercise(workout) { // TODO
-//            cell.detailTextLabel!.text = "inactive"
-//        } else if allCardio(workout) {
+        if !hasActiveExercise(workout) {
+            cell.detailTextLabel!.text = "inactive"
+//        } else if allCardio(workout) { // TODO
 //            // Cardio is typically spread out through the week so we don't care
 //            // so much about when it was last performed.
 //            cell.detailTextLabel!.text = getCardioDetails(workout)
-//        }
-//        else
+        } else {
+            cell.detailTextLabel!.text = ""
+        }
         
         let todays = findTodaysWorkouts()
         if todays.contains(index) {
@@ -182,7 +183,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         func isUnderway(_ workout: Workout) -> Bool {
             let app = UIApplication.shared.delegate as! AppDelegate
             for name in workout.exercises {
-                if let exercise = app.program.findExercise(name) {
+                if let exercise = app.program.findExercise(name), !workout.optional.contains(name) {
                     if case .underway = exercise.plan.state, exercise.plan.on(workout) {
                         return true
                     }
@@ -196,7 +197,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             let app = UIApplication.shared.delegate as! AppDelegate
             let calendar = Calendar.current
             for name in workout.exercises {
-                if let exercise = app.program.findExercise(name) {
+                if let exercise = app.program.findExercise(name), !workout.optional.contains(name) {
                     if let completed = exercise.completed[workout.name], calendar.isDate(completed, inSameDayAs: Date()) {
                         count += 1
                     }
@@ -222,7 +223,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             
             let app = UIApplication.shared.delegate as! AppDelegate
             for name in workout.exercises {
-                if let exercise = app.program.findExercise(name) {
+                if let exercise = app.program.findExercise(name), !workout.optional.contains(name) {
                     if let completed = exercise.completed[workout.name] {
                         if date == nil || completed.compare(date!) == .orderedDescending {
                             date = completed
@@ -240,7 +241,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             let app = UIApplication.shared.delegate as! AppDelegate
             let calendar = Calendar.current
             for name in workout.exercises {
-                if let exercise = app.program.findExercise(name) {
+                if let exercise = app.program.findExercise(name), !workout.optional.contains(name) {
                     if let completed = exercise.completed[workout.name] {
                         if !calendar.isDate(completed, inSameDayAs: latest) {   // this won't be exactly right if anyone is crazy enough to do workouts at midnight
                             partial = true
@@ -259,7 +260,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         let app = UIApplication.shared.delegate as! AppDelegate
         for (i, workout) in app.program.workouts.enumerated() {
             if workout.scheduled && workout.exercises.all({
-                if let exercise = app.program.findExercise($0) {
+                if let exercise = app.program.findExercise($0), !workout.optional.contains($0) {
                     if exercise.completed[workout.name] == nil {
                         return true
                     }
@@ -290,15 +291,15 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         return index
     }
     
-//    private func hasActiveExercise(_ workout: Workout) -> Bool {
-//        for exerciseName in workout.exercises + workout.optional {
-//            if presults.isActive(workout, exerciseName) {
-//                return true
-//            }
-//        }
-//
-//        return false
-//    }
+    private func hasActiveExercise(_ workout: Workout) -> Bool {
+        for exerciseName in workout.exercises {
+            if !workout.optional.contains(exerciseName) {
+                return true
+            }
+        }
+
+        return false
+    }
     
 //    private func allCardio(_ workout: Workout) -> Bool {
 //        for exerciseName in workout.exercises {

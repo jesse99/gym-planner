@@ -18,9 +18,13 @@ func HLM2() -> Program {
         return MastersBasicCyclePlan("Dead", [cycle(1, by: 5, at: 1.0), cycle(1, by: 3, at: 1.05), cycle(1, by: 1, at: 1.1)])
     }
     
-    // TODO: temp
+    // TODO: switch to masters cycle
     func planSquat() -> Plan {
         return LinearPlan("Squat", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 3, workReps: 5)
+    }
+    
+    func planMorning() -> Plan {
+        return LinearPlan("Good Morning", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 3, workReps: 5)
     }
     
     func planLSquat() -> Plan {
@@ -72,6 +76,7 @@ func HLM2() -> Program {
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
 
+        createBarBell("Good Morning",   "Good Morning",   planMorning(),  restMins: 3.0, warmupsWithBar: 2),
         createCycleReps("Lat Pulldown", "Lat Pulldown",   planAccessory(5, 10), restMins: 2.0),
         
         createTimed("Kneeling Front Plank",  "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
@@ -99,9 +104,9 @@ func HLM2() -> Program {
     makeProgression(exercises, "Kneeling Front Plank", "Front Plank", "Side Plank", "Leg Lift Plank", "Arm & Leg Lift Front Plank", "Decline Plank", "Decline & March Plank", "Wall Plank", "Wall March Plank", "Dragon Flag", "Hanging Dragon Flag")
 
     let workouts = [
-        Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
-        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Side Plank", "Lat Pulldown"], scheduled: true),
-        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups", "Lat Pulldown", "Side Plank"], scheduled: true),
+        Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift",   "Good Morning"], scheduled: true, optional: ["Good Morning"]),
+        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Side Plank", "Lat Pulldown"], scheduled: true, optional: ["Lat Pulldown"]),
+        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups",    "Lat Pulldown", "Side Plank"], scheduled: true, optional: ["Lat Pulldown"]),
         Workout("HIIT",       ["HIIT"], scheduled: false),
         Workout("Mobility",   ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
 
