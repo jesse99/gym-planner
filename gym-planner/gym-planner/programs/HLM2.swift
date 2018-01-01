@@ -72,7 +72,7 @@ func HLM2() -> Program {
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
 
-        createCycleReps("Lat Pulldown", "Lat Pulldown",   planAccessory(5, 10), restMins: 3.0),
+        createCycleReps("Lat Pulldown", "Lat Pulldown",   planAccessory(5, 10), restMins: 2.0),
         
         createTimed("Kneeling Front Plank",  "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
         createTimed("Front Plank",           "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
@@ -100,8 +100,8 @@ func HLM2() -> Program {
 
     let workouts = [
         Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift"], scheduled: true),
-        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Side Plank"], scheduled: true),
-        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups", "Side Plank"], scheduled: true),
+        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Side Plank", "Lat Pulldown"], scheduled: true),
+        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups", "Lat Pulldown", "Side Plank"], scheduled: true),
         Workout("HIIT",       ["HIIT"], scheduled: false),
         Workout("Mobility",   ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
 

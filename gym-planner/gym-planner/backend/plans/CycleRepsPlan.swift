@@ -6,33 +6,41 @@ import os.log
 public class CycleRepsPlan : Plan {
     struct Set: Storable {
         let title: String      // "Set 3 of 4"
-        let amount: String     // "8-12 reps @ 200 lbs"
+        let amount: String     // "8 reps @ 200 lbs"
+        let weight: Weight.Info
+        let reps: Int
         
-        init(set: Int, numSets: Int, minReps: Int, maxReps: Int, weight: Double) {
+        init(_ apparatus: Apparatus, set: Int, numSets: Int, numReps: Int, weight: Double) {
             self.title = "Set \(set) of \(numSets)"
-            
-            let prefix = minReps != maxReps ? "\(minReps)-\(maxReps) reps" : repsStr(maxReps)
-            self.amount = "\(prefix) @ \(Weight.friendlyUnitsStr(weight, plural: true))"
+            self.weight = Weight(weight, apparatus).closest()
+            self.reps = numReps
+
+            let prefix = repsStr(reps)
+            self.amount = "\(prefix) @ \(self.weight.text)"
         }
         
         init(from store: Store) {
             self.title = store.getStr("title")
             self.amount = store.getStr("amount")
+            self.weight = store.getObj("weight", ifMissing: Weight.Info(weight: 0.0, text: "0 lbs", plates: ""))
+            self.reps = store.getInt("reps", ifMissing: 5)
         }
         
         func save(_ store: Store) {
             store.addStr("title", title)
             store.addStr("amount", amount)
+            store.addObj("weight", weight)
+            store.addInt("reps", reps)
         }
     }
     
     class Result: WeightedResult {
-        init(numSets: Int, numReps: Int, weight: Double) {
+        init(_ numSets: Int, _ numReps: Int, _ weight: Weight.Info) {
             self.numSets = numSets
             self.numReps = numReps
             
-            let title = "\(numSets)x\(numReps) @ \(Weight.friendlyUnitsStr(weight, plural: true))"
-            super.init(title, weight, primary: true, missed: false)
+            let title = "\(numSets)x\(numReps) @ \(weight.text)"
+            super.init(title, weight.weight, primary: true, missed: false)
         }
         
         required init(from store: Store) {
@@ -62,6 +70,7 @@ public class CycleRepsPlan : Plan {
         self.numSets = numSets
         self.minReps = minReps
         self.maxReps = maxReps
+        self.deloads = defaultDeloads
     }
     
     // This should consider typeName and whatever was passed into the init above.
@@ -77,13 +86,16 @@ public class CycleRepsPlan : Plan {
         }
     }
     
+    private let defaultDeloads: [Double] = [1.0, 1.0, 0.95, 0.9, 0.85]
+    
     public required init(from store: Store) {
         self.planName = store.getStr("name")
         self.typeName = "CycleRepsPlan"
         self.numSets = store.getInt("numSets")
         self.minReps = store.getInt("minReps")
         self.maxReps = store.getInt("maxReps")
-        
+        self.deloads = store.getDblArray("deloads", ifMissing: defaultDeloads)
+
         self.workoutName = store.getStr("workoutName")
         self.exerciseName = store.getStr("exerciseName")
         self.sets = store.getObjArray("sets")
@@ -110,7 +122,8 @@ public class CycleRepsPlan : Plan {
         store.addInt("numSets", numSets)
         store.addInt("minReps", minReps)
         store.addInt("maxReps", maxReps)
-        
+        store.addDblArray("deloads", deloads)
+
         store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("sets", sets)
@@ -142,6 +155,12 @@ public class CycleRepsPlan : Plan {
         
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
+            if setting.weight == 0.0 {
+                self.state = .blocked
+                setting.reps = minReps
+                return NRepMaxPlan("Rep Max", workReps: minReps)
+            }
+            
             self.state = .started
             buildSets(setting)
             frontend.saveExercise(exerciseName)
@@ -169,7 +188,9 @@ public class CycleRepsPlan : Plan {
     public func refresh() {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            buildSets(setting)
+            if setting.weight > 0.0 {
+                buildSets(setting)
+            }
         case .left(_):
             break
         }
@@ -182,34 +203,24 @@ public class CycleRepsPlan : Plan {
     private let defaultRequested = 6
     
     public func sublabel() -> String {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let requested = setting.reps ?? defaultRequested
-            let prefix = requested != maxReps ? "\(requested)-\(maxReps) reps" : repsStr(maxReps)
-            return "\(numSets)x\(prefix) @ \(Weight.friendlyUnitsStr(setting.weight, plural: true))"
-        case .left(let err):
-            return err
+        if let set = sets.last {
+            return "\(numSets)x\(set.reps) @ \(set.weight.text)"
+        } else {
+            return ""
         }
     }
     
     public func prevLabel() -> String {
-        if let last = history.last {
-            return last.title
+        if let deload = deloadedWeight(), let percent = deload.percent {
+            return "Deloaded by \(percent)% (last was \(deload.weeks) weeks ago)"
         } else {
             return ""
         }
     }
     
     public func historyLabel() -> String {
-        if let last = history.last, last.getWeight() > 0.0 {
-            var weights = Array(history.map {$0.getWeight()})
-            if case .right(let setting) = findVariableWeightSetting(exerciseName) {
-                weights.append(setting.weight)
-            }
-            return makeHistoryLabel(weights)
-        } else {
-            return ""
-        }
+        let labels = history.map {"\($0.numReps) @ \(Weight.friendlyUnitsStr($0.getWeight()))"}
+        return makeHistoryFromLabels(labels)
     }
     
     public func current() -> Activity {
@@ -244,19 +255,13 @@ public class CycleRepsPlan : Plan {
         if setIndex+1 < sets.count {
             return .normal([Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})])
         } else {
-            if case .right(let setting) = findVariableWeightSetting(exerciseName), let requested = setting.reps {
-                var completions: [Completion] = []
-                let minimum = max(requested - 3, 1)
-                for reps in minimum..<maxReps {
-                    completions.append(Completion(title: "Did \(repsStr(reps))",  isDefault: reps == requested,  callback: {() -> Void in self.doFinish(requested, reps)}))
-                }
-                // This is outside the loop to handle the odd case where requested > max.
-                completions.append(Completion(title: "Did \(repsStr(maxReps))",  isDefault: maxReps == requested,  callback: {() -> Void in self.doFinish(requested, self.maxReps)}))
-                return .normal(completions)
-                
-            } else {
-                return .normal([Completion(title: "Done", isDefault: false, callback: {() -> Void in self.doFinish(1, self.defaultRequested)})])
-            }
+            let completions: [Completion] = [
+                Completion(title: "Mainain", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 0)}),
+                Completion(title: "Advance by 1", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 1)}),
+                Completion(title: "Advance by 2", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 2)}),
+                Completion(title: "Advance by 3", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 3)}),
+                Completion(title: "Advance by 4", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 4)})]
+            return .normal(completions)
         }
     }
     
@@ -273,10 +278,9 @@ public class CycleRepsPlan : Plan {
     }
     
     public func currentWeight() -> Double? {
-        switch findCurrentWeight(exerciseName) {
-        case .right(let weight):
-            return weight
-        case .left(_):
+        if let deload = deloadedWeight() {
+            return deload.weight
+        } else {
             return nil
         }
     }
@@ -289,34 +293,38 @@ public class CycleRepsPlan : Plan {
         frontend.saveExercise(exerciseName)
     }
     
-    private func doFinish(_ requested: Int, _ reps: Int) {
+    private func doFinish(advanceBy: Int) {
         modifiedOn = Date()
         state = .finished
         if case let .right(exercise) = findExercise(exerciseName) {
             exercise.completed[workoutName] = Date()
         }
         
-        if reps >= requested {
-            handleAdvance(reps)
+        if advanceBy > 0 {
+            handleAdvance(advanceBy)
         }
-        addResult(reps)
+        addResult(sets.last!.reps)
         frontend.saveExercise(exerciseName)
     }
     
-    private func handleAdvance(_ newReps: Int) {
+    private func handleAdvance(_ advanceBy: Int) {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let oldReps = setting.reps ?? 0
+            let oldReps = sets.last!.reps
+            let newReps = oldReps + advanceBy
+            let oldWeight = setting.weight
             setting.reps = newReps
-            if newReps > maxReps {
-                setting.reps = minReps
-
-                let oldWeight = setting.weight
+            while setting.reps! > maxReps {
+                setting.reps = minReps + (setting.reps! - maxReps) - 1
                 let w = Weight(setting.weight, setting.apparatus)
                 setting.changeWeight(w.nextWeight())
+            }
+            
+            if setting.weight != oldWeight {
                 os_log("advanced from %.3f to %.3f lbs", type: .info, oldWeight, setting.weight)
-            } else {
-                os_log("advanced from %d to %d reps", type: .info, oldReps, newReps)
+            }
+            if setting.reps! != oldReps {
+                os_log("advanced from %d to %d reps", type: .info, oldReps, setting.reps!)
             }
             
         case .left(let err):
@@ -326,13 +334,9 @@ public class CycleRepsPlan : Plan {
     }
     
     private func addResult(_ reps: Int) {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let result = Result(numSets: numSets, numReps: reps, weight: setting.weight)
-            history.append(result)
-        case .left(_):
-            break
-        }
+        let weight = sets.last!.weight
+        let result = Result(numSets, reps, weight)
+        history.append(result)
     }
     
     private func buildSets(_ setting: VariableWeightSetting) {
@@ -340,16 +344,29 @@ public class CycleRepsPlan : Plan {
         os_log("weight = %.3f", type: .info, weight)
         
         sets = []
+        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
         for i in 0..<numSets {
             let requested = setting.reps ?? defaultRequested
-            sets.append(Set(set: i+1, numSets: numSets, minReps: requested, maxReps: maxReps, weight: setting.weight))
+            sets.append(Set(setting.apparatus, set: i+1, numSets: numSets, numReps: requested, weight: deload.weight))
+        }
+    }
+    
+    private func deloadedWeight() -> Deload? {
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+            return deload
+            
+        case .left(_):
+            return nil
         }
     }
     
     private let numSets: Int
     private let minReps: Int
     private let maxReps: Int
-    
+    private let deloads: [Double]
+
     private var modifiedOn = Date.distantPast
     private var workoutName: String = ""
     private var exerciseName: String = ""
