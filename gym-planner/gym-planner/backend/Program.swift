@@ -45,6 +45,9 @@ public class Program: Storable {
         case strength
         case hypertrophy
         case conditioning
+
+        case threeDays
+        case fourDays
         
         case female
         case age40s
@@ -169,7 +172,6 @@ public class Program: Storable {
     public var tags: Set<Tags>
     public var description: String
     public var customNotes: [String: String]    // formal name => markdown
-    // TODO: may want a custom flag
 }
 
 /// Helper used when constructing programs.
@@ -247,6 +249,9 @@ extension Program.Tags: Storable {
         case "strength": self = .strength
         case "hypertrophy": self = .hypertrophy
         case "conditioning": self = .conditioning
+
+        case "threeDays": self = .threeDays
+        case "fourDays": self = .fourDays
             
         case "female": self = .female
         case "age40s": self = .age40s
@@ -265,6 +270,9 @@ extension Program.Tags: Storable {
         case .strength: store.addStr("tag", "strength")
         case .hypertrophy: store.addStr("tag", "hypertrophy")
         case .conditioning: store.addStr("tag", "conditioning")
+
+        case .threeDays: store.addStr("tag", "threeDays")
+        case .fourDays: store.addStr("tag", "fourDays")
             
         case .female: store.addStr("tag", "female")
         case .age40s: store.addStr("tag", "age40s")
