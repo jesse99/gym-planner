@@ -14,9 +14,6 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         view.backgroundColor = tableView.backgroundColor
         view.setNeedsDisplay()
         
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 40
-        
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(WorkoutsTabController.enteringForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }

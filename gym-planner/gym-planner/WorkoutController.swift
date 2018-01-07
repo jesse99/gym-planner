@@ -27,9 +27,6 @@ class WorkoutController: UIViewController, UITableViewDataSource, UITableViewDel
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 40
-        
         //tableView.backgroundColor = targetColor(.background)
         view.backgroundColor = tableView.backgroundColor
     }
