@@ -46,6 +46,9 @@ public class Program: Storable {
         case hypertrophy
         case conditioning
 
+        case barbell
+        case dumbbell
+
         case threeDays
         case fourDays
         
@@ -253,6 +256,9 @@ extension Program.Tags: Storable {
         case "threeDays": self = .threeDays
         case "fourDays": self = .fourDays
             
+        case "barbell": self = .barbell
+        case "dumbbell": self = .dumbbell
+
         case "female": self = .female
         case "age40s": self = .age40s
         case "age50s": self = .age50s
@@ -273,6 +279,9 @@ extension Program.Tags: Storable {
 
         case .threeDays: store.addStr("tag", "threeDays")
         case .fourDays: store.addStr("tag", "fourDays")
+            
+        case .barbell: store.addStr("tag", "babell")
+        case .dumbbell: store.addStr("tag", "dumbbell")
             
         case .female: store.addStr("tag", "female")
         case .age40s: store.addStr("tag", "age40s")
