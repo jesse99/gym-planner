@@ -53,6 +53,7 @@ public class Program: Storable {
         case fourDays
         
         case female
+        case ageUnder40
         case age40s
         case age50s
     }
@@ -260,6 +261,7 @@ extension Program.Tags: Storable {
         case "dumbbell": self = .dumbbell
 
         case "female": self = .female
+        case "ageUnder40": self = .ageUnder40
         case "age40s": self = .age40s
         case "age50s": self = .age50s
 
@@ -284,6 +286,8 @@ extension Program.Tags: Storable {
         case .dumbbell: store.addStr("tag", "dumbbell")
             
         case .female: store.addStr("tag", "female")
+
+        case .ageUnder40: store.addStr("tag", "ageUnder40")
         case .age40s: store.addStr("tag", "age40s")
         case .age50s: store.addStr("tag", "age50s")
         }
