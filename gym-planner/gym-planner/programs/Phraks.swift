@@ -64,7 +64,7 @@ This is a bare-bones [implementation](https://www.reddit.com/r/Fitness/wiki/phra
 **Notes**
 * The plus means that the last set should be done As Many Times As Possible (AMRAP). But note that you shouldn't go to failure: instead stop one or two reps short of failure. One way to manage this is to stop when the bar begins to slow significantly.
 * If you're able to do more than ten reps in an AMRAP set then you can optionally select Advance x2 when finishing the exercise.
-* If you can't do five repsfor each set of an exercise then select deload from the menu when finishing and the app will reduce the weight for that exercise by ten percent.
+* If you can't do five reps for each set of an exercise then select deload from the menu when finishing and the app will reduce the weight for that exercise by ten percent.
 * If you cannot do chinups then do negative chinups.
 * If you're able to do thirty chinups then add weight and drop the reps.
 """
