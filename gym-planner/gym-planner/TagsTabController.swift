@@ -118,6 +118,22 @@ class TagsTabController: UIViewController {
         apparatusButton.setTitle(apparatusText + " ^", for: .normal)
         sexButton.setTitle(sexText + " ^", for: .normal)
         ageButton.setTitle(ageText + " ^", for: .normal)
+        
+        let app = UIApplication.shared.delegate as! AppDelegate
+        programs = app.programs.filter {$0.tags.isSuperset(of: tags)}
+        
+        if programs.count == 0 {
+            viewButton.setTitle("No Matching Programs", for: .normal)
+            viewButton.isEnabled = false
+
+        } else if programs.count == 1 {
+            viewButton.setTitle("View 1 Program", for: .normal)
+            viewButton.isEnabled = true
+
+        } else {
+            viewButton.setTitle("View \(programs.count) Programs", for: .normal)
+            viewButton.isEnabled = true
+        }
     }
     
     private func tagToString(_ tag: Program.Tags) -> String {
@@ -169,5 +185,6 @@ class TagsTabController: UIViewController {
     @IBOutlet private var viewButton: UIButton!
     
     private var tags: Set<Program.Tags> = [.beginner, .strength, .ageUnder40, .barbell, .threeDays]
+    private var programs: [Program] = []
 }
 
