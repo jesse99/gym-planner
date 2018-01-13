@@ -7,7 +7,7 @@ func Phraks() -> Program {
     }
     
     func amrapPlan() -> Plan {
-        return AMRAPPlan("AMRAP", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1], workSets: 3, workReps: 5)
+        return AMRAPPlan("AMRAP", firstWarmup: 0.4, warmupReps: [5, 5, 3], workSets: 3, workReps: 5)
     }
     
     let exercises = [
