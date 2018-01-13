@@ -11,21 +11,21 @@ public class PercentOfPlan : Plan {
         let weight: Weight.Info
         let warmup: Bool
         
-        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, weight: Double) {
+        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, warmupWeight: Weight.Info, workingSetWeight: Double) {
             self.title = "Warmup \(phase) of \(phaseCount)"
-            self.weight = Weight(percent*weight, apparatus).closest(below: weight)
+            self.weight = warmupWeight
             self.numReps = numReps
             self.warmup = true
 
-            let info = Weight(weight, apparatus).closest()
+            let info = Weight(workingSetWeight, apparatus).closest()
             let p = String(format: "%.0f", 100.0*percent)
             self.subtitle = "\(p)% of \(info.text)"
         }
 
-        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, weight: Double) {
+        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, workingSetWeight: Double) {
             self.title = "Workset \(phase) of \(phaseCount)"
             self.subtitle = ""
-            self.weight = Weight(weight, apparatus).closest()
+            self.weight = Weight(workingSetWeight, apparatus).closest()
             self.numReps = numReps
             self.warmup = false
         }
@@ -362,19 +362,13 @@ public class PercentOfPlan : Plan {
         }
         
         sets = []
-        let numWarmups = warmupsWithBar + warmupReps.count
-        for i in 0..<warmupsWithBar {
-            sets.append(Set(apparatus, phase: i+1, phaseCount: numWarmups, numReps: warmupReps.first ?? 5, percent: 0.0, weight: workingSetWeight))
-        }
-        
-        let delta = warmupReps.count > 0 ? (0.9 - firstWarmup)/Double(warmupReps.count - 1) : 0.0
-        for (i, reps) in warmupReps.enumerated() {
-            let percent = firstWarmup + Double(i)*delta
-            sets.append(Set(apparatus, phase: warmupsWithBar + i + 1, phaseCount: numWarmups, numReps: reps, percent: percent, weight: workingSetWeight))
+        let warmups = computeWarmups(apparatus, warmupsWithBar, firstWarmup, warmupReps, workingSetWeight: workingSetWeight)
+        for (reps, setIndex, percent, warmupWeight) in warmups {
+            sets.append(Set(apparatus, phase: setIndex, phaseCount: warmups.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: workingSetWeight))
         }
         
         for i in 0..<workSets {
-            sets.append(Set(apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, weight: workingSetWeight))
+            sets.append(Set(apparatus, phase: i+1, phaseCount: workSets, numReps: workReps, workingSetWeight: workingSetWeight))
         }
     }
     

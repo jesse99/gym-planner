@@ -28,6 +28,7 @@
 		374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */; };
 		374E1B6C2009B8AA0052AB0C /* MarkdownController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B6B2009B8AA0052AB0C /* MarkdownController.swift */; };
 		374E1B6E2009DD960052AB0C /* ProgramsTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B6D2009DD960052AB0C /* ProgramsTabController.swift */; };
+		374E1B70200A7E580052AB0C /* PlanHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B6F200A7E580052AB0C /* PlanHelpers.swift */; };
 		375E52E11FE8DFFF0040A975 /* EditWeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */; };
 		376BA11B2001D57000EF804C /* Phraks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BA11A2001D57000EF804C /* Phraks.swift */; };
 		376BA11D2001E08A00EF804C /* AMRAPPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BA11C2001E08A00EF804C /* AMRAPPlan.swift */; };
@@ -102,6 +103,7 @@
 		374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyMarkdown.swift; sourceTree = "<group>"; };
 		374E1B6B2009B8AA0052AB0C /* MarkdownController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownController.swift; sourceTree = "<group>"; };
 		374E1B6D2009DD960052AB0C /* ProgramsTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramsTabController.swift; sourceTree = "<group>"; };
+		374E1B6F200A7E580052AB0C /* PlanHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanHelpers.swift; sourceTree = "<group>"; };
 		375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWeightedHistoryController.swift; sourceTree = "<group>"; };
 		376BA11A2001D57000EF804C /* Phraks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phraks.swift; sourceTree = "<group>"; };
 		376BA11C2001E08A00EF804C /* AMRAPPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPPlan.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				37CED4A91FB1625700244ADD /* Exercise.swift */,
 				3743E2B81FB824CC00787CB3 /* FrontEnd.swift */,
 				37CED48E1FAE29E000244ADD /* Plan.swift */,
+				374E1B6F200A7E580052AB0C /* PlanHelpers.swift */,
 				377F054F1FC0D9CE0015D7EF /* Program.swift */,
 				376E3C9E1FB7C7F9006EEAC3 /* Results.swift */,
 				376E3C9C1FB7923F006EEAC3 /* Settings.swift */,
@@ -430,6 +433,7 @@
 				372B14471FE7369200D8392A /* WeightedHistoryController.swift in Sources */,
 				377C11F31FC26BD20063A324 /* WorkoutController.swift in Sources */,
 				37B3ECF91FD395F900F7D8EF /* WeightsController.swift in Sources */,
+				374E1B70200A7E580052AB0C /* PlanHelpers.swift in Sources */,
 				374E1B6E2009DD960052AB0C /* ProgramsTabController.swift in Sources */,
 				37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */,
 				370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */,

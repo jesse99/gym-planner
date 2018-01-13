@@ -55,9 +55,9 @@ func HLM2() -> Program {
         return VariableRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
     }
     
-    func planAccessory(_ minReps: Int, _ maxReps: Int) -> Plan {
+    func planAccessory(_ minReps: Int, _ maxReps: Int, firstWarmup: Double, warmupReps: [Int]) -> Plan {
         let numSets = 3
-        return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
+        return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps, firstWarmup: firstWarmup, warmupReps: warmupReps)
     }
     
     func planHIIT() -> Plan {
@@ -77,7 +77,7 @@ func HLM2() -> Program {
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
 
         createBarBell("Good Morning",   "Good Morning",   planMorning(),  restMins: 3.0, warmupsWithBar: 0),
-        createCycleReps("Lat Pulldown", "Lat Pulldown",   planAccessory(5, 10), restMins: 2.0),
+        createCycleReps("Lat Pulldown", "Lat Pulldown",   planAccessory(5, 10, firstWarmup: 0.8, warmupReps: [5]), restMins: 2.0),
         
         createTimed("Kneeling Front Plank",  "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
         createTimed("Front Plank",           "Front Plank",           planTimed(1, targetTime: 60), duration: 30),

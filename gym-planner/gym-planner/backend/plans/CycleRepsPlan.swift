@@ -5,15 +5,33 @@ import os.log
 
 public class CycleRepsPlan : Plan {
     struct Set: Storable {
-        let title: String      // "Set 3 of 4"
+        let title: String      // "Workset 3 of 4"
+        let subtitle: String   // "60% of 200 lbs"
         let amount: String     // "8 reps @ 200 lbs"
         let weight: Weight.Info
         let reps: Int
+        let warmup: Bool
         
-        init(_ apparatus: Apparatus, set: Int, numSets: Int, numReps: Int, weight: Double) {
-            self.title = "Set \(set) of \(numSets)"
-            self.weight = Weight(weight, apparatus).closest()
+        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, warmupWeight: Weight.Info, workingSetWeight: Double) {
+            self.title = "Warmup \(phase) of \(phaseCount)"
+            self.weight = warmupWeight
             self.reps = numReps
+            self.warmup = true
+            
+            let info = Weight(workingSetWeight, apparatus).closest()
+            let p = String(format: "%.0f", 100.0*percent)
+            self.subtitle = "\(p)% of \(info.text)"
+
+            let prefix = repsStr(numReps)
+            self.amount = "\(prefix) @ \(self.weight.text)"
+        }
+        
+        init(_ apparatus: Apparatus, set: Int, numSets: Int, numReps: Int, workingSetWeight: Double) {
+            self.title = "Workset \(set) of \(numSets)"
+            self.weight = Weight(workingSetWeight, apparatus).closest()
+            self.reps = numReps
+            self.subtitle = ""
+            self.warmup = false
 
             let prefix = repsStr(reps)
             self.amount = "\(prefix) @ \(self.weight.text)"
@@ -21,16 +39,20 @@ public class CycleRepsPlan : Plan {
         
         init(from store: Store) {
             self.title = store.getStr("title")
+            self.subtitle = store.getStr("subtitle", ifMissing: "")
             self.amount = store.getStr("amount")
             self.weight = store.getObj("weight", ifMissing: Weight.Info(weight: 0.0, text: "0 lbs", plates: ""))
             self.reps = store.getInt("reps", ifMissing: 5)
+            self.warmup = store.getBool("warmup", ifMissing: false)
         }
         
         func save(_ store: Store) {
             store.addStr("title", title)
+            store.addStr("subtitle", subtitle)
             store.addStr("amount", amount)
             store.addObj("weight", weight)
             store.addInt("reps", reps)
+            store.addBool("warmup", warmup)
         }
     }
     
@@ -63,13 +85,15 @@ public class CycleRepsPlan : Plan {
         let numReps: Int
     }
     
-    init(_ name: String, numSets: Int, minReps: Int, maxReps: Int) {
+    init(_ name: String, numSets: Int, minReps: Int, maxReps: Int, firstWarmup: Double, warmupReps: [Int]) {
         os_log("init CycleRepsPlan for %@", type: .info, name)
         self.planName = name
         self.typeName = "CycleRepsPlan"
         self.numSets = numSets
         self.minReps = minReps
         self.maxReps = maxReps
+        self.firstWarmup = firstWarmup
+        self.warmupReps = warmupReps
         self.deloads = defaultDeloads
     }
     
@@ -80,7 +104,9 @@ public class CycleRepsPlan : Plan {
                 planName == savedPlan.planName &&
                 numSets == savedPlan.numSets &&
                 minReps == savedPlan.minReps &&
-                maxReps == savedPlan.maxReps
+                maxReps == savedPlan.maxReps &&
+                firstWarmup == savedPlan.firstWarmup &&
+                warmupReps == savedPlan.warmupReps
         } else {
             return false
         }
@@ -94,6 +120,8 @@ public class CycleRepsPlan : Plan {
         self.numSets = store.getInt("numSets")
         self.minReps = store.getInt("minReps")
         self.maxReps = store.getInt("maxReps")
+        self.firstWarmup = store.getDbl("firstWarmup", ifMissing: 0.0)
+        self.warmupReps = store.getIntArray("warmupReps", ifMissing: [])
         self.deloads = store.getDblArray("deloads", ifMissing: defaultDeloads)
 
         self.workoutName = store.getStr("workoutName")
@@ -122,6 +150,8 @@ public class CycleRepsPlan : Plan {
         store.addInt("numSets", numSets)
         store.addInt("minReps", minReps)
         store.addInt("maxReps", maxReps)
+        store.addDbl("firstWarmup", firstWarmup)
+        store.addIntArray("warmupReps", warmupReps)
         store.addDblArray("deloads", deloads)
 
         store.addStr("workoutName", workoutName)
@@ -226,7 +256,7 @@ public class CycleRepsPlan : Plan {
     public func current() -> Activity {
         return Activity(
             title: sets[setIndex].title,
-            subtitle: "",
+            subtitle: sets[setIndex].subtitle,
             amount: sets[setIndex].amount,
             details: "",
             buttonName: "Next",
@@ -240,7 +270,7 @@ public class CycleRepsPlan : Plan {
             if case .finished = state {
                 return RestTime(autoStart: false, secs: secs)
             } else {
-                return RestTime(autoStart: setIndex > 0, secs: secs)
+                return RestTime(autoStart: setIndex > 0 && !sets[setIndex-1].warmup, secs: secs)
             }
         case .left(_):
             return RestTime(autoStart: false, secs: 0)
@@ -345,9 +375,15 @@ public class CycleRepsPlan : Plan {
         
         sets = []
         let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
+
+        let warmups = computeWarmups(setting.apparatus, 0, firstWarmup, warmupReps, workingSetWeight: deload.weight)
+        for (reps, setIndex, percent, warmupWeight) in warmups {
+            sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmups.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: weight))
+        }
+
         for i in 0..<numSets {
             let requested = setting.reps ?? defaultRequested
-            sets.append(Set(setting.apparatus, set: i+1, numSets: numSets, numReps: requested, weight: deload.weight))
+            sets.append(Set(setting.apparatus, set: i+1, numSets: numSets, numReps: requested, workingSetWeight: deload.weight))
         }
     }
     
@@ -365,6 +401,8 @@ public class CycleRepsPlan : Plan {
     private let numSets: Int
     private let minReps: Int
     private let maxReps: Int
+    private let firstWarmup: Double
+    private let warmupReps: [Int]
     private let deloads: [Double]
 
     private var modifiedOn = Date.distantPast

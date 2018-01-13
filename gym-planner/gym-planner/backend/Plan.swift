@@ -183,13 +183,6 @@ extension PlanState: Storable {
 // deload for progression   blah
 // deload for time          blah
 
-// https://www.reddit.com/r/Fitness/wiki/phraks-gslp
-// 3x5+ (last set is AMRAP)
-// add weight each workout
-// if hit 10 reps on AMRAP can double added weight
-// if can't hit 15 sets across all sets then deload that lift by 10%
-// deload by time
-
 // 531      https://www.t-nation.com/workouts/531-how-to-build-pure-strength
 
 
