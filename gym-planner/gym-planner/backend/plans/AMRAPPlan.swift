@@ -225,7 +225,7 @@ public class AMRAPPlan : Plan {
     
     public func current() -> Activity {
         let info = sets[setIndex].weight
-        let reps = setIndex+1 == sets.count ? repsStr(sets[setIndex].numReps)+"+" : repsStr(sets[setIndex].numReps)
+        let reps = repsStr(sets[setIndex].numReps, amrap: setIndex+1 == sets.count)
         return Activity(
             title: sets[setIndex].title,
             subtitle: sets[setIndex].subtitle,

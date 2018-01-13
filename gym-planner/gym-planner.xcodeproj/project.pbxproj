@@ -27,6 +27,7 @@
 		374556ED1FD66ADC0005020B /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EC1FD66ADC0005020B /* NotesController.swift */; };
 		374556F01FD66F6B0005020B /* SwiftyMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */; };
 		374E1B6C2009B8AA0052AB0C /* MarkdownController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B6B2009B8AA0052AB0C /* MarkdownController.swift */; };
+		374E1B6E2009DD960052AB0C /* ProgramsTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B6D2009DD960052AB0C /* ProgramsTabController.swift */; };
 		375E52E11FE8DFFF0040A975 /* EditWeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */; };
 		376BA11B2001D57000EF804C /* Phraks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BA11A2001D57000EF804C /* Phraks.swift */; };
 		376BA11D2001E08A00EF804C /* AMRAPPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BA11C2001E08A00EF804C /* AMRAPPlan.swift */; };
@@ -66,7 +67,6 @@
 		37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4A91FB1625700244ADD /* Exercise.swift */; };
 		37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AC1FB3FCED00244ADD /* SequenceExtension.swift */; };
 		37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */; };
-		37D892E12004731B0092D231 /* ProgramsTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D892E02004731B0092D231 /* ProgramsTabController.swift */; };
 		37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +101,7 @@
 		374556EC1FD66ADC0005020B /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		374556EF1FD66F6B0005020B /* SwiftyMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyMarkdown.swift; sourceTree = "<group>"; };
 		374E1B6B2009B8AA0052AB0C /* MarkdownController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownController.swift; sourceTree = "<group>"; };
+		374E1B6D2009DD960052AB0C /* ProgramsTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramsTabController.swift; sourceTree = "<group>"; };
 		375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWeightedHistoryController.swift; sourceTree = "<group>"; };
 		376BA11A2001D57000EF804C /* Phraks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phraks.swift; sourceTree = "<group>"; };
 		376BA11C2001E08A00EF804C /* AMRAPPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPPlan.swift; sourceTree = "<group>"; };
@@ -144,7 +145,6 @@
 		37CED4A91FB1625700244ADD /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		37CED4AC1FB3FCED00244ADD /* SequenceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtension.swift; sourceTree = "<group>"; };
 		37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastersBasicCyclePlan.swift; sourceTree = "<group>"; };
-		37D892E02004731B0092D231 /* ProgramsTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramsTabController.swift; sourceTree = "<group>"; };
 		37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -250,7 +250,7 @@
 				374556EA1FD669ED0005020B /* Notes.swift */,
 				374556EC1FD66ADC0005020B /* NotesController.swift */,
 				377F05571FC0DD8F0015D7EF /* programs */,
-				37D892E02004731B0092D231 /* ProgramsTabController.swift */,
+				374E1B6D2009DD960052AB0C /* ProgramsTabController.swift */,
 				37B3ECEF1FD370A600F7D8EF /* setting controllers */,
 				372B14461FE7369200D8392A /* WeightedHistoryController.swift */,
 				377C11F21FC26BD20063A324 /* WorkoutController.swift */,
@@ -430,6 +430,7 @@
 				372B14471FE7369200D8392A /* WeightedHistoryController.swift in Sources */,
 				377C11F31FC26BD20063A324 /* WorkoutController.swift in Sources */,
 				37B3ECF91FD395F900F7D8EF /* WeightsController.swift in Sources */,
+				374E1B6E2009DD960052AB0C /* ProgramsTabController.swift in Sources */,
 				37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */,
 				370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */,
 				37B3ECF31FD3818000F7D8EF /* VariableWeightSetting.swift in Sources */,
@@ -451,7 +452,6 @@
 				37163DEE1FD8DA23008EB47D /* VariableRepsPlan.swift in Sources */,
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,
 				378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */,
-				37D892E12004731B0092D231 /* ProgramsTabController.swift in Sources */,
 				37CED48F1FAE29E000244ADD /* Plan.swift in Sources */,
 				3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */,
 				376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */,

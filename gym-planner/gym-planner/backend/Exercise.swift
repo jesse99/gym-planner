@@ -43,6 +43,7 @@ public class Exercise: Storable {
 
         let pname = store.getStr("plan-type")
         switch pname {
+        case "AMRAPPlan":             let p: AMRAPPlan = store.getObj("plan"); self.plan = p
         case "CycleRepsPlan":         let p: CycleRepsPlan = store.getObj("plan"); self.plan = p
         case "LinearPlan":            let p: LinearPlan = store.getObj("plan"); self.plan = p
         case "MastersBasicCyclePlan": let p: MastersBasicCyclePlan = store.getObj("plan"); self.plan = p
@@ -112,10 +113,15 @@ public class Exercise: Storable {
     public var hidden: Bool
 }
 
-internal func repsStr(_ reps: Int) -> String {
-    if reps == 1 {
-        return "1 rep"
+internal func repsStr(_ reps: Int, amrap: Bool = false) -> String {
+    if amrap {
+        return "\(reps)+ reps"
+
     } else {
-        return "\(reps) reps"
+        if reps == 1 {
+            return "1 rep"
+        } else {
+            return "\(reps) reps"
+        }
     }
 }

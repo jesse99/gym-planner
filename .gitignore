@@ -68,3 +68,4 @@ fastlane/screenshots
 fastlane/test_output
 
 *-back-color.xml
+.DS_Store

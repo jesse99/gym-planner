@@ -282,7 +282,7 @@ extension Program.Tags: Storable {
         case .threeDays: store.addStr("tag", "threeDays")
         case .fourDays: store.addStr("tag", "fourDays")
             
-        case .barbell: store.addStr("tag", "babell")
+        case .barbell: store.addStr("tag", "barbell")
         case .dumbbell: store.addStr("tag", "dumbbell")
             
         case .female: store.addStr("tag", "female")
