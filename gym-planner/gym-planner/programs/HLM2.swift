@@ -24,7 +24,7 @@ func HLM2() -> Program {
     }
     
     func planMorning() -> Plan {
-        return LinearPlan("Good Morning", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 3, workReps: 5)
+        return LinearPlan("Good Morning", firstWarmup: 0.6, warmupReps: [5, 3], workSets: 3, workReps: 5)
     }
     
     func planLSquat() -> Plan {
@@ -76,14 +76,14 @@ func HLM2() -> Program {
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
 
-        createBarBell("Good Morning",   "Good Morning",   planMorning(),  restMins: 3.0, warmupsWithBar: 2),
+        createBarBell("Good Morning",   "Good Morning",   planMorning(),  restMins: 3.0, warmupsWithBar: 0),
         createCycleReps("Lat Pulldown", "Lat Pulldown",   planAccessory(5, 10), restMins: 2.0),
         
         createTimed("Kneeling Front Plank",  "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
         createTimed("Front Plank",           "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
-        createTimed("Side Plank",            "Side Plank",            planTimed(2, targetTime: 60), duration: 30),
-        createTimed("Leg Lift Plank",        "Leg Lift Plank",        planTimed(2, targetTime: 60), duration: 30),
-        createTimed("Arm & Leg Lift Front Plank", "Arm & Leg Lift Front Plank", planTimed(2, targetTime: 60), duration: 30),
+        createTimed("Side Plank",            "Side Plank",            planTimed(2, targetTime: 30), duration: 15),
+        createTimed("Leg Lift Plank",        "Leg Lift Plank",        planTimed(2, targetTime: 30), duration: 15),
+        createTimed("Arm & Leg Lift Front Plank", "Arm & Leg Lift Front Plank", planTimed(2, targetTime: 30), duration: 15),
         createTimed("Decline Plank",         "Decline Plank",         planTimed(1, targetTime: 60), duration: 30),
         createTimed("Decline & March Plank", "Decline & March Plank", planTimed(1, targetTime: 60), duration: 30),
         createTimed("Wall Plank",            "Wall Plank",            planTimed(1, targetTime: 60), duration: 30),
