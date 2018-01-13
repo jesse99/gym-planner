@@ -89,7 +89,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
     
     private func activate(_ program: Program) {
         let app = UIApplication.shared.delegate as! AppDelegate
-        app.program = program
+        app.changeProgram(program)
         tableView.reloadData()
     }
     
