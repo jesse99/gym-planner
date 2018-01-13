@@ -76,12 +76,11 @@ public class PercentOfPlan : Plan {
         let numReps: Int
     }
     
-    init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int, percent: Double) {
+    init(_ name: String, _ warmups: Warmups, workSets: Int, workReps: Int, percent: Double) {
         os_log("init PercentOfPlan for %@", type: .info, name)
         self.planName = name
         self.typeName = "PercentOfPlan"
-        self.firstWarmup = firstWarmup
-        self.warmupReps = warmupReps
+        self.warmups = warmups
         self.workSets = workSets
         self.workReps = workReps
         self.percent = percent
@@ -92,8 +91,7 @@ public class PercentOfPlan : Plan {
         if let savedPlan = inPlan as? PercentOfPlan {
             return typeName == savedPlan.typeName &&
                 planName == savedPlan.planName &&
-                firstWarmup == savedPlan.firstWarmup &&
-                warmupReps == savedPlan.warmupReps &&
+                warmups == savedPlan.warmups &&
                 workSets == savedPlan.workSets &&
                 workReps == savedPlan.workReps &&
                 percent == savedPlan.percent
@@ -105,11 +103,17 @@ public class PercentOfPlan : Plan {
     public required init(from store: Store) {
         self.planName = store.getStr("name")
         self.typeName = "PercentOfPlan"
-        self.firstWarmup = store.getDbl("firstWarmup")
-        self.warmupReps = store.getIntArray("warmupReps")
         self.workSets = store.getInt("workSets")
         self.workReps = store.getInt("workReps")
         self.percent = store.getDbl("percent")
+        
+        if !store.hasKey("warmups") {
+            let firstWarmup = store.getDbl("firstWarmup")
+            let warmupReps = store.getIntArray("warmupReps")
+            self.warmups = Warmups(withBar: 2, firstPercent: firstWarmup, lastPercent: 0.9, reps: warmupReps)
+        } else {
+            self.warmups = store.getObj("warmups")
+        }
         
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
@@ -134,8 +138,7 @@ public class PercentOfPlan : Plan {
     
     public func save(_ store: Store) {
         store.addStr("name", planName)
-        store.addDbl("firstWarmup", firstWarmup)
-        store.addIntArray("warmupReps", warmupReps)
+        store.addObj("warmups", warmups)
         store.addInt("workSets", workSets)
         store.addInt("workReps", workReps)
         store.addDbl("percent", percent)
@@ -355,16 +358,10 @@ public class PercentOfPlan : Plan {
         let workingSetWeight = percent*otherWeight
         os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
         
-        var warmupsWithBar = 0
-        switch apparatus {
-        case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
-        default: break
-        }
-        
         sets = []
-        let warmups = computeWarmups(apparatus, warmupsWithBar, firstWarmup, warmupReps, workingSetWeight: workingSetWeight)
-        for (reps, setIndex, percent, warmupWeight) in warmups {
-            sets.append(Set(apparatus, phase: setIndex, phaseCount: warmups.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: workingSetWeight))
+        let warmupSets = warmups.computeWarmups(apparatus, workingSetWeight: workingSetWeight)
+        for (reps, setIndex, percent, warmupWeight) in warmupSets {
+            sets.append(Set(apparatus, phase: setIndex, phaseCount: warmupSets.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: workingSetWeight))
         }
         
         for i in 0..<workSets {
@@ -408,8 +405,7 @@ public class PercentOfPlan : Plan {
         }
     }
     
-    private let firstWarmup: Double
-    private let warmupReps: [Int]
+    private let warmups: Warmups
     private let workSets: Int;
     private let workReps: Int
     private let percent: Double

@@ -6,17 +6,18 @@ func Phraks() -> Program {
         return VariableSetsPlan("Chinups", targetReps: 30)
     }
     
-    func amrapPlan() -> Plan {
-        return AMRAPPlan("AMRAP", firstWarmup: 0.4, warmupReps: [5, 5, 3], workSets: 3, workReps: 5)
+    func amrapPlan(withBar: Int) -> Plan {
+        let warmups = Warmups(withBar: withBar, firstPercent: 0.4, lastPercent: 0.6, reps: [5, 5, 3])
+        return AMRAPPlan("AMRAP", warmups, workSets: 3, workReps: 5)
     }
     
     let exercises = [
         createVarReps("Chinups",        "Chinup",         chinsPlan(), restMins: 2.5, requestedReps: 15),
-        createBarBell("Overhead Press", "Overhead Press", amrapPlan(), restMins: 2.5, magnets: [1.25]),
-        createBarBell("Squat",          "Low bar Squat",  amrapPlan(), restMins: 3.0, warmupsWithBar: 2),
-        createBarBell("Barbell Rows",   "Pendlay Row",    amrapPlan(), restMins: 2.0, magnets: [1.25]),
-        createBarBell("Bench Press",    "Bench Press",    amrapPlan(), restMins: 3.0, magnets: [1.25]),
-        createBarBell("Deadlift",       "Deadlift",       amrapPlan(), restMins: 3.0, useBumpers: true)]
+        createBarBell("Overhead Press", "Overhead Press", amrapPlan(withBar: 2), restMins: 2.5, magnets: [1.25]),
+        createBarBell("Squat",          "Low bar Squat",  amrapPlan(withBar: 2), restMins: 3.0),
+        createBarBell("Barbell Rows",   "Pendlay Row",    amrapPlan(withBar: 0), restMins: 2.0, magnets: [1.25]),
+        createBarBell("Bench Press",    "Bench Press",    amrapPlan(withBar: 2), restMins: 3.0, magnets: [1.25]),
+        createBarBell("Deadlift",       "Deadlift",       amrapPlan(withBar: 2), restMins: 3.0, useBumpers: true)]
     
     let workouts = [
         Workout("OHP1",   ["Chinups",      "Overhead Press", "Squat"], scheduled: true, optional: []),

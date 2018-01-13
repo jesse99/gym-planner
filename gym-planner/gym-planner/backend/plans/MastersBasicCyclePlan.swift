@@ -47,21 +47,21 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         let weight: Weight.Info
         let warmup: Bool
         
-        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, weight: Double) {
+        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, warmupWeight: Weight.Info, workingSetWeight: Double) {
             self.title = "Warmup \(phase) of \(phaseCount)"
-            self.weight = Weight(percent*weight, apparatus).closest(below: weight)
+            self.weight = warmupWeight
             self.numReps = numReps
             self.warmup = true
 
-            let info1 = Weight(weight, apparatus).closest()
+            let info1 = Weight(workingSetWeight, apparatus).closest()
             let p = String(format: "%.0f", 100.0*percent)
             self.subtitle = "\(p)% of \(info1.text)"
         }
 
-        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, weight: Double) {
+        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, workingSetWeight: Double) {
             self.title = "Workset \(phase) of \(phaseCount)"
             self.subtitle = ""
-            self.weight = Weight(weight, apparatus).closest()
+            self.weight = Weight(workingSetWeight, apparatus).closest()
             self.numReps = numReps
             self.warmup = false
         }
@@ -120,10 +120,11 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         let numReps: Int
     }
     
-    init(_ name: String, _ cycles: [Execute]) {
+    init(_ name: String, _ warmups: Warmups, _ cycles: [Execute]) {
         os_log("init MastersBasicCyclePlan for %@", type: .info, name)
         self.planName = name
         self.typeName = "MastersBasicCyclePlan"
+        self.warmups = warmups
         self.cycles = cycles
         self.deloads = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 0.85, 0.8]
 //        self.deloads = [1.0, 1.0, 0.9, 0.85, 0.8]
@@ -134,6 +135,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         if let savedPlan = inPlan as? MastersBasicCyclePlan {
             return typeName == savedPlan.typeName &&
                 planName == savedPlan.planName &&
+                warmups == savedPlan.warmups &&
                 cycles == savedPlan.cycles
         } else {
             return false
@@ -145,6 +147,12 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         self.typeName = "MastersBasicCyclePlan"
         self.cycles = store.getObjArray("cycles")
         self.deloads = store.getDblArray("deloads")
+        
+        if store.hasKey("warmups") {
+            self.warmups = store.getObj("warmups")
+        } else {
+            self.warmups = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
+        }
         
         self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
@@ -171,6 +179,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
     
     public func save(_ store: Store) {
         store.addStr("name", planName)
+        store.addObj("warmups", warmups)
         store.addObjArray("cycles", cycles)
         store.addDblArray("deloads", deloads)
         
@@ -457,28 +466,15 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         let workingSetWeight = getWorkingSetWeight(deload, log: true)
         os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
         
-        var warmupsWithBar = 0
-        switch setting.apparatus {
-        case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
-        default: break
-        }
-        
         self.sets = []
-        
-        let numWarmups = 5 + warmupsWithBar
-        for i in 0..<warmupsWithBar {
-            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: numWarmups, numReps: 5, percent: 0.0, weight: workingSetWeight))   // could also use max reps from all the executes, but 5 is probably better than 10 or whatever
+                
+        let warmupSets = warmups.computeWarmups(setting.apparatus, workingSetWeight: workingSetWeight)
+        for (reps, setIndex, percent, warmupWeight) in warmupSets {
+            sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmupSets.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: workingSetWeight))
         }
-        
-        sets.append(Set(setting.apparatus, phase: numWarmups-4, phaseCount: numWarmups, numReps: 5, percent: 0.5, weight: workingSetWeight))
-        sets.append(Set(setting.apparatus, phase: numWarmups-3, phaseCount: numWarmups, numReps: 3, percent: 0.6, weight: workingSetWeight))
-        sets.append(Set(setting.apparatus, phase: numWarmups-2, phaseCount: numWarmups, numReps: 1, percent: 0.7, weight: workingSetWeight))
-        sets.append(Set(setting.apparatus, phase: numWarmups-1, phaseCount: numWarmups, numReps: 1, percent: 0.8, weight: workingSetWeight))
-        sets.append(Set(setting.apparatus, phase: numWarmups,   phaseCount: numWarmups, numReps: 1, percent: 0.9, weight: workingSetWeight))
-        frontend.assert(sets.count == numWarmups, "MastersBasicCyclePlan sets.count is \(sets.count) but numWarmups is \(numWarmups)")
         
         for i in 0..<cycle.workSets {
-            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, weight: workingSetWeight))
+            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, workingSetWeight: workingSetWeight))
         }
     }
 
@@ -519,6 +515,7 @@ public class MastersBasicCyclePlan : Plan, CustomDebugStringConvertible {
         return workingSetWeight
     }
 
+    private let warmups: Warmups
     private let cycles: [Execute]
     private let deloads: [Double]
     

@@ -179,8 +179,8 @@ public class Program: Storable {
 }
 
 /// Helper used when constructing programs.
-public func createBarBell(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double, warmupsWithBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = [], derivedFrom: String? = nil) -> Exercise {
-    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets, warmupsWithBar: warmupsWithBar)
+public func createBarBell(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double, useBumpers: Bool = false, magnets: [Double] = [], derivedFrom: String? = nil) -> Exercise {
+    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
     if let otherName = derivedFrom {
         let setting = DerivedWeightSetting(otherName, restSecs: Int(restMins*60.0))
         return Exercise(name, formalName, plan, .derivedWeight(setting))

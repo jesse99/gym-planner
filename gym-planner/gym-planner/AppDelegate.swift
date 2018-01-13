@@ -132,8 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
 //                print("---- loading ---------------------------------------")
 //                print(store)
                 let savedProgram = Program(from: store)
-                let builtin = HLM2()      // TODO: do a lookup of built-in programs
-                if savedProgram.name == builtin.name {
+                if let builtin = programs.first(where: {$0.name == savedProgram.name}) {
                     os_log("syncing %@", type: .info, builtin.name)
                     builtin.sync(savedProgram)
                     return builtin

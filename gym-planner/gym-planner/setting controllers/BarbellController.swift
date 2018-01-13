@@ -15,7 +15,7 @@ class BarbellController: UIViewController {
         
         if setting != nil {
             switch setting.apparatus {
-            case .barbell(bar: let bar, collar: let collar, plates: _, bumpers: _, magnets: _, warmupsWithBar: _):
+            case .barbell(bar: let bar, collar: let collar, plates: _, bumpers: _, magnets: _):
                 collarTextbox.text = Weight.friendlyStr(collar)
                 barTextbox.text = Weight.friendlyStr(bar)
             default:
@@ -37,14 +37,13 @@ class BarbellController: UIViewController {
     @IBAction func donePressed(_ sender: Any) {
         if setting != nil {
             switch setting.apparatus {
-            case .barbell(bar: _, collar: _, plates: let oldPlates, bumpers: let oldBumpers, magnets: let oldMagnets, warmupsWithBar: let oldWarmups):
+            case .barbell(bar: _, collar: _, plates: let oldPlates, bumpers: let oldBumpers, magnets: let oldMagnets):
                 setting.apparatus = .barbell(
                     bar: Double(barTextbox.text!)!,
                     collar: Double(collarTextbox.text!)!,
                     plates: oldPlates,
                     bumpers: oldBumpers,
-                    magnets: oldMagnets,
-                    warmupsWithBar: oldWarmups)
+                    magnets: oldMagnets)
             default:
                 frontend.assert(false, "BarbellController was called without a barbell")
             }
@@ -56,7 +55,7 @@ class BarbellController: UIViewController {
     @IBAction func platesPressed(_ sender: Any) {
         if setting != nil {
             switch setting.apparatus {
-            case .barbell(bar: _, collar: _, plates: let plates, bumpers: _, magnets: _, warmupsWithBar: _):
+            case .barbell(bar: _, collar: _, plates: let plates, bumpers: _, magnets: _):
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let view = storyboard.instantiateViewController(withIdentifier: "WeightsID") as! WeightsController
                 view.initialize(
@@ -76,7 +75,7 @@ class BarbellController: UIViewController {
     @IBAction func bumpersPressed(_ sender: Any) {
         if setting != nil {
             switch setting.apparatus {
-            case .barbell(bar: _, collar: _, plates: _, bumpers: let bumpers, magnets: _, warmupsWithBar: _):
+            case .barbell(bar: _, collar: _, plates: _, bumpers: let bumpers, magnets: _):
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let view = storyboard.instantiateViewController(withIdentifier: "WeightsID") as! WeightsController
                 view.initialize(
@@ -96,7 +95,7 @@ class BarbellController: UIViewController {
     @IBAction func magnetsPressed(_ sender: Any) {
         if setting != nil {
             switch setting.apparatus {
-            case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: let magnets, warmupsWithBar: _):
+            case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: let magnets):
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let view = storyboard.instantiateViewController(withIdentifier: "WeightsID") as! WeightsController
                 view.initialize(
@@ -116,14 +115,13 @@ class BarbellController: UIViewController {
     private func updatePlates(_ newPlates: [Double]) {
         if setting != nil {
             switch setting.apparatus {
-            case .barbell(bar: let oldBar, collar: let oldCollar, plates: _, bumpers: let oldBumpers, magnets: let oldMagnets, warmupsWithBar: let oldWarmups):
+            case .barbell(bar: let oldBar, collar: let oldCollar, plates: _, bumpers: let oldBumpers, magnets: let oldMagnets):
                 setting.apparatus = .barbell(
                     bar: oldBar,
                     collar: oldCollar,
                     plates: newPlates,
                     bumpers: oldBumpers,
-                    magnets: oldMagnets,
-                    warmupsWithBar: oldWarmups)
+                    magnets: oldMagnets)
             default:
                 frontend.assert(false, "BarbellController was called without a barbell")
             }
@@ -133,14 +131,13 @@ class BarbellController: UIViewController {
     private func updateBumpers(_ newBumpers: [Double]) {
         if setting != nil {
             switch setting.apparatus {
-            case .barbell(bar: let oldBar, collar: let oldCollar, plates: let oldPlates, bumpers: _, magnets: let oldMagnets, warmupsWithBar: let oldWarmups):
+            case .barbell(bar: let oldBar, collar: let oldCollar, plates: let oldPlates, bumpers: _, magnets: let oldMagnets):
                 setting.apparatus = .barbell(
                     bar: oldBar,
                     collar: oldCollar,
                     plates: oldPlates,
                     bumpers: newBumpers,
-                    magnets: oldMagnets,
-                    warmupsWithBar: oldWarmups)
+                    magnets: oldMagnets)
             default:
                 frontend.assert(false, "BarbellController was called without a barbell")
             }
@@ -150,14 +147,13 @@ class BarbellController: UIViewController {
     private func updateMagnets(_ newMagnets: [Double]) {
         if setting != nil {
             switch setting.apparatus {
-            case .barbell(bar: let oldBar, collar: let oldCollar, plates: let oldPlates, bumpers: let oldBumpers, magnets: _, warmupsWithBar: let oldWarmups):
+            case .barbell(bar: let oldBar, collar: let oldCollar, plates: let oldPlates, bumpers: let oldBumpers, magnets: _):
                 setting.apparatus = .barbell(
                     bar: oldBar,
                     collar: oldCollar,
                     plates: oldPlates,
                     bumpers: oldBumpers,
-                    magnets: newMagnets,
-                    warmupsWithBar: oldWarmups)
+                    magnets: newMagnets)
             default:
                 frontend.assert(false, "BarbellController was called without a barbell")
             }

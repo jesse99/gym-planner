@@ -151,7 +151,7 @@ public struct Weight: CustomStringConvertible {
     // Returns a range about weight sorted from smallest to largest.
     private func closestRange() -> [Info] {
         switch apparatus {
-        case .barbell(bar: let barWeight, collar: let collarWeight, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: _):
+        case .barbell(bar: let barWeight, collar: let collarWeight, plates: let plates, bumpers: let bumpers, magnets: let magnets):
             let limit = 18
             let smallest = 2*min(plates.first ?? 45.0, bumpers.first ?? 45.0, magnets.first ?? 45.0)
             let floor = max(barWeight, weight - Double(limit/2)*smallest)

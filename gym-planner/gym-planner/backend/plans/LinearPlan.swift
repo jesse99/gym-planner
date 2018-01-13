@@ -76,12 +76,11 @@ public class LinearPlan : Plan {
         let numReps: Int
     }
     
-    init(_ name: String, firstWarmup: Double, warmupReps: [Int], workSets: Int, workReps: Int) {
+    init(_ name: String, _ warmups: Warmups, workSets: Int, workReps: Int) {
         os_log("init LinearPlan for %@", type: .info, name)
         self.planName = name
         self.typeName = "LinearPlan"
-        self.firstWarmup = firstWarmup
-        self.warmupReps = warmupReps
+        self.warmups = warmups
         self.workSets = workSets
         self.workReps = workReps
         self.deloads = [1.0, 1.0, 0.95, 0.9, 0.85]
@@ -92,8 +91,7 @@ public class LinearPlan : Plan {
         if let savedPlan = inPlan as? LinearPlan {
             return typeName == savedPlan.typeName &&
                 planName == savedPlan.planName &&
-                firstWarmup == savedPlan.firstWarmup &&
-                warmupReps == savedPlan.warmupReps &&
+                warmups == savedPlan.warmups &&
                 workSets == savedPlan.workSets &&
                 workReps == savedPlan.workReps
         } else {
@@ -104,11 +102,17 @@ public class LinearPlan : Plan {
     public required init(from store: Store) {
         self.planName = store.getStr("name")
         self.typeName = "LinearPlan"
-        self.firstWarmup = store.getDbl("firstWarmup")
-        self.warmupReps = store.getIntArray("warmupReps")
         self.workSets = store.getInt("workSets")
         self.workReps = store.getInt("workReps")
         self.deloads = store.getDblArray("deloads")
+        
+        if !store.hasKey("warmups") {
+            let firstWarmup = store.getDbl("firstWarmup")
+            let warmupReps = store.getIntArray("warmupReps")
+            self.warmups = Warmups(withBar: 2, firstPercent: firstWarmup, lastPercent: 0.9, reps: warmupReps)
+        } else {
+            self.warmups = store.getObj("warmups")
+        }
 
         self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
@@ -133,8 +137,7 @@ public class LinearPlan : Plan {
 
     public func save(_ store: Store) {
         store.addStr("name", planName)
-        store.addDbl("firstWarmup", firstWarmup)
-        store.addIntArray("warmupReps", warmupReps)
+        store.addObj("warmups", warmups)
         store.addInt("workSets", workSets)
         store.addInt("workReps", workReps)
         store.addDblArray("deloads", deloads)
@@ -362,16 +365,10 @@ public class LinearPlan : Plan {
         }
         os_log("weight = %.3f", type: .info, weight)
         
-        var warmupsWithBar = 0
-        switch setting.apparatus {
-        case .barbell(bar: _, collar: _, plates: _, bumpers: _, magnets: _, warmupsWithBar: let n): warmupsWithBar = n
-        default: break
-        }
-        
         sets = []
-        let warmups = computeWarmups(setting.apparatus, warmupsWithBar, firstWarmup, warmupReps, workingSetWeight: weight)
-        for (reps, setIndex, percent, warmupWeight) in warmups {
-            sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmups.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: weight))
+        let warmupSets = warmups.computeWarmups(setting.apparatus, workingSetWeight: weight)
+        for (reps, setIndex, percent, warmupWeight) in warmupSets {
+            sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmupSets.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: weight))
         }
         
         for i in 0..<workSets {
@@ -390,8 +387,7 @@ public class LinearPlan : Plan {
         }
     }
     
-    private let firstWarmup: Double
-    private let warmupReps: [Int]
+    private let warmups: Warmups
     private let workSets: Int
     private let workReps: Int
     private let deloads: [Double]

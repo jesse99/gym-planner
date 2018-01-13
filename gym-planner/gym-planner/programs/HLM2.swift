@@ -7,36 +7,44 @@ func HLM2() -> Program {
     }
     
     func plan531() -> Plan {
-        return MastersBasicCyclePlan("531",  [cycle(3, by: 5, at: 1.0), cycle(3, by: 3, at: 1.05), cycle(3, by: 1, at: 1.1)])
+        let warmups = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
+        return MastersBasicCyclePlan("531", warmups,  [cycle(3, by: 5, at: 1.0), cycle(3, by: 3, at: 1.05), cycle(3, by: 1, at: 1.1)])
     }
     
     func plan53() -> Plan {
-        return MastersBasicCyclePlan("53",   [cycle(3, by: 5, at: 1.0), cycle(3, by: 3, at: 1.055)])
+        let warmups = Warmups(withBar: 2, firstPercent: 0.6, lastPercent: 0.9, reps: [5, 3, 1, 1])
+        return MastersBasicCyclePlan("53", warmups, [cycle(3, by: 5, at: 1.0), cycle(3, by: 3, at: 1.055)])
     }
     
     func planDead() -> Plan {
-        return MastersBasicCyclePlan("Dead", [cycle(1, by: 5, at: 1.0), cycle(1, by: 3, at: 1.05), cycle(1, by: 1, at: 1.1)])
+        let warmups = Warmups(withBar: 0, firstPercent: 0.4, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
+        return MastersBasicCyclePlan("Dead", warmups, [cycle(1, by: 5, at: 1.0), cycle(1, by: 3, at: 1.05), cycle(1, by: 1, at: 1.1)])
     }
     
     // TODO: switch to masters cycle
     func planSquat() -> Plan {
-        return LinearPlan("Squat", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 3, workReps: 5)
+        let warmups = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
+        return LinearPlan("Squat", warmups, workSets: 3, workReps: 5)
     }
     
     func planMorning() -> Plan {
-        return LinearPlan("Good Morning", firstWarmup: 0.6, warmupReps: [5, 3], workSets: 3, workReps: 5)
+        let warmups = Warmups(withBar: 0, firstPercent: 0.6, lastPercent: 0.8, reps: [5, 3])
+        return LinearPlan("Good Morning", warmups, workSets: 3, workReps: 5)
     }
     
     func planLSquat() -> Plan {
-        return PercentOfPlan("Light Squat",  firstWarmup: 0.5, warmupReps: [5, 3, 1, 1],    workSets: 1, workReps: 5, percent: 0.88)
+        let warmups = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1])
+        return PercentOfPlan("Light Squat", warmups, workSets: 1, workReps: 5, percent: 0.88)
     }
     
     func planMSquat() -> Plan {
-        return PercentOfPlan("Medium Squat", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 2, workReps: 5, percent: 0.94)
+        let warmups = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
+        return PercentOfPlan("Medium Squat", warmups, workSets: 2, workReps: 5, percent: 0.94)
     }
     
     func planMBench() -> Plan {
-        return PercentOfPlan("Medium Bench", firstWarmup: 0.5, warmupReps: [5, 3, 1, 1, 1], workSets: 2, workReps: 5, percent: 0.94)
+        let warmups = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
+        return PercentOfPlan("Medium Bench", warmups, workSets: 2, workReps: 5, percent: 0.94)
     }
     
     func planChin() -> Plan {
@@ -55,9 +63,10 @@ func HLM2() -> Program {
         return VariableRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
     }
     
-    func planAccessory(_ minReps: Int, _ maxReps: Int, firstWarmup: Double, warmupReps: [Int]) -> Plan {
+    func planLats(_ minReps: Int, _ maxReps: Int) -> Plan {
         let numSets = 3
-        return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps, firstWarmup: firstWarmup, warmupReps: warmupReps)
+        let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [5])
+        return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
     }
     
     func planHIIT() -> Plan {
@@ -67,17 +76,17 @@ func HLM2() -> Program {
     let exercises = [
         createHIIT("HIIT",     planHIIT()),
 
-        createBarBell("Squat",          "Low bar Squat",  planSquat(),  restMins: 3.0, warmupsWithBar: 3),
+        createBarBell("Squat",          "Low bar Squat",  planSquat(),  restMins: 3.0),
         createBarBell("Bench Press",    "Bench Press",    plan531(),    restMins: 3.0),
         createBarBell("Deadlift",       "Deadlift",       planDead(),   restMins: 3.5, useBumpers: true),
-        createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restMins: 2.0, warmupsWithBar: 3, derivedFrom: "Squat"),
+        createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restMins: 2.0, derivedFrom: "Squat"),
         createBarBell("Overhead Press", "Overhead Press", plan53(),     restMins: 3.0, magnets: [1.25]),
         createVarReps("Chinups",        "Chinup",         planChin(),   restMins: 2.0, requestedReps: 10),
-        createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, warmupsWithBar: 3, derivedFrom: "Squat"),
+        createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
 
-        createBarBell("Good Morning",   "Good Morning",   planMorning(),  restMins: 3.0, warmupsWithBar: 0),
-        createCycleReps("Lat Pulldown", "Lat Pulldown",   planAccessory(5, 10, firstWarmup: 0.8, warmupReps: [5]), restMins: 2.0),
+        createBarBell("Good Morning",   "Good Morning",   planMorning(),   restMins: 3.0),
+        createCycleReps("Lat Pulldown", "Lat Pulldown",   planLats(5, 10), restMins: 2.0),
         
         createTimed("Kneeling Front Plank",  "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
         createTimed("Front Plank",           "Front Plank",           planTimed(1, targetTime: 60), duration: 30),

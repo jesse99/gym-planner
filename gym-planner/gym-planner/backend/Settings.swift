@@ -9,7 +9,7 @@ public struct MachineRange {
 
 public enum Apparatus
 {
-    case barbell(bar: Double, collar: Double, plates: [Double], bumpers: [Double], magnets: [Double], warmupsWithBar: Int)
+    case barbell(bar: Double, collar: Double, plates: [Double], bumpers: [Double], magnets: [Double])
     
     case dumbbells(weights: [Double], magnets: [Double])
     
@@ -243,8 +243,7 @@ extension Apparatus: Storable {
             let plates = store.getDblArray("plates", ifMissing: defaultPlates())
             let bumpers = store.getDblArray("bumpers", ifMissing: defaultBumpers())
             let magnets = store.getDblArray("magnets")
-            let warmupsWithBar = store.getInt("warmupsWithBar")
-            self = .barbell(bar: bar, collar: collar, plates: plates, bumpers: bumpers, magnets: magnets, warmupsWithBar: warmupsWithBar)
+            self = .barbell(bar: bar, collar: collar, plates: plates, bumpers: bumpers, magnets: magnets)
             
         case "dumbbells":
             let weights = store.getDblArray("weights")
@@ -272,14 +271,13 @@ extension Apparatus: Storable {
     
     public func save(_ store: Store) {
         switch self {
-        case .barbell(bar: let bar, collar: let collar, plates: let plates, bumpers: let bumpers, magnets: let magnets, warmupsWithBar: let warmupsWithBar):
+        case .barbell(bar: let bar, collar: let collar, plates: let plates, bumpers: let bumpers, magnets: let magnets):
             store.addStr("type", "barbell")
             store.addDbl("bar", bar)
             store.addDbl("collar", collar)
             store.addDblArray("plates", plates)
             store.addDblArray("bumpers", bumpers)
             store.addDblArray("magnets", magnets)
-            store.addInt("warmupsWithBar", warmupsWithBar)
             
         case .dumbbells(weights: let weights, magnets: let magnets):
             store.addStr("type", "dumbbells")

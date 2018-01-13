@@ -85,15 +85,14 @@ public class CycleRepsPlan : Plan {
         let numReps: Int
     }
     
-    init(_ name: String, numSets: Int, minReps: Int, maxReps: Int, firstWarmup: Double, warmupReps: [Int]) {
+    init(_ name: String, _ warmups: Warmups, numSets: Int, minReps: Int, maxReps: Int) {
         os_log("init CycleRepsPlan for %@", type: .info, name)
         self.planName = name
         self.typeName = "CycleRepsPlan"
         self.numSets = numSets
         self.minReps = minReps
         self.maxReps = maxReps
-        self.firstWarmup = firstWarmup
-        self.warmupReps = warmupReps
+        self.warmups = warmups
         self.deloads = defaultDeloads
     }
     
@@ -105,8 +104,7 @@ public class CycleRepsPlan : Plan {
                 numSets == savedPlan.numSets &&
                 minReps == savedPlan.minReps &&
                 maxReps == savedPlan.maxReps &&
-                firstWarmup == savedPlan.firstWarmup &&
-                warmupReps == savedPlan.warmupReps
+                warmups == savedPlan.warmups
         } else {
             return false
         }
@@ -120,9 +118,15 @@ public class CycleRepsPlan : Plan {
         self.numSets = store.getInt("numSets")
         self.minReps = store.getInt("minReps")
         self.maxReps = store.getInt("maxReps")
-        self.firstWarmup = store.getDbl("firstWarmup", ifMissing: 0.0)
-        self.warmupReps = store.getIntArray("warmupReps", ifMissing: [])
         self.deloads = store.getDblArray("deloads", ifMissing: defaultDeloads)
+        
+        if !store.hasKey("warmups") {
+            let firstWarmup = store.getDbl("firstWarmup", ifMissing: 0.0)
+            let warmupReps = store.getIntArray("warmupReps", ifMissing: [])
+            self.warmups = Warmups(withBar: 2, firstPercent: firstWarmup, lastPercent: 0.9, reps: warmupReps)
+        } else {
+            self.warmups = store.getObj("warmups")
+        }
 
         self.workoutName = store.getStr("workoutName")
         self.exerciseName = store.getStr("exerciseName")
@@ -150,8 +154,7 @@ public class CycleRepsPlan : Plan {
         store.addInt("numSets", numSets)
         store.addInt("minReps", minReps)
         store.addInt("maxReps", maxReps)
-        store.addDbl("firstWarmup", firstWarmup)
-        store.addIntArray("warmupReps", warmupReps)
+        store.addObj("warmups", warmups)
         store.addDblArray("deloads", deloads)
 
         store.addStr("workoutName", workoutName)
@@ -376,9 +379,9 @@ public class CycleRepsPlan : Plan {
         sets = []
         let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
 
-        let warmups = computeWarmups(setting.apparatus, 0, firstWarmup, warmupReps, workingSetWeight: deload.weight)
-        for (reps, setIndex, percent, warmupWeight) in warmups {
-            sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmups.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: weight))
+        let warmupSets = warmups.computeWarmups(setting.apparatus, workingSetWeight: deload.weight)
+        for (reps, setIndex, percent, warmupWeight) in warmupSets {
+            sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmupSets.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: weight))
         }
 
         for i in 0..<numSets {
@@ -401,8 +404,7 @@ public class CycleRepsPlan : Plan {
     private let numSets: Int
     private let minReps: Int
     private let maxReps: Int
-    private let firstWarmup: Double
-    private let warmupReps: [Int]
+    private let warmups: Warmups
     private let deloads: [Double]
 
     private var modifiedOn = Date.distantPast
