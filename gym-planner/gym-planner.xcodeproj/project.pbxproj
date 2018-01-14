@@ -29,6 +29,7 @@
 		374E1B6C2009B8AA0052AB0C /* MarkdownController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B6B2009B8AA0052AB0C /* MarkdownController.swift */; };
 		374E1B6E2009DD960052AB0C /* ProgramsTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B6D2009DD960052AB0C /* ProgramsTabController.swift */; };
 		374E1B72200AB54E0052AB0C /* Warmups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B71200AB54E0052AB0C /* Warmups.swift */; };
+		374E1B76200B09890052AB0C /* BaseCyclicPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374E1B75200B09890052AB0C /* BaseCyclicPlan.swift */; };
 		375E52E11FE8DFFF0040A975 /* EditWeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */; };
 		376BA11B2001D57000EF804C /* Phraks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BA11A2001D57000EF804C /* Phraks.swift */; };
 		376BA11D2001E08A00EF804C /* AMRAPPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BA11C2001E08A00EF804C /* AMRAPPlan.swift */; };
@@ -104,6 +105,7 @@
 		374E1B6B2009B8AA0052AB0C /* MarkdownController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownController.swift; sourceTree = "<group>"; };
 		374E1B6D2009DD960052AB0C /* ProgramsTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramsTabController.swift; sourceTree = "<group>"; };
 		374E1B71200AB54E0052AB0C /* Warmups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Warmups.swift; sourceTree = "<group>"; };
+		374E1B75200B09890052AB0C /* BaseCyclicPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCyclicPlan.swift; sourceTree = "<group>"; };
 		375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWeightedHistoryController.swift; sourceTree = "<group>"; };
 		376BA11A2001D57000EF804C /* Phraks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phraks.swift; sourceTree = "<group>"; };
 		376BA11C2001E08A00EF804C /* AMRAPPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPPlan.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				376BA11C2001E08A00EF804C /* AMRAPPlan.swift */,
+				374E1B75200B09890052AB0C /* BaseCyclicPlan.swift */,
 				3707C21F1FF22101000981D7 /* CycleRepsPlan.swift */,
 				370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */,
 				37452C931FDDDA2A00A3CAA6 /* HIITPlan.swift */,
@@ -424,6 +427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37CED4A61FB15E7300244ADD /* Weight.swift in Sources */,
+				374E1B76200B09890052AB0C /* BaseCyclicPlan.swift in Sources */,
 				37B3ECFB1FD48DE800F7D8EF /* TimedPlan.swift in Sources */,
 				37452C941FDDDA2A00A3CAA6 /* HIITPlan.swift in Sources */,
 				377F055B1FC0E1000015D7EF /* Helpers.swift in Sources */,
