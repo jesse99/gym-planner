@@ -235,13 +235,14 @@ public class PercentOfPlan : Plan {
         
         switch findBaseExerciseName(exerciseName) {
             case .right(let otherName):
+                let prefix = "\(workSets)x\(workReps)"
                 if let weight = sets.last?.weight {
                     let p = Int(100.0*self.percent)
-                    return "\(weight.text) (\(p)% of \(otherName)\(suffix))"
+                    return "\(prefix) @ \(weight.text) (\(p)% of \(otherName)\(suffix))"
                 
                 } else {
                     let p = Int(100.0*self.percent)
-                    return "\(p)% of \(otherName)\(suffix)"
+                    return "\(prefix) @ \(p)% of \(otherName)\(suffix)"
                 }
 
             case .left(let err):

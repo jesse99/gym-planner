@@ -26,14 +26,14 @@ public class CycleRepsPlan : Plan {
             self.amount = "\(prefix) @ \(self.weight.text)"
         }
         
-        init(_ apparatus: Apparatus, set: Int, numSets: Int, numReps: Int, workingSetWeight: Double) {
+        init(_ apparatus: Apparatus, set: Int, numSets: Int, numReps: Int, maxReps: Int, workingSetWeight: Double) {
             self.title = "Workset \(set) of \(numSets)"
             self.weight = Weight(workingSetWeight, apparatus).closest()
             self.reps = numReps
             self.subtitle = ""
             self.warmup = false
 
-            let prefix = repsStr(reps)
+            let prefix = numReps < maxReps ? "\(numReps)-\(maxReps) reps" : repsStr(reps)
             self.amount = "\(prefix) @ \(self.weight.text)"
         }
         
@@ -237,7 +237,11 @@ public class CycleRepsPlan : Plan {
     
     public func sublabel() -> String {
         if let set = sets.last {
-            return "\(numSets)x\(set.reps) @ \(set.weight.text)"
+            if set.reps < maxReps {
+                return "\(numSets)x\(set.reps)-\(maxReps) @ \(set.weight.text)"
+            } else {
+                return "\(numSets)x\(set.reps) @ \(set.weight.text)"
+            }
         } else {
             return ""
         }
@@ -386,7 +390,7 @@ public class CycleRepsPlan : Plan {
 
         for i in 0..<numSets {
             let requested = setting.reps ?? defaultRequested
-            sets.append(Set(setting.apparatus, set: i+1, numSets: numSets, numReps: requested, workingSetWeight: deload.weight))
+            sets.append(Set(setting.apparatus, set: i+1, numSets: numSets, numReps: requested, maxReps: maxReps, workingSetWeight: deload.weight))
         }
     }
     

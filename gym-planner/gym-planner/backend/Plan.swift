@@ -102,10 +102,10 @@ public protocol Plan: Storable {
     /// Called when settings change.
     func refresh()
     
-    /// "Light Squat".
+    /// "Light Squat". Used on WorkoutController.
     func label() -> String
     
-    /// "200 lbs (80% of Heavy Squat)"
+    /// "200 lbs (80% of Heavy Squat)". Used on WorkoutController.
     func sublabel() -> String
     
     /// "Previous was 125 lbs"
