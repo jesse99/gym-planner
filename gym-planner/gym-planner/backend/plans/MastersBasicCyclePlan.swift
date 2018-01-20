@@ -6,8 +6,8 @@ import os.log
 
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
 public class MastersBasicCyclePlan : BaseCyclicPlan {
-    init(_ name: String, _ warmups: Warmups, _ cycles: [BaseCyclicPlan.Execute]) {
-        super.init(name, "MastersBasicCyclePlan", warmups, cycles, deloads: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 0.85, 0.8])
+    init(_ name: String, _ cycles: [Cycle]) {
+        super.init(name, "MastersBasicCyclePlan", cycles, deloads: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 0.85, 0.8])
     }
     
     public required init(from store: Store) {
@@ -45,9 +45,13 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
     }
     
     // Internal items
-    internal override func getMissedWeight(_ cycleIndex: Int, _ result: Result) -> Double? {
-        if cycleIndex > 0 {    // missed first cycle is dealt with in doAdvance
-            return result.getWeight()
+    internal override func adjustUnitWeight() -> Double? {
+        let index = BaseCyclicPlan.getCycle(cycles, history)
+        if index > 0 {    // missed first cycle is dealt with in doAdvance
+            if let result = BaseCyclicPlan.findCycleResult(history, index), result.missed {
+                let scale = 1.0/cycles[index].maxPercent()  // mapping from maxWeight to unitWeight
+                return scale*result.getWeight()
+            }
         }
         return nil
     }

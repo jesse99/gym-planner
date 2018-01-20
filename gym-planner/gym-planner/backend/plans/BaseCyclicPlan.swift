@@ -1,34 +1,91 @@
-/// Base class for plans that follow a weekly cycle.
+/// Base class for plans where the reps and percentages change each workout.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
 import os.log
 
 public class BaseCyclicPlan : Plan {
-    struct Execute: Storable, Equatable {
-        let workSets: Int
-        let workReps: Int
+    struct Reps: Storable, Equatable {
+        let count: Int
         let percent: Double
+        let amrap: Bool
         
-        init(workSets: Int, workReps: Int, percent: Double) {
-            self.workSets = workSets
-            self.workReps = workReps
+        init(count: Int, percent: Double, amrap: Bool = false) {
+            self.count = count
             self.percent = percent
+            self.amrap = amrap
         }
         
         init(from store: Store) {
-            self.workSets = store.getInt("workSets")
-            self.workReps = store.getInt("workReps")
+            self.count = store.getInt("count")
             self.percent = store.getDbl("percent")
+            self.amrap = store.getBool("amrap")
         }
         
         func save(_ store: Store) {
-            store.addInt("workSets", workSets)
-            store.addInt("workReps", workReps)
+            store.addInt("count", count)
             store.addDbl("percent", percent)
+            store.addBool("amrap", amrap)
         }
         
-        static func ==(lhs: Execute, rhs: Execute)->Bool {
-            return lhs.workSets == rhs.workSets && lhs.workReps == rhs.workReps && lhs.percent == rhs.percent
+        static func ==(lhs: Reps, rhs: Reps)->Bool {
+            return lhs.count == rhs.count && lhs.percent == rhs.percent && lhs.amrap == rhs.amrap
+        }
+    }
+    
+    struct Cycle: Storable, Equatable {
+        let warmups: Warmups
+        let worksets: [Reps]
+
+        init(_ warmups: Warmups, _ worksets: [Reps]) {
+            self.warmups = warmups
+            self.worksets = worksets
+        }
+        
+        init(from store: Store) {
+            self.warmups = store.getObj("warmups")
+            self.worksets = store.getObjArray("worksets")
+        }
+        
+        func save(_ store: Store) {
+            store.addObj("warmups", warmups)
+            store.addObjArray("worksets", worksets)
+        }
+        
+        /// Returns a string like "3x5", or "3x5+", or "3+" for the sets at the maximum percent (so that
+        /// we aren't counting ascending or backoff sets).
+        func label() -> String {
+            if let maxPercent = worksets.map({$0.percent}).max() {
+                let sets = worksets.filter({$0.percent == maxPercent})
+                let reps = sets.map({$0.count.description + ($0.amrap ? "+" : "")})
+                if reps.count > 0 {
+                    if reps.count == 1 {
+                        return reps[0]
+                    } else if reps.all({$0 == reps[0]}) {
+                        return "\(reps.count)x\(reps[0])"
+                    } else {
+                        return "\(reps.first!) to \(reps.last!)"
+                    }
+                }
+            }
+            return ""
+        }
+        
+        func maxPercent() -> Double {
+            return worksets.map({$0.percent}).max() ?? 0.0
+        }
+        
+        /// Returns the maximum number of reps at the maximum percent.
+        func maxReps() -> Int {
+            if let maxPercent = worksets.map({$0.percent}).max() {
+                let sets = worksets.filter({$0.percent == maxPercent})
+                let reps = sets.map({$0.count})
+                return reps.max()!
+            }
+            return 0
+        }
+        
+        static func ==(lhs: Cycle, rhs: Cycle)->Bool {
+            return lhs.warmups == rhs.warmups && lhs.worksets == rhs.worksets
         }
     }
     
@@ -39,23 +96,30 @@ public class BaseCyclicPlan : Plan {
         let weight: Weight.Info
         let warmup: Bool
         
-        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, warmupWeight: Weight.Info, workingSetWeight: Double) {
+        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, warmupWeight: Weight.Info, unitWeight: Double) {
             self.title = "Warmup \(phase) of \(phaseCount)"
             self.weight = warmupWeight
             self.numReps = numReps
             self.warmup = true
             
-            let info1 = Weight(workingSetWeight, apparatus).closest()
+            let info = Weight(unitWeight, apparatus).closest()
             let p = String(format: "%.0f", 100.0*percent)
-            self.subtitle = "\(p)% of \(info1.text)"
+            self.subtitle = "\(p)% of \(info.text)"
         }
         
-        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, workingSetWeight: Double) {
+        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, workingPercent: Double, unitWeight: Double) {
             self.title = "Workset \(phase) of \(phaseCount)"
-            self.subtitle = ""
-            self.weight = Weight(workingSetWeight, apparatus).closest()
+            self.weight = Weight(workingPercent*unitWeight, apparatus).closest()
             self.numReps = numReps
             self.warmup = false
+            
+            if workingPercent == 1.0 {
+                self.subtitle = ""
+            } else {
+                let info = Weight(unitWeight, apparatus).closest()
+                let p = String(format: "%.0f", 100.0*workingPercent)
+                self.subtitle = "\(p)% of \(info.text)"
+            }
         }
         
         init(from store: Store) {
@@ -76,43 +140,43 @@ public class BaseCyclicPlan : Plan {
     }
     
     class Result: WeightedResult {
-        let cycleIndex: Int
-        
-        init(_ numSets: Int, _ numReps: Int, _ cycleIndex: Int, _ missed: Bool, _ info: Weight.Info) {
-            self.numSets = numSets
-            self.numReps = numReps
+        init(_ label: String, _ cycleIndex: Int, _ missed: Bool, _ info: Weight.Info) {
+            self.label = label
             self.cycleIndex = cycleIndex
-            let title = "\(info.text) \(numSets)x\(numReps)"
+            let title = "\(label) @ \(info.text)"
             super.init(title, info.weight, primary: cycleIndex == 0, missed: missed)
         }
         
         required init(from store: Store) {
+            if store.hasKey("label") {
+                self.label = store.getStr("label")
+            } else {
+                let numSets = store.getInt("numSets", ifMissing: 0)
+                let numReps = store.getInt("numReps", ifMissing: 0)
+                self.label = "\(numSets)x\(numReps)"
+            }
             self.cycleIndex = store.getInt("cycleIndex")
-            self.numSets = store.getInt("numSets", ifMissing: 0)
-            self.numReps = store.getInt("numReps", ifMissing: 0)
             super.init(from: store)
         }
         
         override func save(_ store: Store) {
             super.save(store)
+            store.addStr("label", label)
             store.addInt("cycleIndex", cycleIndex)
-            store.addInt("numSets", numSets)
-            store.addInt("numReps", numReps)
         }
         
         internal override func updatedWeight(_ newWeight: Weight.Info) {
-            title = "\(newWeight.text) \(numSets)x\(numReps)"
+            title = "\(label) @ \(newWeight.text)"
         }
         
-        let numSets: Int
-        let numReps: Int
+        let label: String
+        let cycleIndex: Int
     }
     
-    init(_ name: String, _ type: String, _ warmups: Warmups, _ cycles: [Execute], deloads: [Double]) {
+    init(_ name: String, _ type: String, _ cycles: [Cycle], deloads: [Double]) {
         os_log("init %@ for %@", type: .info, type, name)
         self.planName = name
         self.typeName = type
-        self.warmups = warmups
         self.cycles = cycles
         self.deloads = deloads  // by time
     }
@@ -122,8 +186,8 @@ public class BaseCyclicPlan : Plan {
         if let savedPlan = inPlan as? BaseCyclicPlan {
             return typeName == savedPlan.typeName &&
                 planName == savedPlan.planName &&
-                warmups == savedPlan.warmups &&
-                cycles == savedPlan.cycles
+                cycles == savedPlan.cycles &&
+                deloads == savedPlan.deloads
         } else {
             return false
         }
@@ -131,8 +195,15 @@ public class BaseCyclicPlan : Plan {
     
     public required init(from store: Store) {
         self.planName = store.getStr("name")
-        self.cycles = store.getObjArray("cycles")
         self.deloads = store.getDblArray("deloads")
+        
+        if store.hasKey("cycles2") {
+            self.cycles = store.getObjArray("cycles2")
+        } else {
+            let warmups = Warmups(withBar: 0, firstPercent: 0.5, lastPercent: 0.9, reps: [1])
+            let reps = Reps(count: 5, percent: 1.0)
+            self.cycles = [Cycle(warmups, [reps])]   // this will fail shouldSync so it won't actually be used
+        }
         
         if store.hasKey("typeName") {
             self.typeName = store.getStr("typeName")
@@ -140,17 +211,10 @@ public class BaseCyclicPlan : Plan {
             self.typeName = "MastersBasicCyclePlan"
         }
         
-        if store.hasKey("warmups") {
-            self.warmups = store.getObj("warmups")
-        } else {
-            self.warmups = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
-        }
-        
         self.workoutName = store.getStr("workoutName", ifMissing: "unknown")
         self.exerciseName = store.getStr("exerciseName")
         self.history = store.getObjArray("history")
         self.sets = store.getObjArray("sets")
-        self.maxWeight = store.getDbl("maxWeight")
         self.setIndex = store.getInt("setIndex", ifMissing: 0)
         self.state = store.getObj("state", ifMissing: .waiting)
         self.modifiedOn = store.getDate("modifiedOn", ifMissing: Date.distantPast)
@@ -163,7 +227,6 @@ public class BaseCyclicPlan : Plan {
             if !calendar.isDate(modifiedOn, inSameDayAs: Date()) {
                 sets = []
                 setIndex = 0
-                maxWeight = 0.0
                 state = .waiting
             }
         }
@@ -171,15 +234,13 @@ public class BaseCyclicPlan : Plan {
     
     public func save(_ store: Store) {
         store.addStr("name", planName)
-        store.addObj("warmups", warmups)
-        store.addObjArray("cycles", cycles)
+        store.addObjArray("cycles2", cycles)
         store.addDblArray("deloads", deloads)
         
         store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
         store.addObjArray("history", history)
         store.addObjArray("sets", sets)
-        store.addDbl("maxWeight", maxWeight)
         store.addInt("setIndex", setIndex)
         store.addDate("modifiedOn", modifiedOn)
         store.addObj("state", state)
@@ -208,7 +269,8 @@ public class BaseCyclicPlan : Plan {
         case .right(let setting):
             if setting.weight == 0.0 {
                 self.state = .blocked
-                return NRepMaxPlan("Rep Max", workReps: cycles.first?.workReps ?? 5)
+                let reps = cycles.first?.maxReps() ?? 5
+                return NRepMaxPlan("Rep Max", workReps: reps)
             }
             
             doBuildSets(setting)
@@ -251,21 +313,28 @@ public class BaseCyclicPlan : Plan {
     }
     
     public func sublabel() -> String {
-        switch findApparatus(exerciseName) {
-        case .right(let apparatus):
-            let cycleIndex = BaseCyclicPlan.getCycle(cycles, history)
-            let cycle = cycles[cycleIndex]
-            let sr = "\(cycle.workSets)x\(cycle.workReps)"
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            let index = BaseCyclicPlan.getCycle(cycles, history)
+            let cycle = cycles[index]
+            let sr = cycle.label()
             
-            let info1 = Weight(maxWeight, apparatus).closest()
-            if cycle.percent == 1.0 {
-                return "\(sr) @ \(info1.text)"
-            } else {
-                let info2 = sets.last!.weight
-                let p = String(format: "%.0f", 100.0*cycle.percent)
-                return "\(sr) @ \(info2.text) (\(p)% of \(info1.text))"
+            if setting.weight > 0.0 {
+                let unitWeight = getUnitWeight(setting, log: false)
+                let unitInfo = Weight(unitWeight, setting.apparatus).closest()
+                
+                let percent = cycle.maxPercent()
+                if percent == 1.0 {
+                    return "\(sr) @ \(unitInfo.text)"
+                } else {
+                    let maxWeight = percent*unitWeight
+                    let maxInfo = Weight(maxWeight, setting.apparatus).closest()
+                    let p = String(format: "%.0f", 100.0*percent)
+                    return "\(sr) @ \(maxInfo.text) (\(p)% of \(unitInfo.text))"
+                }
             }
-            
+            return sr
+
         case .left(let err):
             return err
         }
@@ -282,18 +351,26 @@ public class BaseCyclicPlan : Plan {
     }
     
     public func historyLabel() -> String {
-        let index = BaseCyclicPlan.getCycle(cycles, history)
-        let results = history.filter {$0.cycleIndex == index}
-        var weights = Array(results.map {$0.getWeight()})
-        if case .right(let apparatus) = findApparatus(exerciseName) {
-            if let deload = doDeloadByTime() {
-                let workingSetWeight = getWorkingSetWeight(deload, log: false)
-                let info = Weight(workingSetWeight, apparatus).closest()
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            let index = BaseCyclicPlan.getCycle(cycles, history)
+            let results = history.filter {$0.cycleIndex == index}
+            var weights = Array(results.map {$0.getWeight()})
+
+            if setting.weight > 0.0 {
+                let cycle = cycles[index]
+                let percent = cycle.maxPercent()
+                let weight = getUnitWeight(setting, log: false)
+                let info = Weight(percent*weight, setting.apparatus).closest()
                 weights.append(info.weight)
             }
+            
+            return makeHistoryLabel(weights)
+
+        case .left(_):
+            break
         }
-        
-        return makeHistoryLabel(weights)
+        return ""
     }
     
     public func current() -> Activity {
@@ -328,13 +405,19 @@ public class BaseCyclicPlan : Plan {
         abort()
     }
     
-    /// TODO: Think we can have a global that just does this.
     public func currentWeight() -> Double? {
-        if case .right(let apparatus) = findApparatus(exerciseName) {
-            if let deload = doDeloadByTime() {
-                let info = Weight(deload.weight, apparatus).closest()
-                return info.weight
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            if setting.weight > 0.0 {
+                // We're supposed to return the "base-line weight" not the maxWeight for this particular workout.
+                // So we'll just use the first cycle's weight.
+                let cycle = cycles[0]
+                let unitWeight = getUnitWeight(setting, log: false)
+                return cycle.maxPercent()*unitWeight
             }
+            
+        case .left(_):
+            break
         }
         
         return nil
@@ -372,14 +455,15 @@ public class BaseCyclicPlan : Plan {
     }
     
     internal func addResult(_ cycleIndex: Int, _ missed: Bool) {
-        let weight = sets.last!.weight
-        let numSets = sets.reduce(0) {(sum, set) -> Int in sum + (set.warmup ? 0 : 1)}
-        let numReps = sets.filter({!$0.warmup}).map({$0.numReps}).min() ?? 0    // min so 531 does something sensible
-        let result = Result(numSets, numReps,  cycleIndex, missed, weight)
+        let weights = sets.map {$0.weight}
+        let maxWeight = weights.max {$0.weight < $1.weight}
+
+        let cycle = cycles[cycleIndex]
+        let result = Result(cycle.label(), cycleIndex, missed, maxWeight!)
         history.append(result)
     }
     
-    internal static func getCycle(_ cycles: [Execute], _ history: [Result]) -> Int {
+    internal static func getCycle(_ cycles: [Cycle], _ history: [Result]) -> Int {
         if let last = history.last {
             return (last.cycleIndex + 1) % cycles.count
         } else {
@@ -387,27 +471,27 @@ public class BaseCyclicPlan : Plan {
         }
     }
     
-    internal func getWorkingSetWeight(_ deload: Deload, log: Bool) -> Double {
-        let cycleIndex = MastersBasicCyclePlan.getCycle(cycles, history)
-        let cycle = cycles[cycleIndex]
-        
-        var workingSetWeight = cycle.percent*deload.weight
-        if let percent = deload.percent {
+    /// Returns the weight that would be lifted at 1.0 percent.
+    internal func getUnitWeight(_ setting: VariableWeightSetting, log: Bool) -> Double {
+        var weight = setting.weight
+
+        if let deload = doDeloadByTime(), let percent = deload.percent {
+            weight = deload.weight
             if log {
                 os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
             }
-        } else if let result = MastersBasicCyclePlan.findCycleResult(history, cycleIndex), result.missed {
-            if let weight = getMissedWeight(cycleIndex, result) {
-                workingSetWeight = weight
-                if log {
-                    os_log("using %.3f (previous cycle was missed)", type: .info, weight)
-                }
+        } else if let adjustedWeight = adjustUnitWeight() {
+            weight = adjustedWeight
+            if log {
+                os_log("using %.3f (adjusted)", type: .info, adjustedWeight)
             }
         }
-        return workingSetWeight
+        
+        return weight
     }
     
-    internal func getMissedWeight(_ cycleIndex: Int, _ result: Result) -> Double? {
+    /// Override and optionally return a new weight for stuff like the last result was missed.
+    internal func adjustUnitWeight() -> Double? {
         return nil
     }
     
@@ -420,24 +504,21 @@ public class BaseCyclicPlan : Plan {
     }
     
     private func doBuildSets(_ setting: VariableWeightSetting) {
-        let cycleIndex = BaseCyclicPlan.getCycle(cycles, history)
-        let cycle = cycles[cycleIndex]
+        let index = BaseCyclicPlan.getCycle(cycles, history)
+        let cycle = cycles[index]
         
-        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-        self.maxWeight = deload.weight
-        
-        let workingSetWeight = getWorkingSetWeight(deload, log: true)
-        os_log("workingSetWeight = %.3f", type: .info, workingSetWeight)
+        let unitWeight = getUnitWeight(setting, log: true)
+        os_log("unitWeight = %.3f", type: .info, unitWeight)
         
         self.sets = []
         
-        let warmupSets = warmups.computeWarmups(setting.apparatus, workingSetWeight: workingSetWeight)
+        let warmupSets = cycle.warmups.computeWarmups(setting.apparatus, unitWeight: unitWeight)
         for (reps, setIndex, percent, warmupWeight) in warmupSets {
-            sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmupSets.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: workingSetWeight))
+            sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmupSets.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, unitWeight: unitWeight))
         }
         
-        for i in 0..<cycle.workSets {
-            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.workSets, numReps: cycle.workReps, workingSetWeight: workingSetWeight))
+        for (i, reps) in cycle.worksets.enumerated() {
+            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.worksets.count, numReps: reps.count, workingPercent: reps.percent, unitWeight: unitWeight))
         }
     }
     
@@ -452,8 +533,7 @@ public class BaseCyclicPlan : Plan {
         }
     }
     
-    internal let warmups: Warmups
-    internal let cycles: [Execute]
+    internal let cycles: [Cycle]
     internal let deloads: [Double]
     
     internal var modifiedOn = Date.distantPast
@@ -461,7 +541,6 @@ public class BaseCyclicPlan : Plan {
     internal var exerciseName: String = ""
     internal var history: [Result] = []
     internal var sets: [Set] = []
-    internal var maxWeight: Double = 0.0
     internal var setIndex = 0
 }
 

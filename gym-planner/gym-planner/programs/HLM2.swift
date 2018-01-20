@@ -2,23 +2,36 @@
 import Foundation
 
 func HLM2() -> Program {
-    func cycle(_ worksets: Int, by: Int, at: Double) -> MastersBasicCyclePlan.Execute {
-        return MastersBasicCyclePlan.Execute(workSets: worksets, workReps: by, percent: at)
+    func cycle(withBar: Int, firstPercent: Double, warmups: [Int], sets: Int, reps: Int, at: Double) -> BaseCyclicPlan.Cycle {
+        let warmups = Warmups(withBar: withBar, firstPercent: firstPercent, lastPercent: at - 0.1, reps: warmups)
+        let reps = Array(repeating: BaseCyclicPlan.Reps(count: reps, percent: at), count: sets)
+        return BaseCyclicPlan.Cycle(warmups, reps)
     }
     
     func plan531() -> Plan {
-        let warmups = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
-        return MastersBasicCyclePlan("531", warmups,  [cycle(3, by: 5, at: 1.0), cycle(3, by: 3, at: 1.05), cycle(3, by: 1, at: 1.1)])
+        let cycles = [
+            cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
+            cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
+            cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
+        ]
+        return MastersBasicCyclePlan("531", cycles)
     }
     
     func plan53() -> Plan {
-        let warmups = Warmups(withBar: 2, firstPercent: 0.6, lastPercent: 0.9, reps: [5, 3, 1, 1])
-        return MastersBasicCyclePlan("53", warmups, [cycle(3, by: 5, at: 1.0), cycle(3, by: 3, at: 1.055)])
+        let cycles = [
+            cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 5, at: 1.0),
+            cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 3, at: 1.055)
+        ]
+        return MastersBasicCyclePlan("53", cycles)
     }
     
     func planDead() -> Plan {
-        let warmups = Warmups(withBar: 0, firstPercent: 0.4, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
-        return MastersBasicCyclePlan("Dead", warmups, [cycle(1, by: 5, at: 1.0), cycle(1, by: 3, at: 1.05), cycle(1, by: 1, at: 1.1)])
+        let cycles = [
+            cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
+            cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 3, at: 1.05),
+            cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 1, at: 1.1)
+        ]
+        return MastersBasicCyclePlan("Dead", cycles)
     }
     
     // TODO: switch to masters cycle
