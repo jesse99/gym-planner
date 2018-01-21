@@ -233,7 +233,7 @@ public class CycleRepsPlan : Plan {
         return exerciseName
     }
     
-    private let defaultRequested = 6
+    private let defaultRequested = 5
     
     public func sublabel() -> String {
         if let set = sets.last {
@@ -293,7 +293,7 @@ public class CycleRepsPlan : Plan {
             return .normal([Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})])
         } else {
             let completions: [Completion] = [
-                Completion(title: "Mainain", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 0)}),
+                Completion(title: "Maintain",     isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 0)}),
                 Completion(title: "Advance by 1", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 1)}),
                 Completion(title: "Advance by 2", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 2)}),
                 Completion(title: "Advance by 3", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 3)}),
