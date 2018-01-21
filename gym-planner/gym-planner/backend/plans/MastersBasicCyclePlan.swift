@@ -46,8 +46,10 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
     
     // Internal items
     internal override func adjustUnitWeight() -> Double? {
+        // doAdvance handles the case where the first cycle was missed (we just don't advance).
+        // Here we handle the other cases where we ask the user to repeat what he did last time.
         let index = BaseCyclicPlan.getCycle(cycles, history)
-        if index > 0 {    // missed first cycle is dealt with in doAdvance
+        if index > 0 {
             if let result = BaseCyclicPlan.findCycleResult(history, index), result.missed {
                 let scale = 1.0/cycles[index].maxPercent()  // mapping from maxWeight to unitWeight
                 return scale*result.getWeight()
