@@ -184,11 +184,17 @@ public func createBarBell(_ name: String, _ formalName: String, _ plan: Plan, re
     if let otherName = derivedFrom {
         let setting = DerivedWeightSetting(otherName, restSecs: Int(restMins*60.0))
         return Exercise(name, formalName, plan, .derivedWeight(setting))
-
+        
     } else {
         let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
         return Exercise(name, formalName, plan, .variableWeight(setting))
     }
+}
+
+public func createMachine(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
+    let apparatus = Apparatus.machine(range1: defaultMachine(), range2: zeroMachine(), extra: [])
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
 /// Helper used when constructing programs.

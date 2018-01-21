@@ -1172,6 +1172,14 @@ let builtInNotes: [String: String] = [
             "Push handles out."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/machine-bench-press"]),
     
+    "Medicine Ball Slam": createNote(
+        notes: [
+            "Hold the ball with both hands.",
+            "Stand with feet shoulder width apart.",
+            "Raise the ball above your head.",
+            "Slam it down in front of you as hard as you can."],
+        links: ["Link": "https://www.bodybuilding.com/exercises/overhead-slam"]),
+    
     "Military Press": createNote(
         notes: [
             "Grip the bar with palms facing out slightly wider than shoulder width.",
