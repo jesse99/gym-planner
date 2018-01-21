@@ -41,6 +41,18 @@ public class BaseCyclicPlan : Plan {
             self.worksets = worksets
         }
         
+        init(withBar: Int, firstPercent: Double, lastPercent: Double, warmups: [Int], sets: Int, reps: Int, at: Double) {
+            let warmups = Warmups(withBar: withBar, firstPercent: firstPercent, lastPercent: lastPercent, reps: warmups)
+            let reps = Array(repeating: BaseCyclicPlan.Reps(count: reps, percent: at), count: sets)
+            self.init(warmups, reps)
+        }
+        
+        init(withBar: Int, firstPercent: Double, warmups: [Int], sets: Int, reps: Int, at: Double) {
+            let warmups = Warmups(withBar: withBar, firstPercent: firstPercent, lastPercent: at - 0.1, reps: warmups)
+            let reps = Array(repeating: BaseCyclicPlan.Reps(count: reps, percent: at), count: sets)
+            self.init(warmups, reps)
+        }
+
         init(from store: Store) {
             self.warmups = store.getObj("warmups")
             self.worksets = store.getObjArray("worksets")

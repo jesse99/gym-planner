@@ -150,7 +150,7 @@ public class AMRAPPlan : Plan {
     }
     
     public func start(_ workout: Workout, _ exerciseName: String) -> Plan? {
-        os_log("starting AMRAPPlan for %@ and %@", type: .info, planName, exerciseName)
+        //os_log("starting AMRAPPlan for %@ and %@", type: .info, planName, exerciseName)
         self.sets = []
         self.setIndex = 0
         self.workoutName = workout.name
@@ -261,10 +261,10 @@ public class AMRAPPlan : Plan {
             return .normal([Completion(title: "", isDefault: true, callback: {() -> Void in self.doNext()})])
         } else {
             return .normal([
-                Completion(title: "Advance x2",  isDefault: false,  callback: {() -> Void in self.doFinish(2)}),
-                Completion(title: "Advance",  isDefault: true,  callback: {() -> Void in self.doFinish(1)}),
-                Completion(title: "Don't Advance",  isDefault: false,  callback: {() -> Void in self.doFinish(0)}),
-                Completion(title: "Deload", isDefault: false, callback: {() -> Void in self.doDeload()})])
+                Completion(title: "Advance x2",   isDefault: false, callback: {() -> Void in self.doFinish(2)}),
+                Completion(title: "Advance",      isDefault: true,  callback: {() -> Void in self.doFinish(1)}),
+                Completion(title: "Don't Advance",isDefault: false, callback: {() -> Void in self.doFinish(0)}),
+                Completion(title: "Deload",       isDefault: false, callback: {() -> Void in self.doDeload()})])
         }
     }
     

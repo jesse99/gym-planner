@@ -2,6 +2,7 @@
 /// and work sets along with the weight to use for each set. This is done with the aid of a Plan which
 /// manages details like progression, deloads, and manipulating volume and intensity across workouts.
 import Foundation
+import os.log
 
 /// Used to inform a Plan of the result of an activity.
 public struct Completion {
@@ -166,6 +167,161 @@ extension PlanState: Storable {
         case .error(let s): store.addStr("plan-state", "error"); store.addStr("plan-state-err", s)
         }
     }
+}
+
+fileprivate struct TestFrontEnd: FrontEnd {
+    init(_ workout: Workout, _ exercise: Exercise) {
+        self.workout = workout
+        self.exercise = exercise
+    }
+    
+    public func saveExercise(_ name: String) {
+        //os_log("saved %@", type: .debug, name)
+    }
+    
+    public func findWorkout(_ name: String) -> Workout? {
+        return name == workout.name ? workout : nil
+    }
+    
+    public func findExercise(_ name: String) -> Exercise? {
+        return name == exercise.name ? exercise : nil
+    }
+    
+    public func assert(_ predicate: Bool, _ message: String) {
+        if !predicate {
+            os_log("ASSERT failed: %@", type: .info, message)
+        }
+    }
+    
+    let workout: Workout
+    let exercise: Exercise
+}
+
+fileprivate func chooseDefaultCompletion(_ completions: [Completion]) {
+    if completions.count == 1 {
+        os_log("--> %@", type: .info, completions[0].title)
+        os_log(" ", type: .info)
+        completions[0].callback()
+        return
+    }
+    
+    for c in completions {
+        if c.isDefault {
+            os_log("--> %@", type: .info, c.title)
+            os_log(" ", type: .info)
+            c.callback()
+            return
+        }
+    }
+    frontend.assert(false, "no default completion")
+}
+
+fileprivate func chooseAnyCompletion(_ completions: [Completion], _ defaultWeight: Int) {
+    if completions.count == 1 {
+        os_log("--> %@", type: .info, completions[0].title)
+        os_log(" ", type: .info)
+        completions[0].callback()
+        return
+    }
+    
+    // If there are multiple choices then bias our choice to the default
+    var options = Array(completions)
+    for c in completions {
+        if c.isDefault {
+            for _ in 1..<defaultWeight {
+                options.append(c)
+            }
+        }
+    }
+    
+    let index = Int(arc4random_uniform(UInt32(options.count)))
+    os_log("--> %@", type: .info, options[index].title)
+    os_log(" ", type: .info)
+    options[index].callback()
+}
+
+fileprivate func runPlan(_ plan: Plan, _ workout: Workout, _ exercise: Exercise, _ numWorkouts: Int, _ choose: ([Completion]) -> ()) {
+    func logActivity() {
+        let activity = plan.current()
+        os_log("%@", type: .info, activity.title)
+        if !activity.subtitle.isEmpty {
+            os_log("%@", type: .info, activity.subtitle)
+        }
+        if !activity.amount.isEmpty {
+            os_log("%@", type: .info, activity.amount)
+        }
+        if !activity.details.isEmpty {
+            os_log("%@", type: .info, activity.details)
+        }
+    }
+    
+    let oldFrontEnd = frontend
+    
+    frontend = TestFrontEnd(workout, exercise)
+    
+    let newPlan = plan.start(workout, "default exercise")
+    if newPlan == nil {
+        os_log("%@ started up", type: .info, plan.typeName)
+        
+        var count = 1
+        os_log("---- %d ---------------------------------", type: .info, count)
+        logActivity()
+        while count <= numWorkouts {
+            switch plan.state {
+            case .underway:
+                logActivity()
+                fallthrough
+                
+            case .started:
+                let completions = plan.completions()
+                switch completions {
+                case .normal(let cs):
+                    choose(cs)
+                case .cardio(_):
+                    os_log("cardio isn't supported")
+                    frontend = oldFrontEnd
+                    return
+                }
+                
+            case .finished:
+                count += 1
+                os_log("---- %d ---------------------------------", type: .info, count)
+                _ = plan.start(workout, "default exercise")
+                logActivity()
+                
+            case .waiting:
+                os_log("plan state is waiting")
+                frontend = oldFrontEnd
+                return
+                
+            case .blocked:
+                os_log("plan state is blocked")
+                frontend = oldFrontEnd
+                return
+                
+            case .error(let err):
+                os_log("plan state is error(%@)", err)
+                frontend = oldFrontEnd
+                return
+            }
+        }
+        frontend = oldFrontEnd
+    } else {
+        os_log("%@ started up a new plan", type: .info, plan.typeName)
+    }
+}
+
+/// This is for testing: it runs the plan the specified number of times using the default
+/// completion and logs what happened.
+public func runDefaultPlan(_ plan: Plan, _ workout: Workout, _ exercise: Exercise, numWorkouts: Int) {
+    runPlan(plan, workout, exercise, numWorkouts, chooseDefaultCompletion)
+}
+
+/// This is for testing: it runs the plan the specified number of times using a random
+/// completion and logs what happened.
+public func runNonDefaultPlan(_ plan: Plan, _ workout: Workout, _ exercise: Exercise, numWorkouts: Int, defaultWeight: Int = 1) {
+    let chooser = {(c: [Completion]) -> () in chooseAnyCompletion(c, defaultWeight)}
+    runPlan(plan, workout, exercise, numWorkouts, chooser)
 }
 
 // Phrak could be LinearAMRAP

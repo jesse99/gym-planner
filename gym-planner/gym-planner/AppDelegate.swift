@@ -17,6 +17,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
             os_log("failed to load program from %@", type: .info, path)
             program = HLM2() // TODO: use a better default
         }
+        
+//        let warmups = Warmups(withBar: 0, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1])
+//        let plan = AMRAPPlan("default plan", warmups, workSets: 3, workReps: 5)
+//        let plan = CycleRepsPlan("default plan", warmups, numSets: 3, minReps: 4, maxReps: 8)
+//        let plan = VariableRepsPlan("default plan", numSets: 3, minReps: 4, maxReps: 8)
+//        runWeighted(plan)
+
+//        let plan = FiveThreeOneBeginnerPlan("default plan", withBar: 0)
+//        runWeighted(plan, numWorkouts: 20, defaultWeight: 3)
+
+//        let cycles = [
+//            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
+//            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
+//            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
+//        ]
+//        let plan = MastersBasicCyclePlan("default plan", cycles)
+//        runWeighted(plan, numWorkouts: 15, defaultWeight: 2)
+    }
+    
+    private func runWeighted(_ plan: Plan, numWorkouts: Int = 10, defaultWeight: Int = 4) {
+        let workout = Workout("default workout", ["default exercise"], scheduled: true)
+        let apparatus = Apparatus.barbell(bar: 45, collar: 0, plates: defaultPlates(), bumpers: [], magnets: [])
+        let setting = VariableWeightSetting(apparatus, restSecs: 60)
+        let exercise = Exercise("default exercise", "default", plan, .variableWeight(setting))
+        setting.changeWeight(100)
+        runNonDefaultPlan(plan, workout, exercise, numWorkouts: numWorkouts, defaultWeight: defaultWeight)
+        //        runDefaultPlan(plan, numWorkouts: 4)
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {

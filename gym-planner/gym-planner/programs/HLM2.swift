@@ -1,35 +1,31 @@
 /// Masters program with cycles of 3x5, 3x3,and 3x1.
 import Foundation
 
+typealias Cycle = BaseCyclicPlan.Cycle
+
 func HLM2() -> Program {
-    func cycle(withBar: Int, firstPercent: Double, warmups: [Int], sets: Int, reps: Int, at: Double) -> BaseCyclicPlan.Cycle {
-        let warmups = Warmups(withBar: withBar, firstPercent: firstPercent, lastPercent: at - 0.1, reps: warmups)
-        let reps = Array(repeating: BaseCyclicPlan.Reps(count: reps, percent: at), count: sets)
-        return BaseCyclicPlan.Cycle(warmups, reps)
-    }
-    
     func plan531() -> Plan {
         let cycles = [
-            cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
-            cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
-            cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
+            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
+            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
+            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
         ]
         return MastersBasicCyclePlan("531", cycles)
     }
     
     func plan53() -> Plan {
         let cycles = [
-            cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 5, at: 1.0),
-            cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 3, at: 1.055)
+            Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 5, at: 1.0),
+            Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 3, at: 1.055)
         ]
         return MastersBasicCyclePlan("53", cycles)
     }
     
     func planDead() -> Plan {
         let cycles = [
-            cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
-            cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 3, at: 1.05),
-            cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 1, at: 1.1)
+            Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
+            Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 3, at: 1.05),
+            Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 1, at: 1.1)
         ]
         return MastersBasicCyclePlan("Dead", cycles)
     }

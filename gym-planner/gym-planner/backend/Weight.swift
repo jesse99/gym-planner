@@ -106,6 +106,12 @@ public struct Weight: CustomStringConvertible {
         return temp.closest(above: weight).weight
     }
     
+    /// Returns the weight immediately below weight.
+    func prevWeight() -> Double {
+        let temp = Weight(weight - 0.0001, apparatus)
+        return temp.closest(below: weight).weight
+    }
+
     public var description: String {
         return String(format: "%.3f", weight)
     }
