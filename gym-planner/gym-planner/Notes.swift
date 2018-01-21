@@ -287,6 +287,16 @@ let builtInNotes: [String: String] = [
             "Keep back straight and knees slightly bent."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/good-morning-off-pins"]),
     
+    "Box Jump": createNote(
+        notes: [
+            "Squat down, swing your arms behind you, and jump as high as you can onto the box.",
+            "Land with your feet flat.",
+            "Keep back straight and abs braced.",
+            "Eyes and chest should be up when landing.",
+            "Pause for a bit after landing.",
+            "Step off the box if it’s higher than 20 inches."],
+        links: ["Guide": "https://www.bodybuilding.com/exercises/front-box-jump", "More": "https://www.t-nation.com/training/stop-doing-box-jumps-like-a-jackass"]),
+    
     "Box Squat": createNote(
         notes: [
             "Find a bench or chair that is at a height where when your butt touches it your thighs are slightly below parallel with the floor.",

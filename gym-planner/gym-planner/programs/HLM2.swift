@@ -92,7 +92,7 @@ func HLM2() -> Program {
         createBarBell("Deadlift",       "Deadlift",       planDead(),   restMins: 3.5, useBumpers: true),
         createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restMins: 2.0, derivedFrom: "Squat"),
         createBarBell("Overhead Press", "Overhead Press", plan53(),     restMins: 3.0, magnets: [1.25]),
-        createVarReps("Chinups",        "Chinup",         planChin(),   restMins: 2.0, requestedReps: 10),
+        createVarSets("Chinups",        "Chinup",         planChin(),   restMins: 2.0, requestedReps: 10),
         createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, derivedFrom: "Squat"),
         createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
 

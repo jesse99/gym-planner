@@ -235,5 +235,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
     var notificationsAreEnabled = false
     var program: Program!
 
-    let programs = [HLM2(), Phraks()]   // TODO: will need to be var when we start supporting program editing
+    let programs = [HLM2(), Phraks(), FiveThreeOneBeginner()]   // TODO: will need to be var when we start supporting program editing
 }
