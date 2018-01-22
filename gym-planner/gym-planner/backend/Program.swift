@@ -191,6 +191,12 @@ public func createBarBell(_ name: String, _ formalName: String, _ plan: Plan, re
     }
 }
 
+public func createDumbbell1(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
+    let apparatus = Apparatus.dumbbells1(weights: defaultDumbbells(), magnets: [])
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
 public func createDumbbell2(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
     let apparatus = Apparatus.dumbbells2(weights: defaultDumbbells(), magnets: [])
     let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))

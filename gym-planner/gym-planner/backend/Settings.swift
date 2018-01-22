@@ -11,6 +11,9 @@ public enum Apparatus
 {
     case barbell(bar: Double, collar: Double, plates: [Double], bumpers: [Double], magnets: [Double])
     
+    /// Single dumbbell.
+    case dumbbells1(weights: [Double], magnets: [Double])
+    
     /// Paired dumbbells.
     case dumbbells2(weights: [Double], magnets: [Double])
     
@@ -251,6 +254,11 @@ extension Apparatus: Storable {
             let magnets = store.getDblArray("magnets")
             self = .dumbbells2(weights: weights, magnets: magnets)
             
+        case "dumbbells1":
+            let weights = store.getDblArray("weights")
+            let magnets = store.getDblArray("magnets")
+            self = .dumbbells1(weights: weights, magnets: magnets)
+            
         case "machine":
             let min1 = store.getDbl("min1")
             let max1 = store.getDbl("max1")
@@ -278,6 +286,11 @@ extension Apparatus: Storable {
             store.addDbl("collar", collar)
             store.addDblArray("plates", plates)
             store.addDblArray("bumpers", bumpers)
+            store.addDblArray("magnets", magnets)
+            
+        case .dumbbells1(weights: let weights, magnets: let magnets):
+            store.addStr("type", "dumbbells1")
+            store.addDblArray("weights", weights)
             store.addDblArray("magnets", magnets)
             
         case .dumbbells2(weights: let weights, magnets: let magnets):

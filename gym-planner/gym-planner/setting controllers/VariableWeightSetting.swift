@@ -93,6 +93,9 @@ class VariableWeightController: UIViewController {
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
             
+        case .dumbbells1(weights: _, magnets: _):
+            break   // TODO:
+            
         case .dumbbells2(weights: _, magnets: _):
             break   // TODO:
             
