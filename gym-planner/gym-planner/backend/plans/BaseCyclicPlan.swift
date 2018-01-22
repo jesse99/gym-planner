@@ -107,24 +107,27 @@ public class BaseCyclicPlan : Plan {
         let numReps: Int
         let weight: Weight.Info
         let warmup: Bool
+        let amrap: Bool
         
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, percent: Double, warmupWeight: Weight.Info, unitWeight: Double) {
             self.title = "Warmup \(phase) of \(phaseCount)"
             self.weight = warmupWeight
             self.numReps = numReps
             self.warmup = true
+            self.amrap = false
             
             let info = Weight(unitWeight, apparatus).closest()
             let p = String(format: "%.0f", 100.0*percent)
             self.subtitle = "\(p)% of \(info.text)"
         }
         
-        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, workingPercent: Double, unitWeight: Double) {
+        init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, workingPercent: Double, unitWeight: Double, amrap: Bool) {
             self.title = "Workset \(phase) of \(phaseCount)"
             self.weight = Weight(workingPercent*unitWeight, apparatus).closest()
             self.numReps = numReps
             self.warmup = false
-            
+            self.amrap = amrap
+
             if workingPercent == 1.0 {
                 self.subtitle = ""
             } else {
@@ -140,6 +143,7 @@ public class BaseCyclicPlan : Plan {
             self.numReps = store.getInt("numReps")
             self.weight = store.getObj("weight")
             self.warmup = store.getBool("warmup")
+            self.amrap = store.getBool("amrap", ifMissing: false)
         }
         
         func save(_ store: Store) {
@@ -148,6 +152,7 @@ public class BaseCyclicPlan : Plan {
             store.addInt("numReps", numReps)
             store.addObj("weight", weight)
             store.addBool("warmup", warmup)
+            store.addBool("amrap", amrap)
         }
     }
     
@@ -387,10 +392,11 @@ public class BaseCyclicPlan : Plan {
     
     public func current() -> Activity {
         let info = sets[setIndex].weight
+        let prefix = sets[setIndex].amrap ? "\(sets[setIndex].numReps)+ reps" : repsStr(sets[setIndex].numReps)
         return Activity(
             title: sets[setIndex].title,
             subtitle: sets[setIndex].subtitle,
-            amount: "\(repsStr(sets[setIndex].numReps)) @ \(info.text)",
+            amount: "\(prefix) @ \(info.text)",
             details: info.plates,
             buttonName: "Next",
             showStartButton: true,
@@ -530,7 +536,7 @@ public class BaseCyclicPlan : Plan {
         }
         
         for (i, reps) in cycle.worksets.enumerated() {
-            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.worksets.count, numReps: reps.count, workingPercent: reps.percent, unitWeight: unitWeight))
+            sets.append(Set(setting.apparatus, phase: i+1, phaseCount: cycle.worksets.count, numReps: reps.count, workingPercent: reps.percent, unitWeight: unitWeight, amrap: reps.amrap))
         }
     }
     
