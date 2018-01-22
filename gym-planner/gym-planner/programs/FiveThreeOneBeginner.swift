@@ -49,12 +49,12 @@ func FiveThreeOneBeginner() -> Program {
         createMachine("Cable Crunch (core)",           "Cable Crunch",      planWeightedAux(), restMins: 1.5),
         createVarSets("Reverse Hyperextension (core)", "Reverse Hyperextension", planBodyAux(), restMins: 1.0, requestedReps: 50),
         createVarSets("Hanging Leg Raise (core)",      "Hanging Leg Raise", planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createDumbbell("Spell Caster (core)",          "Spell Caster",      planWeightedAux(), restMins: 1.0),
+        createDumbbell2("Spell Caster (core)",          "Spell Caster",      planWeightedAux(), restMins: 1.0),
         
-        createDumbbell("Dumbbell Lunge (leg)",         "Dumbbell Lunge",    planWeightedAux(), restMins: 1.0),
+        createDumbbell2("Dumbbell Lunge (leg)",         "Dumbbell Lunge",    planWeightedAux(), restMins: 1.0),
         createKettlebell("Kettlebell Snatch (leg)",    "One-Arm Kettlebell Snatch", planWeightedAux(), restMins: 1.0),
         createKettlebell("Kettlebell Swing (leg)",     "Kettlebell Two Arm Swing", planWeightedAux(), restMins: 1.0),
-        createDumbbell("Step-ups (leg)",               "Step-ups",          planWeightedAux(), restMins: 1.0),
+        createDumbbell2("Step-ups (leg)",               "Step-ups",          planWeightedAux(), restMins: 1.0),
 
         // pull
         createMachine("Lat Pulldown (pull)", "Lat Pulldown", planWeightedAux(), restMins: 1.5),

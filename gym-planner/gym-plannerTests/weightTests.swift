@@ -66,8 +66,8 @@ class weightTests: XCTestCase {
         checkRange(a)
     }
     
-    func testDumbbells() {
-        let a: Apparatus = .dumbbells(weights: [5, 10, 15, 20], magnets: [])
+    func testDumbbells2() {
+        let a: Apparatus = .dumbbells2(weights: [5, 10, 15, 20], magnets: [])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().weight, 10.0)
         XCTAssertEqual(w.closest().text, "10 lbs")
@@ -94,8 +94,8 @@ class weightTests: XCTestCase {
         XCTAssertEqual(w.closest().plates, "20 lb")
     }
     
-    func testDumbbellMagnets() {
-        let a: Apparatus = .dumbbells(weights: [5, 10, 15, 20], magnets: [0.25, 0.5])
+    func testDumbbell2Magnets() {
+        let a: Apparatus = .dumbbells2(weights: [5, 10, 15, 20], magnets: [0.25, 0.5])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().weight, 10.0)
         XCTAssertEqual(w.closest().text, "10 lbs")

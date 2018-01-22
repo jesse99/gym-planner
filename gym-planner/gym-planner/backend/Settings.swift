@@ -11,7 +11,8 @@ public enum Apparatus
 {
     case barbell(bar: Double, collar: Double, plates: [Double], bumpers: [Double], magnets: [Double])
     
-    case dumbbells(weights: [Double], magnets: [Double])
+    /// Paired dumbbells.
+    case dumbbells2(weights: [Double], magnets: [Double])
     
     /// Used for stuff like cable machines with a stack of plates. Range2 is for machines that have weights like [5, 10, 15, 20, 30, ...]. Extra are small weights that can be optionally added.
     case machine(range1: MachineRange, range2: MachineRange, extra: [Double])
@@ -248,7 +249,7 @@ extension Apparatus: Storable {
         case "dumbbells":
             let weights = store.getDblArray("weights")
             let magnets = store.getDblArray("magnets")
-            self = .dumbbells(weights: weights, magnets: magnets)
+            self = .dumbbells2(weights: weights, magnets: magnets)
             
         case "machine":
             let min1 = store.getDbl("min1")
@@ -279,7 +280,7 @@ extension Apparatus: Storable {
             store.addDblArray("bumpers", bumpers)
             store.addDblArray("magnets", magnets)
             
-        case .dumbbells(weights: let weights, magnets: let magnets):
+        case .dumbbells2(weights: let weights, magnets: let magnets):
             store.addStr("type", "dumbbells")
             store.addDblArray("weights", weights)
             store.addDblArray("magnets", magnets)

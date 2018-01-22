@@ -174,7 +174,7 @@ public struct Weight: CustomStringConvertible {
             
             return candidates
             
-        case .dumbbells(let weights, let magnets):
+        case .dumbbells2(let weights, let magnets):
             var infos: [Info] = []
 
             let magnets2 = [0.0] + magnets
