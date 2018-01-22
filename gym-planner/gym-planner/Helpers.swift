@@ -52,6 +52,23 @@ func defaultBumpers() -> [Double] {
 //    }
 }
 
+func defaultDumbbells() -> [Double] {
+//    switch units {
+//    case .imperial:
+        return [
+            5.0, 10, 15, 20, 25,
+            30, 35, 40, 45, 50, 55,
+            60, 70, 80, 90,
+            100, 110, 120, 130, 140, 150]
+        
+//    case .metric:
+//        let plates = [1.0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22,
+//                      24, 26, 28, 30, 32, 34, 36, 38, 40,
+//                      45, 50, 55, 60, 70]
+//        return plates.map {$0*Double.kgToLb}
+//    }
+}
+
 func availableMagnets() -> [Double] {
 //    let app = UIApplication.shared.delegate as! AppDelegate
 //    switch app.units() {

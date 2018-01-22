@@ -1203,6 +1203,15 @@ let builtInNotes: [String: String] = [
             "Switch hands."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/oblique-crunches"]),
     
+    "One-Arm Kettlebell Snatch": createNote(
+        notes: [
+            "Place a kettlebell between your feet.",
+            "Bend your knees and push your butt back.",
+            "Look straight ahead and swing the kettlebell backwards.",
+            "Immediately reverse direction and use your knees and hips to accelerate the kettlebell.",
+            "As the kettlebell reaches your shoulders punch upwards and lock it out overhead."],
+        links: ["Link": "https://www.bodybuilding.com/exercises/one-arm-kettlebell-snatch", "technique": "https://www.girlsgonestrong.com/blog/strength-training/how-to-do-a-kettlebell-snatch/"]),
+    
     "One-Legged Cable Kickback": createNote(
         notes: [
             "Hook a cuff to a low cable pulley.",

@@ -174,9 +174,35 @@ public struct Weight: CustomStringConvertible {
             
             return candidates
             
-        case .dumbbells(_, _):
-            frontend.assert(false, "find doesn't support dumbbells"); abort()
-            
+        case .dumbbells(let weights, let magnets):
+            var infos: [Info] = []
+
+            let magnets2 = [0.0] + magnets
+            for weight in weights {
+                for magnet1 in magnets2 {
+                    for magnet2 in magnets2 {   // we allow 0, 1, or 2 magnets
+                        var plates = Weight.friendlyUnitsStr(weight, plural: false)
+                        if magnet1 != 0.0 {
+                            plates += " + " + Weight.friendlyStr(magnet1)
+                        }
+                        
+                        if magnet2 == 0.0 {
+                            let total = 2*(weight+magnet1)
+                            let text = Weight.friendlyUnitsStr(total)
+                            infos.append(Info(weight: total, text: text, plates: plates))
+                        } else if magnet2 > magnet1 {
+                            let total = 2*(weight+magnet1+magnet2)
+                            let text = Weight.friendlyUnitsStr(total)
+                            plates += " + " + Weight.friendlyStr(magnet2)
+                            infos.append(Info(weight: total, text: text, plates: plates))
+                        }
+                    }
+                }
+            }
+            infos.sort {$0.weight < $1.weight}
+
+            return infos
+
         case .machine(range1: let range1, range2: let range2, extra: let inExtra):
            var extra = inExtra
            if !extra.contains(0.0) {

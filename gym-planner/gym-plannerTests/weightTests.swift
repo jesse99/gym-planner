@@ -3,12 +3,12 @@ import XCTest
 
 class weightTests: XCTestCase {
     func testRanges() {
-        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates:defaultPlates(), bumpers: [], magnets: [], warmupsWithBar: 2)
+        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates:defaultPlates(), bumpers: [], magnets: [])
         checkRange(a)
     }
     
     func testTiny() {
-        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: [5, 10, 25], bumpers: [], magnets: [], warmupsWithBar: 2)
+        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: [5, 10, 25], bumpers: [], magnets: [])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().plates, "no plates")
         
@@ -23,7 +23,7 @@ class weightTests: XCTestCase {
     }
 
     func testHuge() {
-        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: [5, 10, 25, 45, 100], bumpers: [], magnets: [], warmupsWithBar: 2)
+        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: [5, 10, 25, 45, 100], bumpers: [], magnets: [])
         let w = Weight(1014.0, a)
         XCTAssertEqual(w.closest().weight, 1015.0)
         XCTAssertEqual(w.closest().text, "1015 lbs")
@@ -31,7 +31,7 @@ class weightTests: XCTestCase {
     }
 
     func testBumpers() {
-        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: defaultPlates(), bumpers: defaultBumpers(), magnets: [], warmupsWithBar: 2)
+        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: defaultPlates(), bumpers: defaultBumpers(), magnets: [])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().weight, 75.0)
         XCTAssertEqual(w.closest().text, "75 lbs")
@@ -43,8 +43,8 @@ class weightTests: XCTestCase {
         XCTAssertEqual(w.closest().plates, "45 lb bumper")
     }
     
-    func testMagnets() {
-        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: [5, 10, 25], bumpers: [], magnets: [0.5, 1.25], warmupsWithBar: 2)
+    func testBarbellMagnets() {
+        let a: Apparatus = .barbell(bar: 45.0, collar: 0, plates: [5, 10, 25], bumpers: [], magnets: [0.5, 1.25])
         var w = Weight(0.0, a)
         XCTAssertEqual(w.closest().plates, "no plates")
         
@@ -64,6 +64,77 @@ class weightTests: XCTestCase {
         XCTAssertEqual(w.closest().plates, "10 lb plate")
         
         checkRange(a)
+    }
+    
+    func testDumbbells() {
+        let a: Apparatus = .dumbbells(weights: [5, 10, 15, 20], magnets: [])
+        var w = Weight(0.0, a)
+        XCTAssertEqual(w.closest().weight, 10.0)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb")
+        
+        w = Weight(9.0, a)
+        XCTAssertEqual(w.closest().weight, 10.0)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb")
+        
+        w = Weight(12.0, a)
+        XCTAssertEqual(w.closest().weight, 10.0)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb")
+        
+        w = Weight(28.0, a)
+        XCTAssertEqual(w.closest().weight, 30.0)
+        XCTAssertEqual(w.closest().text, "30 lbs")
+        XCTAssertEqual(w.closest().plates, "15 lb")
+        
+        w = Weight(50.0, a)
+        XCTAssertEqual(w.closest().weight, 40.0)
+        XCTAssertEqual(w.closest().text, "40 lbs")
+        XCTAssertEqual(w.closest().plates, "20 lb")
+    }
+    
+    func testDumbbellMagnets() {
+        let a: Apparatus = .dumbbells(weights: [5, 10, 15, 20], magnets: [0.25, 0.5])
+        var w = Weight(0.0, a)
+        XCTAssertEqual(w.closest().weight, 10.0)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb")
+
+        w = Weight(9.0, a)
+        XCTAssertEqual(w.closest().weight, 10.0)
+        XCTAssertEqual(w.closest().text, "10 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb")
+
+        w = Weight(10.3, a)
+        XCTAssertEqual(w.closest().weight, 10.5)
+        XCTAssertEqual(w.closest().text, "10.5 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb + 0.25")
+        
+        w = Weight(11.0, a)
+        XCTAssertEqual(w.closest().weight, 11.0)
+        XCTAssertEqual(w.closest().text, "11 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb + 0.5")
+        
+        w = Weight(12.0, a)
+        XCTAssertEqual(w.closest().weight, 11.5)
+        XCTAssertEqual(w.closest().text, "11.5 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb + 0.25 + 0.5")
+        
+        w = Weight(13.0, a)
+        XCTAssertEqual(w.closest().weight, 11.5)
+        XCTAssertEqual(w.closest().text, "11.5 lbs")
+        XCTAssertEqual(w.closest().plates, "5 lb + 0.25 + 0.5")
+
+        w = Weight(28.0, a)
+        XCTAssertEqual(w.closest().weight, 30.0)
+        XCTAssertEqual(w.closest().text, "30 lbs")
+        XCTAssertEqual(w.closest().plates, "15 lb")
+
+        w = Weight(50.0, a)
+        XCTAssertEqual(w.closest().weight, 41.5)
+        XCTAssertEqual(w.closest().text, "41.5 lbs")
+        XCTAssertEqual(w.closest().plates, "20 lb + 0.25 + 0.5")
     }
     
     func testMachine() {

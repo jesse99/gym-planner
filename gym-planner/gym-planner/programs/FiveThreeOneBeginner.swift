@@ -13,16 +13,17 @@ func FiveThreeOneBeginner() -> Program {
         return FiveThreeOneBeginnerPlan("531", withBar: 2)
     }
     
-    func planVarSetsAux() -> Plan {
+    func planBodyAux() -> Plan {
         let targetReps = 100
         return VariableSetsPlan("\(targetReps) target", targetReps: targetReps)
     }
     
-    func planLinearAux() -> Plan {
-        let numSets = 4
-        let numReps = 12
+    func planWeightedAux() -> Plan {
+        let numSets = 5
+        let minReps = 10
+        let maxReps = 15
         let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-        return LinearPlan("\(numSets)x\(numReps)", warmups, workSets: numSets, workReps: numReps)
+        return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
     }
     
     func planTimedMob(_ numSets: Int, targetTime: Int? = nil) -> Plan {
@@ -43,16 +44,24 @@ func FiveThreeOneBeginner() -> Program {
         createBarBell("Overhead Press", "Overhead Press", planMain(),  restMins: 1.5, magnets: [1.25]),
         
         // single leg/core
-        createVarSets("Ab Wheel Rollout (core)",  "Ab Wheel Rollout",  planVarSetsAux(), restMins: 1.0, requestedReps: 50),
-        createMachine("Cable Crunch (core)",      "Cable Crunch",      planLinearAux(), restMins: 1.5),
-        createVarSets("Hanging Leg Raise (core)", "Hanging Leg Raise", planVarSetsAux(), restMins: 1.0, requestedReps: 50),
+        createVarSets("Ab Wheel Rollout (core)",       "Ab Wheel Rollout",  planBodyAux(), restMins: 1.0, requestedReps: 50),
+        createVarSets("Back Extension (core)",         "Back Extension",    planBodyAux(), restMins: 1.0, requestedReps: 50),
+        createMachine("Cable Crunch (core)",           "Cable Crunch",      planWeightedAux(), restMins: 1.5),
+        createVarSets("Reverse Hyperextension (core)", "Reverse Hyperextension", planBodyAux(), restMins: 1.0, requestedReps: 50),
+        createVarSets("Hanging Leg Raise (core)",      "Hanging Leg Raise", planBodyAux(), restMins: 1.0, requestedReps: 50),
+        createDumbbell("Spell Caster (core)",          "Spell Caster",      planWeightedAux(), restMins: 1.0),
+        
+        createDumbbell("Dumbbell Lunge (leg)",         "Dumbbell Lunge",    planWeightedAux(), restMins: 1.0),
+        createKettlebell("Kettlebell Snatch (leg)",    "One-Arm Kettlebell Snatch", planWeightedAux(), restMins: 1.0),
+        createKettlebell("Kettlebell Swing (leg)",     "Kettlebell Two Arm Swing", planWeightedAux(), restMins: 1.0),
+        createDumbbell("Step-ups (leg)",               "Step-ups",          planWeightedAux(), restMins: 1.0),
 
         // pull
-        createMachine("Lat Pulldown (pull)", "Lat Pulldown", planLinearAux(), restMins: 1.5),
+        createMachine("Lat Pulldown (pull)", "Lat Pulldown", planWeightedAux(), restMins: 1.5),
         
         // push
-        createVarSets("Push Ups (push)",         "Pushup", planVarSetsAux(), restMins: 1.0, requestedReps: 50),
-        createMachine("Triceps Pushdown (push)", "Triceps Pushdown (rope)", planLinearAux(), restMins: 1.5),
+        createVarSets("Push Ups (push)",         "Pushup",                  planBodyAux(), restMins: 1.0, requestedReps: 50),
+        createMachine("Triceps Pushdown (push)", "Triceps Pushdown (rope)", planWeightedAux(), restMins: 1.5),
 
         createFixed("Foam Rolling",            "IT-Band Foam Roll",         planFixedMob(1, 15), restMins: 0.0),
         createFixed("Shoulder Dislocates",     "Shoulder Dislocate",        planFixedMob(1, 12), restMins: 0.0),
@@ -65,15 +74,13 @@ func FiveThreeOneBeginner() -> Program {
         createTimed("Piriformis Stretch",      "Seated Piriformis Stretch", planTimedMob(2), duration: 30),
         createTimed("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", planTimedMob(2), duration: 30)]
     
-    // TODO:
-    // add lots of missing accessories
-    
     // Aux exercises default to Hanging Leg Raise, Lat Pulldown, and Triceps Pushdown.
-    let core = ["Ab Wheel Rollout (core)", "Cable Crunch (core)", "Hanging Leg Raise (core)"]
+    let core = ["Ab Wheel Rollout (core)", "Back Extension (core)", "Cable Crunch (core)", "Hanging Leg Raise (core)", "Reverse Hyperextension (core)", "Spell Caster (core)"]
+    let leg = ["Dumbbell Lunge (leg)", "Kettlebell Snatch (leg)", "Kettlebell Swing (leg)", "Step-ups (leg)"]
     let pull = ["Lat Pulldown (pull)"]
     let push = ["Push Ups (push)", "Triceps Pushdown (push)"]
-    let aux = core + pull + push
-    let optional = ["Ab Wheel Rollout (core)", "Cable Crunch (core)", "Medicine Ball Slam", "Push Ups (push)"]
+    let aux = core + leg + pull + push
+    let optional = ["Ab Wheel Rollout (core)", "Back Extension (core)", "Cable Crunch (core)", "Dumbbell Lunge (leg)", "Kettlebell Snatch (leg)", "Kettlebell Swing (leg)", "Medicine Ball Slam", "Push Ups (push)", "Reverse Hyperextension (core)", "Spell Caster (core)", "Step-ups (leg)"]
     
     let workouts = [
         Workout("Squat",    ["Box Jumps", "Medicine Ball Slam", "Squat",       "Bench Press"] + aux,    scheduled: true, optional: optional),

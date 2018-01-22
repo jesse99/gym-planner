@@ -265,7 +265,7 @@ public class CycleRepsPlan : Plan {
             title: sets[setIndex].title,
             subtitle: sets[setIndex].subtitle,
             amount: sets[setIndex].amount,
-            details: "",
+            details: sets[setIndex].weight.plates,
             buttonName: "Next",
             showStartButton: true,
             color: nil)
