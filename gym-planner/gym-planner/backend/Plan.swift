@@ -324,21 +324,3 @@ public func runNonDefaultPlan(_ plan: Plan, _ workout: Workout, _ exercise: Exer
     runPlan(plan, workout, exercise, numWorkouts, chooser)
 }
 
-// Phrak could be LinearAMRAP
-//    paramterize based on sets/reps, progression bonus amount, reps target
-
-// GZCLP could be LinearCycleAMRAP
-
-// BodyWeightAMRAP
-//    sets/reps
-
-// GZCLP    https://www.reddit.com/r/Fitness/comments/44hnbc/strength_training_using_the_gzcl_method_from/
-// set/rep scheme           5x3+
-// T1 progression           each workout, fail to do 15 reps then keep weight same and do 6x2+, then 10x1+, rest for 2-3 days and test for new 5RM, use 85% of that for new 5x3+ cycle
-// T2 progression           each workout, fail to do 30 reps then drop to 3x8+, then 3x6+, then up weight and restart
-// deload for progression   blah
-// deload for time          blah
-
-// 531      https://www.t-nation.com/workouts/531-how-to-build-pure-strength
-
-
