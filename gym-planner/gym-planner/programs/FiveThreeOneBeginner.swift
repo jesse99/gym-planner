@@ -96,7 +96,7 @@ func FiveThreeOneBeginner() -> Program {
         Workout("Bench",    ["Box Jumps", "Medicine Ball Slam", "Bench Press", "Squat"] + aux,          scheduled: true, optional: optional),
         Workout("Mobility", ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
     
-    let tags: [Program.Tags] = [.beginner, .strength, .barbell, .threeDays, .ageUnder40, .age40s, .age50s]
+    let tags: [Program.Tags] = [.beginner, .strength, .barbell, .threeDays, .unisex, .ageUnder40, .age40s, .age50s]
     let description = """
 This [program](https://www.reddit.com/r/Fitness/wiki/531-beginners) is a variant of Jim Wendler's popular 531 program designed for beginners. It uses a three week cycle with 5+, 3+, and 1+ reps within each cycle and higher weights as the reps drop. Once the cycle finishes you have the option of adding weight, deloading, or keeping the weights the same. Progression is slower with this program than most of the other beginner programs but it's also a program than you can run for longer than the other programs. It's a three day a week program and the days look like this:
 

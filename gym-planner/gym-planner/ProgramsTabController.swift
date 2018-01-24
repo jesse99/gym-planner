@@ -114,7 +114,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @IBAction func sexPressed(_ sender: Any) {
-        let alert = createAlert("Any Sex", [.female])
+        let alert = createAlert("Any Sex", [.unisex, .female])
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -171,6 +171,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
             case .dumbbell:     apparatusText = tagToString(tag)
             case .threeDays:    daysText = tagToString(tag)
             case .fourDays:     daysText = tagToString(tag)
+            case .unisex:       sexText = tagToString(tag)
             case .female:       sexText = tagToString(tag)
             case .ageUnder40:   ageText = tagToString(tag)
             case .age40s:       ageText = tagToString(tag)
@@ -202,6 +203,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
         case .dumbbell:     return "Dumbbell"
         case .threeDays:    return "3 Days/Week"
         case .fourDays:     return "4 Days/Week"
+        case .unisex:       return "Unisex"
         case .female:       return "Female"
         case .ageUnder40:   return "Under 40"
         case .age40s:       return "40s"
@@ -221,6 +223,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
         case "Dumbbell":        return .dumbbell
         case "3 Days/Week":     return .threeDays
         case "4 Days/Week":     return .fourDays
+        case "Unisex":          return .unisex
         case "Female":          return .female
         case "Under 40":        return .ageUnder40
         case "40s":             return .age40s
@@ -238,7 +241,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet private var tableView: UITableView!
     
-    private var tags: Set<Program.Tags> = [.beginner, .strength, .ageUnder40, .barbell, .threeDays]
+    private var tags: Set<Program.Tags> = [.beginner, .strength, .unisex, .ageUnder40, .barbell, .threeDays]
     private var programs: [Program] = []
 }
 

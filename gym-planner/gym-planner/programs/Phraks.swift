@@ -28,7 +28,7 @@ func Phraks() -> Program {
         Workout("Dead2",  ["Chinups",      "Overhead Press", "Deadlift"], scheduled: true, optional: []),
         Workout("Bench2", ["Barbell Rows", "Bench Press",    "Squat"], scheduled: true, optional: [])]
     
-    let tags: [Program.Tags] = [.beginner, .strength, .barbell, .threeDays, .ageUnder40, .age40s]
+    let tags: [Program.Tags] = [.beginner, .strength, .barbell, .threeDays, .unisex, .ageUnder40, .age40s]
     let description = """
 This is a bare-bones [implementation](https://www.reddit.com/r/Fitness/wiki/phraks-gslp) of the [Greyskull linear progression program](https://strengthvillain.myshopify.com/collections/ebooks/products/greyskull-lp-third-edition). It's a three day a week program and the days look like this:
 
