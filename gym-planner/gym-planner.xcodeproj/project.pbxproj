@@ -72,6 +72,7 @@
 		37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AC1FB3FCED00244ADD /* SequenceExtension.swift */; };
 		37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */; };
 		37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */; };
+		37F3F11C20182E5600BF0418 /* Bootyful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F3F11B20182E5600BF0418 /* Bootyful.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +155,7 @@
 		37CED4AC1FB3FCED00244ADD /* SequenceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtension.swift; sourceTree = "<group>"; };
 		37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastersBasicCyclePlan.swift; sourceTree = "<group>"; };
 		37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteController.swift; sourceTree = "<group>"; };
+		37F3F11B20182E5600BF0418 /* Bootyful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bootyful.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 		377F05571FC0DD8F0015D7EF /* programs */ = {
 			isa = PBXGroup;
 			children = (
+				37F3F11B20182E5600BF0418 /* Bootyful.swift */,
 				3765A33F2014485B00C4C44E /* FiveThreeOneBeginner.swift */,
 				377F05581FC0DDA10015D7EF /* HLM2.swift */,
 				376BA11A2001D57000EF804C /* Phraks.swift */,
@@ -468,6 +471,7 @@
 				37CED46C1FAE289100244ADD /* AppDelegate.swift in Sources */,
 				378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */,
 				37CED48F1FAE29E000244ADD /* Plan.swift in Sources */,
+				37F3F11C20182E5600BF0418 /* Bootyful.swift in Sources */,
 				3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */,
 				376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */,
 				3733073E1FF9EC2D00D540D0 /* MachineController.swift in Sources */,

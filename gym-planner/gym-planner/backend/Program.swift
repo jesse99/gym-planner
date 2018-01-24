@@ -46,8 +46,10 @@ public class Program: Storable {
         case hypertrophy
         case conditioning
 
+        case gym
         case barbell
         case dumbbell
+        case minimal
 
         case threeDays
         case fourDays
@@ -287,8 +289,10 @@ extension Program.Tags: Storable {
         case "threeDays": self = .threeDays
         case "fourDays": self = .fourDays
             
+        case "gym": self = .gym
         case "barbell": self = .barbell
         case "dumbbell": self = .dumbbell
+        case "minimal": self = .minimal
 
         case "unisex": self = .unisex
         case "female": self = .female
@@ -314,9 +318,11 @@ extension Program.Tags: Storable {
         case .threeDays: store.addStr("tag", "threeDays")
         case .fourDays: store.addStr("tag", "fourDays")
             
+        case .gym: store.addStr("tag", "gym")
         case .barbell: store.addStr("tag", "barbell")
         case .dumbbell: store.addStr("tag", "dumbbell")
-            
+        case .minimal: store.addStr("tag", "minimal")
+
         case .unisex: store.addStr("tag", "unisex")
         case .female: store.addStr("tag", "female")
 

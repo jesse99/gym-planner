@@ -1,0 +1,75 @@
+import Foundation
+
+// Weeks 1-4 for 4 days/week version of Booty-ful Beginnings.
+func Bootyful4a() -> Program {
+    func chinsPlan() -> Plan {
+        return VariableSetsPlan("Chinups", targetReps: 30)
+    }
+    
+    func amrapPlan(withBar: Int) -> Plan {
+        let warmups = Warmups(withBar: withBar, firstPercent: 0.6, lastPercent: 0.9, reps: [5, 5, 3])
+        return AMRAPPlan("AMRAP", warmups, workSets: 3, workReps: 5)
+    }
+    
+    let exercises = [
+        createVarReps("Chinups",        "Chinup",         chinsPlan(), restMins: 2.5, requestedReps: 15),
+        createBarBell("Overhead Press", "Overhead Press", amrapPlan(withBar: 2), restMins: 2.5, magnets: [1.25]),
+        createBarBell("Squat",          "Low bar Squat",  amrapPlan(withBar: 2), restMins: 3.0),
+        createBarBell("Barbell Rows",   "Pendlay Row",    amrapPlan(withBar: 0), restMins: 2.0, magnets: [1.25]),
+        createBarBell("Bench Press",    "Bench Press",    amrapPlan(withBar: 2), restMins: 3.0, magnets: [1.25]),
+        createBarBell("Deadlift",       "Deadlift",       amrapPlan(withBar: 2), restMins: 3.0, useBumpers: true)]
+    
+    let workouts = [
+        Workout("OHP1",   ["Chinups",      "Overhead Press", "Squat"], scheduled: true, optional: []),
+        Workout("Dead1",  ["Barbell Rows", "Bench Press",    "Deadlift"], scheduled: true, optional: []),
+        Workout("OHP2",   ["Chinups",      "Overhead Press", "Squat"], scheduled: true, optional: []),
+        
+        Workout("Bench1", ["Barbell Rows", "Bench Press",    "Squat"], scheduled: true, optional: []),
+        Workout("Dead2",  ["Chinups",      "Overhead Press", "Deadlift"], scheduled: true, optional: []),
+        Workout("Bench2", ["Barbell Rows", "Bench Press",    "Squat"], scheduled: true, optional: [])]
+    
+    let tags: [Program.Tags] = [.beginner, .strength, .gym, .fourDays, .female, .ageUnder40, .age40s, .age50s]
+    let description = """
+This is a bare-bones [implementation](https://www.reddit.com/r/Fitness/wiki/phraks-gslp) of the [Greyskull linear progression program](https://strengthvillain.myshopify.com/collections/ebooks/products/greyskull-lp-third-edition). It's a three day a week program and the days look like this:
+
+**OHP1**
+* Chinups 3x5-30
+* Overhead Press 3x5+
+* Squats 3x5+
+
+**Dead1**
+* Barbell Rows 3x5+
+* Bench Press 3x5+
+* Deadlift 1x5+
+
+**OHP2**
+* Chinups 3x5-30
+* Overhead Press 3x5+
+* Squats 3x5+
+
+**Bench1**
+* Barbell Rows 3x5+
+* Bench Press 3x5+
+* Squats 3x5+
+
+**Dead2**
+* Chinups 3x5-30
+* Overhead Press 3x5+
+* Deadlift 1x5+
+
+**Bench2**
+* Barbell Rows 3x5+
+* Bench Press 3x5+
+* Squats 3x5+
+
+**Notes**
+* Focus on activating the glutes with each exercise.
+* If you're able to do more than ten reps in an AMRAP set then you can optionally select Advance x2 when finishing the exercise.
+* If you can't do five reps for each set of an exercise then select deload from the menu when finishing and the app will reduce the weight for that exercise by ten percent.
+* If you cannot do chinups then do negative chinups.
+* If you're able to do thirty chinups then add weight and drop the reps.
+"""
+    return Program("Booty-ful Beginnings/4 1-4", workouts, exercises, tags, description)
+}
+
+

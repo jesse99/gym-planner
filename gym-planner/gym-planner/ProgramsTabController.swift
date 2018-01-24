@@ -109,7 +109,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @IBAction func apparatusPressed(_ sender: Any) {
-        let alert = createAlert("Any Apparatus", [.barbell, .dumbbell])
+        let alert = createAlert("Any Apparatus", [.gym, .barbell, .dumbbell, .minimal])
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -167,8 +167,10 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
             case .strength:     typeText = tagToString(tag)
             case .hypertrophy:  typeText = tagToString(tag)
             case .conditioning: typeText = tagToString(tag)
+            case .gym:          apparatusText = tagToString(tag)
             case .barbell:      apparatusText = tagToString(tag)
             case .dumbbell:     apparatusText = tagToString(tag)
+            case .minimal:      apparatusText = tagToString(tag)
             case .threeDays:    daysText = tagToString(tag)
             case .fourDays:     daysText = tagToString(tag)
             case .unisex:       sexText = tagToString(tag)
@@ -199,8 +201,10 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
         case .strength:     return "Strength"
         case .hypertrophy:  return "Hypertrophy"
         case .conditioning: return "Conditioning"
+        case .gym:          return "Gym"
         case .barbell:      return "Barbell"
         case .dumbbell:     return "Dumbbell"
+        case .minimal:      return "Minimal"
         case .threeDays:    return "3 Days/Week"
         case .fourDays:     return "4 Days/Week"
         case .unisex:       return "Unisex"
@@ -219,8 +223,10 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
         case "Strength":        return .strength
         case "Hypertrophy":     return .hypertrophy
         case "Conditioning":    return .conditioning
+        case "Gym":             return .gym
         case "Barbell":         return .barbell
         case "Dumbbell":        return .dumbbell
+        case "Minimal":         return .minimal
         case "3 Days/Week":     return .threeDays
         case "4 Days/Week":     return .fourDays
         case "Unisex":          return .unisex
