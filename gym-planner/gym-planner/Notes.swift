@@ -193,6 +193,13 @@ let builtInNotes: [String: String] = [
             "Bring dumbbells to your sides while keeping torso stationary."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/bent-over-two-dumbbell-row"]),
     
+    "Bird-dog": createNote(
+        notes: [
+            "Kneel with your hands and feet shoulder width apart.",
+            "Slowly lean forward and place your hands on the mat below your shoulders.",
+            "Brace your core and simultaneously raise one arm and the opposite leg until they extend straight outwards."],
+        links: ["Link": "https://www.acefitness.org/education-and-resources/lifestyle/exercise-library/14/bird-dog"]),
+    
     "Body Saw": createNote(
         notes: [
             "Crouch down in front plank position with your feet resting on something that will allow them to move easily.",
@@ -753,6 +760,15 @@ let builtInNotes: [String: String] = [
             "Difficulty can be increased by placing the foam roller on a bench so that your arms can be lowered further."],
         links: ["Link": "http://breakingmuscle.com/mobility-recovery/why-does-the-front-of-my-shoulder-hurt"]),
     
+    "Foot Elevated Hamstring Stretch": createNote(
+        notes: [
+            "Stand facing an elevated surface.",
+            "Place one foot onto the surface keeping your knee straight.",
+            "The foot on the ground should be pointed sraight ahead.",
+            "The toes of the elevated foot should be pointed straight upwards (or backwards to also stretch the calf).",
+            "Gently lean forward until you feel your hamstrings stretch."],
+        links: ["Link": "http://www.floota.com/HamstringStretch.html"]),
+    
     "Foot Supported L-sit": createNote(
         notes: [
             "Sit with your legs stretched out before you on the floor.",
@@ -761,6 +777,15 @@ let builtInNotes: [String: String] = [
             "Keep arms and legs straight.",
             "Don't shrug your shoulders up."],
         links: ["Link": "https://www.youtube.com/watch?v=IUZJoSP66HI#t=40s", "L-sits": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/l-sit"]),
+    
+    "Forward Lunge Stretch": createNote(
+        notes: [
+            "Kneel down with one leg forward and the other stretched behind you so that your weight is supported by your forward foot and back knee.",
+            "Forward foot should be directly under your knee.",
+            "Back leg should be stretched out straight behind you.",
+            "If you're having balance problems you may rest your hands on the ground.",
+            "Gently lower your hips down and forward."],
+        links: ["Link": "http://www.topendsports.com/medicine/stretches/lunge-forward.htm", "Video": "https://www.doyogawithme.com/content/lunge-psoas-stretch"]),
     
     "Freestanding Handstand": createNote(
         notes: [
@@ -1212,6 +1237,13 @@ let builtInNotes: [String: String] = [
             "As the kettlebell reaches your shoulders punch upwards and lock it out overhead."],
         links: ["Link": "https://www.bodybuilding.com/exercises/one-arm-kettlebell-snatch", "technique": "https://www.girlsgonestrong.com/blog/strength-training/how-to-do-a-kettlebell-snatch/"]),
     
+    "One-Handed Hang": createNote(
+        notes: [
+            "With your palm facing away from you grab a chinup bar.",
+            "Keep your feet on the ground or on a support so that you're not supporting quite all of your weight.",
+            "Hold that position."],
+        links: ["Link": "https://www.bodybuilding.com/exercises/one-handed-hang"]),
+    
     "One-Legged Cable Kickback": createNote(
         notes: [
             "Hook a cuff to a low cable pulley.",
@@ -1399,12 +1431,28 @@ let builtInNotes: [String: String] = [
             "Difficulty can be increased by placing feet on a bench."],
         links: ["Link": "http://www.exrx.net/WeightExercises/PectoralSternal/BWPushup.html", "Antranik": "https://www.youtube.com/watch?v=4dF1DOWzf20&feature=youtu.be", "Pushups": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/pushup", "Inclined": "http://www.bodybuilding.com/exercises/detail/view/name/incline-push-up"]),
     
+    "Pushup Plus": createNote(
+        notes: [
+            "Get into the upper portion of a pushup.",
+            "While keeping your arms straight depress your chest and allow your shoulder blades to come together.",
+            "Then raise your chest upwards moving your shoulder blades apart."],
+        links: ["Video": "http://www.cornell.edu/video/push-up-plus"]),
+    
     "Quadruped Double Traverse Abduction": createNote(
         notes: [
             "Crouch down on all fours.",
             "Tilt your hips to one side.",
             "Raise your opposite leg into the air as high as you can."],
         links: ["Video": "https://www.youtube.com/watch?v=1HrzisfjpBw"]),
+    
+    "Quadruped Thoracic Extension": createNote(
+        notes: [
+            "Crouch down on all fours.",
+            "Place one hand behind your head.",
+            "Rotate that arm inwards so that the elbow is pointed to the oppsite knee",
+            "Pause and then rotate the arm up as far as possible.",
+            "Keep your lower back straight."],
+        links: ["Link": "https://www.exercise.com/exercises/quadruped-extension-and-rotation"]),
     
     "Rack Chinup": createNote(
         notes: [
@@ -1550,6 +1598,14 @@ let builtInNotes: [String: String] = [
             "Swing the rope up and around.",
             "As it hits the floor jump over it."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/rope-jumping"]),
+    
+    "Rotational Lunge": createNote(
+        notes: [
+            "Stand up with one foot behind you and the other forward.",
+            "Angle your back foot so that it is pointing to the side.",
+            "Clasp your hands together, stretch them out forward, and crouch onto your back leg.",
+            "It's OK if your front toes come off the ground."],
+        links: ["Video": "https://www.youtube.com/watch?v=iH8erCfR7lQ"]),
     
     "Rowing Machine": createNote(
         notes: [
@@ -1822,6 +1878,14 @@ let builtInNotes: [String: String] = [
             "Jump into the air as high as possible."],
         links: ["Link": "https://www.youtube.com/watch?v=CVaEhXotL7M"]),
     
+    "Squat to Stand": createNote(
+        notes: [
+            "Stand with feet shoulder width apart.",
+            "Keeping legs as straight as possible, bend over and grab your toes.",
+            "Lower your hips into a squat while pushing shoulders and chest up.",
+            "Raise your hips back to the starting position keeping your hands on your toes."],
+        links: ["Link": "https://www.exercise.com/exercises/sumo-squat-to-stand"]),
+    
     "Standing Calf Raises": createNote(
         notes: [
             "Keep knees slightly bent at all times.",
@@ -1852,6 +1916,22 @@ let builtInNotes: [String: String] = [
             "Drive elbow back as far as possible.",
             "Keep torso upright and don't twist."],
         links: ["Link": "http://www.trainbetterfitness.com/standing-1-arm-cable-row/"]),
+    
+    "Standing Quad Stretch": createNote(
+        notes: [
+            "Stand next to a wall or some other support.",
+            "Place one hand on the support.",
+            "With the other hand grab your ankle and pull your foot back to your butt."],
+        links: ["Link": "http://www.exrx.net/Stretches/Quadriceps/Standing.html"]),
+    
+    "Standing Wide Leg Straddle": createNote(
+        notes: [
+            "Stand with your legs spread wide apart and feet pointer straight out.",
+            "Straighten your legs.",
+            "Place your fingertips (or palms) on the ground below your shoulders.",
+            "You may also grab your big toes.",
+            "Keep your eyes forward and your back concave."],
+        links: ["Link": "http://yahwehyoga.com/pose-descriptions/cool-down/standing-wide-leg-straddle/"]),
     
     "Static Hold": createNote(
         notes: [
@@ -1896,6 +1976,14 @@ let builtInNotes: [String: String] = [
             "At the midpoint push hips into the bar."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/sumo-deadlift", "7-Steps": "https://www.elitefts.com/education/7-step-guide-to-learning-the-sumo-deadlift/", "Mastering": "https://www.t-nation.com/training/6-tips-to-master-the-sumo-deadlift"]),
     
+    "Swiss Ball Hip Internal Rotation": createNote(
+        notes: [
+            "Lie on your back on a swiss ball.",
+            "Cross your hands over your chest.",
+            "Raise your hips up slightly and slowly rock forward and backward.",
+            "As you're rocking bring your knees inward a bit."],
+        links: ["Video": "https://www.youtube.com/watch?v=aVRidEHlbMA"]),
+    
     "Third World Squat": createNote(
         notes: [
             "Look straight ahead and hold hands straight out.",
@@ -1905,6 +1993,14 @@ let builtInNotes: [String: String] = [
             "Difficulty can be lessened by using a wider stance and by angling feet outward more.",
             "Work towards holding the squat for one minute for multiple reps."],
         links: ["Link": "http://thirdworldsquats.com/", "Video": "https://vimeo.com/116283733"]),
+    
+    "Tiger Tail Roller": createNote(
+        notes: [
+            "Apply about ten pounds of force.",
+            "Try to relax your muscles.",
+            "Discomfort is OK, major pain is not.",
+            "Spend 10-20 seconds on each muscle group."],
+        links: ["Link": "https://www.tigertailusa.com/pages/how-to-roll"]),
     
     "Trap Bar Deadlift": createNote(
         notes: [
@@ -2003,6 +2099,20 @@ let builtInNotes: [String: String] = [
             "Arms should be straight at the bottom.",
             "Don't let your shoulders shrug up."],
         links: ["Link": "https://www.youtube.com/watch?v=e5fdh9_kH_Y", "Body Weight Rows": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/row"]),
+    
+    "Walking Knee Hugs": createNote(
+        notes: [
+            "Stand up straight with your arms ar your sides.",
+            "Bring one knee up, grab it with both hands, and gently pull it higher and in."],
+        links: ["Link": "https://www.msn.com/en-us/health/exercise/strength/walking-knee-hugs/ss-BBtOl5z"]),
+    
+    "Wall Ankle Mobility": createNote(
+        notes: [
+            "Place one foot 3-4 inches away from a wall.",
+            "Place the other foot well behind you.",
+            "While keeping your front heel on the floor, drive your knees forward.",
+            "Your rear heel should be off the floor."],
+        links: ["Video": "https://www.youtube.com/watch?v=eGjJkurZlGw"]),
     
     "Wall Extensions": createNote(
         notes: [
