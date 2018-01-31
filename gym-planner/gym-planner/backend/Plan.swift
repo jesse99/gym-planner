@@ -134,6 +134,7 @@ public protocol Plan: Storable {
     /// Explanation of how sets/reps, progression, and deloads work.
     func description() -> String
 
+    /// Last result is the newest one.
     func getHistory() -> [BaseResult]
     func deleteHistory(_ index: Int)
     
