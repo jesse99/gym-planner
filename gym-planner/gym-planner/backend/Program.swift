@@ -62,13 +62,19 @@ public class Program: Storable {
         case age50s
     }
     
-    init(_ name: String, _ workouts: [Workout], _ exercises: [Exercise], _ tags: [Tags], _ description: String) {
+    init(_ name: String, _ workouts: [Workout], _ exercises: [Exercise], _ tags: [Tags], _ description: String, maxWorkouts: Int?, nextProgram: String?) {
         self.name = name
         self.workouts = workouts
         self.exercises = exercises
         self.tags = Set(tags)
         self.description = description
         self.customNotes = [:]
+        self.maxWorkouts = maxWorkouts
+        self.nextProgram = nextProgram
+    }
+
+    convenience init(_ name: String, _ workouts: [Workout], _ exercises: [Exercise], _ tags: [Tags], _ description: String) {
+        self.init(name, workouts, exercises, tags, description, maxWorkouts: nil, nextProgram: nil)
     }
 
     public required init(from store: Store) {
@@ -180,6 +186,9 @@ public class Program: Storable {
     public var tags: Set<Tags>
     public var description: String
     public var customNotes: [String: String]    // formal name => markdown
+    
+    public var maxWorkouts: Int?    // number of workouts that the user is expected to perform before switching to a new program
+    public var nextProgram: String? // if the program has a well defined successor than it should be listed here
 }
 
 extension Program.Tags: Storable {

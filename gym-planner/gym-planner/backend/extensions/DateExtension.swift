@@ -85,6 +85,12 @@ extension Date {
         }
     }
     
+    func startOfDay() -> Date {
+        let calendar = Calendar.current
+        let result = calendar.startOfDay(for: self)
+        return result
+    }
+    
     /// Returns a human readable string for number of days.
     func daysName() -> String {
         let calendar = Calendar.current

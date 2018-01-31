@@ -320,6 +320,18 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
     // Returns a string like: "You’ve been running the Ripptoe Masters program for 3 months, and have
     // worked out 84 days."
     static internal func getWorkoutSummary() -> String {
+        let app = UIApplication.shared.delegate as! AppDelegate
+
+        func numWorkouts() -> Int {
+            var dates: Set<Date> = []
+            for exercise in app.program.exercises {
+                for result in exercise.plan.getHistory() {
+                    dates.insert(result.date.startOfDay())    // TODO: don't want the date if it's been more than a month(?) since the prior date
+                }
+            }
+            return dates.count
+        }
+        
         // TODO: return an attributed string (program name in italics)
         // TODO: or underline?
 //        if results.numWorkouts > 0 {
@@ -329,7 +341,16 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
 //        } else {
 //            return "You are running the \(results.program.name) program."
 //        }
-        return ""
+        let count = numWorkouts()
+        var mesg = "You've done \(count) \(app.program.name) " + (count == 1 ? "workout." : "workouts.")
+        if let max = app.program.maxWorkouts, count >= max {
+            if let next = app.program.nextProgram {
+                mesg += " Consider switching to \(next)."
+            } else {
+                mesg += " You've done all the workouts the program calls for."
+            }
+        }
+        return mesg
     }
     
     @IBOutlet private var tableView: UITableView!

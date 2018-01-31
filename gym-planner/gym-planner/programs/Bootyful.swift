@@ -170,7 +170,7 @@ This is the 4 days/week version of weeks 1-4 of the beginner program from [Stron
 * To speed up the workouts you can superset the exercises: do a set of a lower body exercise, a set of an upper body, rest for 60-120s, and repeat until you've finished all the sets for both exercises.
 * Once you've done all the indicated workouts the app will prompt you to move onto the next program.
 """
-    return Program("Booty-ful Beginnings/4 1-4", workouts, exercises, tags, description)
+    return Program("Booty-ful Beginnings/4 1-4", workouts, exercises, tags, description, maxWorkouts: 4*4, nextProgram: "Booty-ful Beginnings/4 5-8")
 }
 
 // TODO: add the 3d/week version, would be nice not to duplicate much
