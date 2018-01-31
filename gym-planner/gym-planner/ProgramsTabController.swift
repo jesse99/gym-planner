@@ -247,7 +247,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet private var tableView: UITableView!
     
-    private var tags: Set<Program.Tags> = [.beginner, .strength, .unisex, .ageUnder40, .barbell, .threeDays]
+    private var tags: Set<Program.Tags> = [.beginner, .unisex, .ageUnder40]
     private var programs: [Program] = []
 }
 
