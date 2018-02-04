@@ -323,10 +323,15 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         let app = UIApplication.shared.delegate as! AppDelegate
 
         func numWorkouts() -> Int {
+            let scheduledWorkouts = app.program.workouts.filter {$0.scheduled}
+            let scheduledExercises = Set(scheduledWorkouts.flatMap {$0.exercises})
+            
             var dates: Set<Date> = []
             for exercise in app.program.exercises {
-                for result in exercise.plan.getHistory() {
-                    dates.insert(result.date.startOfDay())    // TODO: don't want the date if it's been more than a month(?) since the prior date
+                if scheduledExercises.contains(exercise.name) {
+                    for result in exercise.plan.getHistory() {
+                        dates.insert(result.date.startOfDay())    // TODO: don't want the date if it's been more than a month(?) since the prior date
+                    }
                 }
             }
             return dates.count
