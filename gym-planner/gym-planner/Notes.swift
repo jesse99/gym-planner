@@ -328,7 +328,7 @@ let builtInNotes: [String: String] = [
         notes: [
             "Kneel below a high pulley with a rope attachment.",
             "Lower the rope until your hands are next to your face.",
-            "Allow the weight to hyper=extend your back.",
+            "Allow the weight to hyper-extend your back.",
             "Flex abs and lower your torso.",
             "Elbows should be lowered to mind-thighs."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/cable-crunch"]),
