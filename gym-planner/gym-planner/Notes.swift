@@ -81,6 +81,7 @@ let builtInNotes: [String: String] = [
             "Keep knees slightly bent, angle feet out.",
             "Bend forward as far as possible while keeping back straight.",
             "Raise upwards again keeping back straight.",
+            "Stop once your body forms a straight line.",
             "Difficulty can be increased by clasping your hands behind your head (prisoner position), by bracing yourself with one leg, or by holding a weight to your chest."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/hyperextensions-back-extensions", "Video": "https://bretcontreras.com/back-extensions/"]),
     
@@ -1509,6 +1510,13 @@ let builtInNotes: [String: String] = [
             "Pinch shoulder blades together.",
             "Bring the hips up."],
         links: ["Link": "https://www.youtube.com/watch?v=44ScXWFaVBs&feature=youtu.be&t=3m34s"]),
+    
+    "Reverse Wrist Curl": createNote(
+        notes: [
+            "Using a light dumbbell sit on a bench with your elbow on your leg so that your arm is bent at ninety degrees.",
+            "With your palm facing the floor slowly lower and raise the weight.",
+            "For Tennis Elbow (pain outside the elbow) it's recommended to repeat this with the arm held straight out."],
+        links: ["Link": "http://www.exrx.net/WeightExercises/WristExtensors/DBReverseWristCurl.html", "Tennis Elbow": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2515258/table/t1-0541115/"]),
     
     "Ring Dips": createNote(
         notes: [

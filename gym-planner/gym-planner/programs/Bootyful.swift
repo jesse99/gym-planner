@@ -12,6 +12,14 @@ fileprivate func planTimed(_ numSets: Int, targetTime: Int? = nil) -> Plan {
     return TimedPlan("\(numSets) timed sets", numSets: numSets, targetTime: targetTime)
 }
 
+fileprivate func planWeighted3to10() -> Plan {
+    let numSets = 3
+    let minReps = 3
+    let maxReps = 10
+    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+}
+
 fileprivate func planWeighted8to12() -> Plan {
     let numSets = 3
     let minReps = 8
@@ -32,6 +40,22 @@ fileprivate func planWeighted10to20() -> Plan {
     let numSets = 3
     let minReps = 10
     let maxReps = 20
+    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+}
+
+fileprivate func planWeighted10to15() -> Plan {
+    let numSets = 3
+    let minReps = 10
+    let maxReps = 15
+    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+}
+
+fileprivate func planWeighted15to30() -> Plan {
+    let numSets = 3
+    let minReps = 14
+    let maxReps = 30
     let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
     return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
 }
@@ -84,7 +108,7 @@ fileprivate let booty14Exercises = [
     createMachine("Lat Pulldown",    "Lat Pulldown",             planWeighted8to12(), restMins: 1.0),
     createVarReps("Step-up",         "Step-ups",                 planVarying(3, 10, 20), restMins: 0.5, requestedReps: 10),
     createDumbbell2("Dumbbell OHP",  "Dumbbell Shoulder Press",  planWeighted8to12(), restMins: 1.0),
-    createVarReps("Back Extension",  "Step-ups",                 planVarying(3, 10, 20), restMins: 0.5, requestedReps: 10),
+    createVarReps("Back Extension",  "Back Extension",           planVarying(3, 10, 20), restMins: 0.5, requestedReps: 10),
     createVarReps("Side Lying Clam", "Clam",                     planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
     createVarReps("Crunch",          "Situp",                    planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
     createVarReps("Side Crunch",     "Oblique Crunches",         planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
@@ -110,7 +134,7 @@ fileprivate let booty58Exercises = [
     createVarReps("Side Lying Abduction",    "Side Lying Abduction",                 planVarying(3, 10, 20), restMins: 0.5, requestedReps: 10),
     createTimed("Decline Plank",             "Decline Plank",                        planTimed(1, targetTime: 60), duration: 20),
     createTimed("Side Plank",                "Side Plank",                           planTimed(2, targetTime: 60), duration: 20),
-
+    
     // B
     createVarReps("Glute Bridge",           "Glute Bridge",              planVarying(3, 10, 20), restMins: 0.5, requestedReps: 10),
     createVarReps("Negative Chinup",        "Chinup",                    planVarying(3, 3, 3), restMins: 1.0, requestedReps: 3),
@@ -120,7 +144,7 @@ fileprivate let booty58Exercises = [
     createVarReps("Clam",                   "Clam",                      planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
     createVarReps("Swiss Ball Crunch",      "Exercise Ball Crunch",      planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
     createVarReps("Swiss Ball Side Crunch", "Exercise Ball Side Crunch", planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
-
+    
     // C
     createVarReps("Hip Thrust (paused)",    "Body-weight Hip Thrust",   planVarying(3, 10, 20), restMins: 0.5, requestedReps: 10),
     createVarReps("Inverted Row",           "Inverted Row",             planVarying(3, 8, 12), restMins: 0.5, requestedReps: 8),
@@ -130,6 +154,38 @@ fileprivate let booty58Exercises = [
     createVarReps("X-Band Walk",            "X-Band Walk",              planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
     createVarReps("Straight Leg Situp",     "Straight Leg Situp",       planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
     createTimed("Anti-Rotary Hold",         "Band Anti-Rotary Hold",    planTimed(2, targetTime: 20), duration: 10),
+    ] + bootyWarmups
+
+fileprivate let booty912Exercises = [
+    // A
+    createBarBell("Hip Thrust",           "Hip Thrust",             planWeighted10to20(), restMins: 1.0),
+    createDumbbell2("Dumbbell Row",       "Bent Over Dumbbell Row", planWeighted8to12(), restMins: 1.0),
+    createBarBell("Box Squat",            "Box Squat",              planWeighted10to20(), restMins: 2.0),
+    createVarReps("Pushup",               "Pushup",                 planVarying(3, 3, 10), restMins: 0.5, requestedReps: 3),
+    createBarBell("Deadlift",             "Deadlift",               planWeighted10to20(), restMins: 2.0),
+    createVarReps("Side Lying Abduction", "Side Lying Abduction",   planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
+    createVarReps("Dumbbell Ball Crunch", "Exercise Ball Crunch",   planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
+    createMachine("Anti-Rotation Press",  "Half-kneeling Cable Anti-Rotation Press", planWeighted10to15(), restMins: 0.5),
+
+    // B
+    createVarReps("Single Leg Hip Thrust", "Body-weight Single Leg Hip Thrust", planVarying(3, 20, 20), restMins: 1.0, requestedReps: 10),
+    createVarReps("Chinup",                "Chinup",                            planVarying(3, 1, 5), restMins: 1.0, requestedReps: 1),
+    createVarReps("Bulgarian Split Squat", "Body-weight Bulgarian Split Squat", planVarying(3, 10, 20), restMins: 1.0, requestedReps: 10),
+    createDumbbell2("One Arm OHP",         "Dumbbell One Arm Shoulder Press",   planWeighted8to12(), restMins: 1.0),
+    createBarBell("Good Morning",          "Good Morning",                      planWeighted10to20(), restMins: 1.0),
+    createVarReps("X-Band Walk",           "X-Band Walk",                       planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
+    createTimed("Decline Plank",           "Decline Plank",                     planTimed(1, targetTime: 120), duration: 60),
+    createDumbbell2("Side Bend",           "Dumbbell Side Bend",                planWeighted15to30(), restMins: 1.0),
+
+    // C
+    createBarBell("Hip Thrust (paused)",   "Hip Thrust",             planWeighted8to12(), restMins: 1.0),
+    createDumbbell2("Incline Row",         "Dumbbell Incline Row",   planWeighted8to12(), restMins: 1.0),
+    createBarBell("Squat",                 "Low bar Squat",          planWeighted10to20(), restMins: 2.0),
+    createBarBell("Incline Bench Press",   "Incline Bench Press",    planWeighted3to10(), restMins: 2.0),
+    createVarReps("Back Extension",        "Back Extension",         planVarying(3, 10, 30), restMins: 0.5, requestedReps: 10),
+    createVarReps("Clam",                  "Clam",                   planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
+    createVarReps("Hanging Leg Raise",     "Hanging Leg Raise",      planVarying(1, 10, 20), restMins: 0.5, requestedReps: 10),
+    createMachine("Rope Horizontal Chop",  "Rope Horizontal Chop",   planWeighted10to15(), restMins: 0.5),
 ] + bootyWarmups
 
 fileprivate let booty14AExercises = ["Glute Bridge", "One Arm Row", "Box Squat", "Dumbbell Bench Press", "Dumbbell Romanian Deadlift", "Side Lying Abduction", "Front Plank", "Front Plank", "Side Plank from Knees"]
@@ -139,6 +195,10 @@ fileprivate let booty14CExercises = ["Glute March", "Seated Row", "Box Squat", "
 fileprivate let booty58AExercises = ["Hip Thrust", "One Arm Cable Row", "Step Up + Reverse Lunge", "Bench Press", "Romanian Deadlift", "Side Lying Abduction", "Decline Plank", "Side Plank"]
 fileprivate let booty58BExercises = ["Glute Bridge", "Negative Chinup", "Walking Lunge", "Dumbbell OHP", "Reverse Hyperextension", "Clam", "Swiss Ball Crunch", "Swiss Ball Side Crunch"]
 fileprivate let booty58CExercises = ["Hip Thrust (paused)", "Inverted Row", "Goblet Squat", "Close-Grip Bench Press", "Kettlebell Swing", "X-Band Walk", "Straight Leg Situp", "Anti-Rotary Hold"]
+
+fileprivate let booty912AExercises = ["Hip Thrust", "Dumbbell Row", "Box Squat", "Pushup", "Deadlift", "Side Lying Abduction", "Dumbbell Ball Crunch", "Anti-Rotation Press"]
+fileprivate let booty912BExercises = ["Single Leg Hip Thrust", "Chinup", "Bulgarian Split Squat", "One Arm OHP", "Good Morning", "X-Band Walk", "Decline Plank", "Side Bend"]
+fileprivate let booty912CExercises = ["Hip Thrust (paused)", "Incline Row", "Squat", "Incline Bench Press", "Back Extension", "Clam", "Hanging Leg Raise", "Rope Horizontal Chop"]
 
 fileprivate let bootyACWarmup = ["Foam Rolling", "Hamstring Stretch", "Psoas Stretch", "Adductors", "Side Lying Abduction", "Bird-dog", "Front Plank", "LYTP", "Walking Lunge", "Wall Ankle Mobility", "Quadruped Thoracic Extension", "Rotational Lunge"]
 fileprivate let bootyBWarmup = ["Tiger Tail Roller", "SMR Glutes with Ball", "Standing Quad Stretch", "Seated Piriformis Stretch", "One-Handed Hang", "Pec Stretch", "Clam", "Side Plank", "Pushup Plus", "Wall Extensions", "Walking Knee Hugs", "Squat to Stand", "Swiss Ball Internal Rotation"]
@@ -209,18 +269,40 @@ Straight-leg Situp 1x15-30
 Band Rotary Hold 1x10-20s (set per side)
 """
 
-fileprivate let booty14Notes = """
-* Bret recommends spending 10-15 minutes warming up before each workout.
-* When foam rolling Bret recommends hitting the erectors, quads, IT Band, hip flexors, hamsttrings, adductors, glutes, calves, and lats.
-* For the Stick/Tiger Tail roller warmup hit the IT-band, quads, calves, and shins.
-* Focus on activating the glutes with each exercise.
-* When performing a single leg/arm exercise begin with the weaker limb and then do the same number of reps with the stronger limb.
-* If you're having an off day don't continue a set if your form begins to break down.
-* To speed up the workouts you can superset the exercises: do a set of a lower body exercise, a set of an upper body, rest for 60-120s, and repeat until you've finished all the sets for both exercises.
-* Once you've done all the indicated workouts the app will prompt you to move onto the next program.
+fileprivate let booty912ADesc = """
+Barbell Hip Thrust 3x10-20
+Dumbbell Bent Over Row 3x8-12
+Barbell Box Squat 3x10-20
+Push-up 3x-3-10
+Barbell Deadlift 3x10-20
+Side Lying Abduction 1x15-30 (set pet side)
+Dumbbell Swiss Ball Crunch 1x-15-30 (set pet side)
+Half-kneeling Cable Anti-Rotation Press 1x10-15 (set per side)
 """
 
-fileprivate let booty58Notes = """
+fileprivate let booty912BDesc = """
+Bodyweight Single-leg Hip Thrust (shoulders elevated) 3x10-20 (set per side)
+Chin-up (or assisted) 3x1-5
+Bodyweight Bulgarian Split Squat 3x10-20
+Single-arm Dumbbell OHP 3x8-12
+Barbell Good Morning 3x10-20
+X-band Walk (moderate) 1x15-30 (set per side)
+Feet Elevated Plank 1x60-120s
+Dumbbell Side Bend 1x15-30 (set per side)
+"""
+
+fileprivate let booty912CDesc = """
+Barbell Hip Thrust (paused) 3x8-12
+Dumbbell Chest Supported Row 3x8-10
+Barbell Squat 3x10-20
+Incline Press 3x3-10
+Bodyweight Back Extension 3x10-30
+Side Lying Clam 1x15-30 (set pet side)
+Hanging Leg Raise 1x10-20
+Rope Horizontal Chop 1x10-15 (set per side)
+"""
+
+fileprivate let bootyNotes = """
 * Bret recommends spending 10-15 minutes warming up before each workout.
 * When foam rolling Bret recommends hitting the erectors, quads, IT Band, hip flexors, hamsttrings, adductors, glutes, calves, and lats.
 * For the Stick/Tiger Tail roller warmup hit the IT-band, quads, calves, and shins.
@@ -265,11 +347,10 @@ func Bootyful4a() -> Program {
     **Rest**
     
     **Notes**
-    \(booty14Notes)
+    \(bootyNotes)
     """
     return Program("Booty-ful Beginnings/4 1-4", workouts, booty14Exercises, tags, description, maxWorkouts: 4*4, nextProgram: "Booty-ful Beginnings/4 5-8")
 }
-
 
 // Weeks 5-8 for 4 days/week version of Booty-ful Beginnings.
 func Bootyful4b() -> Program {
@@ -278,6 +359,45 @@ func Bootyful4b() -> Program {
         Workout("B",  booty58BExercises, scheduled: true, optional: []),
         Workout("A2", booty58AExercises, scheduled: true, optional: []),
         Workout("C",  booty58CExercises, scheduled: true, optional: []),
+        
+        Workout("AC warmup", bootyACWarmup, scheduled: false, optional: []),
+        Workout("B warmup", bootyBWarmup, scheduled: false, optional: []),
+        ]
+    
+    let tags: [Program.Tags] = [.beginner, .strength, .gym, .fourDays, .female, .ageUnder40, .age40s, .age50s]
+    let description = """
+    This is the 4 days/week version of weeks 5-8 of the beginner program from [Strong Curves: A Woman's Guide to Building a Better Butt and Body](https://www.amazon.com/Strong-Curves-Womans-Building-Better-ebook/dp/B00C4XI0QM/ref=sr_1_1?ie=UTF8&qid=1516764374&sr=8-1&keywords=strong+curves). The program is as follows (Bret recommends warmups, and they are part of the program, but there are a lot so they aren't listed here):
+    
+    **Workout A**
+    \(booty58ADesc)
+    
+    **Workout B**
+    \(booty58BDesc)
+    
+    **Cardio**
+    
+    **Workout A (again)**
+    
+    **Workout C**
+    \(booty58CDesc)
+    
+    **Cardio**
+    
+    **Rest**
+    
+    **Notes**
+    \(bootyNotes)
+    """
+    return Program("Booty-ful Beginnings/4 5-8", workouts, booty58Exercises, tags, description, maxWorkouts: 4*4, nextProgram: "Booty-ful Beginnings/4 9-12")
+}
+
+// Weeks 9-12 for 4 days/week version of Booty-ful Beginnings.
+func Bootyful4c() -> Program {
+    let workouts = [
+        Workout("A1", booty912AExercises, scheduled: true, optional: []),
+        Workout("B",  booty912BExercises, scheduled: true, optional: []),
+        Workout("A2", booty912AExercises, scheduled: true, optional: []),
+        Workout("C",  booty912CExercises, scheduled: true, optional: []),
 
         Workout("AC warmup", bootyACWarmup, scheduled: false, optional: []),
         Workout("B warmup", bootyBWarmup, scheduled: false, optional: []),
@@ -285,29 +405,29 @@ func Bootyful4b() -> Program {
     
     let tags: [Program.Tags] = [.beginner, .strength, .gym, .fourDays, .female, .ageUnder40, .age40s, .age50s]
     let description = """
-This is the 4 days/week version of weeks 5-8 of the beginner program from [Strong Curves: A Woman's Guide to Building a Better Butt and Body](https://www.amazon.com/Strong-Curves-Womans-Building-Better-ebook/dp/B00C4XI0QM/ref=sr_1_1?ie=UTF8&qid=1516764374&sr=8-1&keywords=strong+curves). The program is as follows (Bret recommends warmups, and they are part of the program, but there are a lot so they aren't listed here):
+This is the 4 days/week version of weeks 9-12 of the beginner program from [Strong Curves: A Woman's Guide to Building a Better Butt and Body](https://www.amazon.com/Strong-Curves-Womans-Building-Better-ebook/dp/B00C4XI0QM/ref=sr_1_1?ie=UTF8&qid=1516764374&sr=8-1&keywords=strong+curves). The program is as follows (Bret recommends warmups, and they are part of the program, but there are a lot so they aren't listed here):
 
 **Workout A**
-\(booty58ADesc)
+\(booty912ADesc)
 
 **Workout B**
-\(booty58BDesc)
+\(booty912BDesc)
 
 **Cardio**
 
 **Workout A (again)**
 
 **Workout C**
-\(booty58CDesc)
+\(booty912CDesc)
 
 **Cardio**
 
 **Rest**
 
 **Notes**
-\(booty58Notes)
+\(bootyNotes)
 """
-    return Program("Booty-ful Beginnings/4 5-8", workouts, booty58Exercises, tags, description, maxWorkouts: 4*4, nextProgram: "Booty-ful Beginnings/4 9-12")
+    return Program("Booty-ful Beginnings/4 9-12", workouts, booty912Exercises, tags, description, maxWorkouts: 4*4, nextProgram: "Gluteal Goddess/4 1-4")
 }
 
 // Weeks 1-4 for 3 days/week version of Booty-ful Beginnings.
@@ -343,7 +463,7 @@ func Bootyful3a() -> Program {
     **Rest**
     
     **Notes**
-    \(booty14Notes)
+    \(bootyNotes)
     """
     return Program("Booty-ful Beginnings/3 1-4", workouts, booty14Exercises, tags, description, maxWorkouts: 3*4, nextProgram: "Booty-ful Beginnings/3 5-8")
 }
@@ -381,8 +501,46 @@ func Bootyful3b() -> Program {
     **Rest**
     
     **Notes**
-    \(booty58Notes)
+    \(bootyNotes)
     """
     return Program("Booty-ful Beginnings/3 5-8", workouts, booty58Exercises, tags, description, maxWorkouts: 3*4, nextProgram: "Booty-ful Beginnings/3 9-12")
+}
+
+// Weeks 9-12 for 3 days/week version of Booty-ful Beginnings.
+func Bootyful3c() -> Program {
+    let workouts = [
+        Workout("A", booty912AExercises, scheduled: true, optional: []),
+        Workout("B", booty912BExercises, scheduled: true, optional: []),
+        Workout("C", booty912CExercises, scheduled: true, optional: []),
+        
+        Workout("AC warmup", bootyACWarmup, scheduled: false, optional: []),
+        Workout("B warmup", bootyBWarmup, scheduled: false, optional: []),
+        ]
+    
+    let tags: [Program.Tags] = [.beginner, .strength, .gym, .threeDays, .female, .ageUnder40, .age40s, .age50s]
+    let description = """
+    This is the 3 days/week version of weeks 9-12 of the beginner program from [Strong Curves: A Woman's Guide to Building a Better Butt and Body](https://www.amazon.com/Strong-Curves-Womans-Building-Better-ebook/dp/B00C4XI0QM/ref=sr_1_1?ie=UTF8&qid=1516764374&sr=8-1&keywords=strong+curves). The program is as follows (Bret recommends warmups, and they are part of the program, but there are a lot so they aren't listed here):
+    
+    **Workout A**
+    \(booty912ADesc)
+    
+    **Cardio**
+    
+    **Workout B**
+    \(booty912BDesc)
+    
+    **Cardio**
+    
+    **Workout C**
+    \(booty912CDesc)
+    
+    **Cardio**
+    
+    **Rest**
+    
+    **Notes**
+    \(bootyNotes)
+    """
+    return Program("Booty-ful Beginnings/3 9-12", workouts, booty912Exercises, tags, description, maxWorkouts: 3*4, nextProgram: "Gluteal Goddess/3 1-4")
 }
 
