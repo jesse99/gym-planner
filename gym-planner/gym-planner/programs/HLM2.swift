@@ -85,7 +85,8 @@ func HLM2() -> Program {
     }
     
     let exercises = [
-        createHIIT("HIIT",     planHIIT()),
+        createHIIT("HIIT",                                      planHIIT()),
+        createFixed("Reverse Wrist Curl", "Reverse Wrist Curl", planFixed(2, 10), restMins: 2.0),
 
         createBarBell("Squat",          "Low bar Squat",  planSquat(),  restMins: 3.0),
         createBarBell("Bench Press",    "Bench Press",    plan531(),    restMins: 3.0),
@@ -124,11 +125,12 @@ func HLM2() -> Program {
     makeProgression(exercises, "Kneeling Front Plank", "Front Plank", "Side Plank", "Leg Lift Plank", "Arm & Leg Lift Front Plank", "Decline Plank", "Decline & March Plank", "Wall Plank", "Wall March Plank", "Dragon Flag", "Hanging Dragon Flag")
 
     let workouts = [
-        Workout("Heavy Day",  ["Squat",        "Bench Press",    "Deadlift",   "Good Morning"], scheduled: true, optional: ["Good Morning"]),
-        Workout("Light Day",  ["Light Squat",  "Overhead Press", "Side Plank", "Lat Pulldown"], scheduled: true, optional: ["Lat Pulldown"]),
-        Workout("Medium Day", ["Medium Squat", "Medium Bench",   "Chinups",    "Lat Pulldown", "Side Plank"], scheduled: true, optional: ["Lat Pulldown"]),
-        Workout("HIIT",       ["HIIT"], scheduled: false),
-        Workout("Mobility",   ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
+        Workout("Heavy Day",    ["Squat",        "Bench Press",    "Deadlift",   "Good Morning"], scheduled: true, optional: ["Good Morning"]),
+        Workout("Light Day",    ["Light Squat",  "Overhead Press", "Side Plank", "Lat Pulldown"], scheduled: true, optional: ["Lat Pulldown"]),
+        Workout("Medium Day",   ["Medium Squat", "Medium Bench",   "Chinups",    "Lat Pulldown", "Side Plank"], scheduled: true, optional: ["Lat Pulldown"]),
+        Workout("Tennis Elbow", ["Reverse Wrist Curl"], scheduled: false),
+        Workout("HIIT",         ["HIIT"], scheduled: false),
+        Workout("Mobility",     ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
 
     let tags: [Program.Tags] = [.intermediate, .strength, .barbell, .unisex, .threeDays, .age40s, .age50s]
     let description = """
