@@ -541,6 +541,6 @@ func Bootyful3c() -> Program {
     **Notes**
     \(bootyNotes)
     """
-    return Program("Booty-ful Beginnings/3 9-12", workouts, booty912Exercises, tags, description, maxWorkouts: 3*4, nextProgram: "Gluteal Goddess/3 1-4")
+    return Program("Booty-ful Beginnings/3 9-12", workouts, booty912Exercises, tags, description, maxWorkouts: 3*4, nextProgram: "Gluteal Goddess 1-4")
 }
 
