@@ -219,11 +219,18 @@ public class AMRAPPlan : Plan {
     }
     
     public func historyLabel() -> String {
-        var weights = history.map {$0.getWeight()}
-        if let deload = deloadedWeight() {
-            weights.append(deload.weight)
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            var weights = history.map {$0.getWeight()}
+            if let deload = deloadedWeight() {
+                let info = Weight(deload.weight, setting.apparatus).closest()
+                weights.append(info.weight)
+            }
+            return makeHistoryLabel(Array(weights))
+        case .left(_):
+            break
         }
-        return makeHistoryLabel(Array(weights))
+        return ""
     }
     
     public func current() -> Activity {
