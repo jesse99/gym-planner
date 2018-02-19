@@ -7,7 +7,7 @@ import os.log
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
 public class MastersBasicCyclePlan : BaseCyclicPlan {
     init(_ name: String, _ cycles: [Cycle]) {
-        super.init(name, "MastersBasicCyclePlan", cycles, deloads: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 0.85, 0.8])
+        super.init(name, "MastersBasicCyclePlan", cycles, deloads: [1.0, 1.0, 0.9, 0.85, 0.8])
     }
     
     public required init(from store: Store) {
