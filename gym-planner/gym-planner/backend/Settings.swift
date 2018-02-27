@@ -23,8 +23,8 @@ public enum Apparatus
     //    /// Used with plates attached to a machine two at a time (e.g. a Leg Press machine).
     //    case pairedPlates(plates: [Double])
     
-        /// Used with plates attached to a machine one at a time (e.g. a T-Bar Row machine).
-        case singlePlates(plates: [Double])
+    /// Used with plates attached to a machine one at a time (e.g. a T-Bar Row machine).
+    case singlePlates(plates: [Double])
 }
 
 /// Used for exercises that use plates, or dumbbells, or machines with variable weights.
