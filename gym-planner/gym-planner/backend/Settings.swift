@@ -22,9 +22,9 @@ public enum Apparatus
     
     //    /// Used with plates attached to a machine two at a time (e.g. a Leg Press machine).
     //    case pairedPlates(plates: [Double])
-    //
-    //    /// Used with plates attached to a machine one at a time (e.g. a T-Bar Row machine).
-    //    case singlePlates(plates: [Double])
+    
+        /// Used with plates attached to a machine one at a time (e.g. a T-Bar Row machine).
+        case singlePlates(plates: [Double])
 }
 
 /// Used for exercises that use plates, or dumbbells, or machines with variable weights.
@@ -249,6 +249,10 @@ extension Apparatus: Storable {
             let magnets = store.getDblArray("magnets")
             self = .barbell(bar: bar, collar: collar, plates: plates, bumpers: bumpers, magnets: magnets)
             
+        case "single-plates":
+            let plates = store.getDblArray("plates", ifMissing: defaultPlates())
+            self = .singlePlates(plates: plates)
+            
         case "dumbbells":
             let weights = store.getDblArray("weights")
             let magnets = store.getDblArray("magnets")
@@ -288,6 +292,10 @@ extension Apparatus: Storable {
             store.addDblArray("bumpers", bumpers)
             store.addDblArray("magnets", magnets)
             
+        case .singlePlates(plates: let plates):
+            store.addStr("type", "single-plates")
+            store.addDblArray("plates", plates)
+
         case .dumbbells1(weights: let weights, magnets: let magnets):
             store.addStr("type", "dumbbells1")
             store.addDblArray("weights", weights)

@@ -99,6 +99,9 @@ class VariableWeightController: UIViewController {
         case .dumbbells2(weights: _, magnets: _):
             break   // TODO:
             
+        case .singlePlates(plates: _):
+            break   // TODO:
+
         case .machine(range1: _, range2: _, extra: _):
             let view = storyboard.instantiateViewController(withIdentifier: "MachineID") as! MachineController
             view.initialize(exercise, setting, breadcrumbLabel.text!)

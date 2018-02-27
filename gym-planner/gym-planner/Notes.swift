@@ -507,7 +507,7 @@ let builtInNotes: [String: String] = [
     "Deep Step-ups": createNote(
         notes: [
             "Place one foot on a high object.",
-            "Place all of your weight on that object ans step up onto the object.",
+            "Place all of your weight on that object and step up onto the object.",
             "Use your back leg as little as possible.",
             "Difficulty can be increased by using a higher object or holding a weight."],
         links: ["Link": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/squat", "Body Weight Squats": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/squat"]),
@@ -1805,6 +1805,15 @@ let builtInNotes: [String: String] = [
             "Keep your back straight.",
             "Difficulty can be increased by elevating your body by placing one foot on a chair or bench."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/single-leg-glute-bridge-", "Elevated Video": "https://www.youtube.com/watch?v=juyqMVIzDkQ"]),
+    
+    "Single Leg Romanian Deadlift": createNote(
+        notes: [
+            "Start in a standing position with your arms hanging down holding a barbell.",
+            "Lower the barbell towards the ground while at the same time raising one leg behind you.",
+            "Keep your back straight and try to make your raised leg form a a straight line with your back.",
+            "Tuck your chin.",
+            "Slightly bend the knee your weight is resting on."],
+        links: ["Link": "http://tonygentilcore.com/2009/06/exercises-you-should-be-doing-1-legged-barbell-rdl/"]),
     
     "Situp (intro)": createNote(
         notes: [

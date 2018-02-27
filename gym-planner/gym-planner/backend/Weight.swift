@@ -174,6 +174,18 @@ public struct Weight: CustomStringConvertible {
             
             return candidates
             
+        case .singlePlates(plates: let plates):
+            let limit = 40
+            let smallest = plates.first ?? 5.0
+
+            var candidates: [Info] = []
+            for n in 0..<limit {
+                let x = findSinglePlates(Double(n)*smallest, plates)
+                candidates.append(x)
+            }
+            
+            return candidates
+
         case .dumbbells1(let weights, let magnets):
             return findDumbbells(weights, magnets, multipler: 1)
             
@@ -279,7 +291,7 @@ public struct Weight: CustomStringConvertible {
                         addedMagnet = true
                     }
                 }
-
+                
                 if kind != "magnet" {
                     if sum + 2*plate <= target {
                         sum += 2*plate
@@ -298,6 +310,42 @@ public struct Weight: CustomStringConvertible {
         // Only use collars if we used a plate.
         if used.isEmpty {
             sum -= 2*collarWeight
+        }
+        
+        return Info(weight: sum, text: Weight.friendlyUnitsStr(sum), plates: Weight.platesStr(used))
+    }
+    
+    private func findSinglePlates(_ target: Double, _ plates: [Double]) -> Info {
+        var used: [(Double, String)] = []
+        var sum = 0.0
+        
+        var candidates: [(Double, String)] = []
+        for p in plates {
+            if !candidates.contains(where: {(x, _) -> Bool in x == p}) {
+                candidates.append((p, "plate"))
+            }
+        }
+        candidates.sort {$0.0 < $1.0}
+        
+        // Biggest plate can be added as many times as neccesary.
+        if let (last, kind) = candidates.last {
+            while sum + last <= target {
+                sum += last
+                used.append((last, kind))
+            }
+        }
+        
+        // Remaining plates can be added up to 2x.
+        for (plate, kind) in candidates.reversed() {
+            if sum + plate <= target {
+                sum += plate
+                used.append((plate, kind))
+            }
+
+            if sum + plate <= target {
+                sum += plate
+                used.append((plate, kind))
+            }
         }
         
         return Info(weight: sum, text: Weight.friendlyUnitsStr(sum), plates: Weight.platesStr(used))
