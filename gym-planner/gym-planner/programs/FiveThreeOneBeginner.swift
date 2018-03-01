@@ -2,85 +2,57 @@
 import Foundation
 
 func FiveThreeOneBeginner() -> Program {
-    func planBoxJump() -> Plan {
-        let numSets = 1
-        let minReps = 10
-        let maxReps = 15
-        return VariableRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
-    }
-    
-    func planMain() -> Plan {
-        return FiveThreeOneBeginnerPlan("531", withBar: 2)
-    }
-    
-    func planBodyAux() -> Plan {
-        let targetReps = 100
-        return VariableSetsPlan("\(targetReps) target", targetReps: targetReps)
-    }
-    
-    func planWeightedAux() -> Plan {
-        let numSets = 5
-        let minReps = 10
-        let maxReps = 15
-        let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-        return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-    }
-    
     func planTimedMob(_ numSets: Int, targetTime: Int? = nil) -> Plan {
         return TimedPlan("\(numSets) timed sets", numSets: numSets, targetTime: targetTime)
     }
     
-    func planFixedMob(_ numSets: Int, _ numReps: Int) -> Plan {
-        return FixedSetsPlan("\(numSets)x\(numReps)", numSets: numSets, numReps: numReps)
-    }
-    
     let exercises = [
-        createVarReps("Box Jumps",          "Box Jump",           planBoxJump(), restMins: 0.0, requestedReps: 10),
-        createVarReps("Medicine Ball Slam", "Medicine Ball Slam", planBoxJump(), restMins: 0.0, requestedReps: 10),
+        bodyWeight("Box Jumps",          "Box Jump",           1, minReps: 10, maxReps: 15, restMins: 0.0),
+        bodyWeight("Medicine Ball Slam", "Medicine Ball Slam", 1, minReps: 10, maxReps: 15, restMins: 0.0),
 
-        createBarBell("Squat",          "Low bar Squat",  planMain(),  restMins: 2.0),
-        createBarBell("Deadlift",       "Deadlift",       planMain(),  restMins: 2.0, useBumpers: true),
-        createBarBell("Bench Press",    "Bench Press",    planMain(),  restMins: 1.5, magnets: [1.25]),
-        createBarBell("Overhead Press", "Overhead Press", planMain(),  restMins: 1.5, magnets: [1.25]),
+        barbell531Beginner("Squat",          "Low bar Squat",  restMins: 2.0),
+        barbell531Beginner("Deadlift",       "Deadlift",       useBumpers: true, restMins: 2.0),
+        barbell531Beginner("Bench Press",    "Bench Press",    magnets: [1.25], restMins: 1.5),
+        barbell531Beginner("Overhead Press", "Overhead Press", magnets: [1.25], restMins: 1.5),
         
         // single leg/core
-        createVarSets("Ab Wheel Rollout (core)",       "Ab Wheel Rollout",  planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createVarSets("Back Extension (core)",         "Back Extension",    planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createMachine("Cable Crunch (core)",           "Cable Crunch",      planWeightedAux(), restMins: 1.5),
-        createVarSets("Reverse Hyperextension (core)", "Reverse Hyperextension", planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createVarSets("Hanging Leg Raise (core)",      "Hanging Leg Raise", planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createDumbbell2("Spell Caster (core)",         "Spell Caster",      planWeightedAux(), restMins: 1.0),
+        bodyWeight("Ab Wheel Rollout (core)",       "Ab Wheel Rollout",       requestedReps: 50, targetReps: 100, restMins: 1.0),
+        bodyWeight("Back Extension (core)",         "Back Extension",         requestedReps: 50, targetReps: 100, restMins: 1.0),
+        machine("Cable Crunch (core)",              "Cable Crunch",           5, minReps: 10, maxReps: 15, restMins: 1.5),
+        bodyWeight("Reverse Hyperextension (core)", "Reverse Hyperextension", requestedReps: 50, targetReps: 100, restMins: 1.0),
+        bodyWeight("Hanging Leg Raise (core)",      "Hanging Leg Raise",      requestedReps: 50, targetReps: 100, restMins: 1.0),
+        dumbbell("Spell Caster (core)",             "Spell Caster",           5, minReps: 10, maxReps: 15, restMins: 1.0),
         
-        createDumbbell2("Dumbbell Lunge (leg)",        "Dumbbell Lunge",    planWeightedAux(), restMins: 1.0),
-        createKettlebell("Kettlebell Snatch (leg)",    "One-Arm Kettlebell Snatch", planWeightedAux(), restMins: 1.0),
-        createKettlebell("Kettlebell Swing (leg)",     "Kettlebell Two Arm Swing", planWeightedAux(), restMins: 1.0),
-        createDumbbell2("Step-ups (leg)",              "Step-ups",          planWeightedAux(), restMins: 1.0),
+        dumbbell("Dumbbell Lunge (leg)",        "Dumbbell Lunge",    5, minReps: 10, maxReps: 15, restMins: 1.0),
+        bodyWeight("Kettlebell Snatch (leg)",    "One-Arm Kettlebell Snatch", 5, minReps: 10, maxReps: 15, restMins: 1.0),
+        bodyWeight("Kettlebell Swing (leg)",     "Kettlebell Two Arm Swing", 5, minReps: 10, maxReps: 15, restMins: 1.0),
+        dumbbell("Step-ups (leg)",              "Step-ups",          5, minReps: 10, maxReps: 15, restMins: 1.0),
 
         // pull
-        createVarSets("Chinup (pull)",         "Chinup",       planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createMachine("Face Pull (pull)",      "Face Pull",    planWeightedAux(), restMins: 1.0),
-        createDumbbell2("Hammer Curls (pull)", "Hammer Curls", planWeightedAux(), restMins: 1.0),
-        createVarSets("Inverted Row (pull)",   "Inverted Row", planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createMachine("Lat Pulldown (pull)",   "Lat Pulldown", planWeightedAux(), restMins: 1.5),
-        createBarBell("Pendlay Row (pull)",    "Pendlay Row",  planWeightedAux(), restMins: 1.5),
+        bodyWeight("Chinup (pull)",       "Chinup",       requestedReps: 50, targetReps: 100, restMins: 1.0),
+        machine("Face Pull (pull)",       "Face Pull",    5, minReps: 10, maxReps: 15, restMins: 1.0),
+        dumbbell("Hammer Curls (pull)",   "Hammer Curls", 5, minReps: 10, maxReps: 15, restMins: 1.0),
+        bodyWeight("Inverted Row (pull)", "Inverted Row", requestedReps: 50, targetReps: 100, restMins: 1.0),
+        machine("Lat Pulldown (pull)",    "Lat Pulldown", 5, minReps: 10, maxReps: 15, restMins: 1.5),
+        barbell("Pendlay Row (pull)",     "Pendlay Row",  5, minReps: 10, maxReps: 15, restMins: 1.5),
         
         // push
-        createVarSets("Dips (push)",             "Dips",                    planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createDumbbell2("Dumbbell Bench Press (push)", "Dumbbell Bench Press", planWeightedAux(), restMins: 1.0),
-        createVarSets("Push Ups (push)",         "Pushup",                  planBodyAux(), restMins: 1.0, requestedReps: 50),
-        createDumbbell1("Triceps Press (push)",  "Seated Triceps Press",    planWeightedAux(), restMins: 1.0),
-        createMachine("Triceps Pushdown (push)", "Triceps Pushdown (rope)", planWeightedAux(), restMins: 1.5),
+        bodyWeight("Dips (push)",               "Dips",                    requestedReps: 50, targetReps: 100, restMins: 1.0),
+        dumbbell("Dumbbell Bench Press (push)", "Dumbbell Bench Press",    5, minReps: 10, maxReps: 15, restMins: 1.0),
+        bodyWeight("Push Ups (push)",           "Pushup",                  requestedReps: 50, targetReps: 100, restMins: 1.0),
+        singleDumbbell("Triceps Press (push)",  "Seated Triceps Press",    5, minReps: 10, maxReps: 15, restMins: 1.0),
+        machine("Triceps Pushdown (push)",      "Triceps Pushdown (rope)", 5, minReps: 10, maxReps: 15, restMins: 1.5),
 
-        createFixed("Foam Rolling",            "IT-Band Foam Roll",         planFixedMob(1, 15), restMins: 0.0),
-        createFixed("Shoulder Dislocates",     "Shoulder Dislocate",        planFixedMob(1, 12), restMins: 0.0),
-        createFixed("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      planFixedMob(1, 10), restMins: 0.0),
-        createFixed("Roll-over into V-sit",    "Roll-over into V-sit",      planFixedMob(1, 15), restMins: 0.0),
-        createFixed("Rocking Frog Stretch",    "Rocking Frog Stretch",      planFixedMob(1, 10), restMins: 0.0),
-        createFixed("Fire Hydrant Hip Circle", "Fire Hydrant Hip Circle",   planFixedMob(1, 10), restMins: 0.0),
-        createFixed("Mountain Climber",        "Mountain Climber",          planFixedMob(1, 10), restMins: 0.0),
-        createFixed("Cossack Squat",           "Cossack Squat",             planFixedMob(1, 10), restMins: 0.0),
-        createTimed("Piriformis Stretch",      "Seated Piriformis Stretch", planTimedMob(2), duration: 30),
-        createTimed("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", planTimedMob(2), duration: 30)]
+        bodyWeight("Foam Rolling",            "IT-Band Foam Roll",         1, by: 15, restMins: 0.0),
+        bodyWeight("Shoulder Dislocates",     "Shoulder Dislocate",        1, by: 12, restMins: 0.0),
+        bodyWeight("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      1, by: 10, restMins: 0.0),
+        bodyWeight("Roll-over into V-sit",    "Roll-over into V-sit",      1, by: 15, restMins: 0.0),
+        bodyWeight("Rocking Frog Stretch",    "Rocking Frog Stretch",      1, by: 10, restMins: 0.0),
+        bodyWeight("Fire Hydrant Hip Circle", "Fire Hydrant Hip Circle",   1, by: 10, restMins: 0.0),
+        bodyWeight("Mountain Climber",        "Mountain Climber",          1, by: 10, restMins: 0.0),
+        bodyWeight("Cossack Squat",           "Cossack Squat",             1, by: 10, restMins: 0.0),
+        bodyWeight("Piriformis Stretch",      "Seated Piriformis Stretch", 2, secs: 30),
+        bodyWeight("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", 2, secs: 30)]
     
     // Aux exercises default to Hanging Leg Raise, Lat Pulldown, and Triceps Pushdown.
     let core = ["Ab Wheel Rollout (core)", "Back Extension (core)", "Cable Crunch (core)", "Hanging Leg Raise (core)", "Reverse Hyperextension (core)", "Spell Caster (core)"]

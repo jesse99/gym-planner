@@ -1,6 +1,7 @@
 /// Helpers used when constructing programs.
 import Foundation
 
+/// CycleRepsPlan
 public func barbell(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], derivedFrom: String? = nil, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
@@ -22,6 +23,20 @@ public func barbell(_ name: String, _ formalName: String, _ numSets: Int, minRep
     }
 }
 
+/// FiveThreeOneBeginnerPlan
+public func barbell531Beginner(_ name: String, _ formalName: String, withBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "531"
+    }
+    
+    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = FiveThreeOneBeginnerPlan(planName, withBar: withBar)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// CycleRepsPlan
 public func dumbbell(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
@@ -36,6 +51,28 @@ public func dumbbell(_ name: String, _ formalName: String, _ numSets: Int, minRe
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
+public func createDumbbell1(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
+    let apparatus = Apparatus.dumbbells1(weights: defaultDumbbells(), magnets: [])
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// CycleRepsPlan
+public func singleDumbbell(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(numSets)x\(minReps)-\(maxReps)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let apparatus = Apparatus.dumbbells1(weights: defaultDumbbells(), magnets: [])
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = CycleRepsPlan(planName, warmups ?? defaultWarmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// CycleRepsPlan
 public func machine(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
@@ -50,6 +87,7 @@ public func machine(_ name: String, _ formalName: String, _ numSets: Int, minRep
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
+/// FixedSetsPlan
 public func bodyWeight(_ name: String, _ formalName: String, _ numSets: Int, by: Int, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
@@ -61,6 +99,7 @@ public func bodyWeight(_ name: String, _ formalName: String, _ numSets: Int, by:
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
+/// TimedPlan
 public func bodyWeight(_ name: String, _ formalName: String, _ numSets: Int, minSecs: Int, maxSecs: Int, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
@@ -72,6 +111,7 @@ public func bodyWeight(_ name: String, _ formalName: String, _ numSets: Int, min
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
+/// TimedPlan
 public func bodyWeight(_ name: String, _ formalName: String, _ numSets: Int, secs: Int, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
@@ -83,6 +123,7 @@ public func bodyWeight(_ name: String, _ formalName: String, _ numSets: Int, sec
     return Exercise(name, formalName, plan, .fixedWeight(setting))
 }
 
+/// VariableRepsPlan
 public func bodyWeight(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
@@ -94,34 +135,23 @@ public func bodyWeight(_ name: String, _ formalName: String, _ numSets: Int, min
     return Exercise(name, formalName, plan, .variableReps(setting))
 }
 
+/// VariableSetsPlan
+public func bodyWeight(_ name: String, _ formalName: String, requestedReps: Int, targetReps: Int, restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = requestedReps != targetReps ? "\(requestedReps)-\(targetReps)" : "\(targetReps) reps"
+    }
+    
+    let setting = VariableRepsSetting(requestedReps: requestedReps, restSecs: Int(restMins*60.0))
+    let plan = VariableSetsPlan(planName, targetReps: targetReps)
+    return Exercise(name, formalName, plan, .variableReps(setting))
+}
+
 // -------------------------------------------------------------------------------------
 
 
 public func createSinglePlates(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
     let apparatus = Apparatus.singlePlates(plates: defaultPlates())
-    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
-    return Exercise(name, formalName, plan, .variableWeight(setting))
-}
-
-public func createDumbbell1(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
-    let apparatus = Apparatus.dumbbells1(weights: defaultDumbbells(), magnets: [])
-    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
-    return Exercise(name, formalName, plan, .variableWeight(setting))
-}
-
-public func createKettlebell(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
-    let setting = FixedWeightSetting(restSecs: Int(restMins*60.0))
-    return Exercise(name, formalName, plan, .fixedWeight(setting))
-}
-
-/// Helper used when constructing programs.
-public func createVarSets(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double, requestedReps: Int) -> Exercise {
-    let setting = VariableRepsSetting(requestedReps: requestedReps, restSecs: Int(restMins*60.0))
-    return Exercise(name, formalName, plan, .variableReps(setting))
-}
-
-public func createCycleReps(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
-    let apparatus = Apparatus.machine(range1: defaultMachine(), range2: zeroMachine(), extra: [])
     let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
