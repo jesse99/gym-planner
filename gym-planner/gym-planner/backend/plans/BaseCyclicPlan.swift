@@ -32,7 +32,7 @@ public class BaseCyclicPlan : Plan {
         }
     }
     
-    struct Cycle: Storable, Equatable {
+    public struct Cycle: Storable, Equatable {
         let warmups: Warmups
         let worksets: [Reps]
 
@@ -53,12 +53,12 @@ public class BaseCyclicPlan : Plan {
             self.init(warmups, reps)
         }
 
-        init(from store: Store) {
+        public init(from store: Store) {
             self.warmups = store.getObj("warmups")
             self.worksets = store.getObjArray("worksets")
         }
         
-        func save(_ store: Store) {
+        public func save(_ store: Store) {
             store.addObj("warmups", warmups)
             store.addObjArray("worksets", worksets)
         }
@@ -96,7 +96,7 @@ public class BaseCyclicPlan : Plan {
             return 0
         }
         
-        static func ==(lhs: Cycle, rhs: Cycle)->Bool {
+        static public func ==(lhs: Cycle, rhs: Cycle)->Bool {
             return lhs.warmups == rhs.warmups && lhs.worksets == rhs.worksets
         }
     }

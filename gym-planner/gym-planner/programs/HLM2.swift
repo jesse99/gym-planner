@@ -4,124 +4,65 @@ import Foundation
 typealias Cycle = BaseCyclicPlan.Cycle
 
 func HLM2() -> Program {
-    func plan531() -> Plan {
-        let cycles = [
-            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
-            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
-            Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
-        ]
-        return MastersBasicCyclePlan("531", cycles)
-    }
+    let normalWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
+    let lsquatWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1])
+    let goodWarmup = Warmups(withBar: 0, firstPercent: 0.6, lastPercent: 0.8, reps: [5, 3])
+    let latWarmup = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [5])
     
-    func plan53() -> Plan {
-        let cycles = [
-            Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 5, at: 1.0),
-            Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 3, at: 1.055)
-        ]
-        return MastersBasicCyclePlan("53", cycles)
-    }
-    
-    func planDead() -> Plan {
-        let cycles = [
-            Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
-            Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 3, at: 1.05),
-            Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 1, at: 1.1)
-        ]
-        return MastersBasicCyclePlan("Dead", cycles)
-    }
-    
-    // TODO: switch to masters cycle
-    func planSquat() -> Plan {
-        let warmups = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
-        return LinearPlan("Squat", warmups, workSets: 3, workReps: 5)
-    }
-    
-    func planMorning() -> Plan {
-        let warmups = Warmups(withBar: 0, firstPercent: 0.6, lastPercent: 0.8, reps: [5, 3])
-        return LinearPlan("Good Morning", warmups, workSets: 3, workReps: 5)
-    }
-    
-    func planLSquat() -> Plan {
-        let warmups = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1])
-        return PercentOfPlan("Light Squat", warmups, workSets: 1, workReps: 5, percent: 0.88)
-    }
-    
-    func planMSquat() -> Plan {
-        let warmups = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
-        return PercentOfPlan("Medium Squat", warmups, workSets: 2, workReps: 5, percent: 0.94)
-    }
-    
-    func planMBench() -> Plan {
-        let warmups = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
-        return PercentOfPlan("Medium Bench", warmups, workSets: 2, workReps: 5, percent: 0.94)
-    }
-    
-    func planChin() -> Plan {
-        return VariableSetsPlan("Chinups", targetReps: 50)
-    }
-    
-    func planTimed(_ numSets: Int, targetTime: Int? = nil) -> Plan {
-        return TimedPlan("\(numSets) timed sets", numSets: numSets, targetTime: targetTime)
-    }
-
-    func planFixed(_ numSets: Int, _ numReps: Int) -> Plan {
-        return FixedSetsPlan("\(numSets)x\(numReps)", numSets: numSets, numReps: numReps)
-    }
-    
-    func planVarying(_ numSets: Int, _ minReps: Int, _ maxReps: Int) -> Plan {
-        return VariableRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
-    }
-    
-    func planLats() -> Plan {
-        let numSets = 3
-        let minReps = 4
-        let maxReps = 8
-        let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [5])
-        return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-    }
-    
-    func planHIIT() -> Plan {
-        return HIITPlan("HIIT", targetCycles: 8, targetHighSecs: 60)
-    }
+    let cycles53 = [
+        Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 5, at: 1.0),
+        Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 3, at: 1.055)
+    ]
+    let cycles531 = [
+        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
+        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
+        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
+    ]
+    let cyclesDead = [
+        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
+        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 3, at: 1.05),
+        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 1, at: 1.1)
+    ]
     
     let exercises = [
-        createHIIT("HIIT",                                      planHIIT()),
-        createFixed("Reverse Wrist Curl", "Reverse Wrist Curl", planFixed(2, 10), restMins: 2.0),
+        hiit("HIIT", warmupMins: 5, highSecs: 30, lowSecs: 60, cooldownMins: 5, numCycles: 4, targetCycles: 8, targetHighSecs: 45),
+        bodyWeight("Reverse Wrist Curl", "Reverse Wrist Curl", 2, by: 10, restMins: 2.0),
 
-        createBarBell("Squat",          "Low bar Squat",  planSquat(),  restMins: 3.0),
-        createBarBell("Bench Press",    "Bench Press",    plan531(),    restMins: 3.0),
-        createBarBell("Deadlift",       "Deadlift",       planDead(),   restMins: 3.5, useBumpers: true),
-        createBarBell("Light Squat",    "Low bar Squat",  planLSquat(), restMins: 2.0, derivedFrom: "Squat"),
-        createBarBell("Overhead Press", "Overhead Press", plan53(),     restMins: 3.0, magnets: [1.25]),
-        createVarSets("Chinups",        "Chinup",         planChin(),   restMins: 2.0, requestedReps: 10),
-        createBarBell("Medium Squat",   "Low bar Squat",  planMSquat(), restMins: 3.0, derivedFrom: "Squat"),
-        createBarBell("Medium Bench",   "Bench Press",    planMBench(), restMins: 3.0, derivedFrom: "Bench Press"),
-
-        createBarBell("Good Morning",   "Good Morning",   planMorning(),   restMins: 3.0),
-        createCycleReps("Lat Pulldown", "Lat Pulldown",   planLats(), restMins: 2.0),
+        barbell("Squat",          "Low bar Squat",  3, by: 5, warmups: normalWarmup,  restMins: 3.0),  // TODO: switch to masters cycle
+        barbell("Light Squat",    "Low bar Squat",  1, by: 5, percent: 0.88, of: "Squat", warmups: lsquatWarmup, restMins: 2.0),
+        barbell("Medium Squat",   "Low bar Squat",  2, by: 5, percent: 0.9, of: "Squat", warmups: normalWarmup, restMins: 3.0),
         
-        createTimed("Kneeling Front Plank",  "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
-        createTimed("Front Plank",           "Front Plank",           planTimed(1, targetTime: 60), duration: 30),
-        createTimed("Side Plank",            "Side Plank",            planTimed(2, targetTime: 30), duration: 15),
-        createTimed("Leg Lift Plank",        "Leg Lift Plank",        planTimed(2, targetTime: 30), duration: 15),
-        createTimed("Arm & Leg Lift Front Plank", "Arm & Leg Lift Front Plank", planTimed(2, targetTime: 30), duration: 15),
-        createTimed("Decline Plank",         "Decline Plank",         planTimed(1, targetTime: 60), duration: 30),
-        createTimed("Decline & March Plank", "Decline & March Plank", planTimed(1, targetTime: 60), duration: 30),
-        createTimed("Wall Plank",            "Wall Plank",            planTimed(1, targetTime: 60), duration: 30),
-        createTimed("Wall March Plank",      "Wall March Plank",      planTimed(1, targetTime: 60), duration: 30),
-        createVarReps("Dragon Flag",         "Dragon Flag",           planVarying(3, 1, 8), restMins: 1.5, requestedReps: 3),
-        createTimed("Hanging Dragon Flag",   "Hanging Dragon Flag",   planTimed(1, targetTime: 20), duration: 5),
+        barbell("Bench Press",    "Bench Press",    masterCycles: cycles531, restMins: 3.0, planName: "531"),
+        barbell("Medium Bench",   "Bench Press",    2, by: 5, percent: 0.94, of: "Bench Press", warmups: normalWarmup, restMins: 3.0),
 
-        createFixed("Foam Rolling",            "IT-Band Foam Roll",         planFixed(1, 15), restMins: 0.0),
-        createFixed("Shoulder Dislocates",     "Shoulder Dislocate",        planFixed(1, 12), restMins: 0.0),
-        createFixed("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      planFixed(1, 10), restMins: 0.0),
-        createFixed("Roll-over into V-sit",    "Roll-over into V-sit",      planFixed(1, 15), restMins: 0.0),
-        createFixed("Rocking Frog Stretch",    "Rocking Frog Stretch",      planFixed(1, 10), restMins: 0.0),
-        createFixed("Fire Hydrant Hip Circle", "Fire Hydrant Hip Circle",   planFixed(1, 10), restMins: 0.0),
-        createFixed("Mountain Climber",        "Mountain Climber",          planFixed(1, 10), restMins: 0.0),
-        createFixed("Cossack Squat",           "Cossack Squat",             planFixed(1, 10), restMins: 0.0),
-        createTimed("Piriformis Stretch",      "Seated Piriformis Stretch", planTimed(2), duration: 30),
-        createTimed("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", planTimed(2), duration: 30)]
+        barbell("Deadlift",       "Deadlift",       masterCycles: cyclesDead, useBumpers: true, restMins: 3.5, planName: "dead"),
+        barbell("Overhead Press", "Overhead Press", masterCycles: cycles53, magnets: [1.25], restMins: 3.0, planName: "53"),
+        bodyWeight("Chinups",     "Chinup",         requestedReps: 12, targetReps: 50,   restMins: 2.00),
+        barbell("Good Morning",   "Good Morning",   3, by: 5, warmups: goodWarmup, restMins: 3.0),
+        machine("Lat Pulldown",   "Lat Pulldown",   3, minReps: 4, maxReps: 8, warmups: latWarmup, restMins: 2.0),
+        
+        bodyWeight("Kneeling Front Plank",  "Front Plank",           1, minSecs: 30, maxSecs: 60),
+        bodyWeight("Front Plank",           "Front Plank",           1, minSecs: 30, maxSecs: 60),
+        bodyWeight("Side Plank",            "Side Plank",            2, minSecs: 15, maxSecs: 30),
+        bodyWeight("Leg Lift Plank",        "Leg Lift Plank",        2, minSecs: 15, maxSecs: 30),
+        bodyWeight("Arm & Leg Lift Front Plank", "Arm & Leg Lift Front Plank", 2, minSecs: 15, maxSecs: 30),
+        bodyWeight("Decline Plank",         "Decline Plank",         1, minSecs: 30, maxSecs: 60),
+        bodyWeight("Decline & March Plank", "Decline & March Plank", 1, minSecs: 30, maxSecs: 60),
+        bodyWeight("Wall Plank",            "Wall Plank",            1, minSecs: 30, maxSecs: 60),
+        bodyWeight("Wall March Plank",      "Wall March Plank",      1, minSecs: 30, maxSecs: 60),
+        bodyWeight("Dragon Flag",           "Dragon Flag",           3, minReps: 1, maxReps: 8, restMins: 1.5),
+        bodyWeight("Hanging Dragon Flag",   "Hanging Dragon Flag",   1, minSecs: 5, maxSecs: 20),
+
+        bodyWeight("Foam Rolling",            "IT-Band Foam Roll",         1, by: 15, restMins: 0.0),
+        bodyWeight("Shoulder Dislocates",     "Shoulder Dislocate",        1, by: 12, restMins: 0.0),
+        bodyWeight("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      1, by: 10, restMins: 0.0),
+        bodyWeight("Roll-over into V-sit",    "Roll-over into V-sit",      1, by: 15, restMins: 0.0),
+        bodyWeight("Rocking Frog Stretch",    "Rocking Frog Stretch",      1, by: 10, restMins: 0.0),
+        bodyWeight("Fire Hydrant Hip Circle", "Fire Hydrant Hip Circle",   1, by: 10, restMins: 0.0),
+        bodyWeight("Mountain Climber",        "Mountain Climber",          1, by: 10, restMins: 0.0),
+        bodyWeight("Cossack Squat",           "Cossack Squat",             1, by: 10, restMins: 0.0),
+        bodyWeight("Piriformis Stretch",      "Seated Piriformis Stretch", 2, secs: 30),
+        bodyWeight("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", 2, secs: 30)]
     makeProgression(exercises, "Kneeling Front Plank", "Front Plank", "Side Plank", "Leg Lift Plank", "Arm & Leg Lift Front Plank", "Decline Plank", "Decline & March Plank", "Wall Plank", "Wall March Plank", "Dragon Flag", "Hanging Dragon Flag")
 
     let workouts = [

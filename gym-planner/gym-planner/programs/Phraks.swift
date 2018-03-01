@@ -1,23 +1,17 @@
-/// Masters program with cycles of 3x5, 3x3,and 3x1.
+/// Linear beginner program from Reddit.
 import Foundation
 
 func Phraks() -> Program {
-    func chinsPlan() -> Plan {
-        return VariableSetsPlan("Chinups", targetReps: 30)
-    }
-    
-    func amrapPlan(withBar: Int) -> Plan {
-        let warmups = Warmups(withBar: withBar, firstPercent: 0.6, lastPercent: 0.9, reps: [5, 5, 3])
-        return AMRAPPlan("AMRAP", warmups, workSets: 3, workReps: 5)
-    }
+    let warmup = Warmups(withBar: 2, firstPercent: 0.6, lastPercent: 0.9, reps: [5, 5, 3])
+    let rowWarmup = Warmups(withBar: 0, firstPercent: 0.6, lastPercent: 0.9, reps: [5, 5, 3])
     
     let exercises = [
-        createVarReps("Chinups",        "Chinup",         chinsPlan(), restMins: 2.5, requestedReps: 15),
-        createBarBell("Overhead Press", "Overhead Press", amrapPlan(withBar: 2), restMins: 2.5, magnets: [1.25]),
-        createBarBell("Squat",          "Low bar Squat",  amrapPlan(withBar: 2), restMins: 3.0),
-        createBarBell("Barbell Rows",   "Pendlay Row",    amrapPlan(withBar: 0), restMins: 2.0, magnets: [1.25]),
-        createBarBell("Bench Press",    "Bench Press",    amrapPlan(withBar: 2), restMins: 3.0, magnets: [1.25]),
-        createBarBell("Deadlift",       "Deadlift",       amrapPlan(withBar: 2), restMins: 3.0, useBumpers: true)]
+        bodyWeight("Chinups",     "Chinup",         requestedReps: 15, targetReps: 30, restMins: 2.5),
+        barbell("Overhead Press", "Overhead Press", 3, amrap: 5, warmups: warmup, magnets: [1.25], restMins: 2.5),
+        barbell("Squat",          "Low bar Squat",  3, amrap: 5, warmups: warmup, restMins: 3.0),
+        barbell("Barbell Rows",   "Pendlay Row",    3, amrap: 5, warmups: rowWarmup, magnets: [1.25], restMins: 2.0),
+        barbell("Bench Press",    "Bench Press",    3, amrap: 5, warmups: warmup, magnets: [1.25], restMins: 3.0),
+        barbell("Deadlift",       "Deadlift",       3, amrap: 5, warmups: warmup, useBumpers: true, restMins: 3.0)]
     
     let workouts = [
         Workout("OHP1",   ["Chinups",      "Overhead Press", "Squat"], scheduled: true, optional: []),

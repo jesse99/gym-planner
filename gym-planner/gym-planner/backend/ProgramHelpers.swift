@@ -2,7 +2,7 @@
 import Foundation
 
 /// CycleRepsPlan
-public func barbell(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], derivedFrom: String? = nil, restMins: Double, planName: String = "") -> Exercise {
+public func barbell(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
         planName = "\(numSets)x\(minReps)-\(maxReps)"
@@ -11,20 +11,13 @@ public func barbell(_ name: String, _ formalName: String, _ numSets: Int, minRep
     let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
     
     let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
-    if let otherName = derivedFrom {
-        let setting = DerivedWeightSetting(otherName, restSecs: Int(restMins*60.0))
-        let plan = CycleRepsPlan(planName, warmups ?? defaultWarmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-        return Exercise(name, formalName, plan, .derivedWeight(setting))
-        
-    } else {
-        let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
-        let plan = CycleRepsPlan(planName, warmups ?? defaultWarmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-        return Exercise(name, formalName, plan, .variableWeight(setting))
-    }
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = CycleRepsPlan(planName, warmups ?? defaultWarmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
 /// LinearPlan
-public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], derivedFrom: String? = nil, restMins: Double, planName: String = "") -> Exercise {
+public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
         planName = "\(numSets)x\(by)"
@@ -33,16 +26,46 @@ public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: In
     let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
     
     let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
-    if let otherName = derivedFrom {
-        let setting = DerivedWeightSetting(otherName, restSecs: Int(restMins*60.0))
-        let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
-        return Exercise(name, formalName, plan, .derivedWeight(setting))
-        
-    } else {
-        let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
-        let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
-        return Exercise(name, formalName, plan, .variableWeight(setting))
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// AMRAPPlan
+public func barbell(_ name: String, _ formalName: String, _ numSets: Int, amrap: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(numSets)x\(amrap)+"
     }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = AMRAPPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: amrap)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// PercentOfPlan
+public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: Int, percent: Double, of: String, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(Int(100*percent))% of \(of)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let setting = DerivedWeightSetting(of, restSecs: Int(restMins*60.0))
+    let plan = PercentOfPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by, percent: percent)
+    return Exercise(name, formalName, plan, .derivedWeight(setting))
+}
+
+/// MastersBasicCyclePlan
+public func barbell(_ name: String, _ formalName: String, masterCycles: [BaseCyclicPlan.Cycle], useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String) -> Exercise {
+    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = MastersBasicCyclePlan(planName, masterCycles)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
 /// FiveThreeOneBeginnerPlan
@@ -122,7 +145,7 @@ public func machine(_ name: String, _ formalName: String, _ numSets: Int, minRep
 public func machine(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
-        planName = "\(numSets)x\(minReps)-\(maxReps)"
+        planName = "\(numSets)x\(by)"
     }
     
     let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
@@ -193,6 +216,17 @@ public func bodyWeight(_ name: String, _ formalName: String, requestedReps: Int,
     return Exercise(name, formalName, plan, .variableReps(setting))
 }
 
+public func hiit(_ name: String, warmupMins: Int, highSecs: Int, lowSecs: Int, cooldownMins: Int, numCycles: Int, targetCycles: Int? = nil, targetHighSecs: Int? = nil, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "HIIT"
+    }
+    
+    let setting = HIITSetting(warmupMins: warmupMins, highSecs: highSecs, lowSecs: lowSecs, cooldownMins: cooldownMins, numCycles: numCycles)
+    let plan = HIITPlan(planName, targetCycles: targetCycles ?? numCycles, targetHighSecs: targetHighSecs ?? highSecs)
+    return Exercise(name, "", plan, .hiit(setting))
+}
+
 // -------------------------------------------------------------------------------------
 
 public func createSinglePlates(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
@@ -204,11 +238,6 @@ public func createSinglePlates(_ name: String, _ formalName: String, _ plan: Pla
 public func createCardio(_ name: String, _ plan: Plan) -> Exercise {
     let setting = IntensitySetting()
     return Exercise(name, "", plan, .intensity(setting))
-}
-
-public func createHIIT(_ name: String, _ plan: Plan) -> Exercise {
-    let setting = HIITSetting(warmupMins: 5, highSecs: 30, lowSecs: 60, cooldownMins: 5, numCycles: 4)
-    return Exercise(name, "", plan, .hiit(setting))
 }
 
 public func makeProgression(_ exercises: [Exercise], _ names: String...) {
