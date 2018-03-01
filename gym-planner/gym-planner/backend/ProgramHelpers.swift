@@ -23,6 +23,28 @@ public func barbell(_ name: String, _ formalName: String, _ numSets: Int, minRep
     }
 }
 
+/// LinearPlan
+public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], derivedFrom: String? = nil, restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(numSets)x\(by)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
+    if let otherName = derivedFrom {
+        let setting = DerivedWeightSetting(otherName, restSecs: Int(restMins*60.0))
+        let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
+        return Exercise(name, formalName, plan, .derivedWeight(setting))
+        
+    } else {
+        let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+        let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
+        return Exercise(name, formalName, plan, .variableWeight(setting))
+    }
+}
+
 /// FiveThreeOneBeginnerPlan
 public func barbell531Beginner(_ name: String, _ formalName: String, withBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
@@ -51,9 +73,18 @@ public func dumbbell(_ name: String, _ formalName: String, _ numSets: Int, minRe
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
-public func createDumbbell1(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
-    let apparatus = Apparatus.dumbbells1(weights: defaultDumbbells(), magnets: [])
+/// LinearPlan
+public func dumbbell(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(numSets)x\(by)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let apparatus = Apparatus.dumbbells2(weights: defaultDumbbells(), magnets: [])
     let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
@@ -80,10 +111,25 @@ public func machine(_ name: String, _ formalName: String, _ numSets: Int, minRep
     }
     
     let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-
+    
     let apparatus = Apparatus.machine(range1: defaultMachine(), range2: zeroMachine(), extra: [])
     let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
     let plan = CycleRepsPlan(planName, warmups ?? defaultWarmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// LinearPlan
+public func machine(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(numSets)x\(minReps)-\(maxReps)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+
+    let apparatus = Apparatus.machine(range1: defaultMachine(), range2: zeroMachine(), extra: [])
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
@@ -148,7 +194,6 @@ public func bodyWeight(_ name: String, _ formalName: String, requestedReps: Int,
 }
 
 // -------------------------------------------------------------------------------------
-
 
 public func createSinglePlates(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
     let apparatus = Apparatus.singlePlates(plates: defaultPlates())

@@ -1,78 +1,5 @@
 import Foundation
 
-fileprivate func planVarying(_ numSets: Int, _ minReps: Int, _ maxReps: Int) -> Plan {
-    return VariableRepsPlan("\(numSets)x\(minReps)-\(maxReps)", numSets: numSets, minReps: minReps, maxReps: maxReps)
-}
-
-fileprivate func planFixed(_ numSets: Int, _ numReps: Int) -> Plan {
-    return FixedSetsPlan("\(numSets)x\(numReps)", numSets: numSets, numReps: numReps)
-}
-
-fileprivate func planTimed(_ numSets: Int, targetTime: Int? = nil) -> Plan {
-    return TimedPlan("\(numSets) timed sets", numSets: numSets, targetTime: targetTime)
-}
-
-fileprivate func planWeighted3to8() -> Plan {
-    let numSets = 3
-    let minReps = 3
-    let maxReps = 8
-    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-}
-
-fileprivate func planWeighted8to12() -> Plan {
-    let numSets = 3
-    let minReps = 8
-    let maxReps = 12
-    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-}
-
-fileprivate func planWeighted1_8to12() -> Plan {
-    let numSets = 1
-    let minReps = 8
-    let maxReps = 12
-    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-}
-
-//fileprivate func planWeighted5to10() -> Plan {
-//    let numSets = 1
-//    let minReps = 5     // this called for 1x10 which seems silly
-//    let maxReps = 10
-//    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-//    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-//}
-//
-fileprivate func planWeighted10to20() -> Plan {
-    let numSets = 3
-    let minReps = 10
-    let maxReps = 20
-    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-}
-
-//fileprivate func planWeighted10to15() -> Plan {
-//    let numSets = 3
-//    let minReps = 10
-//    let maxReps = 15
-//    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-//    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-//}
-//
-//fileprivate func planWeighted15to30() -> Plan {
-//    let numSets = 3
-//    let minReps = 14
-//    let maxReps = 30
-//    let warmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
-//    return CycleRepsPlan("\(numSets)x\(minReps)-\(maxReps)", warmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
-//}
-
-func planLinear(_ numSets: Int, by: Int) -> Plan {
-    let warmups = Warmups(withBar: 0, firstPercent: 0.5, lastPercent: 0.9, reps: [])
-    return LinearPlan("\(numSets)x\(by)", warmups, workSets: numSets, workReps: by)
-}
-
 fileprivate let glutealNotes = """
 * This program should be started once you have built a base of strength using a program like Booty-ful Beginnings.
 * Attempt to increase weights by 5-10 pounds each week.
@@ -90,34 +17,34 @@ fileprivate let glutealNotes = """
 func GlutealGoddess1() -> Program {
     let exercises = [
         // A
-        createBarBell("Glute Bridge",             "Glute Bridge",           planLinear(3, by: 20), restMins: 2.0),
-        createDumbbell2("One Arm Row",            "Kroc Row",               planLinear(3, by: 8), restMins: 1.0),
-        createBarBell("Box Squat",                "Body-weight Box Squat",  planLinear(3, by: 5), restMins: 2.0),
-        createDumbbell2("Dumbbell Incline Press", "Dumbbell Incline Press", planLinear(3, by: 8), restMins: 1.0),
-        createBarBell("Deadlift",                 "Deadlift",               planLinear(3, by: 8), restMins: 2.0),
-        createMachine("Cable Hip Abduction",      "Cable Hip Abduction",    planLinear(1, by: 20), restMins: 0.5),
-        createTimed("RKC Plank",                  "RKC Plank",              planTimed(1, targetTime: 60), duration: 60),
-        createTimed("Side Plank",                 "Side Plank",             planTimed(2, targetTime: 60), duration: 60),
+        barbell("Glute Bridge",            "Glute Bridge",           3, by: 20, restMins: 2.0),
+        dumbbell("One Arm Row",            "Kroc Row",               3, by: 8, restMins: 1.0),
+        barbell("Box Squat",               "Body-weight Box Squat",  3, by: 5, restMins: 2.0),
+        dumbbell("Dumbbell Incline Press", "Dumbbell Incline Press", 3, by: 8, restMins: 1.0),
+        barbell("Deadlift",                "Deadlift",               3, by: 8, restMins: 2.0),
+        machine("Cable Hip Abduction",     "Cable Hip Abduction",    1, by: 20, restMins: 0.5),
+        bodyWeight("RKC Plank",            "RKC Plank",              1, secs: 60),
+        bodyWeight("Side Plank",           "Side Plank",             2, secs: 60),
 
         // B
-        createVarReps("Single Leg Hip Thrust",   "Body-weight Single Leg Hip Thrust", planVarying(3, 8, 20), restMins: 1.0, requestedReps: 8),
-        createFixed("Chinup",                    "Chinup",                            planFixed(3, 5), restMins: 2.0),
-        createDumbbell2("Dumbbell Step Up",      "Deep Step-ups",                     planLinear(3, by: 10), restMins: 2.0),
-        createBarBell("Overhead Press",          "Overhead Press",                    planLinear(3, by: 8), restMins: 2.0),
-        createFixed("Prisoner Back Extension",   "Back Extension",                    planFixed(2, 12), restMins: 1.0),
-        createFixed("Band Seated Abduction",     "Band Seated Abduction",             planFixed(1, 20), restMins: 1.0),
-        createFixed("Straight-leg Situp",        "Straight Leg Situp",                planFixed(1, 20), restMins: 1.0),
-        createFixed("Side Bend",                 "Side Bend (45 degree)",             planFixed(1, 20), restMins: 1.0),
+        bodyWeight("Single Leg Hip Thrust",   "Body-weight Single Leg Hip Thrust", 3, minReps: 8, maxReps: 20, restMins: 1.0),
+        bodyWeight("Chinup",                  "Chinup",                            3, by: 5, restMins: 2.0),
+        dumbbell("Dumbbell Step Up",          "Deep Step-ups",                     3, by: 10, restMins: 2.0),
+        barbell("Overhead Press",             "Overhead Press",                    3, by: 8, restMins: 2.0),
+        bodyWeight("Prisoner Back Extension", "Back Extension",                    2, by: 12, restMins: 1.0),
+        bodyWeight("Band Seated Abduction",   "Band Seated Abduction",             1, by: 20, restMins: 1.0),
+        bodyWeight("Straight-leg Situp",      "Straight Leg Situp",                1, by: 20, restMins: 1.0),
+        bodyWeight("Side Bend",               "Side Bend (45 degree)",             1, by: 20, restMins: 1.0),
 
         // C
-        createBarBell("Hip Thrust",             "Hip Thrust",                   planLinear(3, by: 20), restMins: 2.0),
-        createMachine("One Arm Cable Row",      "Standing One Arm Cable Row",   planLinear(3, by: 8), restMins: 1.0),
-        createDumbbell2("Goblet Squat",         "Goblet Squat",                 planLinear(3, by: 5), restMins: 2.0),
-        createDumbbell2("One Arm Bench Press",  "Dumbbell One Arm Bench Press", planLinear(3, by: 8), restMins: 1.0),
-        createMachine("Pull Through",           "Pull Through",                 planVarying(3, 8, 12), restMins: 1.0),
-        createFixed("Side Lying Hip Raise",     "Side Lying Hip Raise",         planFixed(1, 10), restMins: 1.0),
-        createFixed("Turkish Get-Up",           "Turkish Get-Up",               planFixed(1, 5), restMins: 1.0),
-        createMachine("Anti-Rotation Press",    "Half-kneeling Cable Anti-Rotation Press", planVarying(1, 8, 12), restMins: 2.0),
+        barbell("Hip Thrust",              "Hip Thrust",                   3, by: 20, restMins: 2.0),
+        machine("One Arm Cable Row",       "Standing One Arm Cable Row",   3, by: 8, restMins: 1.0),
+        dumbbell("Goblet Squat",           "Goblet Squat",                 3, by: 5, restMins: 2.0),
+        dumbbell("One Arm Bench Press",    "Dumbbell One Arm Bench Press", 3, by: 8, restMins: 1.0),
+        machine("Pull Through",            "Pull Through",                 3, minReps: 8, maxReps: 12, restMins: 1.0),
+        bodyWeight("Side Lying Hip Raise", "Side Lying Hip Raise",         1, by: 10, restMins: 1.0),
+        bodyWeight("Turkish Get-Up",       "Turkish Get-Up",               1, by: 5, restMins: 1.0),
+        machine("Anti-Rotation Press",     "Half-kneeling Cable Anti-Rotation Press", 1, minReps: 8, maxReps: 12, restMins: 2.0),
         ] + strongCurvesWarmups
     
     let aExercises = ["Glute Bridge", "One Arm Row", "Box Squat", "Dumbbell Incline Press", "Deadlift", "Cable Hip Abduction", "RKC Plank", "Side Plank"]
@@ -185,34 +112,34 @@ func GlutealGoddess1() -> Program {
 func GlutealGoddess2() -> Program {
     let exercises = [
         // A
-        createBarBell("Hip Thrust",              "Hip Thrust",              planWeighted3to8(), restMins: 2.0),
-        createMachine("Seated Row",              "Seated Cable Row",        planLinear(3, by: 8), restMins: 1.0),
-        createBarBell("Squat",                   "Low bar Squat",           planLinear(3, by: 5), restMins: 2.0),
-        createBarBell("Bench Press",             "Bench Press",             planWeighted3to8(), restMins: 2.0),
-        createBarBell("Good Morning",            "Good Morning",            planWeighted8to12(), restMins: 2.0),
-        createVarReps("Band Standing Abduction", "Band Standing Abduction", planVarying(1, 10, 30), restMins: 1.0, requestedReps: 10),
-        createVarReps("Ab Wheel Rollout",        "Ab Wheel Rollout",        planVarying(1, 8, 20), restMins: 1.0, requestedReps: 8),
-        createDumbbell2("Dumbbell Side Bend",    "Dumbbell Side Bend",      planWeighted10to20(), restMins: 1.0),
+        barbell("Hip Thrust",                 "Hip Thrust",              3, minReps: 3, maxReps: 8, restMins: 2.0),
+        machine("Seated Row",                 "Seated Cable Row",        3, by: 8, restMins: 1.0),
+        barbell("Squat",                      "Low bar Squat",           3, by: 5, restMins: 2.0),
+        barbell("Bench Press",                "Bench Press",             3, minReps: 3, maxReps: 8, restMins: 2.0),
+        barbell("Good Morning",               "Good Morning",            3, minReps: 8, maxReps: 12, restMins: 2.0),
+        bodyWeight("Band Standing Abduction", "Band Standing Abduction", 1, minReps: 10, maxReps: 30, restMins: 1.0),
+        bodyWeight("Ab Wheel Rollout",        "Ab Wheel Rollout",        1, minReps: 8, maxReps: 20, restMins: 1.0),
+        dumbbell("Dumbbell Side Bend",        "Dumbbell Side Bend",      3, minReps: 10, maxReps: 20, restMins: 1.0),
         
         // B
-        createVarReps("Single Leg Hip Thrust", "Body-weight Single Leg Hip Thrust", planVarying(3, 8, 20), restMins: 1.0, requestedReps: 8),
-        createVarReps("Pullup",                "Pullup",                            planVarying(3, 3, 8), restMins: 2.0, requestedReps: 3),
-        createDumbbell2("Dumbbell Lunge",      "Dumbbell Lunge",                    planLinear(3, by: 10), restMins: 2.0),
-        createBarBell("Push Press",            "Push Press",                        planLinear(3, by: 6), restMins: 2.0),
-        createFixed("Dumbbell Back Extension", "Back Extension",                    planFixed(2, 20), restMins: 1.0),
-        createVarReps("Band Seated Abduction", "Band Seated Abduction",             planVarying(1, 10, 30), restMins: 1.0, requestedReps: 10),
-        createVarReps("Hanging Leg Raise",     "Hanging Leg Raise",                 planVarying(1, 8, 20), restMins: 1.0, requestedReps: 8),
-        createSinglePlates("Landmine 180's",   "Landmine 180's",                    planWeighted1_8to12(), restMins: 1.0),
+        bodyWeight("Single Leg Hip Thrust",   "Body-weight Single Leg Hip Thrust", 3, minReps: 8, maxReps: 20, restMins: 1.0),
+        bodyWeight("Pullup",                  "Pullup",                            3, minReps: 3, maxReps: 8, restMins: 2.0),
+        dumbbell("Dumbbell Lunge",            "Dumbbell Lunge",                    3, by: 10, restMins: 2.0),
+        barbell("Push Press",                 "Push Press",                        3, by: 6, restMins: 2.0),
+        bodyWeight("Dumbbell Back Extension", "Back Extension",                    2, by: 20, restMins: 1.0),
+        bodyWeight("Band Seated Abduction",   "Band Seated Abduction",             1, minReps: 10, maxReps: 30, restMins: 1.0),
+        bodyWeight("Hanging Leg Raise",       "Hanging Leg Raise",                 1, minReps: 8, maxReps: 20, restMins: 1.0),
+        createSinglePlates("Landmine 180's",  "Landmine 180's",                    1, minReps: 8, maxReps: 12(), restMins: 1.0),
 
         // C
-        createBarBell("Hip Thrust (isohold)",         "Hip Thrust (isohold)",         planLinear(3, by: 1), restMins: 2.0),
-        createMachine("D-handle Lat Pulldown",        "Lat Pulldown",                 planLinear(3, by: 8), restMins: 1.0),
-        createFixed("Skater Squat",                   "Skater Squat",                 planFixed(3, 8), restMins: 1.0),
-        createVarReps("Narrow-base Pushup",           "Pushup",                       planVarying(3, 5, 15), restMins: 2.0, requestedReps: 5),
-        createBarBell("Single-leg Romanian Deadlift", "Single Leg Romanian Deadlift", planWeighted8to12(), restMins: 2.0),
-        createVarReps("Side Lying Hip Raise",         "Side Lying Hip Raise",         planVarying(1, 10, 30), restMins: 1.0, requestedReps: 10),
-        createVarReps("Straight-leg Situp",           "Straight Leg Situp",           planVarying(1, 10, 20), restMins: 1.0, requestedReps: 10),
-        createVarReps("Side Bend",                    "Side Bend (45 degree)",        planVarying(1, 10, 20), restMins: 1.0, requestedReps: 10),
+        barbell("Hip Thrust (isohold)",         "Hip Thrust (isohold)",         3, by: 1, restMins: 2.0),
+        machine("D-handle Lat Pulldown",        "Lat Pulldown",                 3, by: 8, restMins: 1.0),
+        bodyWeight("Skater Squat",              "Skater Squat",                 3, by: 8, restMins: 1.0),
+        bodyWeight("Narrow-base Pushup",        "Pushup",                       3, minReps: 5, maxReps: 15, restMins: 2.0),
+        barbell("Single-leg Romanian Deadlift", "Single Leg Romanian Deadlift", 3, minReps: 8, maxReps: 12, restMins: 2.0),
+        bodyWeight("Side Lying Hip Raise",      "Side Lying Hip Raise",         1, minReps: 10, maxReps: 30, restMins: 1.0),
+        bodyWeight("Straight-leg Situp",        "Straight Leg Situp",           1, minReps: 10, maxReps: 20, restMins: 1.0),
+        bodyWeight("Side Bend",                 "Side Bend (45 degree)",        1, minReps: 10, maxReps: 20, restMins: 1.0),
         ] + strongCurvesWarmups
 
     let aExercises = ["Hip Thrust", "Seated Row", "Squat", "Bench Press", "Good Morning", "Band Standing Abduction", "Ab Wheel Rollout", "Dumbbell Side Bend"]
@@ -279,37 +206,7 @@ func GlutealGoddess2() -> Program {
 // Weeks 9-12 for 3 days/week version of Gluteal Goddess.
 //func GlutealGoddess3() -> Program {
 //    let exercises = [
-//        // A
-//        createBarBell("Hip Thrust",           "Hip Thrust",             planWeighted10to20(), restMins: 1.0),
-//        createDumbbell2("Dumbbell Row",       "Bent Over Dumbbell Row", planWeighted8to12(), restMins: 1.0),
-//        createBarBell("Box Squat",            "Box Squat",              planWeighted10to20(), restMins: 2.0),
-//        createVarReps("Pushup",               "Pushup",                 planVarying(3, 3, 10), restMins: 0.5, requestedReps: 3),
-//        createBarBell("Deadlift",             "Deadlift",               planWeighted10to20(), restMins: 2.0),
-//        createVarReps("Side Lying Abduction", "Side Lying Abduction",   planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
-//        createVarReps("Dumbbell Ball Crunch", "Exercise Ball Crunch",   planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
-//        createMachine("Anti-Rotation Press",  "Half-kneeling Cable Anti-Rotation Press", planWeighted10to15(), restMins: 0.5),
-//        
-//        // B
-//        createVarReps("Single Leg Hip Thrust", "Body-weight Single Leg Hip Thrust", planVarying(3, 20, 20), restMins: 1.0, requestedReps: 10),
-//        createVarReps("Chinup",                "Chinup",                            planVarying(3, 1, 5), restMins: 1.0, requestedReps: 1),
-//        createVarReps("Bulgarian Split Squat", "Body-weight Bulgarian Split Squat", planVarying(3, 10, 20), restMins: 1.0, requestedReps: 10),
-//        createDumbbell2("One Arm OHP",         "Dumbbell One Arm Shoulder Press",   planWeighted8to12(), restMins: 1.0),
-//        createBarBell("Good Morning",          "Good Morning",                      planWeighted10to20(), restMins: 1.0),
-//        createVarReps("X-Band Walk",           "X-Band Walk",                       planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
-//        createTimed("Decline Plank",           "Decline Plank",                     planTimed(1, targetTime: 120), duration: 60),
-//        createDumbbell2("Side Bend",           "Dumbbell Side Bend",                planWeighted15to30(), restMins: 1.0),
-//        
-//        // C
-//        createBarBell("Hip Thrust (paused)",   "Hip Thrust",             planWeighted8to12(), restMins: 1.0),
-//        createDumbbell2("Incline Row",         "Dumbbell Incline Row",   planWeighted8to12(), restMins: 1.0),
-//        createBarBell("Squat",                 "Low bar Squat",          planWeighted10to20(), restMins: 2.0),
-//        createBarBell("Incline Bench Press",   "Incline Bench Press",    planWeighted3to10(), restMins: 2.0),
-//        createVarReps("Back Extension",        "Back Extension",         planVarying(3, 10, 30), restMins: 0.5, requestedReps: 10),
-//        createVarReps("Clam",                  "Clam",                   planVarying(1, 15, 30), restMins: 0.5, requestedReps: 15),
-//        createVarReps("Hanging Leg Raise",     "Hanging Leg Raise",      planVarying(1, 10, 20), restMins: 0.5, requestedReps: 10),
-//        createMachine("Rope Horizontal Chop",  "Rope Horizontal Chop",   planWeighted10to15(), restMins: 0.5),
-//        ] + strongCurvesWarmups
-//    
+//
 //    let aExercises = ["Hip Thrust", "Dumbbell Row", "Box Squat", "Pushup", "Deadlift", "Side Lying Abduction", "Dumbbell Ball Crunch", "Anti-Rotation Press"]
 //    let bExercises = ["Single Leg Hip Thrust", "Chinup", "Bulgarian Split Squat", "One Arm OHP", "Good Morning", "X-Band Walk", "Decline Plank", "Side Bend"]
 //    let cExercises = ["Hip Thrust (paused)", "Incline Row", "Squat", "Incline Bench Press", "Back Extension", "Clam", "Hanging Leg Raise", "Rope Horizontal Chop"]

@@ -54,8 +54,14 @@ phone\
 \f1\b0\fs36 \cf4 func\cf5  barbell(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , \cf4 _\cf5  numSets: \cf6 Int\cf5 , minReps: \cf6 Int\cf5 , maxReps: \cf6 Int\cf5 , warmups: \cf7 Warmups\cf5 ? = \cf4 nil\cf5 , useBumpers: \cf6 Bool\cf5  = \cf4 false\cf5 , magnets: [\cf6 Double\cf5 ] = [], derivedFrom: \cf6 String\cf5 ? = \cf4 nil\cf5 , restMins: \cf6 Double\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
 \f0\fs24 \cf0 \
 
+\f1\fs36 \cf4 func\cf5  barbell(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , \cf4 _\cf5  numSets: \cf6 Int\cf5 , by: \cf6 Int\cf5 , warmups: \cf7 Warmups\cf5 ? = \cf4 nil\cf5 , useBumpers: \cf6 Bool\cf5  = \cf4 false\cf5 , magnets: [\cf6 Double\cf5 ] = [], derivedFrom: \cf6 String\cf5 ? = \cf4 nil\cf5 , restMins: \cf6 Double\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
+\f0\fs24 \cf0 \
+
 \f1\fs36 \cf4 \
 func\cf5  dumbbell(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , \cf4 _\cf5  numSets: \cf6 Int\cf5 , minReps: \cf6 Int\cf5 , maxReps: \cf6 Int\cf5 , warmups: \cf7 Warmups\cf5 ? = \cf4 nil\cf5 , restMins: \cf6 Double\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4 func\cf5  dumbbell(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , \cf4 _\cf5  numSets: \cf6 Int\cf5 , minReps: \cf6 Int\cf5 , maxReps: \cf6 Int\cf5 , warmups: \cf7 Warmups\cf5 ? = \cf4 nil\cf5 , restMins: \cf6 Double\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
 \f0\fs24 \cf0 \
 
 \f1\fs36 \cf4 \
@@ -64,6 +70,9 @@ func\cf5  singleDumbbell(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalN
 
 \f1\fs36 \cf4 \
 func\cf5  machine(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , \cf4 _\cf5  numSets: \cf6 Int\cf5 , minReps: \cf6 Int\cf5 , maxReps: \cf6 Int\cf5 , warmups: \cf7 Warmups\cf5 ? = \cf4 nil\cf5 , restMins: \cf6 Double\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
+\f0\fs24 \cf0 \
+
+\f1\fs36 \cf4 func\cf5  machine(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , \cf4 _\cf5  numSets: \cf6 Int\cf5 , by: \cf6 Int\cf5 , warmups: \cf7 Warmups\cf5 ? = \cf4 nil\cf5 , restMins: \cf6 Double\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
 \f0\fs24 \cf0 \
 
 \f1\fs36 \cf4 \
@@ -79,18 +88,11 @@ func\cf5  bodyWeight(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName:
 \f1\fs36 \cf4 func\cf5  bodyWeight(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , \cf4 _\cf5  numSets: \cf6 Int\cf5 , secs: \cf6 Int\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
 \f0\fs24 \cf0 \
 
-\f1\fs36 \cf4 public\cf5  \cf4 func\cf5  bodyWeight(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , requestedReps: \cf6 Int\cf5 , targetReps: \cf6 Int\cf5 , restMins: \cf6 Double\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
+\f1\fs36 \cf4 func\cf5  bodyWeight(\cf4 _\cf5  name: \cf6 String\cf5 , \cf4 _\cf5  formalName: \cf6 String\cf5 , requestedReps: \cf6 Int\cf5 , targetReps: \cf6 Int\cf5 , restMins: \cf6 Double\cf5 , planName: \cf6 String\cf5  = \cf8 ""\cf5 ) -> \cf7 Exercise\cf5  \{
 \f0\fs24 \cf0 \
-
-\f1\fs36 \cf5 \
-VariableWeightSetting\cb9 	barbell, dumbbell\
-\
-\cb1 VariableRepsSetting\cb9 		body weight\
-\cb1 FixedWeightSetting
-\f0\i\fs48 \cf2 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
 
-\i0 \cf2 \
+\fs48 \cf2 \
 \pard\tx864\pardeftab864\pardirnatural\partightenfactor0
 
 \fs24 \cf0 \
