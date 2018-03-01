@@ -129,7 +129,7 @@ func GlutealGoddess2() -> Program {
         bodyWeight("Dumbbell Back Extension", "Back Extension",                    2, by: 20, restMins: 1.0),
         bodyWeight("Band Seated Abduction",   "Band Seated Abduction",             1, minReps: 10, maxReps: 30, restMins: 1.0),
         bodyWeight("Hanging Leg Raise",       "Hanging Leg Raise",                 1, minReps: 8, maxReps: 20, restMins: 1.0),
-        createSinglePlates("Landmine 180's",  "Landmine 180's",                    1, minReps: 8, maxReps: 12(), restMins: 1.0),
+        singlePlates("Landmine 180's",        "Landmine 180's",                    1, minReps: 8, maxReps: 12, restMins: 1.0),
 
         // C
         barbell("Hip Thrust (isohold)",         "Hip Thrust (isohold)",         3, by: 1, restMins: 2.0),

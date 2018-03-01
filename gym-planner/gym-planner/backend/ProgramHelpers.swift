@@ -82,6 +82,21 @@ public func barbell531Beginner(_ name: String, _ formalName: String, withBar: In
 }
 
 /// CycleRepsPlan
+public func singlePlates(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(numSets)x\(minReps)-\(maxReps)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let apparatus = Apparatus.singlePlates(plates: defaultPlates())
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = CycleRepsPlan(planName, warmups ?? defaultWarmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// CycleRepsPlan
 public func dumbbell(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
     if planName == "" {
@@ -225,19 +240,6 @@ public func hiit(_ name: String, warmupMins: Int, highSecs: Int, lowSecs: Int, c
     let setting = HIITSetting(warmupMins: warmupMins, highSecs: highSecs, lowSecs: lowSecs, cooldownMins: cooldownMins, numCycles: numCycles)
     let plan = HIITPlan(planName, targetCycles: targetCycles ?? numCycles, targetHighSecs: targetHighSecs ?? highSecs)
     return Exercise(name, "", plan, .hiit(setting))
-}
-
-// -------------------------------------------------------------------------------------
-
-public func createSinglePlates(_ name: String, _ formalName: String, _ plan: Plan, restMins: Double) -> Exercise {
-    let apparatus = Apparatus.singlePlates(plates: defaultPlates())
-    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
-    return Exercise(name, formalName, plan, .variableWeight(setting))
-}
-
-public func createCardio(_ name: String, _ plan: Plan) -> Exercise {
-    let setting = IntensitySetting()
-    return Exercise(name, "", plan, .intensity(setting))
 }
 
 public func makeProgression(_ exercises: [Exercise], _ names: String...) {
