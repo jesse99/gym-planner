@@ -899,6 +899,13 @@ let builtInNotes: [String: String] = [
             "Difficulty can be increased by holding a dumbbell between your feet."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/hanging-leg-raise"]),
     
+    "HIIT": createNote(
+        notes: [
+            "Do a 3-4 min warmup at low to moderate intensity of whatever exercise you're doing.",
+            "Do 6-10 sets of 60/60, 30/60, 30/30, 20/10 seconds of high/low intensity.",
+            "Do a 3-4 min cooldown at low intensity."],
+        links: ["Guide": "https://www.reddit.com/r/hiit/wiki/beginners_guide", "FAQ": "https://www.reddit.com/r/hiit/wiki/faq"]),
+    
     "High bar Squat": createNote(
         notes: [
             "Bar goes at the top of shoulders at the base of the neck.",

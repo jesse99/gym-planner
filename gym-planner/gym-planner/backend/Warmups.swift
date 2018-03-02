@@ -30,6 +30,40 @@ public struct Warmups: Storable, Equatable {
             lhs.reps == rhs.reps
     }
 
+    public func errors(prefix: String = "") -> [String] {
+        var problems: [String] = []
+        
+        if withBar < 0 {
+            problems += ["\(prefix)warmup.withBar is negative"]
+        }
+        
+        if firstPercent < 0.0 {
+            problems += ["\(prefix)warmup.firstPercent is negative"]
+        }
+        if firstPercent > 1.0 {
+            problems += ["\(prefix)warmup.firstPercent is greater than 100%"]
+        }
+
+        if lastPercent < 0.0 {
+            problems += ["\(prefix)warmup.lastPercent is negative"]
+        }
+        if lastPercent > 1.0 {
+            problems += ["\(prefix)warmup.lastPercent is greater than 100%"]
+        }
+        
+        if firstPercent > lastPercent {
+            problems += ["\(prefix)warmup.firstPercent is greater than lastPercent"]
+        }
+        
+        for (i, rep) in reps.enumerated() {
+            if rep < 1 {
+                problems += ["\(prefix)rep\(i+1) is less than 1"]
+            }
+        }
+
+        return problems
+    }
+    
     /// Returns array of reps, set number, percent of workingSetWeight, and warmupWeight.
     internal func computeWarmups(_ apparatus: Apparatus, workingSetWeight: Double) -> [(Int, Int, Double, Weight.Info)] {
         var warmups: [(Int, Int, Double, Weight.Info)] = []

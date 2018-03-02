@@ -40,6 +40,22 @@ public class SteadyStateCardioPlan : Plan {
         self.maxRollOverMins = maxRollOverMins
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+                
+        if daysPerWeek < 1 {
+            problems += ["plan \(planName) daysPerWeek is less than 1"]
+        }
+        if minsPerDay < 1 {
+            problems += ["plan \(planName) minsPerDay is less than 1"]
+        }
+        if maxRollOverMins < 0 {
+            problems += ["plan \(planName) maxRollOverMins is less than 0"]
+        }
+        
+        return problems
+    }
+    
     // This should consider typeName and whatever was passed into the init above.
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? SteadyStateCardioPlan {

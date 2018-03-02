@@ -141,6 +141,9 @@ public protocol Plan: Storable {
     /// Returns the weight the user is expected to lift. Note that this is the base-line weight, e.g.
     /// for a plan with cycles it'll typically be the weight for the first cycle.
     func currentWeight() -> Double?
+    
+    /// Returns a list of problems.
+    func errors() -> [String]
 }
 
 extension PlanState: Storable {

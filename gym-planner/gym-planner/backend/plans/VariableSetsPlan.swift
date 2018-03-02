@@ -116,6 +116,10 @@ public class VariableSetsPlan: Plan {
         return nil
     }
     
+    public func errors() -> [String] {
+        return []
+    }
+    
     public func getHistory() -> [BaseResult] {
         return history
     }

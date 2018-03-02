@@ -86,6 +86,21 @@ public class LinearPlan : Plan {
         self.deloads = [1.0, 1.0, 0.95, 0.9, 0.85]
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        problems += warmups.errors()
+        
+        if workSets < 1 {
+            problems += ["plan \(planName) workSets is less than 1"]
+        }
+        if workReps < 1 {
+            problems += ["plan \(planName) workReps is less than 1"]
+        }
+        
+        return problems
+    }
+    
     // This should consider typeName and whatever was passed into the init above.
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? LinearPlan {

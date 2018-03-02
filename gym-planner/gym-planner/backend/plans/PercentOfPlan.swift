@@ -86,6 +86,25 @@ public class PercentOfPlan : Plan {
         self.percent = percent
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        problems += warmups.errors()
+        
+        if workSets < 1 {
+            problems += ["plan \(planName) workSets is less than 1"]
+        }
+        if workReps < 1 {
+            problems += ["plan \(planName) workReps is less than 1"]
+        }
+        if percent < 0 {
+            problems += ["plan \(planName) percent is less than 0"]
+        }
+        // percent greater than 100 is ok (albeit unusual)
+        
+        return problems
+    }
+    
     // This should consider typeName and whatever was passed into the init above.
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? PercentOfPlan {

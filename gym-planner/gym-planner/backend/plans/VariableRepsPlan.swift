@@ -75,6 +75,26 @@ public class VariableRepsPlan : Plan {
         self.maxReps = maxReps
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+                
+        if numSets < 1 {
+            problems += ["plan \(planName) numSets is less than 1"]
+        }
+        if minReps < 1 {
+            problems += ["plan \(planName) minReps is less than 1"]
+        }
+        if maxReps < 1 {
+            problems += ["plan \(planName) maxReps is less than 1"]
+        }
+        
+        if minReps > maxReps {
+            problems += ["plan \(planName) minReps is greater than maxReps"]
+        }
+
+        return problems
+    }
+    
     // This should consider typeName and whatever was passed into the init above.
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? VariableRepsPlan {

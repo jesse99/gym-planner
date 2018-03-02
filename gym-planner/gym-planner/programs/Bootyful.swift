@@ -128,7 +128,7 @@ fileprivate let booty912Exercises = [
     machine("Rope Horizontal Chop", "Rope Horizontal Chop",  1, minReps: 10, maxReps: 15, restMins: 0.5),
 ] + strongCurvesWarmups
 
-fileprivate let booty14AExercises = ["Glute Bridge", "One Arm Row", "Box Squat", "Dumbbell Bench Press", "Dumbbell Romanian Deadlift", "Side Lying Abduction", "Front Plank", "Front Plank", "Side Plank from Knees"]
+fileprivate let booty14AExercises = ["Glute Bridge", "One Arm Row", "Box Squat", "Dumbbell Bench Press", "Dumbbell Romanian Deadlift", "Side Lying Abduction", "Front Plank", "Side Plank from Knees"]
 fileprivate let booty14BExercises = ["Glute Bridge", "Lat Pulldown", "Step-up", "Dumbbell OHP", "Back Extension", "Side Lying Clam", "Crunch", "Side Crunch"]
 fileprivate let booty14CExercises = ["Glute March", "Seated Row", "Body-weight Squat", "Dumbbell Incline Press", "Romanian Deadlift", "X-Band Walk", "RKC Plank", "Rope Horizontal Chop"]
 

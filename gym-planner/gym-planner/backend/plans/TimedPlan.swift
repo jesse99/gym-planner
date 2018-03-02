@@ -39,6 +39,19 @@ public class TimedPlan : Plan {
         self.targetTime = targetTime
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+                
+        if numSets < 1 {
+            problems += ["plan \(planName) numSets is less than 1"]
+        }
+        if let target = targetTime, target < 0 {
+            problems += ["plan \(planName) target is less than 0"]
+        }
+        
+        return problems
+    }
+    
     // This should consider typeName and whatever was passed into the init above.
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? TimedPlan {

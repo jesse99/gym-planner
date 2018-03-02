@@ -81,6 +81,19 @@ public class HIITPlan : Plan {
         self.targetHighSecs = targetHighSecs
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        if targetCycles < 1 {
+            problems += ["plan \(planName) targetCycles is less than 1"]
+        }
+        if targetHighSecs < 1 {
+            problems += ["plan \(planName) targetHighSecs is less than 1"]
+        }
+        
+        return problems
+    }
+    
     // This should consider typeName and whatever was passed into the init above.
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? HIITPlan {

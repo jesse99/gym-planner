@@ -34,6 +34,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
 //        ]
 //        let plan = MastersBasicCyclePlan("default plan", cycles)
 //        runWeighted(plan, numWorkouts: 15, defaultWeight: 2)
+        
+        for p in programs {
+            let problems = p.errors()
+            for q in problems {
+                os_log("%@", type: .error, q)
+            }
+            self.assert(problems.isEmpty, "\(p.name) has errors")
+        }
     }
     
     private func runWeighted(_ plan: Plan, numWorkouts: Int = 10, defaultWeight: Int = 4) {

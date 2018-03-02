@@ -198,6 +198,28 @@ public class BaseCyclicPlan : Plan {
         self.deloads = deloads  // by time
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        if cycles.isEmpty {
+            problems += ["plan \(planName) has no cycles"]
+        }
+        
+        for (i, cycle) in cycles.enumerated() {
+            problems += cycle.warmups.errors(prefix: "\(planName) cycle\(i+1) ")
+            
+            if cycle.worksets.any({$0.count < 1}) {
+                problems += ["\(planName) cycle\(i+1) has a rep less than 1"]
+            }
+            if cycle.worksets.any({$0.percent < 0.0}) {
+                problems += ["\(planName) cycle\(i+1) has a percent less than 0"]
+            }
+            // note that percents greater than 100 are ok
+        }
+        
+        return problems
+    }
+    
     // This should consider typeName and whatever was passed into the init above.
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? BaseCyclicPlan {

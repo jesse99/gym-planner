@@ -34,6 +34,17 @@ extension Sequence {
         return nil
     }
     
+    /// Returns the number of elements where the predicate is true.
+    func count(_ predicate: (Iterator.Element) -> Bool) -> Int {
+        var n = 0
+        for x in self {
+            if predicate(x) {
+                n += 1
+            }
+        }
+        return n
+    }
+    
     func mapi<T>(_ mapping: (Int, Iterator.Element) -> T) -> [T] {
         var result: [T] = []
         

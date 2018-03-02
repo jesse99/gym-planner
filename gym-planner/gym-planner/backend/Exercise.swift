@@ -112,6 +112,31 @@ public class Exercise: Storable {
     
     /// If true don't display the plan in UI.
     public var hidden: Bool
+
+    public func errors(_ program: Program) -> [String] {
+        var problems: [String] = []
+        
+        // formalName is checked by program
+        problems += plan.errors()
+        
+        switch settings {
+        case .variableWeight(let setting): problems += setting.errors()
+        case .derivedWeight(let setting): problems += setting.errors(program)
+        case .fixedWeight(let setting): problems += setting.errors()
+        case .variableReps(let setting): problems += setting.errors()
+        case .intensity(let setting): problems += setting.errors()
+        case .hiit(let setting): problems += setting.errors()
+        }
+        
+        if let name = prevExercise, program.findExercise(name) == nil {
+            problems += ["exercise \(name) prevExercise (\(name)( is missing from the program"]
+        }
+        if let name = nextExercise, program.findExercise(name) == nil {
+            problems += ["exercise \(name) nextExercise (\(name)) is missing from the program"]
+        }
+        
+        return problems
+    }    
 }
 
 internal func repsStr(_ reps: Int, amrap: Bool = false) -> String {

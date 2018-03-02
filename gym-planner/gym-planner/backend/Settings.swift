@@ -1,6 +1,15 @@
 /// Exercise configuration that users are expected to change.
 import Foundation
 
+public enum Settings {
+    case variableWeight(VariableWeightSetting)
+    case derivedWeight(DerivedWeightSetting)
+    case fixedWeight(FixedWeightSetting)
+    case variableReps(VariableRepsSetting)
+    case intensity(IntensitySetting)
+    case hiit(HIITSetting)
+}
+
 public struct MachineRange {
     public let min: Double
     public let max: Double
@@ -43,6 +52,27 @@ public class VariableWeightSetting: Storable {
         self.restSecs = restSecs
         self.stalls = 0
         self.reps = reps
+    }
+    
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        problems += apparatus.errors()
+        
+        if weight < 0 {
+            problems += ["setting.weight is less than 0"]
+        }
+        if restSecs < 0 {
+            problems += ["setting,restSecs is less than 0"]
+        }
+        if stalls < 0 {
+            problems += ["setting,stalls is less than 0"]
+        }
+        if let r = reps, r < 0 {
+            problems += ["setting,reps is less than 0"]
+        }
+        
+        return problems
     }
     
     public required init(from store: Store) {
@@ -93,6 +123,16 @@ public class DerivedWeightSetting: Storable {
         self.restSecs = restSecs
     }
     
+    public func errors(_ program: Program) -> [String] {
+        var problems: [String] = []
+        
+        if program.findExercise(otherName) == nil {
+            problems += ["setting,otherName (\(otherName)) isn't defined"]
+        }
+        
+        return problems
+    }
+    
     public required init(from store: Store) {
         self.otherName = store.getStr("otherName")
         self.restSecs = store.getInt("restSecs")
@@ -116,6 +156,22 @@ public class VariableRepsSetting: Storable {
         self.requestedReps = requestedReps
         self.weight = 0.0
         self.restSecs = restSecs
+    }
+    
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        if weight < 0 {
+            problems += ["setting.weight is less than 0"]
+        }
+        if restSecs < 0 {
+            problems += ["setting,restSecs is less than 0"]
+        }
+        if requestedReps < 0 {
+            problems += ["setting,requestedReps is less than 0"]
+        }
+        
+        return problems
     }
     
     public required init(from store: Store) {
@@ -142,6 +198,19 @@ public class FixedWeightSetting: Storable {
         self.restSecs = restSecs
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        if weight < 0 {
+            problems += ["setting.weight is less than 0"]
+        }
+        if restSecs < 0 {
+            problems += ["setting,restSecs is less than 0"]
+        }
+        
+        return problems
+    }
+    
     public required init(from store: Store) {
         self.weight = store.getDbl("weight")
         self.restSecs = store.getInt("restSecs")
@@ -160,6 +229,10 @@ public class IntensitySetting: Storable {
     
     init(intensity: String = "") {
         self.intensity = intensity
+    }
+    
+    public func errors() -> [String] {
+        return []
     }
     
     public required init(from store: Store) {
@@ -199,6 +272,28 @@ public class HIITSetting: Storable {
         self.cooldownIntensity = ""
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        if warmupSecs < 0 {
+            problems += ["setting.warmupSecs is less than 0"]
+        }
+        if highSecs < 0 {
+            problems += ["setting,highSecs is less than 0"]
+        }
+        if lowSecs < 0 {
+            problems += ["setting,lowSecs is less than 0"]
+        }
+        if cooldownSecs < 0 {
+            problems += ["setting,cooldownSecs is less than 0"]
+        }
+        if numCycles < 1 {
+            problems += ["setting,numCycles is less than 1"]
+        }
+        
+        return problems
+    }
+    
     public required init(from store: Store) {
         self.warmupSecs = store.getInt("warmupSecs")
         self.highSecs = store.getInt("highSecs")
@@ -228,13 +323,122 @@ public class HIITSetting: Storable {
     }
 }
 
-public enum Settings {
-    case variableWeight(VariableWeightSetting)
-    case derivedWeight(DerivedWeightSetting)
-    case fixedWeight(FixedWeightSetting)
-    case variableReps(VariableRepsSetting)
-    case intensity(IntensitySetting)
-    case hiit(HIITSetting)
+extension Settings: Storable {
+        public init(from store: Store) {
+                let tname = store.getStr("type")
+                switch tname {
+                    case "variable":
+                            self = .variableWeight(store.getObj("setting"))
+                    case "derived":
+                            self = .derivedWeight(store.getObj("setting"))
+                    case "fixed":
+                            self = .fixedWeight(store.getObj("setting"))
+                    case "variableReps":
+                            self = .variableReps(store.getObj("setting"))
+                    case "timed":
+                            self = .fixedWeight(FixedWeightSetting(restSecs: 60))   // TODO: remove this
+                    case "intensity":
+                            self = .intensity(store.getObj("setting"))
+                    case "hiit":
+                            self = .hiit(store.getObj("setting"))
+                    default:
+                            frontend.assert(false, "loading settings had unknown type: \(tname)"); abort()
+        }
+    }
+    
+        public func save(_ store: Store) {
+                switch self {
+                    case .variableWeight(let setting):
+                            store.addStr("type", "variable")
+                                store.addObj("setting", setting)
+                    case .derivedWeight(let setting):
+                            store.addStr("type", "derived")
+                                store.addObj("setting", setting)
+                    case .fixedWeight(let setting):
+                            store.addStr("type", "fixed")
+                                store.addObj("setting", setting)
+                    case .variableReps(let setting):
+                            store.addStr("type", "variableReps")
+                                store.addObj("setting", setting)
+                    case .intensity(let setting):
+                            store.addStr("type", "intensity")
+                                store.addObj("setting", setting)
+                    case .hiit(let setting):
+                            store.addStr("type", "hiit")
+                                store.addObj("setting", setting)
+        }
+    }
+}
+
+extension Apparatus {
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        switch self {
+        case .barbell(bar: let bar, collar: let collar, plates: let plates, bumpers: let bumpers, magnets: let magnets):
+            if bar < 0 {
+                problems += ["barbell.bar is less than 0"]
+            }
+            if collar < 0 {
+                problems += ["barbell.collar is less than 0"]
+            }
+            if plates.isEmpty {
+                problems += ["barbell.plates is empty"]
+            }
+            if plates.any({$0 < 0.0}) {
+                problems += ["barbell.plates is less than 0"]
+            }
+            if bumpers.any({$0 < 0.0}) {
+                problems += ["barbell.bumpers is less than 0"]
+            }
+            if magnets.any({$0 < 0.0}) {
+                problems += ["barbell.magnets is less than 0"]
+            }
+            
+        case .singlePlates(plates: let plates):
+            if plates.isEmpty {
+                problems += ["singlePlates.plates is empty"]
+            }
+            if plates.any({$0 < 0.0}) {
+                problems += ["singlePlates.plates is less than 0"]
+            }
+            
+        case .dumbbells1(weights: let weights, magnets: let magnets):
+            if weights.isEmpty {
+                problems += ["dumbbells.weights is empty"]
+            }
+            if weights.any({$0 < 0.0}) {
+                problems += ["dumbbells.weights is less than 0"]
+            }
+            if magnets.any({$0 < 0.0}) {
+                problems += ["dumbbells.magnets is less than 0"]
+            }
+            
+        case .dumbbells2(weights: let weights, magnets: let magnets):
+            if weights.isEmpty {
+                problems += ["dumbbells1.weights is empty"]
+            }
+            if weights.any({$0 < 0.0}) {
+                problems += ["dumbbells1.weights is less than 0"]
+            }
+            if magnets.any({$0 < 0.0}) {
+                problems += ["dumbbells1.magnets is less than 0"]
+            }
+            
+        case .machine(let range1, let range2, let extra):
+            problems += range1.errors("range1")
+            
+            if range2.min > 0 || range2.max > 0 {
+                problems += range2.errors("range2")
+            }
+            
+            if extra.any({$0 < 0.0}) {
+                problems += ["machine.extra.weights is less than 0"]
+            }
+        }
+        
+        return problems
+    }
 }
 
 extension Apparatus: Storable {
@@ -321,49 +525,25 @@ extension Apparatus: Storable {
     }
 }
 
-extension Settings: Storable {
-    public init(from store: Store) {
-        let tname = store.getStr("type")
-        switch tname {
-        case "variable":
-            self = .variableWeight(store.getObj("setting"))
-        case "derived":
-            self = .derivedWeight(store.getObj("setting"))
-        case "fixed":
-            self = .fixedWeight(store.getObj("setting"))
-        case "variableReps":
-            self = .variableReps(store.getObj("setting"))
-        case "timed":
-            self = .fixedWeight(FixedWeightSetting(restSecs: 60))   // TODO: remove this
-        case "intensity":
-            self = .intensity(store.getObj("setting"))
-        case "hiit":
-            self = .hiit(store.getObj("setting"))
-        default:
-            frontend.assert(false, "loading settings had unknown type: \(tname)"); abort()
+extension MachineRange {
+    public func errors(_ prefix: String) -> [String] {
+        var problems: [String] = []
+        
+        if self.min < 1 {
+            problems += ["\(prefix) min is less than 1"]
         }
-    }
-    
-    public func save(_ store: Store) {
-        switch self {
-        case .variableWeight(let setting):
-            store.addStr("type", "variable")
-            store.addObj("setting", setting)
-        case .derivedWeight(let setting):
-            store.addStr("type", "derived")
-            store.addObj("setting", setting)
-        case .fixedWeight(let setting):
-            store.addStr("type", "fixed")
-            store.addObj("setting", setting)
-        case .variableReps(let setting):
-            store.addStr("type", "variableReps")
-            store.addObj("setting", setting)
-        case .intensity(let setting):
-            store.addStr("type", "intensity")
-            store.addObj("setting", setting)
-        case .hiit(let setting):
-            store.addStr("type", "hiit")
-            store.addObj("setting", setting)
+        if self.max < 1 {
+            problems += ["\(prefix) max is less than 1"]
         }
+        if self.step < 0.1 {
+            problems += ["\(prefix) step is less than 0.1"]
+        }
+        
+        if self.min > self.max {
+            problems += ["\(prefix) min is greater than max"]
+        }
+
+        return problems
     }
 }
+

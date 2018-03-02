@@ -48,6 +48,19 @@ public class FixedSetsPlan : Plan {
         self.numReps = numReps
     }
     
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        if numSets < 1 {
+            problems += ["plan \(planName) numSets is less than 1"]
+        }
+        if numReps < 1 {
+            problems += ["plan \(planName) numReps is less than 1"]
+        }
+        
+        return problems
+    }
+    
     // This should consider typeName and whatever was passed into the init above.
     public func shouldSync(_ inPlan: Plan) -> Bool {
         if let savedPlan = inPlan as? FixedSetsPlan {

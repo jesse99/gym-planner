@@ -239,7 +239,7 @@ public func hiit(_ name: String, warmupMins: Int, highSecs: Int, lowSecs: Int, c
     
     let setting = HIITSetting(warmupMins: warmupMins, highSecs: highSecs, lowSecs: lowSecs, cooldownMins: cooldownMins, numCycles: numCycles)
     let plan = HIITPlan(planName, targetCycles: targetCycles ?? numCycles, targetHighSecs: targetHighSecs ?? highSecs)
-    return Exercise(name, "", plan, .hiit(setting))
+    return Exercise(name, "HIIT", plan, .hiit(setting))
 }
 
 public func makeProgression(_ exercises: [Exercise], _ names: String...) {

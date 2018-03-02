@@ -34,6 +34,36 @@ public class Workout: Storable {
     /// push/pull program. False for stuff like a mobility or cardio workout that can be
     /// performed at any time.
     public var scheduled: Bool
+
+    public func errors(_ program: Program) -> [String] {
+        var problems: [String] = []
+        
+        for n in Set(exercises) {
+            if exercises.count({$0 == n}) > 1 {
+                problems += ["workout \(name) exercise (\(n)) appears more than once"]
+            }
+        }
+        
+        for n in Set(optional) {
+            if optional.count({$0 == n}) > 1 {
+                problems += ["workout \(name) optional (\(n)) appears more than once"]
+            }
+        }
+        
+        for n in Set(optional) {
+            if !exercises.contains(n) {
+                problems += ["workout \(name) optional (\(n)) isn't in exercises"]
+            }
+        }
+        
+        for n in Set(exercises) {
+            if program.findExercise(n) == nil {
+                problems += ["workout \(name) exercises (\(n)) isn't in the program"]
+            }
+        }
+        
+        return problems
+    }
 }
 
 public class Program: Storable {
@@ -77,6 +107,84 @@ public class Program: Storable {
         self.init(name, workouts, exercises, tags, description, maxWorkouts: nil, nextProgram: nil)
     }
 
+    public func errors() -> [String] {
+        var problems: [String] = []
+        
+        for w in workouts {
+            problems += w.errors(self)
+        }
+        
+        for e in exercises {
+            problems += e.errors(self)
+
+            if builtInNotes[e.formalName] == nil && customNotes[e.formalName] == nil {
+                problems += ["exercise \(e.name) formalName (\(e.formalName)) is missing from notes"]
+            }
+        }
+        
+        if let n = maxWorkouts {
+            if n < 0 {
+                problems += ["program.maxWorkouts is less than 0"]
+            } else if n == 0 && nextProgram != nil {
+                problems += ["program.nextProgram is set but maxWorkouts is 0"]
+            } else if n > 0 && nextProgram == nil {
+                problems += ["program.maxWorkouts is set but nextProgram isn't"]
+            }
+        } else {
+            if nextProgram != nil {
+                problems += ["program.nextProgram is set but maxWorkouts isn't"]
+            }
+        }
+        
+        if tags.contains(.beginner) && tags.contains(.intermediate) {
+            problems += ["program.tags has both beginner and intermediate"]
+        }
+        if tags.contains(.beginner) && tags.contains(.advanced) {
+            problems += ["program.tags has both beginner and advanced"]
+        }
+        if tags.contains(.intermediate) && tags.contains(.advanced) {
+            problems += ["program.tags has both intermediate and advanced"]
+        }
+        
+        if tags.contains(.strength) && tags.contains(.hypertrophy) {
+            problems += ["program.tags has both strength and hypertrophy"]
+        }
+        if tags.contains(.hypertrophy) && tags.contains(.conditioning) {
+            problems += ["program.tags has both hypertrophy and conditioning"]
+        }
+
+        if tags.contains(.gym) && tags.contains(.barbell) {
+            problems += ["program.tags has both gym and barbell"]
+        }
+        if tags.contains(.gym) && tags.contains(.dumbbell) {
+            problems += ["program.tags has both gym and dumbbell"]
+        }
+        if tags.contains(.gym) && tags.contains(.minimal) {
+            problems += ["program.tags has both gym and minimal"]
+        }
+
+        if tags.contains(.barbell) && tags.contains(.dumbbell) {
+            problems += ["program.tags has both barbell and dumbbell"]
+        }
+        if tags.contains(.barbell) && tags.contains(.minimal) {
+            problems += ["program.tags has both barbell and minimal"]
+        }
+
+        if tags.contains(.dumbbell) && tags.contains(.minimal) {
+            problems += ["program.tags has both dumbbell and minimal"]
+        }
+
+        if tags.contains(.threeDays) && tags.contains(.fourDays) {
+            problems += ["program.tags has both threeDays and fourDays"]
+        }
+
+        if tags.contains(.unisex) && tags.contains(.female) {
+            problems += ["program.tags has both unisex and female"]
+        }
+
+        return problems
+    }
+    
     public required init(from store: Store) {
         self.name = store.getStr("name")
         self.workouts = store.getObjArray("workouts")
