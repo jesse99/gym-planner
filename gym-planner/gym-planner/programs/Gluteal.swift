@@ -160,38 +160,38 @@ func GlutealGoddess2() -> Program {
     This is the 3 days/week version of weeks 5-8 of the intermediate program from [Strong Curves: A Woman's Guide to Building a Better Butt and Body](https://www.amazon.com/Strong-Curves-Womans-Building-Better-ebook/dp/B00C4XI0QM/ref=sr_1_1?ie=UTF8&qid=1516764374&sr=8-1&keywords=strong+curves). The program is as follows (Bret recommends warmups, and they are part of the program, but there are a lot so they aren't listed here):
     
     **Workout A**
-    Barbell Hip Thrust 3x3-8
-    Seated Row 3x8
-    Barbell Squat 3x5
-    Bench Press 3x3-8
-    Good Morning 3x8-12
-    Band Standing Abduction 1x10-30 (set per side)
-    Ab Wheel Rollout from Knees 1x8-20
-    Dumbbell Side Bend 1x10-20 (set per side)
+    * Barbell Hip Thrust 3x3-8
+    * Seated Row 3x8
+    * Barbell Squat 3x5
+    * Bench Press 3x3-8
+    * Good Morning 3x8-12
+    * Band Standing Abduction 1x10-30 (set per side)
+    * Ab Wheel Rollout from Knees 1x8-20
+    * Dumbbell Side Bend 1x10-20 (set per side)
 
     **Cardio**
     
     **Workout B**
-    Bodyweight Single-leg Hip Thrust (shoulder and foot elevated) 3x8-20
-    Pullup 3x3-8
-    Dumbbell Walking Lunge 3x10
-    Push Press 3x6
-    Dumbbell Back Extension 2x20
-    Band Seated Abduction 1x10-30
-    Hanging Leg Raise 1x8-20
-    Landmine 180's 1x8-12 (set per side)
+    * Bodyweight Single-leg Hip Thrust (shoulder and foot elevated) 3x8-20
+    * Pullup 3x3-8
+    * Dumbbell Walking Lunge 3x10
+    * Push Press 3x6
+    * Dumbbell Back Extension 2x20
+    * Band Seated Abduction 1x10-30
+    * Hanging Leg Raise 1x8-20
+    * Landmine 180's 1x8-12 (set per side)
 
     **Cardio**
     
     **Workout C**
-    Barbell Hip Thrust (isohold) 3x30-60s
-    D-handle Lat Pulldowns 3x8
-    Skater Squat 3x8
-    Narrow-base Pushup 3x5-15
-    Barbell Single-leg Romanian Deadlift 3x8-12
-    Side-lying Hip Raise 1x10-30
-    Straight-leg Situp 1x10-20
-    45-degree Side Bend 1x10-20 (set per side)
+    * Barbell Hip Thrust (isohold) 3x30-60s
+    * D-handle Lat Pulldowns 3x8
+    * Skater Squat 3x8
+    * Narrow-base Pushup 3x5-15
+    * Barbell Single-leg Romanian Deadlift 3x8-12
+    * Side-lying Hip Raise 1x10-30
+    * Straight-leg Situp 1x10-20
+    * 45-degree Side Bend 1x10-20 (set per side)
 
     **Cardio**
     
@@ -204,68 +204,98 @@ func GlutealGoddess2() -> Program {
 }
 
 // Weeks 9-12 for 3 days/week version of Gluteal Goddess.
-//func GlutealGoddess3() -> Program {
-//    let exercises = [
-//
-//    let aExercises = ["Hip Thrust", "Dumbbell Row", "Box Squat", "Pushup", "Deadlift", "Side Lying Abduction", "Dumbbell Ball Crunch", "Anti-Rotation Press"]
-//    let bExercises = ["Single Leg Hip Thrust", "Chinup", "Bulgarian Split Squat", "One Arm OHP", "Good Morning", "X-Band Walk", "Decline Plank", "Side Bend"]
-//    let cExercises = ["Hip Thrust (paused)", "Incline Row", "Squat", "Incline Bench Press", "Back Extension", "Clam", "Hanging Leg Raise", "Rope Horizontal Chop"]
-//    
-//    let workouts = [
-//        Workout("A", aExercises, scheduled: true, optional: []),
-//        Workout("B", bExercises, scheduled: true, optional: []),
-//        Workout("C", cExercises, scheduled: true, optional: []),
-//        
-//        Workout("AC warmup", strongCurvesACWarmup, scheduled: false, optional: []),
-//        Workout("B warmup", strongCurvesBWarmup, scheduled: false, optional: []),
-//        ]
-//    
-//    let tags: [Program.Tags] = [.intermediate, .hypertrophy, .gym, .threeDays, .female, .ageUnder40, .age40s, .age50s]
-//    let description = """
-//    This is the 3 days/week version of weeks 9-12 of the intermediate program from [Strong Curves: A Woman's Guide to Building a Better Butt and Body](https://www.amazon.com/Strong-Curves-Womans-Building-Better-ebook/dp/B00C4XI0QM/ref=sr_1_1?ie=UTF8&qid=1516764374&sr=8-1&keywords=strong+curves). The program is as follows (Bret recommends warmups, and they are part of the program, but there are a lot so they aren't listed here):
-//    
-//    **Workout A**
-//    Barbell Hip Thrust 3x10-20
-//    Dumbbell Bent Over Row 3x8-12
-//    Barbell Box Squat 3x10-20
-//    Push-up 3x-3-10
-//    Barbell Deadlift 3x10-20
-//    Side Lying Abduction 1x15-30 (set pet side)
-//    Dumbbell Swiss Ball Crunch 1x-15-30 (set pet side)
-//    Half-kneeling Cable Anti-Rotation Press 1x10-15 (set per side)
-//
-//    **Cardio**
-//    
-//    **Workout B**
-//    Bodyweight Single-leg Hip Thrust (shoulders elevated) 3x10-20 (set per side)
-//    Chin-up (or assisted) 3x1-5
-//    Bodyweight Bulgarian Split Squat 3x10-20
-//    Single-arm Dumbbell OHP 3x8-12
-//    Barbell Good Morning 3x10-20
-//    X-band Walk (moderate) 1x15-30 (set per side)
-//    Feet Elevated Plank 1x60-120s
-//    Dumbbell Side Bend 1x15-30 (set per side)
-//
-//    **Cardio**
-//    
-//    **Workout C**
-//    Barbell Hip Thrust (paused) 3x8-12
-//    Dumbbell Chest Supported Row 3x8-10
-//    Barbell Squat 3x10-20
-//    Incline Press 3x3-10
-//    Bodyweight Back Extension 3x10-30
-//    Side Lying Clam 1x15-30 (set pet side)
-//    Hanging Leg Raise 1x10-20
-//    Rope Horizontal Chop 1x10-15 (set per side)
-//
-//    **Cardio**
-//    
-//    **Rest**
-//    
-//    **Notes**
-//    \(glutealNotes)
-//    """
-//    return Program("Gluteal Goddess 9-12", workouts, exercises, tags, description)
-//}
+func GlutealGoddess3() -> Program {
+    let exercises = [
+        // A
+        barbell("Hip Thrust (rest pause)", "Hip Thrust",            3, by: 10, restMins: 2.0),
+        bodyWeight("Inverted Row",         "Inverted Row",          3, minReps: 6, maxReps: 12, restMins: 1.0),
+        barbell("Zercher Squat",           "Zercher Squat",         3, minReps: 5, maxReps: 10, restMins: 2.0),
+        bodyWeight("Elevated Pushup",      "Pushup",                3, minReps: 5, maxReps: 20, restMins: 1.0),
+        barbell("Sumo Deadlift",           "Sumo Deadlift",         3, minReps: 6, maxReps: 12, restMins: 2.5),
+        bodyWeight("X-Band Walk",          "X-Band Walk",           1, by: 20, restMins: 1.0),
+        dumbbell("Swiss Ball Crunch",      "Exercise Ball Crunch",  1, by: 20, restMins: 2.0),
+        bodyWeight("Anti-Rotary Hold",     "Band Anti-Rotary Hold", 2, secs: 15),
+
+        // B
+        barbell("Hip Thrust (constant tension)",  "Hip Thrust",                      3, minReps: 20, maxReps: 30, restMins: 2.0),
+        bodyWeight("Pullup",                      "Pullup",                          3, minReps: 1, maxReps: 3, restMins: 2.0),
+        dumbbell("Deficit Bulgarian Split Squat", "Dumbbell Single Leg Split Squat", 3, by: 10, restMins: 2.0),
+        barbell("Incline Press",                  "Incline Bench Press",             3, minReps: 6, maxReps: 10, restMins: 2.0),
+        bodyWeight("Gliding Leg Curl",            "Gliding Leg Curl",                2, minReps: 6, maxReps: 15, restMins: 1.0),
+        machine("Cable Hip Rotation",             "Cable Hip Rotation",              1, minReps: 8, maxReps: 15, restMins: 1.0),
+        bodyWeight("Body Saw",                    "Body Saw",                        1, minReps: 8, maxReps: 15, restMins: 1.0),
+        machine("Anti-Rotation Press",            "Half-kneeling Cable Anti-Rotation Press", 1, minReps: 8, maxReps: 12, restMins: 1.0),
+        
+        // C
+        barbell("Hip Thrust",                 "Hip Thrust",                      3, by: 5, restMins: 2.5),
+        dumbbell("Chest Supported Row",       "Dumbbell Incline Row",            3, minReps: 6, maxReps: 12, restMins: 2.0),
+        dumbbell("Dumbbell Step Up",          "Deep Step-ups",                   3, minReps: 8, maxReps: 15, restMins: 2.0),
+        dumbbell("One Arm OHP",               "Dumbbell One Arm Shoulder Press", 3, minReps: 8, maxReps: 15, restMins: 2.0),
+        bodyWeight("Prisoner Single-leg Back Extension", "Back Extension",       3, minReps: 8, maxReps: 15, restMins: 1.0),
+        bodyWeight("Side Lying Hip Raise",    "Side Lying Hip Raise",            1, minReps: 10, maxReps: 30, restMins: 1.0),
+        bodyWeight("Hanging Leg Raise",       "Hanging Leg Raise",               1, minReps: 8, maxReps: 20, restMins: 1.0),
+        singlePlates("Landmine 180's",        "Landmine 180's",                  1, minReps: 8, maxReps: 12, restMins: 1.0),
+        ] + strongCurvesWarmups
+
+    let aExercises = ["Hip Thrust (rest pause)", "Inverted Row", "Zercher Squat", "Elevated Pushup", "Sumo Deadlift", "X-Band Walk", "Swiss Ball Crunch", "Anti-Rotary Hold"]
+    let bExercises = ["Hip Thrust (constant tension)", "Pullup", "Deficit Bulgarian Split Squat", "Incline Press", "Gliding Leg Curl", "Cable Hip Rotation", "Body Saw", "Anti-Rotation Press"]
+    let cExercises = ["Hip Thrust", "Chest Supported Row", "Dumbbell Step Up", "One Arm OHP", "Prisoner Single-leg Back Extension", "Side Lying Hip Raise", "Hanging Leg Raise", "Landmine 180's"]
+    
+    let workouts = [
+        Workout("A", aExercises, scheduled: true, optional: []),
+        Workout("B", bExercises, scheduled: true, optional: []),
+        Workout("C", cExercises, scheduled: true, optional: []),
+    
+        Workout("AC warmup", strongCurvesACWarmup, scheduled: false, optional: []),
+        Workout("B warmup", strongCurvesBWarmup, scheduled: false, optional: []),
+        ]
+    
+    let tags: [Program.Tags] = [.intermediate, .hypertrophy, .gym, .threeDays, .female, .ageUnder40, .age40s, .age50s]
+    let description = """
+    This is the 3 days/week version of weeks 9-12 of the intermediate program from [Strong Curves: A Woman's Guide to Building a Better Butt and Body](https://www.amazon.com/Strong-Curves-Womans-Building-Better-ebook/dp/B00C4XI0QM/ref=sr_1_1?ie=UTF8&qid=1516764374&sr=8-1&keywords=strong+curves). The program is as follows (Bret recommends warmups, and they are part of the program, but there are a lot so they aren't listed here):
+    
+    **Workout A**
+    * Barbell Hip Thrust (rest pause) 3x10
+    * Bodyweight Inverted Row 3x6-12
+    * Barbell Zercher Squat 3x5-10
+    * Feet Elevated Pushup 3x5-20
+    * Barbell Sumo Deadlift 3x6-12
+    * X-band Walk 1x20 (set per side)
+    * Dumbbell Swiss Ball Crunch 1x20
+    * Band Rotary Hold 2x15s (per side)
+    
+    **Cardio**
+    
+    **Workout B**
+    * Barbell Hip Thrust (constant tension) 3x20-30
+    * Weighed Pullup 3x1-3
+    * Deficit Dumbbell Bulgarian Split Squat 3x10 (set per side)
+    * Barbell Incline Press 3x6-10
+    * Gliding Leg Curl 2x6-15
+    * Cable Hip Rotation 1x8-15
+    * Body Saw 1x8-15
+    * Half-kneeling Cable Anti-Rotation Press 1x8-12 (set per side)
+
+    **Cardio**
+    
+    **Workout C**
+    * Barbell American Hip Thrust 3x5
+    * Dumbbell Chest Supported Row 3x6-12
+    * Dumbbell High Step-up 3x8-15 (set per each side)
+    * Dumbbell Single-arm OHP 3x8-15 (set per each side)
+    * Prisoner Single Leg Back Extension 3x8-15 (set per side)
+    * Side Lying Hip Raise 1x10-30 (set per side)
+    * Hanging Leg Raise 1x8-20
+    * Landmine 180's 1x8-12 (set per side)
+
+    **Cardio**
+    
+    **Rest**
+    
+    **Notes**
+    \(glutealNotes)
+    """
+    return Program("Gluteal Goddess 9-12", workouts, exercises, tags, description)
+}
 
 

@@ -6,12 +6,12 @@ func Phraks() -> Program {
     let rowWarmup = Warmups(withBar: 0, firstPercent: 0.6, lastPercent: 0.9, reps: [5, 5, 3])
     
     let exercises = [
-        bodyWeight("Chinups",     "Chinup",         requestedReps: 15, targetReps: 30, restMins: 2.5),
+        bodyWeight("Chinups",     "Chinup",         requestedReps: 5, targetReps: 30, restMins: 2.5),
         barbell("Overhead Press", "Overhead Press", 3, amrap: 5, warmups: warmup, magnets: [1.25], restMins: 2.5),
         barbell("Squat",          "Low bar Squat",  3, amrap: 5, warmups: warmup, restMins: 3.0),
         barbell("Barbell Rows",   "Pendlay Row",    3, amrap: 5, warmups: rowWarmup, magnets: [1.25], restMins: 2.0),
         barbell("Bench Press",    "Bench Press",    3, amrap: 5, warmups: warmup, magnets: [1.25], restMins: 3.0),
-        barbell("Deadlift",       "Deadlift",       3, amrap: 5, warmups: warmup, useBumpers: true, restMins: 3.0)]
+        barbell("Deadlift",       "Deadlift",       1, amrap: 5, warmups: warmup, useBumpers: true, restMins: 3.0)]
     
     let workouts = [
         Workout("OHP1",   ["Chinups",      "Overhead Press", "Squat"], scheduled: true, optional: []),

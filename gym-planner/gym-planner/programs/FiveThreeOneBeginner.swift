@@ -2,10 +2,6 @@
 import Foundation
 
 func FiveThreeOneBeginner() -> Program {
-    func planTimedMob(_ numSets: Int, targetTime: Int? = nil) -> Plan {
-        return TimedPlan("\(numSets) timed sets", numSets: numSets, targetTime: targetTime)
-    }
-    
     let exercises = [
         bodyWeight("Box Jumps",          "Box Jump",           1, minReps: 10, maxReps: 15, restMins: 0.0),
         bodyWeight("Medicine Ball Slam", "Medicine Ball Slam", 1, minReps: 10, maxReps: 15, restMins: 0.0),
@@ -76,22 +72,22 @@ This [program](https://www.reddit.com/r/Fitness/wiki/531-beginners) is a variant
 * Squat 5,3,1   reps change each week
 * Bench 5,3,1
 * Hanging Leg Raise 50 reps
-* Lat Pulldown 4x12
-* Triceps Pushdown 4x12
+* Lat Pulldown 5x10-15
+* Triceps Pushdown 5x10-15
 
 **Deadlift**
 * Deadlift 5,3,1   reps change each week
 * Overhead Press 5,3,1
 * Hanging Leg Raise 50 reps
-* Lat Pulldown 4x12
-* Triceps Pushdown 4x12
+* Lat Pulldown 5x10-15
+* Triceps Pushdown 5x10-15
 
 **Bench**
 * Bench 5,3,1   reps change each week
 * Squat 5,3,1
 * Hanging Leg Raise 50 reps
-* Lat Pulldown 4x12
-* Triceps Pushdown 4x12
+* Lat Pulldown 5x10-15
+* Triceps Pushdown 5x10-15
 
 **Notes**
 * Warmup with either Box Squats or Medicine Ball Slams (use the Options button in the workout screen to switch in slams).
