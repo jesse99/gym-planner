@@ -207,17 +207,17 @@ func GlutealGoddess2() -> Program {
 func GlutealGoddess3() -> Program {
     let exercises = [
         // A
-        barbell("Hip Thrust (rest pause)", "Hip Thrust",            3, by: 10, restMins: 2.0),
-        bodyWeight("Inverted Row",         "Inverted Row",          3, minReps: 6, maxReps: 12, restMins: 1.0),
-        barbell("Zercher Squat",           "Zercher Squat",         3, minReps: 5, maxReps: 10, restMins: 2.0),
-        bodyWeight("Elevated Pushup",      "Pushup",                3, minReps: 5, maxReps: 20, restMins: 1.0),
-        barbell("Sumo Deadlift",           "Sumo Deadlift",         3, minReps: 6, maxReps: 12, restMins: 2.5),
-        bodyWeight("X-Band Walk",          "X-Band Walk",           1, by: 20, restMins: 1.0),
-        dumbbell("Swiss Ball Crunch",      "Exercise Ball Crunch",  1, by: 20, restMins: 2.0),
-        bodyWeight("Anti-Rotary Hold",     "Band Anti-Rotary Hold", 2, secs: 15),
+        barbell("Hip Thrust (rest pause)", "Hip Thrust (rest pause)", 3, by: 10, restMins: 2.0),
+        bodyWeight("Inverted Row",         "Inverted Row",            3, minReps: 6, maxReps: 12, restMins: 1.0),
+        barbell("Zercher Squat",           "Zercher Squat",           3, minReps: 5, maxReps: 10, restMins: 2.0),
+        bodyWeight("Elevated Pushup",      "Pushup",                  3, minReps: 5, maxReps: 20, restMins: 1.0),
+        barbell("Sumo Deadlift",           "Sumo Deadlift",           3, minReps: 6, maxReps: 12, restMins: 2.5),
+        bodyWeight("X-Band Walk",          "X-Band Walk",             1, by: 20, restMins: 1.0),
+        dumbbell("Swiss Ball Crunch",      "Exercise Ball Crunch",    1, by: 20, restMins: 2.0),
+        bodyWeight("Anti-Rotary Hold",     "Band Anti-Rotary Hold",   2, secs: 15),
 
         // B
-        barbell("Hip Thrust (constant tension)",  "Hip Thrust",                      3, minReps: 20, maxReps: 30, restMins: 2.0),
+        barbell("Hip Thrust (constant tension)",  "Hip Thrust (constant tension)",   3, minReps: 20, maxReps: 30, restMins: 2.0),
         bodyWeight("Pullup",                      "Pullup",                          3, minReps: 1, maxReps: 3, restMins: 2.0),
         dumbbell("Deficit Bulgarian Split Squat", "Dumbbell Single Leg Split Squat", 3, by: 10, restMins: 2.0),
         barbell("Incline Press",                  "Incline Bench Press",             3, minReps: 6, maxReps: 10, restMins: 2.0),

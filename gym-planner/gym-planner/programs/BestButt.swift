@@ -203,7 +203,7 @@ func BestButt3() -> Program {
         bodyWeight("Side Plank with Abduction",      "Side Plank",                          2, minSecs: 20, maxSecs: 60),
 
         // B
-        bodyWeight("Elevated Hip Thrust",        "Body-weight Hip Thrust",             3, minReps: 6, maxReps: 20, restMins: 1.0),
+        bodyWeight("Elevated Hip Thrust",       "Body-weight Hip Thrust",              3, minReps: 6, maxReps: 20, restMins: 1.0),
         bodyWeight("Elevated Inverted Row",     "Inverted Row",                        3, minReps: 6, maxReps: 12, restMins: 1.0),
         bodyWeight("Bulgarian Split Squat",     "Body-weight Single Leg Glute Bridge", 3, minReps: 5, maxReps: 30, restMins: 1.0),
         bodyWeight("Elevated Pike Pushup",      "Pike Pushup",                         3, minReps: 6, maxReps: 20, restMins: 1.0),

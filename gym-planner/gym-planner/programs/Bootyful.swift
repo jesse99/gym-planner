@@ -86,7 +86,7 @@ fileprivate let booty58Exercises = [
     bodyWeight("Swiss Ball Side Crunch", "Exercise Ball Side Crunch", 1, minReps: 15, maxReps: 30, restMins: 0.5),
     
     // C
-    bodyWeight("Hip Thrust (paused)", "Body-weight Hip Thrust",   3, minReps: 10, maxReps: 20, restMins: 0.5),
+    bodyWeight("Hip Thrust (paused)", "Hip Thrust (rest pause)",  3, minReps: 10, maxReps: 20, restMins: 0.5),
     bodyWeight("Inverted Row",        "Inverted Row",             3, minReps: 8, maxReps: 12, restMins: 0.5),
     dumbbell("Goblet Squat",          "Goblet Squat",             3, minReps: 10, maxReps: 20, restMins: 2.0),
     barbell("Close-Grip Bench Press", "Close-Grip Bench Press",   3, minReps: 8, maxReps: 12, restMins: 2.0),
@@ -118,14 +118,14 @@ fileprivate let booty912Exercises = [
     dumbbell("Side Bend",               "Dumbbell Side Bend",                1, minReps: 15, maxReps: 30, restMins: 1.0),
 
     // C
-    barbell("Hip Thrust (paused)",   "Hip Thrust",           3, minReps: 8, maxReps: 12, restMins: 1.0),
-    dumbbell("Incline Row",          "Dumbbell Incline Row", 3, minReps: 8, maxReps: 12, restMins: 1.0),
-    barbell("Squat",                 "Low bar Squat",        3, minReps: 10, maxReps: 20, restMins: 2.0),
-    barbell("Incline Bench Press",   "Incline Bench Press",  3, minReps: 3, maxReps: 10, restMins: 2.0),
-    bodyWeight("Back Extension",     "Back Extension",       3, minReps: 10, maxReps: 30, restMins: 0.5),
-    bodyWeight("Clam",               "Clam",                 1, minReps: 15, maxReps: 30, restMins: 0.5),
-    bodyWeight("Hanging Leg Raise",  "Hanging Leg Raise",    1, minReps: 10, maxReps: 20, restMins: 0.5),
-    machine("Rope Horizontal Chop", "Rope Horizontal Chop",  1, minReps: 10, maxReps: 15, restMins: 0.5),
+    barbell("Hip Thrust (paused)",   "Hip Thrust (rest pause)", 3, minReps: 8, maxReps: 12, restMins: 1.0),
+    dumbbell("Incline Row",          "Dumbbell Incline Row",    3, minReps: 8, maxReps: 12, restMins: 1.0),
+    barbell("Squat",                 "Low bar Squat",           3, minReps: 10, maxReps: 20, restMins: 2.0),
+    barbell("Incline Bench Press",   "Incline Bench Press",     3, minReps: 3, maxReps: 10, restMins: 2.0),
+    bodyWeight("Back Extension",     "Back Extension",          3, minReps: 10, maxReps: 30, restMins: 0.5),
+    bodyWeight("Clam",               "Clam",                    1, minReps: 15, maxReps: 30, restMins: 0.5),
+    bodyWeight("Hanging Leg Raise",  "Hanging Leg Raise",       1, minReps: 10, maxReps: 20, restMins: 0.5),
+    machine("Rope Horizontal Chop", "Rope Horizontal Chop",     1, minReps: 10, maxReps: 15, restMins: 0.5),
 ] + strongCurvesWarmups
 
 fileprivate let booty14AExercises = ["Glute Bridge", "One Arm Row", "Box Squat", "Dumbbell Bench Press", "Dumbbell Romanian Deadlift", "Side Lying Abduction", "Front Plank", "Side Plank from Knees"]
