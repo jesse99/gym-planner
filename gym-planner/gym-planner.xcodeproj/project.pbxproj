@@ -46,6 +46,7 @@
 		377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F05581FC0DDA10015D7EF /* HLM2.swift */; };
 		377F055B1FC0E1000015D7EF /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F055A1FC0E1000015D7EF /* Helpers.swift */; };
 		377F055D1FC11E1B0015D7EF /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F055C1FC11E1B0015D7EF /* Either.swift */; };
+		3783802F2049E83D005E0FD3 /* BestButt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3783802E2049E83C005E0FD3 /* BestButt.swift */; };
 		378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */; };
 		378FC14B1FBD3B6A00A3C66E /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC14A1FBD3B6A00A3C66E /* DateExtension.swift */; };
 		378FC1531FBD4C5400A3C66E /* NRepMaxPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */; };
@@ -127,6 +128,7 @@
 		377F05581FC0DDA10015D7EF /* HLM2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLM2.swift; sourceTree = "<group>"; };
 		377F055A1FC0E1000015D7EF /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		377F055C1FC11E1B0015D7EF /* Either.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
+		3783802E2049E83C005E0FD3 /* BestButt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestButt.swift; sourceTree = "<group>"; };
 		378B8E921FBFDF72004CF59B /* VariableSetsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableSetsPlan.swift; sourceTree = "<group>"; };
 		378FC14A1FBD3B6A00A3C66E /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NRepMaxPlan.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				373A0E1A203A8DFA006CC3FA /* Gluteal.swift */,
 				377F05581FC0DDA10015D7EF /* HLM2.swift */,
 				376BA11A2001D57000EF804C /* Phraks.swift */,
+				3783802E2049E83C005E0FD3 /* BestButt.swift */,
 			);
 			path = programs;
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 				377C11F61FC276300063A324 /* LabelExtension.swift in Sources */,
 				374556EB1FD669ED0005020B /* Notes.swift in Sources */,
 				376BA11D2001E08A00EF804C /* AMRAPPlan.swift in Sources */,
+				3783802F2049E83D005E0FD3 /* BestButt.swift in Sources */,
 				3765A33E2013B45000C4C44E /* FiveThreeOmeBeginnerPlan.swift in Sources */,
 				37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */,
 				37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */,

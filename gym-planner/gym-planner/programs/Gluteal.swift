@@ -294,6 +294,7 @@ func GlutealGoddess3() -> Program {
     
     **Notes**
     \(glutealNotes)
+    * After finishing the four weeks Brett recommends that you do a deload week, e.g. by reducing weights 20-50%.
     """
     return Program("Gluteal Goddess 9-12", workouts, exercises, tags, description)
 }
