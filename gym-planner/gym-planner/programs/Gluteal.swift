@@ -66,20 +66,20 @@ func GlutealGoddess1() -> Program {
     
     **Workout A**
     * Barbell Glute Bridge 3x20
-    * One Arm Row 3x8 (each side)
+    * One Arm Row 3x8 (per side)
     * Barbell Box Squat 3x5
     * Dumbbell Incline Press 3x8
     * Deadlift 3x8
-    * Cable Standing Abduction 1x20 (each side)
+    * Cable Standing Abduction 1x20 (per side)
     * RKC Plank 1x60s
-    * Side Plank 2x60s (set per side)
+    * Side Plank 2x60s (per side)
 
     **Cardio**
     
     **Workout B**
-    * Bodyweight Shoulder Elevated Single-leg Hip Thrust 3x8-20 (each side)
+    * Bodyweight Shoulder Elevated Single-leg Hip Thrust 3x8-20 (per side)
     * Chinup 3x5
-    * Dumbbell High Step-up 3x10 (each side)
+    * Dumbbell High Step-up 3x10 (per side)
     * Barbell Overhead Press 3x8
     * Prisoner Back Extension 2x12
     * Band Seated Abduction 1x20
@@ -90,13 +90,13 @@ func GlutealGoddess1() -> Program {
     
     **Workout C**
     * Barbell Hip Thrust 3x20
-    * Standing Single-arm Cable Row 3x8 (each side)
+    * Standing Single-arm Cable Row 3x8 (per side)
     * Goblet Squat 3x5
     * Single Arm Bench Press 3x8
     * Cable Straight-leg Pull-Through 3x8-12
-    * Side-lying Hip Raise 1x10 (each side)
-    * Turkish Get Up 1x5 (each side)
-    * Half-kneeling Cable Anti-rotation Press 1x8-12 (each side)
+    * Side-lying Hip Raise 1x10 (per side)
+    * Turkish Get Up 1x5 (per side)
+    * Half-kneeling Cable Anti-rotation Press 1x8-12 (per side)
 
     **Cardio**
     
@@ -165,9 +165,9 @@ func GlutealGoddess2() -> Program {
     * Barbell Squat 3x5
     * Bench Press 3x3-8
     * Good Morning 3x8-12
-    * Band Standing Abduction 1x10-30 (set per side)
+    * Band Standing Abduction 1x10-30 (per side)
     * Ab Wheel Rollout from Knees 1x8-20
-    * Dumbbell Side Bend 1x10-20 (set per side)
+    * Dumbbell Side Bend 1x10-20 (per side)
 
     **Cardio**
     
@@ -179,7 +179,7 @@ func GlutealGoddess2() -> Program {
     * Dumbbell Back Extension 2x20
     * Band Seated Abduction 1x10-30
     * Hanging Leg Raise 1x8-20
-    * Landmine 180's 1x8-12 (set per side)
+    * Landmine 180's 1x8-12 (per side)
 
     **Cardio**
     
@@ -191,7 +191,7 @@ func GlutealGoddess2() -> Program {
     * Barbell Single-leg Romanian Deadlift 3x8-12
     * Side-lying Hip Raise 1x10-30
     * Straight-leg Situp 1x10-20
-    * 45-degree Side Bend 1x10-20 (set per side)
+    * 45-degree Side Bend 1x10-20 (per side)
 
     **Cardio**
     
@@ -260,7 +260,7 @@ func GlutealGoddess3() -> Program {
     * Barbell Zercher Squat 3x5-10
     * Feet Elevated Pushup 3x5-20
     * Barbell Sumo Deadlift 3x6-12
-    * X-band Walk 1x20 (set per side)
+    * X-band Walk 1x20 (per side)
     * Dumbbell Swiss Ball Crunch 1x20
     * Band Rotary Hold 2x15s (per side)
     
@@ -269,24 +269,24 @@ func GlutealGoddess3() -> Program {
     **Workout B**
     * Barbell Hip Thrust (constant tension) 3x20-30
     * Weighed Pullup 3x1-3
-    * Deficit Dumbbell Bulgarian Split Squat 3x10 (set per side)
+    * Deficit Dumbbell Bulgarian Split Squat 3x10 (per side)
     * Barbell Incline Press 3x6-10
     * Gliding Leg Curl 2x6-15
     * Cable Hip Rotation 1x8-15
     * Body Saw 1x8-15
-    * Half-kneeling Cable Anti-Rotation Press 1x8-12 (set per side)
+    * Half-kneeling Cable Anti-Rotation Press 1x8-12 (per side)
 
     **Cardio**
     
     **Workout C**
     * Barbell American Hip Thrust 3x5
     * Dumbbell Chest Supported Row 3x6-12
-    * Dumbbell High Step-up 3x8-15 (set per each side)
-    * Dumbbell Single-arm OHP 3x8-15 (set per each side)
-    * Prisoner Single Leg Back Extension 3x8-15 (set per side)
-    * Side Lying Hip Raise 1x10-30 (set per side)
+    * Dumbbell High Step-up 3x8-15 (per side)
+    * Dumbbell Single-arm OHP 3x8-15 (per side)
+    * Prisoner Single Leg Back Extension 3x8-15 (per side)
+    * Side Lying Hip Raise 1x10-30 (per side)
     * Hanging Leg Raise 1x8-20
-    * Landmine 180's 1x8-12 (set per side)
+    * Landmine 180's 1x8-12 (per side)
 
     **Cardio**
     

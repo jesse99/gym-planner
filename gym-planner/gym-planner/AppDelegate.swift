@@ -243,5 +243,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
     var notificationsAreEnabled = false
     var program: Program!
 
-    let programs = [BestButt1(), BestButt2(), BestButt3(), Bootyful3a(), Bootyful4a(), Bootyful3b(), Bootyful4b(), Bootyful4c(), Bootyful3c(), FiveThreeOneBeginner(), GlutealGoddess1(), GlutealGoddess2(), GlutealGoddess3(), HLM2(), Phraks()]   // TODO: will need to be var when we start supporting program editing
+    let programs = [BestButt1(), BestButt2(), BestButt3(), Bootyful3a(), Bootyful4a(), Bootyful3b(), Bootyful4b(), Bootyful4c(), Bootyful3c(), FiveThreeOneBeginner(), GlutealGoddess1(), GlutealGoddess2(), GlutealGoddess3(), GorgeousGlutes1(), GorgeousGlutes2(), GorgeousGlutes3(), HLM2(), Phraks()]   // TODO: will need to be var when we start supporting program editing
 }

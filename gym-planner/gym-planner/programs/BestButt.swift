@@ -61,21 +61,21 @@ func BestButt1() -> Program {
     * Box Squat 3x10-20
     * Incline Pushup 3x8-12
     * Hip Hinge with Dowel 3x10-20
-    * Side Lying Abduction 1x10-30 (set per side)
+    * Side Lying Abduction 1x10-30 (per side)
     * Front Plank 1x30-120s
-    * Side Plank from Knees 2x20-60s (one per side)
+    * Side Plank from Knees 2x20-60s (per side)
     
     **Cardio**
     
     **Workout B**
-    * Foot Elevated Single-leg Glute Bridge 3x10-20 (set per side)
+    * Foot Elevated Single-leg Glute Bridge 3x10-20 (per side)
     * Negative Chinup 3x1-3
-    * Step-up 3x10-20 (set per side)
+    * Step-up 3x10-20 (per side)
     * Pushup from Knees 3x5-15
     * Swiss Ball Back Extension 3x10-20
-    * Side Plank from Knees 2x20-60s (each side)
+    * Side Plank from Knees 2x20-60s (per side)
     * Crunch 1x20-30
-    * Side Crunch 1x20-30 (each side)
+    * Side Crunch 1x20-30 (per side)
     
     **Cardio**
     
@@ -85,9 +85,9 @@ func BestButt1() -> Program {
     * Box Squat 3x10-20
     * Negative Pushup 3x3-5
     * Hip Hinge with Dowel 3x10-20
-    * Side Lying Clam 1x20-30 (each side)
+    * Side Lying Clam 1x20-30 (per side)
     * Straight-leg Situp 1x15-30
-    * Swiss Ball Side Crunch 1x15-30 (eaxh side)
+    * Swiss Ball Side Crunch 1x15-30 (per side)
 
     **Cardio**
     
@@ -150,10 +150,10 @@ func BestButt2() -> Program {
     * Inverted Row 3x8-12
     * Full Squat 3x10-30
     * Strict Pushup 3x1
-    * Single-leg Romanian Deadlift 3x10-20 (set per side)
-    * Side Lying Abduction 1x10-30 (set per side)
+    * Single-leg Romanian Deadlift 3x10-20 (per side)
+    * Side Lying Abduction 1x10-30 (per side)
     * RKC Plank 1x20-60s
-    * Side Plank 1x20-60s (set per side)
+    * Side Plank 1x20-60s (per side)
     
     **Cardio**
     
@@ -163,21 +163,21 @@ func BestButt2() -> Program {
     * Walking Lunge 3x10-20
     * Pushup from knees 3x6-20
     * Reverse Hyperextension 3x10-30
-    * Side Lying Clam 1x10-30 (set per side)
+    * Side Lying Clam 1x10-30 (per side)
     * Swiss Ball Crunch 1x10-30
-    * Swiss Ball Side Crunch 1x10-30 (set per side)
+    * Swiss Ball Side Crunch 1x10-30 (per side)
     
     **Cardio**
     
     **Workout C**
     * Hip Thrust 3x10-30
     * Inverted Row 3x8-12
-    * High Step-up 3x10-20 (set per side)
+    * High Step-up 3x10-20 (per side)
     * Torso Elevated Pushup 3x8-12
     * Back Extension 3x20-30
     * Side-lying Hip Raise 1x10-20
     * Feet Elevated Plank 1x60-120s
-    * Swiss Ball Side Crunch 1x10-20 (set per side)
+    * Swiss Ball Side Crunch 1x10-20 (per side)
 
     **Cardio**
     
@@ -236,38 +236,38 @@ func BestButt3() -> Program {
     This is weeks 9-12 of the at home beginner program from [Strong Curves: A Woman's Guide to Building a Better Butt and Body](https://www.amazon.com/Strong-Curves-Womans-Building-Better-ebook/dp/B00C4XI0QM/ref=sr_1_1?ie=UTF8&qid=1516764374&sr=8-1&keywords=strong+curves). The program is as follows:
     
     **Workout A**
-    * Shoulder Elevated Single-leg Hip Thrust 3x8-20 (set per side)
+    * Shoulder Elevated Single-leg Hip Thrust 3x8-20 (per side)
     * Chinup 3x3-10
-    * Step-up + Reverse Lunge 3x10-15 (set per side)
+    * Step-up + Reverse Lunge 3x10-15 (per side)
     * Pushup 3x5-10
-    * Swiss Ball Back Extension 3x8-20 (set per side)
+    * Swiss Ball Back Extension 3x8-20 (per side)
     * Quadreped Double Traverse Abduction 1x6
     * Prisoner Swiss Ball Crunch 1x10-30
-    * Side Plank with Abduction 1x20-60s (each side)
+    * Side Plank with Abduction 1x20-60s (per side)
     
     **Cardio**
     
     **Workout B**
-    * Shoulder/foot Elevated Single-leg Hip Thrust 3x6-20 (set per side)
+    * Shoulder/foot Elevated Single-leg Hip Thrust 3x6-20 (per side)
     * Feet Elevated Inverted Row 3x6-12
-    * Bulgarian Split Squat 3x5-30 (set per side)
+    * Bulgarian Split Squat 3x5-30 (per side)
     * Feet Elevated Pike Pushup 3x6-20
     * Sliding Leg Curl 2x10-20
     * Standing Double Abduction 1x6
     * RKC Plank 1x30-60s
-    * Feet Elevated Side Plank 1x20-60s (each side)
+    * Feet Elevated Side Plank 1x20-60s (per side)
     
     **Cardio**
     
     **Workout C**
-    * Shoulder Elevated Single-leg Hip Thrust (paused) 3x5-15 (set per side)
+    * Shoulder Elevated Single-leg Hip Thrust (paused) 3x5-15 (per side)
     * Pullup 3x3-10
-    * High Step-up 3x10-15 (set per each side)
+    * High Step-up 3x10-15 (per side)
     * Narrow-base Pushup 3x3-8
     * Russian Leg Curls 3x3-5
-    * Side Lying Hip Raise 1x10-20 (set per side)
+    * Side Lying Hip Raise 1x10-20 (per side)
     * Body Saw 1x10-15
-    * Feet Elevated Side Plank with Abduction 1x20-60s (set per side)
+    * Feet Elevated Side Plank with Abduction 1x20-60s (per side)
     
     **Cardio**
     

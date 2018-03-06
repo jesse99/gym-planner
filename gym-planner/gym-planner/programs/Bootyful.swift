@@ -149,20 +149,20 @@ fileprivate let booty14ADesc = """
 * Bodyweight Box Squat 3x10-20
 * Dumbbell Bench Press 3x8-12
 * Dumbbell Romanian Deadlift 3x10-20
-* Side Lying Abduction 2x15-30 (set per side)
+* Side Lying Abduction 2x15-30 (per side)
 * Front Plank 1x20-120s
-* Side Plank from Knees 1x20-60s (set per side)
+* Side Plank from Knees 1x20-60s (per side)
 """
 
 fileprivate let booty14BDesc = """
 * Bodyweight Single-leg Glute Bridge 3x10-20 (set per side)
 * Lat Pulldown 3x8-12
-* Bodyweight Step-up 3x10-20 (set per side)
+* Bodyweight Step-up 3x10-20 (per side)
 * Dumbbell Overhead Press 3x8-12
 * Back Extension 3x10-20
-* Side Lying Clam 1x15-30 (set per side)
+* Side Lying Clam 1x15-30 (per side)
 * Crunch 1x15-30
-* Side Crunch 1x15-30 (set per side)
+* Side Crunch 1x15-30 (per side)
 """
 
 fileprivate let booty14CDesc = """
@@ -170,10 +170,10 @@ fileprivate let booty14CDesc = """
 * Seated Row 3x8-12
 * Bodyweight Squat 3x10-20
 * Dumbbell Incline Press 3x8-12
-* Bodyweight Romanian Deadlift 3x10-20 (set per side)
-* X-Band Walk (light tension) 1x10-20 steps (set per side)
+* Bodyweight Romanian Deadlift 3x10-20 (per side)
+* X-Band Walk (light tension) 1x10-20 steps (per side)
 * RKC Plank 1x10-30s
-* Rope Horz Chop 1x5-10 (set per side)
+* Rope Horz Chop 1x5-10 (per side)
 """
 
 fileprivate let booty58ADesc = """
@@ -188,7 +188,7 @@ fileprivate let booty58ADesc = """
 """
 
 fileprivate let booty58BDesc = """
-* Bodyweight Single-leg Glute Bridge 3x-10-20 (set per side)
+* Bodyweight Single-leg Glute Bridge 3x-10-20 (per side)
 * Negative Chinup 3x3 (or lat pulldown)
 * Bodyweight Walking Lunge 3x10-20
 * Dumbbell OHP 3x8-12
@@ -204,9 +204,9 @@ fileprivate let booty58CDesc = """
 * Goblet squat 3x10-20
 * Close-grip Bench Press 3x8-12
 * Russian Kettlebell Swing 3x10-20
-* X-band Walk (moderate) 1x15-30 (set per side)
+* X-band Walk (moderate) 1x15-30 (per side)
 * Straight-leg Situp 1x15-30
-* Band Rotary Hold 1x10-20s (set per side)
+* Band Rotary Hold 1x10-20s (per side)
 """
 
 fileprivate let booty912ADesc = """
@@ -215,20 +215,20 @@ fileprivate let booty912ADesc = """
 * Barbell Box Squat 3x10-20
 * Push-up 3x3-10
 * Barbell Deadlift 3x10-20
-* Side Lying Abduction 1x15-30 (set pet side)
-* Dumbbell Swiss Ball Crunch 1x15-30 (set pet side)
-* Half-kneeling Cable Anti-Rotation Press 1x10-15 (set per side)
+* Side Lying Abduction 1x15-30 (per side)
+* Dumbbell Swiss Ball Crunch 1x15-30 (per side)
+* Half-kneeling Cable Anti-Rotation Press 1x10-15 (per side)
 """
 
 fileprivate let booty912BDesc = """
-* Bodyweight Single-leg Hip Thrust (shoulders elevated) 3x10-20 (set per side)
+* Bodyweight Single-leg Hip Thrust (shoulders elevated) 3x10-20 (per side)
 * Chin-up (or assisted) 3x1-5
 * Bodyweight Bulgarian Split Squat 3x10-20
 * Single-arm Dumbbell OHP 3x8-12
 * Barbell Good Morning 3x10-20
-* X-band Walk (moderate) 1x15-30 (set per side)
+* X-band Walk (moderate) 1x15-30 (per side)
 * Feet Elevated Plank 1x60-120s
-* Dumbbell Side Bend 1x15-30 (set per side)
+* Dumbbell Side Bend 1x15-30 (per side)
 """
 
 fileprivate let booty912CDesc = """
@@ -237,9 +237,9 @@ fileprivate let booty912CDesc = """
 * Barbell Squat 3x10-20
 * Incline Press 3x3-10
 * Bodyweight Back Extension 3x10-30
-* Side Lying Clam 1x15-30 (set pet side)
+* Side Lying Clam 1x15-30 (per side)
 * Hanging Leg Raise 1x10-20
-* Rope Horizontal Chop 1x10-15 (set per side)
+* Rope Horizontal Chop 1x10-15 (per side)
 """
 
 fileprivate let bootyNotes = """
