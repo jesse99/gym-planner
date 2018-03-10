@@ -356,7 +356,7 @@ public class LinearPlan : Plan {
                 setting.stalls += 1
                 os_log("stalled = %dx", type: .info, setting.stalls)
                 
-                if setting.stalls >= 3 {
+                if setting.stalls >= 2 {
                     let info = Weight(0.9*setting.weight, setting.apparatus).closest(below: setting.weight)
                     setting.changeWeight(info.weight)
                     setting.stalls = 0
