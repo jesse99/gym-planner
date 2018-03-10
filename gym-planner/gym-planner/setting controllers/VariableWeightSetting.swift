@@ -94,13 +94,19 @@ class VariableWeightController: UIViewController {
             present(view, animated: true, completion: nil)
             
         case .dumbbells1(weights: _, magnets: _):
-            break   // TODO:
-            
+            let view = storyboard.instantiateViewController(withIdentifier: "DumbbellControllerID") as! DumbbellController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
+
         case .dumbbells2(weights: _, magnets: _):
-            break   // TODO:
-            
+            let view = storyboard.instantiateViewController(withIdentifier: "DumbbellControllerID") as! DumbbellController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
+
         case .singlePlates(plates: _):
-            break   // TODO:
+            let view = storyboard.instantiateViewController(withIdentifier: "SinglePlatesControllerID") as! SinglePlatesController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
 
         case .machine(range1: _, range2: _, extra: _):
             let view = storyboard.instantiateViewController(withIdentifier: "MachineID") as! MachineController

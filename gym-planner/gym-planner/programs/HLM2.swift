@@ -35,12 +35,13 @@ func HLM2() -> Program {
         barbell("Bench Press",    "Bench Press",    masterCycles: cycles531, restMins: 3.0, planName: "531"),
         barbell("Medium Bench",   "Bench Press",    2, by: 5, percent: 0.94, of: "Bench Press", warmups: normalWarmup, restMins: 3.0),
 
-        barbell("Deadlift",       "Deadlift",       masterCycles: cyclesDead, useBumpers: true, restMins: 3.5, planName: "dead"),
-        barbell("Overhead Press", "Overhead Press", masterCycles: cycles53, magnets: [1.25], restMins: 3.0, planName: "53"),
-        bodyWeight("Chinups",     "Chinup",         requestedReps: 12, targetReps: 50,   restMins: 2.00),
-        barbell("Good Morning",   "Good Morning",   3, by: 5, warmups: goodWarmup, restMins: 3.0),
-        machine("Lat Pulldown",   "Lat Pulldown",   3, minReps: 4, maxReps: 8, warmups: latWarmup, restMins: 2.0),
-        
+        barbell("Deadlift",               "Deadlift",       masterCycles: cyclesDead, useBumpers: true, restMins: 3.5, planName: "dead"),
+        barbell("Overhead Press",         "Overhead Press", masterCycles: cycles53, magnets: [1.25], restMins: 3.0, planName: "53"),
+        bodyWeight("Chinups",             "Chinup",         requestedReps: 12, targetReps: 50,   restMins: 2.00),
+        barbell("Good Morning",           "Good Morning",   3, by: 5, warmups: goodWarmup, restMins: 3.0),
+        machine("Lat Pulldown",           "Lat Pulldown",   3, minReps: 4, maxReps: 8, warmups: latWarmup, restMins: 2.0),
+        singleDumbbell("Back Extensions", "Back Extension", 3, minReps: 6, maxReps: 12, restMins: 1.5),
+
         bodyWeight("Kneeling Front Plank",  "Front Plank",           1, minSecs: 30, maxSecs: 60),
         bodyWeight("Front Plank",           "Front Plank",           1, minSecs: 30, maxSecs: 60),
         bodyWeight("Side Plank",            "Side Plank",            2, minSecs: 15, maxSecs: 30),
@@ -67,8 +68,8 @@ func HLM2() -> Program {
 
     let workouts = [
         Workout("Heavy Day",    ["Squat",        "Bench Press",    "Deadlift",   "Good Morning"], scheduled: true, optional: ["Good Morning"]),
-        Workout("Light Day",    ["Light Squat",  "Overhead Press", "Side Plank", "Lat Pulldown"], scheduled: true, optional: ["Lat Pulldown"]),
-        Workout("Medium Day",   ["Medium Squat", "Medium Bench",   "Chinups",    "Lat Pulldown", "Side Plank"], scheduled: true, optional: ["Lat Pulldown"]),
+        Workout("Light Day",    ["Light Squat",  "Overhead Press", "Back Extensions", "Side Plank", "Lat Pulldown"], scheduled: true, optional: ["Lat Pulldown"]),
+        Workout("Medium Day",   ["Medium Squat", "Medium Bench",   "Chinups",    "Lat Pulldown", "Side Plank", "Leg Lift Plank"], scheduled: true, optional: ["Lat Pulldown"]),
         Workout("Tennis Elbow", ["Reverse Wrist Curl"], scheduled: false),
         Workout("HIIT",         ["HIIT"], scheduled: false),
         Workout("Mobility",     ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]

@@ -163,7 +163,7 @@ func GorgeousGlutes3() -> Program {
         bodyWeight("Side Lying Hip Raise", "Side Lying Hip Raise",     1, by: 15, restMins: 1.0)]
     
     let aExercises = ["Elevated Single-leg Hip Thrust (pause rep)", "Box Squat", "Single-leg Back Extension", "Cable Hip Abduction"]
-    let bExercises = ["Glute Bridge", "Zercher Squat", "Side Lying Hip Raise", "Cable Hip Rotation"]
+    let bExercises = ["Elevated Single-leg Hip Thrust (pause rep)", "Box Squat", "Single-leg Back Extension", "Cable Hip Abduction"]
     let cExercises = ["Hip Thrust (rest pause)", "Step Ups", "Kettlebell Swing", "Side Lying Hip Raise"]
     
     let workouts = [

@@ -41,6 +41,8 @@
 		3778CE981FBE730D0042111C /* PercentOfPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3778CE971FBE730D0042111C /* PercentOfPlan.swift */; };
 		377C11F31FC26BD20063A324 /* WorkoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377C11F21FC26BD20063A324 /* WorkoutController.swift */; };
 		377C11F61FC276300063A324 /* LabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377C11F51FC276300063A324 /* LabelExtension.swift */; };
+		377CDB0B205234C20003819E /* DumbbellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377CDB0A205234C20003819E /* DumbbellController.swift */; };
+		377CDB0D20538CC90003819E /* SinglePlatesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377CDB0C20538CC90003819E /* SinglePlatesController.swift */; };
 		377F054E1FC0B5980015D7EF /* LinearPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F054D1FC0B5980015D7EF /* LinearPlan.swift */; };
 		377F05501FC0D9CE0015D7EF /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F054F1FC0D9CE0015D7EF /* Program.swift */; };
 		377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377F05581FC0DDA10015D7EF /* HLM2.swift */; };
@@ -124,6 +126,8 @@
 		3778CE971FBE730D0042111C /* PercentOfPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentOfPlan.swift; sourceTree = "<group>"; };
 		377C11F21FC26BD20063A324 /* WorkoutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutController.swift; sourceTree = "<group>"; };
 		377C11F51FC276300063A324 /* LabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelExtension.swift; sourceTree = "<group>"; };
+		377CDB0A205234C20003819E /* DumbbellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DumbbellController.swift; sourceTree = "<group>"; };
+		377CDB0C20538CC90003819E /* SinglePlatesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePlatesController.swift; sourceTree = "<group>"; };
 		377F054D1FC0B5980015D7EF /* LinearPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearPlan.swift; sourceTree = "<group>"; };
 		377F054F1FC0D9CE0015D7EF /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
 		377F05581FC0DDA10015D7EF /* HLM2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLM2.swift; sourceTree = "<group>"; };
@@ -205,13 +209,13 @@
 		377F05571FC0DD8F0015D7EF /* programs */ = {
 			isa = PBXGroup;
 			children = (
+				3783802E2049E83C005E0FD3 /* BestButt.swift */,
 				37F3F11B20182E5600BF0418 /* Bootyful.swift */,
 				3765A33F2014485B00C4C44E /* FiveThreeOneBeginner.swift */,
 				373A0E1A203A8DFA006CC3FA /* Gluteal.swift */,
 				37838030204C60F2005E0FD3 /* Gorgeous.swift */,
 				377F05581FC0DDA10015D7EF /* HLM2.swift */,
 				376BA11A2001D57000EF804C /* Phraks.swift */,
-				3783802E2049E83C005E0FD3 /* BestButt.swift */,
 			);
 			path = programs;
 			sourceTree = "<group>";
@@ -220,12 +224,14 @@
 			isa = PBXGroup;
 			children = (
 				37B3ECF61FD38FDB00F7D8EF /* BarbellController.swift */,
+				377CDB0A205234C20003819E /* DumbbellController.swift */,
 				370EFADA1FD6450400CDE63D /* FixedWeightController.swift */,
 				37B3ECF41FD38B2E00F7D8EF /* DerivedWeightController.swift */,
 				37452C971FDE4D7B00A3CAA6 /* HIITController.swift */,
 				37452C991FDE540C00A3CAA6 /* HIITIntensityController.swift */,
 				37452C911FDDC01D00A3CAA6 /* IntensityController.swift */,
 				3733073D1FF9EC2D00D540D0 /* MachineController.swift */,
+				377CDB0C20538CC90003819E /* SinglePlatesController.swift */,
 				37B3ECF01FD370CA00F7D8EF /* VariableRepsController.swift */,
 				37B3ECF21FD3818000F7D8EF /* VariableWeightSetting.swift */,
 				37B3ECF81FD395F900F7D8EF /* WeightsController.swift */,
@@ -501,6 +507,7 @@
 				3783802F2049E83D005E0FD3 /* BestButt.swift in Sources */,
 				37838031204C60F2005E0FD3 /* Gorgeous.swift in Sources */,
 				3765A33E2013B45000C4C44E /* FiveThreeOmeBeginnerPlan.swift in Sources */,
+				377CDB0D20538CC90003819E /* SinglePlatesController.swift in Sources */,
 				37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */,
 				37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */,
 				376BA11B2001D57000EF804C /* Phraks.swift in Sources */,
@@ -508,6 +515,7 @@
 				377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */,
 				37452C901FDDA6B100A3CAA6 /* CardioResultController.swift in Sources */,
 				3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */,
+				377CDB0B205234C20003819E /* DumbbellController.swift in Sources */,
 				37452C981FDE4D7B00A3CAA6 /* HIITController.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
 				37B3ECF51FD38B2E00F7D8EF /* DerivedWeightController.swift in Sources */,
