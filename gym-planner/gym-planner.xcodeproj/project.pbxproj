@@ -12,6 +12,8 @@
 		370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370EFADA1FD6450400CDE63D /* FixedWeightController.swift */; };
 		37163DEE1FD8DA23008EB47D /* VariableRepsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */; };
 		372926C92053B4EF00608F9B /* IceCream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372926C82053B4EF00608F9B /* IceCream.swift */; };
+		372926CB20546C9000608F9B /* FiveThreeOneLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372926CA20546C9000608F9B /* FiveThreeOneLP.swift */; };
+		372926CD205A2CCF00608F9B /* nSuns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372926CC205A2CCF00608F9B /* nSuns.swift */; };
 		372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14441FE708B700D8392A /* BaseHistoryController.swift */; };
 		372B14471FE7369200D8392A /* WeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14461FE7369200D8392A /* WeightedHistoryController.swift */; };
 		3733073E1FF9EC2D00D540D0 /* MachineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733073D1FF9EC2D00D540D0 /* MachineController.swift */; };
@@ -35,6 +37,7 @@
 		375E52E11FE8DFFF0040A975 /* EditWeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */; };
 		3765A33E2013B45000C4C44E /* FiveThreeOmeBeginnerPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3765A33D2013B45000C4C44E /* FiveThreeOmeBeginnerPlan.swift */; };
 		3765A3402014485B00C4C44E /* FiveThreeOneBeginner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3765A33F2014485B00C4C44E /* FiveThreeOneBeginner.swift */; };
+		376B5B142060B62E00832B20 /* PercentsOf'Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376B5B132060B62E00832B20 /* PercentsOf'Plan.swift */; };
 		376BA11B2001D57000EF804C /* Phraks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BA11A2001D57000EF804C /* Phraks.swift */; };
 		376BA11D2001E08A00EF804C /* AMRAPPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376BA11C2001E08A00EF804C /* AMRAPPlan.swift */; };
 		376E3C9D1FB7923F006EEAC3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376E3C9C1FB7923F006EEAC3 /* Settings.swift */; };
@@ -98,6 +101,8 @@
 		370EFADA1FD6450400CDE63D /* FixedWeightController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWeightController.swift; sourceTree = "<group>"; };
 		37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableRepsPlan.swift; sourceTree = "<group>"; };
 		372926C82053B4EF00608F9B /* IceCream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IceCream.swift; sourceTree = "<group>"; };
+		372926CA20546C9000608F9B /* FiveThreeOneLP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveThreeOneLP.swift; sourceTree = "<group>"; };
+		372926CC205A2CCF00608F9B /* nSuns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nSuns.swift; sourceTree = "<group>"; };
 		372B14441FE708B700D8392A /* BaseHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHistoryController.swift; sourceTree = "<group>"; };
 		372B14461FE7369200D8392A /* WeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightedHistoryController.swift; sourceTree = "<group>"; };
 		3733073D1FF9EC2D00D540D0 /* MachineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineController.swift; sourceTree = "<group>"; };
@@ -121,6 +126,7 @@
 		375E52E01FE8DFFF0040A975 /* EditWeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWeightedHistoryController.swift; sourceTree = "<group>"; };
 		3765A33D2013B45000C4C44E /* FiveThreeOmeBeginnerPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveThreeOmeBeginnerPlan.swift; sourceTree = "<group>"; };
 		3765A33F2014485B00C4C44E /* FiveThreeOneBeginner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveThreeOneBeginner.swift; sourceTree = "<group>"; };
+		376B5B132060B62E00832B20 /* PercentsOf'Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PercentsOf'Plan.swift"; sourceTree = "<group>"; };
 		376BA11A2001D57000EF804C /* Phraks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phraks.swift; sourceTree = "<group>"; };
 		376BA11C2001E08A00EF804C /* AMRAPPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AMRAPPlan.swift; sourceTree = "<group>"; };
 		376E3C9C1FB7923F006EEAC3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -218,6 +224,7 @@
 				37838030204C60F2005E0FD3 /* Gorgeous.swift */,
 				377F05581FC0DDA10015D7EF /* HLM2.swift */,
 				372926C82053B4EF00608F9B /* IceCream.swift */,
+				372926CC205A2CCF00608F9B /* nSuns.swift */,
 				376BA11A2001D57000EF804C /* Phraks.swift */,
 			);
 			path = programs;
@@ -339,12 +346,14 @@
 				374E1B75200B09890052AB0C /* BaseCyclicPlan.swift */,
 				3707C21F1FF22101000981D7 /* CycleRepsPlan.swift */,
 				3765A33D2013B45000C4C44E /* FiveThreeOmeBeginnerPlan.swift */,
+				372926CA20546C9000608F9B /* FiveThreeOneLP.swift */,
 				370EFAD81FD6332E00CDE63D /* FixedSetsPlan.swift */,
 				37452C931FDDDA2A00A3CAA6 /* HIITPlan.swift */,
 				377F054D1FC0B5980015D7EF /* LinearPlan.swift */,
 				37CED4AF1FB52E2F00244ADD /* MastersBasicCyclePlan.swift */,
 				378FC1521FBD4C5400A3C66E /* NRepMaxPlan.swift */,
 				3778CE971FBE730D0042111C /* PercentOfPlan.swift */,
+				376B5B132060B62E00832B20 /* PercentsOf'Plan.swift */,
 				37452C8D1FDCA98800A3CAA6 /* SteadyStateCardio.swift */,
 				37B3ECFA1FD48DE800F7D8EF /* TimedPlan.swift */,
 				37163DED1FD8DA23008EB47D /* VariableRepsPlan.swift */,
@@ -476,6 +485,7 @@
 				370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */,
 				377F055D1FC11E1B0015D7EF /* Either.swift in Sources */,
 				37CED4701FAE289100244ADD /* HistoryTabController.swift in Sources */,
+				376B5B142060B62E00832B20 /* PercentsOf'Plan.swift in Sources */,
 				37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */,
 				372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */,
 				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
@@ -512,9 +522,11 @@
 				3765A33E2013B45000C4C44E /* FiveThreeOmeBeginnerPlan.swift in Sources */,
 				377CDB0D20538CC90003819E /* SinglePlatesController.swift in Sources */,
 				37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */,
+				372926CD205A2CCF00608F9B /* nSuns.swift in Sources */,
 				37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */,
 				376BA11B2001D57000EF804C /* Phraks.swift in Sources */,
 				373307401FFAD08D00D540D0 /* WorkoutOptionsController.swift in Sources */,
+				372926CB20546C9000608F9B /* FiveThreeOneLP.swift in Sources */,
 				377F05591FC0DDA10015D7EF /* HLM2.swift in Sources */,
 				37452C901FDDA6B100A3CAA6 /* CardioResultController.swift in Sources */,
 				3743E2B91FB824CC00787CB3 /* FrontEnd.swift in Sources */,

@@ -81,6 +81,19 @@ public func barbell531Beginner(_ name: String, _ formalName: String, withBar: In
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
+/// FiveThreeOneLPPlan
+public func barbell531LP(_ name: String, _ formalName: String, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, _ sets: [FiveThreeOneLPPlan.WorkSet], workSetPercent: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "531LP"
+    }
+    
+    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = FiveThreeOneLPPlan(planName, sets, workSetPercent: workSetPercent)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
 /// CycleRepsPlan
 public func singlePlates(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
