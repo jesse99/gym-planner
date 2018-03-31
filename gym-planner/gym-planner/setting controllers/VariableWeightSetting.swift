@@ -103,6 +103,11 @@ class VariableWeightController: UIViewController {
             view.initialize(exercise, setting, breadcrumbLabel.text!)
             present(view, animated: true, completion: nil)
 
+        case .pairedPlates(plates: _):
+            let view = storyboard.instantiateViewController(withIdentifier: "SinglePlatesControllerID") as! SinglePlatesController
+            view.initialize(exercise, setting, breadcrumbLabel.text!)
+            present(view, animated: true, completion: nil)
+            
         case .singlePlates(plates: _):
             let view = storyboard.instantiateViewController(withIdentifier: "SinglePlatesControllerID") as! SinglePlatesController
             view.initialize(exercise, setting, breadcrumbLabel.text!)

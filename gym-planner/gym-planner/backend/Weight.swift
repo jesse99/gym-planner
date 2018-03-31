@@ -174,6 +174,19 @@ public struct Weight: CustomStringConvertible {
             
             return candidates
             
+        case .pairedPlates(plates: let plates):
+            let limit = 18
+            let smallest = 2*(plates.first ?? 45.0)
+            let floor = max(0.0, weight - Double(limit/2)*smallest)
+
+            var candidates: [Info] = []
+            for n in 0..<limit {
+                let x = findPairedPlates(floor + Double(n)*smallest, 0.0, 0.0, plates, [], [])
+                candidates.append(x)
+            }
+            
+            return candidates
+
         case .singlePlates(plates: let plates):
             let limit = 40
             let smallest = plates.first ?? 5.0

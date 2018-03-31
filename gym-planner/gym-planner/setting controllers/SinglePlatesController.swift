@@ -3,14 +3,19 @@ import UIKit
 class SinglePlatesController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func initialize(_ exercise: Exercise, _ setting: VariableWeightSetting, _ breadcrumb: String) {
         self.setting = setting
-        self.breadcrumb = "\(breadcrumb) • Single Plates"
         
         self.available = availablePlates()
         switch setting.apparatus {
         case .singlePlates(plates: let weights):
+            self.breadcrumb = "\(breadcrumb) • Single Plates"
             self.used = weights
+            self.single = true
+        case .pairedPlates(plates: let weights):
+            self.breadcrumb = "\(breadcrumb) • Paired Plates"
+            self.used = weights
+            self.single = false
         default:
-            frontend.assert(false, "expected single plates")
+            frontend.assert(false, "expected single or paired plates")
             abort()
         }
     }
@@ -25,7 +30,11 @@ class SinglePlatesController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @IBAction func donePressed(_ sender: Any) {
-        setting.apparatus = .singlePlates(plates: used)
+        if single {
+            setting.apparatus = .singlePlates(plates: used)
+        } else {
+            setting.apparatus = .pairedPlates(plates: used)
+        }
         self.performSegue(withIdentifier: "unwindToVariableWeightID", sender: self)
     }
     
@@ -68,5 +77,6 @@ class SinglePlatesController: UIViewController, UITableViewDataSource, UITableVi
     private var available: [Double]!
     private var used: [Double]!
     private var breadcrumb = ""
+    private var single = false
 }
 

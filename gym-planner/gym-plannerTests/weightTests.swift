@@ -229,6 +229,30 @@ class weightTests: XCTestCase {
         w = Weight(90.0, a)
         XCTAssertEqual(w.closest().plates, "3 25s + 10 + 5")
     }
+    
+    func testPairedPlates() {
+        let a: Apparatus = .pairedPlates(plates: [5, 10, 25])
+        var w = Weight(0.0, a)
+        XCTAssertEqual(w.closest().plates, "no plates")
+        
+        w = Weight(10.0, a)
+        XCTAssertEqual(w.closest().plates, "5 lb plate")
+        
+        w = Weight(40.0, a)
+        XCTAssertEqual(w.closest().plates, "2 10s")
+
+        w = Weight(44.0, a)
+        XCTAssertEqual(w.closest().plates, "2 10s")
+
+        w = Weight(48.0, a)
+        XCTAssertEqual(w.closest().plates, "25 lb plate")
+
+        w = Weight(80.0, a)
+        XCTAssertEqual(w.closest().plates, "25 + 10 + 5")
+
+        w = Weight(180.0, a)
+        XCTAssertEqual(w.closest().plates, "3 25s + 10 + 5")
+    }
 
     private func checkRange(_ a: Apparatus) {
 //        for i in 100...300 {

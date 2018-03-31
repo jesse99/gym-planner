@@ -28,6 +28,19 @@ fileprivate func createDead() -> Exercise {
 }
 
 // secondary lifts
+fileprivate func createLightBench() -> Exercise {
+    func set(_ reps: Int, at: Double) -> PercentsOfPlan.WorkSet {
+        return PercentsOfPlan.WorkSet(reps: reps, at: at)
+    }
+    
+    func amrap(_ reps: Int, at: Double) -> PercentsOfPlan.WorkSet {
+        return PercentsOfPlan.WorkSet(amrap: reps, at: at)
+    }
+    
+    let sets = [set(8, at: 0.65), set(6, at: 0.75), set(4, at: 0.85), set(4, at: 0.85), set(4, at: 0.85), set(5, at: 0.80), set(6, at: 0.75), set(7, at: 0.70), amrap(8, at: 0.65)]
+    return barbellPercents("Light Bench", "Bench Press", of: "Bench Press", restMins: 2.0, sets, workSetPercent: 0.85, planName: "light bench")
+}
+
 fileprivate func createOHP() -> Exercise {
     let sets = [set(6, at: 0.50), set(5, at: 0.60), set(3, at: 0.70), set(5, at: 0.70), set(7, at: 0.70), set(4, at: 0.70), set(6, at: 0.70), set(8, at: 0.70)]
     return barbell531LP("Overhead Press", "Overhead Press", useBumpers: false, magnets: [], restMins: 2.0, sets, workSetPercent: 0.70, planName: "ohp")
@@ -48,23 +61,31 @@ fileprivate func createFrontSquat() -> Exercise {
     return barbell531LP("Front Squat", "Front Squat", useBumpers: false, magnets: [], restMins: 3.0, sets, workSetPercent: 0.55, planName: "front squat")
 }
 
-// accessories
-
 func nSunsLP4() -> Program {
     let exercises = [
+        createLightBench(),
         createSquat(),
         createBench(),
         createDead(),
         createOHP(),
         createSumo(),
         createCGBench(),
-        createFrontSquat()]
+        createFrontSquat(),
+        
+        // accessories
+        bodyWeight("Chinups",         "Chinup",           requestedReps: 15, targetReps: 36, restMins: 2.5),
+        bodyWeight("Dips",            "Dips",             3, minReps: 8, maxReps: 12, restMins: 1.5),
+        bodyWeight("Ab Wheel",        "Ab Wheel Rollout", 3, by: 12, restMins: 1.0),
+        pairedPlates("Leg Press",     "Leg Press",        3, by: 12, restMins: 3.0),
+        barbell("Barbell Shrugs",     "Barbell Shrug",    3, by: 12, restMins: 2.0),
+        bodyWeight("Back Extensions", "Back Extension",   3, minReps: 8, maxReps: 12, restMins: 1.5),
+        machine("Cable Crunches",     "Cable Crunch",     3, minReps: 8, maxReps: 12, restMins: 2.0)]
     
     let workouts = [
-        Workout("Light",    ["Overhead Press"],    scheduled: true, optional: []),
-        Workout("Squat",    ["Squat", "Sumo Deadlift"], scheduled: true, optional: []),
-        Workout("Bench",    ["Bench Press", "C.G. Bench Press"],          scheduled: true, optional: []),
-        Workout("Deadlift", ["Deadlift", "Front Squat"], scheduled: false)]
+        Workout("Light",    ["Light Bench", "Overhead Press", "Chinups", "Dips"], scheduled: true, optional: []),
+        Workout("Squat",    ["Squat", "Sumo Deadlift", "Ab Wheel", "Leg Press"], scheduled: true, optional: []),
+        Workout("Bench",    ["Bench Press", "C.G. Bench Press", "Barbell Shrugs", "Chinups"], scheduled: true, optional: []),
+        Workout("Deadlift", ["Deadlift", "Front Squat", "Back Extensions", "Cable Crunches"], scheduled: false)]
     
     let tags: [Program.Tags] = [.intermediate, .strength, .barbell, .fourDays, .unisex, .ageUnder40, .age40s]
     let description = """
@@ -79,18 +100,19 @@ The program looks like this:
 * Bench
 * OHP
 * Chinups
-* Lateral Raise
+* Dips
 
 **Squat**
 * Squat
 * Sumo Deadlift
-* Cable Crunch
+* Ab Wheel
+* Leg Press
 
 **Bench**
 * Bench
 * Close-grip Bench
+* Shrugs
 * Chinups
-* Pendlay Row
 
 **Deadlift**
 * Deadlift
@@ -99,8 +121,10 @@ The program looks like this:
 * Cable Crunch
 
 **Notes**
+* This program uses a lot of sets at a relatively low intensity so be conservative with your initial weights.
 * You can do up to four assistence lifts during a workout.
 * The assistence lifts should be tailored to address your weak areas.
+* Wendler recommends a 10% deload for a lift if you think you've stalled on it.
 """
     return Program("2_Suns/4", workouts, exercises, tags, description)
 }

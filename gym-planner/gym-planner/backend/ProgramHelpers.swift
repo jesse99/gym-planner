@@ -94,6 +94,18 @@ public func barbell531LP(_ name: String, _ formalName: String, useBumpers: Bool 
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 
+/// PercentsOfPlan
+public func barbellPercents(_ name: String, _ formalName: String, of: String, restMins: Double, _ sets: [PercentsOfPlan.WorkSet], workSetPercent: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "percents"
+    }
+    
+    let setting = DerivedWeightSetting(of, restSecs: Int(restMins*60.0))
+    let plan = PercentsOfPlan(name, sets, workSetPercent: workSetPercent)
+    return Exercise(name, formalName, plan, .derivedWeight(setting))
+}
+
 /// CycleRepsPlan
 public func singlePlates(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
     var planName = planName
@@ -106,6 +118,36 @@ public func singlePlates(_ name: String, _ formalName: String, _ numSets: Int, m
     let apparatus = Apparatus.singlePlates(plates: defaultPlates())
     let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
     let plan = CycleRepsPlan(planName, warmups ?? defaultWarmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// CycleRepsPlan
+public func pairedPlates(_ name: String, _ formalName: String, _ numSets: Int, minReps: Int, maxReps: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(numSets)x\(minReps)-\(maxReps)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let apparatus = Apparatus.pairedPlates(plates: defaultPlates())
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = CycleRepsPlan(planName, warmups ?? defaultWarmups, numSets: numSets, minReps: minReps, maxReps: maxReps)
+    return Exercise(name, formalName, plan, .variableWeight(setting))
+}
+
+/// LinearPlan
+public func pairedPlates(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(numSets)x\(by)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let apparatus = Apparatus.pairedPlates(plates: defaultPlates())
+    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
+    let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 

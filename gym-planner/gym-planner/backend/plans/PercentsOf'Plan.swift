@@ -39,7 +39,7 @@ public class PercentsOfPlan : Plan {
         }
     }
     
-    struct WorkSet: Storable {
+    public struct WorkSet: Storable {
         let reps: Int
         let percent: Double
         let amrap: Bool
@@ -56,13 +56,13 @@ public class PercentsOfPlan : Plan {
             self.amrap = true
         }
         
-        init(from store: Store) {
+        public init(from store: Store) {
             self.reps = store.getInt("reps")
             self.percent = store.getDbl("percent")
             self.amrap = store.getBool("amrap")
         }
         
-        func save(_ store: Store) {
+        public func save(_ store: Store) {
             store.addInt("reps", reps)
             store.addDbl("percent", percent)
             store.addBool("amrap", amrap)
@@ -409,7 +409,7 @@ public class PercentsOfPlan : Plan {
 
 extension PercentsOfPlan.WorkSet: Equatable {}
 
-func ==(lhs: PercentsOfPlan.WorkSet, rhs: PercentsOfPlan.WorkSet) -> Bool {
+public func ==(lhs: PercentsOfPlan.WorkSet, rhs: PercentsOfPlan.WorkSet) -> Bool {
     return lhs.reps == rhs.reps && lhs.percent == rhs.percent && lhs.amrap == rhs.amrap
 }
 

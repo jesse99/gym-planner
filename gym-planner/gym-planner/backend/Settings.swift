@@ -29,8 +29,8 @@ public enum Apparatus
     /// Used for stuff like cable machines with a stack of plates. Range2 is for machines that have weights like [5, 10, 15, 20, 30, ...]. Extra are small weights that can be optionally added.
     case machine(range1: MachineRange, range2: MachineRange, extra: [Double])
     
-    //    /// Used with plates attached to a machine two at a time (e.g. a Leg Press machine).
-    //    case pairedPlates(plates: [Double])
+    /// Used with plates attached to a machine two at a time (e.g. a Leg Press machine).
+    case pairedPlates(plates: [Double])
     
     /// Used with plates attached to a machine one at a time (e.g. a T-Bar Row machine).
     case singlePlates(plates: [Double])
@@ -395,6 +395,14 @@ extension Apparatus {
                 problems += ["barbell.magnets is less than 0"]
             }
             
+        case .pairedPlates(plates: let plates):
+            if plates.isEmpty {
+                problems += ["pairedPlates.plates is empty"]
+            }
+            if plates.any({$0 < 0.0}) {
+                problems += ["pairedPlates.plates is less than 0"]
+            }
+            
         case .singlePlates(plates: let plates):
             if plates.isEmpty {
                 problems += ["singlePlates.plates is empty"]
@@ -453,6 +461,10 @@ extension Apparatus: Storable {
             let magnets = store.getDblArray("magnets")
             self = .barbell(bar: bar, collar: collar, plates: plates, bumpers: bumpers, magnets: magnets)
             
+        case "paired-plates":
+            let plates = store.getDblArray("plates", ifMissing: defaultPlates())
+            self = .pairedPlates(plates: plates)
+            
         case "single-plates":
             let plates = store.getDblArray("plates", ifMissing: defaultPlates())
             self = .singlePlates(plates: plates)
@@ -495,6 +507,10 @@ extension Apparatus: Storable {
             store.addDblArray("plates", plates)
             store.addDblArray("bumpers", bumpers)
             store.addDblArray("magnets", magnets)
+            
+        case .pairedPlates(plates: let plates):
+            store.addStr("type", "paired-plates")
+            store.addDblArray("plates", plates)
             
         case .singlePlates(plates: let plates):
             store.addStr("type", "single-plates")
