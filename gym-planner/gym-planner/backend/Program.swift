@@ -83,6 +83,7 @@ public class Program: Storable {
 
         case threeDays
         case fourDays
+        case fiveDays
         
         case unisex
         case female
@@ -176,6 +177,14 @@ public class Program: Storable {
 
         if tags.contains(.threeDays) && tags.contains(.fourDays) {
             problems += ["program.tags has both threeDays and fourDays"]
+        }
+        
+        if tags.contains(.threeDays) && tags.contains(.fiveDays) {
+            problems += ["program.tags has both threeDays and fiveDays"]
+        }
+
+        if tags.contains(.fourDays) && tags.contains(.fiveDays) {
+            problems += ["program.tags has both fourDays and fiveDays"]
         }
 
         if tags.contains(.unisex) && tags.contains(.female) {
@@ -313,6 +322,7 @@ extension Program.Tags: Storable {
 
         case "threeDays": self = .threeDays
         case "fourDays": self = .fourDays
+        case "fiveDays": self = .fiveDays
             
         case "gym": self = .gym
         case "barbell": self = .barbell
@@ -342,6 +352,7 @@ extension Program.Tags: Storable {
 
         case .threeDays: store.addStr("tag", "threeDays")
         case .fourDays: store.addStr("tag", "fourDays")
+        case .fiveDays: store.addStr("tag", "fiveDays")
             
         case .gym: store.addStr("tag", "gym")
         case .barbell: store.addStr("tag", "barbell")
