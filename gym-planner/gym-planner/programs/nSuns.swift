@@ -63,7 +63,17 @@ fileprivate func createPercentsBench() -> Exercise {
 
 fileprivate func createPercentsOHP() -> Exercise {
     let sets = [pset(6, at: 0.50), pset(5, at: 0.60), pset(3, at: 0.70), pset(5, at: 0.70), pset(7, at: 0.70), pset(4, at: 0.70), pset(6, at: 0.70), pset(8, at: 0.70)]
-    return barbellPercents("Light OHP", "Overhead Press", of: "Overhead Press", restMins: 2.0, sets, workSetPercent: 0.85, planName: "light ohp")
+    return barbellPercents("Light OHP", "Overhead Press", of: "Overhead Press", restMins: 2.0, sets, workSetPercent: 0.70, planName: "light ohp")
+}
+
+fileprivate func createPercentsDead() -> Exercise {
+    let sets = [pset(3, at: 0.75), pset(3, at: 0.75), pset(3, at: 0.75), pset(3, at: 0.75), pset(3, at: 0.75), pset(3, at: 0.75), pset(3, at: 0.75), pset(3, at: 0.75)]
+    return barbellPercents("Light Deadlift", "Deadlift", of: "Deadlift", restMins: 2.5, sets, workSetPercent: 0.75, planName: "light deadlift")
+}
+
+fileprivate func createPercentsFrontSquat() -> Exercise {
+    let sets = [pset(3, at: 0.55), pset(3, at: 0.55), pset(3, at: 0.55), pset(3, at: 0.55), pset(3, at: 0.55), pset(3, at: 0.55), ]
+    return barbellPercents("Light Front Squat", "Front Squat", of: "Front Squat", restMins: 2.5, sets, workSetPercent: 0.55, planName: "light front squat")
 }
 
 fileprivate func createLightOHP() -> Exercise {
@@ -115,7 +125,7 @@ func nSunsLP4() -> Program {
         Workout("Light",    ["Light Bench", "Overhead Press", "Chinups", "Dips"], scheduled: true, optional: []),
         Workout("Squat",    ["Squat", "Sumo Deadlift", "Ab Wheel", "Leg Press"], scheduled: true, optional: []),
         Workout("Bench",    ["Bench Press", "C.G. Bench Press", "Barbell Shrugs", "Chinups"], scheduled: true, optional: []),
-        Workout("Deadlift", ["Deadlift", "Front Squat", "Back Extensions", "Cable Crunches"], scheduled: false)]
+        Workout("Deadlift", ["Deadlift", "Front Squat", "Back Extensions", "Cable Crunches"], scheduled: true)]
     
     let tags: [Program.Tags] = [.intermediate, .strength, .barbell, .fourDays, .unisex, .ageUnder40, .age40s]
     let description = """
@@ -179,7 +189,7 @@ func nSunsLP5() -> Program {
         Workout("Light",    ["Light Bench", "Light OHP", "Chinups", "Dips"], scheduled: true, optional: []),
         Workout("Squat",    ["Squat", "Sumo Deadlift", "Ab Wheel", "Leg Press"], scheduled: true, optional: []),
         Workout("OHP",      ["Overhead Press", "Incline Bench", "Dumbbell Flyes", "Dips"], scheduled: true, optional: []),
-        Workout("Deadlift", ["Deadlift", "Front Squat", "Back Extensions", "Cable Crunches"], scheduled: false),
+        Workout("Deadlift", ["Deadlift", "Front Squat", "Back Extensions", "Cable Crunches"], scheduled: true),
         Workout("Bench",    ["Bench Press", "C.G. Bench Press", "Barbell Shrugs", "Chinups"], scheduled: true, optional: [])]
     
     let tags: [Program.Tags] = [.intermediate, .strength, .barbell, .fiveDays, .unisex, .ageUnder40]
@@ -221,5 +231,87 @@ The program looks like this:
 \(notes)
 """
     return Program("2_Suns/5", workouts, exercises, tags, description)
+}
+
+func nSunsLPDead() -> Program {
+    let exercises = [
+        createPercentsBench(),
+        createPercentsOHP(),
+        createPercentsDead(),
+        createPercentsFrontSquat(),
+        createSquat(),
+        createBench(),
+        createDead(),
+        createOHP(),
+        createSumo(),
+        createCGBench(),
+        createInclineBench(),
+        createFrontSquat(),
+        
+        // accessories
+        bodyWeight("Chinups",         "Chinup",           requestedReps: 15, targetReps: 36, restMins: 2.5),
+        bodyWeight("Dips",            "Dips",             3, minReps: 8, maxReps: 12, restMins: 1.5),
+        bodyWeight("Ab Wheel",        "Ab Wheel Rollout", 3, by: 12, restMins: 1.0),
+        pairedPlates("Leg Press",     "Leg Press",        3, by: 12, restMins: 3.0),
+        barbell("Pendlay Row",        "Pendlay Row",      3, by: 12, restMins: 2.0),
+        barbell("Barbell Shrugs",     "Barbell Shrug",    3, by: 12, restMins: 2.0),
+        bodyWeight("Back Extensions", "Back Extension",   3, minReps: 8, maxReps: 12, restMins: 1.5),
+        dumbbell("Dumbbell Flyes",    "Dumbbell Flyes",   3, minReps: 8, maxReps: 12, restMins: 1.5),
+        machine("Cable Crunches",     "Cable Crunch",     3, minReps: 8, maxReps: 12, restMins: 2.0)]
+    
+    let workouts = [
+        Workout("Light Upper",    ["Light Bench", "Light OHP", "Pendlay Row", "Dips"], scheduled: true, optional: ["Dips"]),
+        Workout("Deadlift",       ["Deadlift", "Front Squat", "Chinups", "Ab Wheel"], scheduled: true, optional: ["Ab Wheel"]),
+        Workout("OHP",            ["Overhead Press", "Incline Bench", "Dumbbell Flyes", "Dips"], scheduled: true, optional: ["Dips"]),
+        Workout("Squat",          ["Squat", "Sumo Deadlift", "Ab Wheel", "Leg Press"], scheduled: true, optional: ["Leg Press"]),
+        Workout("Bench",          ["Bench Press", "C.G. Bench Press", "Barbell Shrugs", "Pendlay Row"], scheduled: true, optional: ["Pendlay Row"]),
+        Workout("Light Deadlift", ["Light Deadlift", "Light Front Squat", "Chinups", "Leg Press"], scheduled: true, optional: ["Leg Press"])]
+    
+    let tags: [Program.Tags] = [.intermediate, .strength, .barbell, .sixDays, .unisex, .ageUnder40]
+    let description = """
+    Six day [program](http://archive.is/2017.01.27-015129/https://www.reddit.com/r/Fitness/comments/5icyza/2_suns531lp_tdee_calculator_and_other_items_all/#selection-2129.0-2129.12) with weekly progression and a focus on deadlifting from redditor n-Suns. \(programSuffix)
+    The program looks like this:
+    
+    **Light Upper**
+    * Bench
+    * OHP
+    * Pendlay Row
+    * Dips (disabled by default)
+    
+    **Deadlift**
+    * Deadlift
+    * Front Squat
+    * Chinups
+    * Ab Wheel (disabled by default)
+
+    **OHP**
+    * Overhead Press
+    * Incline Bench
+    * Dumbbell Flyes
+    * Dips (disabled by default)
+    
+    **Squat**
+    * Squat
+    * Sumo Deadlift
+    * Ab Wheel
+    * Leg Press (disabled by default)
+    
+    **Bench**
+    * Bench
+    * Close-grip Bench
+    * Barbell Shrugs
+    * Pendlay Row (disabled by default)
+
+    **Light Deadlift**
+    * Deadlift
+    * Front Squat
+    * Chinups
+    * Leg Press (disabled by default)
+
+    **Notes**
+    \(notes)
+    * Use the Options button within a workout screen to enable the disabled exercises.
+    """
+    return Program("2_SunsDeadift/6", workouts, exercises, tags, description)
 }
 

@@ -3,7 +3,7 @@ import Foundation
 import os.log
 
 public class Workout: Storable {
-    init(_ name: String, _ exercises: [String], scheduled: Bool, optional: [String] = []) {
+    init(_ name: String, _ exercises: [String], scheduled: Bool = true, optional: [String] = []) {
         self.name = name
         self.exercises = exercises
         self.optional = optional
@@ -84,6 +84,7 @@ public class Program: Storable {
         case threeDays
         case fourDays
         case fiveDays
+        case sixDays
         
         case unisex
         case female
@@ -174,7 +175,8 @@ public class Program: Storable {
         if tags.contains(.dumbbell) && tags.contains(.minimal) {
             problems += ["program.tags has both dumbbell and minimal"]
         }
-
+        
+        // check for threeDays
         if tags.contains(.threeDays) && tags.contains(.fourDays) {
             problems += ["program.tags has both threeDays and fourDays"]
         }
@@ -183,8 +185,22 @@ public class Program: Storable {
             problems += ["program.tags has both threeDays and fiveDays"]
         }
 
+        if tags.contains(.threeDays) && tags.contains(.sixDays) {
+            problems += ["program.tags has both threeDays and sixDays"]
+        }
+
+        // check for fourDays
         if tags.contains(.fourDays) && tags.contains(.fiveDays) {
             problems += ["program.tags has both fourDays and fiveDays"]
+        }
+
+        if tags.contains(.fourDays) && tags.contains(.sixDays) {
+            problems += ["program.tags has both fourDays and sixDays"]
+        }
+
+        // check for fiveDays
+        if tags.contains(.fiveDays) && tags.contains(.sixDays) {
+            problems += ["program.tags has both fiveDays and sixDays"]
         }
 
         if tags.contains(.unisex) && tags.contains(.female) {
@@ -323,6 +339,7 @@ extension Program.Tags: Storable {
         case "threeDays": self = .threeDays
         case "fourDays": self = .fourDays
         case "fiveDays": self = .fiveDays
+        case "sixDays": self = .sixDays
             
         case "gym": self = .gym
         case "barbell": self = .barbell
@@ -353,6 +370,7 @@ extension Program.Tags: Storable {
         case .threeDays: store.addStr("tag", "threeDays")
         case .fourDays: store.addStr("tag", "fourDays")
         case .fiveDays: store.addStr("tag", "fiveDays")
+        case .sixDays: store.addStr("tag", "sixDays")
             
         case .gym: store.addStr("tag", "gym")
         case .barbell: store.addStr("tag", "barbell")

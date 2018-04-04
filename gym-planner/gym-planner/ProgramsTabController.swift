@@ -104,7 +104,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @IBAction func daysPressed(_ sender: Any) {
-        let alert = createAlert("Any Number of Days", [.threeDays, .fourDays, .fiveDays])
+        let alert = createAlert("Any Number of Days", [.threeDays, .fourDays, .fiveDays, .sixDays])
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -174,6 +174,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
             case .threeDays:    daysText = tagToString(tag)
             case .fourDays:     daysText = tagToString(tag)
             case .fiveDays:     daysText = tagToString(tag)
+            case .sixDays:      daysText = tagToString(tag)
             case .unisex:       sexText = tagToString(tag)
             case .female:       sexText = tagToString(tag)
             case .ageUnder40:   ageText = tagToString(tag)
@@ -209,6 +210,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
         case .threeDays:    return "3 Days/Week"
         case .fourDays:     return "4 Days/Week"
         case .fiveDays:     return "5 Days/Week"
+        case .sixDays:      return "6 Days/Week"
         case .unisex:       return "Unisex"
         case .female:       return "Female"
         case .ageUnder40:   return "Under 40"
@@ -232,6 +234,7 @@ class ProgramsTabController: UIViewController, UITableViewDataSource, UITableVie
         case "3 Days/Week":     return .threeDays
         case "4 Days/Week":     return .fourDays
         case "5 Days/Week":     return .fiveDays
+        case "6 Days/Week":     return .sixDays
         case "Unisex":          return .unisex
         case "Female":          return .female
         case "Under 40":        return .ageUnder40
