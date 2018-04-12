@@ -105,6 +105,11 @@ public class VariableWeightSetting: Storable {
     func sameWeight() {
         self.updatedWeight = Date()
     }
+    
+    /// This is used to help test deloadByTime.
+    func forceDate(_ date: Date) {
+        self.updatedWeight = date
+    }
 }
 
 /// Used for an exercise where the weight is derived from another exercises's VariableWeightSetting,

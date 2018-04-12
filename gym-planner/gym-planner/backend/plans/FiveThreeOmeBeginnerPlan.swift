@@ -83,7 +83,10 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
 
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let original = setting.weight
+            let deloaded = doDeloadByTime()
+            let original = deloaded?.weight ?? setting.weight
+            setting.changeWeight(original)
+
             for _ in 0..<multiplier {
                 let old = setting.weight
                 let w = Weight(old, setting.apparatus)
@@ -102,7 +105,10 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
 
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let original = setting.weight
+            let deloaded = doDeloadByTime()
+            let original = deloaded?.weight ?? setting.weight
+            setting.changeWeight(original)
+            
             for _ in 0..<3 {
                 let old = setting.weight
                 let w = Weight(old, setting.apparatus)
@@ -121,8 +127,11 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
         
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            // User doesn't want to chane weights but we still need to indicate that we've done a lift so that deload by time doesn't kick in.
-            setting.sameWeight()
+            // User doesn't want to change weights but a deload might have happened (and even if it didn't we want to reset the date
+            // in settings so that deload by time doesn't kick in later).
+            let deloaded = doDeloadByTime()
+            let weight = deloaded?.weight ?? setting.weight
+            setting.changeWeight(weight)
         case .left(_):
             break
         }

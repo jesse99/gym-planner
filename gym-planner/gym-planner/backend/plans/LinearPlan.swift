@@ -344,14 +344,16 @@ public class LinearPlan : Plan {
     private func handleAdvance(_ missed: Bool) {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
+            let deloaded = deloadedWeight()
+            let weight = deloaded?.weight ?? setting.weight
+            
             if !missed {
-                let old = setting.weight
-                let w = Weight(setting.weight, setting.apparatus)
+                let w = Weight(weight, setting.apparatus)
                 setting.changeWeight(w.nextWeight())
                 setting.stalls = 0
-                os_log("advanced from %.3f to %.3f", type: .info, old, setting.weight)
+                os_log("advanced from %.3f to %.3f", type: .info, weight, setting.weight)
                 
-            } else {
+            } else if deloaded == nil {
                 setting.sameWeight()
                 setting.stalls += 1
                 os_log("stalled = %dx", type: .info, setting.stalls)
@@ -362,6 +364,11 @@ public class LinearPlan : Plan {
                     setting.stalls = 0
                     os_log("deloaded to = %.3f", type: .info, setting.weight)
                 }
+
+            } else {
+                setting.changeWeight(weight)
+                setting.stalls = 1
+                os_log("stalled = %dx", type: .info, setting.stalls)
             }
 
         case .left(let err):

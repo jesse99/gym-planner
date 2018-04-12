@@ -369,14 +369,23 @@ public class CycleRepsPlan : Plan {
     private func handleAdvance(_ advanceBy: Int) {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
+            let deloaded = deloadedWeight()
+            var weight = deloaded?.weight ?? setting.weight
+
             let oldReps = sets.last!.reps
             let newReps = oldReps + advanceBy
-            let oldWeight = setting.weight
+            let oldWeight = weight
             setting.reps = newReps
-            while setting.reps! > maxReps {
-                setting.reps = minReps + (setting.reps! - maxReps) - 1
-                let w = Weight(setting.weight, setting.apparatus)
-                setting.changeWeight(w.nextWeight())
+            if setting.reps! > maxReps {
+                while setting.reps! > maxReps {
+                    setting.reps = minReps + (setting.reps! - maxReps) - 1
+                    let w = Weight(weight, setting.apparatus)
+                    setting.changeWeight(w.nextWeight())
+
+                    weight = setting.weight
+                }
+            } else {
+                setting.changeWeight(weight)
             }
             
             if setting.weight != oldWeight {

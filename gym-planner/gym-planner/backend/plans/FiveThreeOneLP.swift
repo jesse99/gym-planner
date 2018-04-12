@@ -375,11 +375,13 @@ public class FiveThreeOneLPPlan : Plan {
     private func handleAdvance() {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let old = setting.weight
-            let w = Weight(setting.weight, setting.apparatus)
-            setting.changeWeight(w.nextWeight())
-            os_log("advanced from %.3f to %.3f", type: .info, old, setting.weight)
+            let deloaded = deloadedWeight()
+            let weight = deloaded?.weight ?? setting.weight
             
+            let w = Weight(weight, setting.apparatus)
+            setting.changeWeight(w.nextWeight())
+            os_log("advanced from %.3f to %.3f", type: .info, weight, setting.weight)
+                        
         case .left(let err):
             // Not sure if this can happen, maybe if the user edits the program after the plan starts.
             os_log("%@ advance failed: %@", type: .error, planName, err)

@@ -562,7 +562,7 @@ public class BaseCyclicPlan : Plan {
         }
     }
     
-    private func doDeloadByTime() -> Deload? {
+    func doDeloadByTime() -> Deload? {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)

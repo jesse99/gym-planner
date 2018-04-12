@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Verdana.ttf">
-            <string>Verdana</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Programs-->
         <scene sceneID="DvT-MZ-0Ih">
@@ -1221,11 +1216,18 @@
                                                 <action selector="donePressed:" destination="lhM-tS-lq5" id="nkn-mc-bHr"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Apparatus" id="PWd-fK-qoG">
-                                            <connections>
-                                                <action selector="apparatusPressed:" destination="lhM-tS-lq5" id="3fF-Bx-VqF"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <rightBarButtonItems>
+                                            <barButtonItem title="Apparatus" id="PWd-fK-qoG">
+                                                <connections>
+                                                    <action selector="apparatusPressed:" destination="lhM-tS-lq5" id="3fF-Bx-VqF"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem title="Set Date" id="ith-Qc-osl">
+                                                <connections>
+                                                    <action selector="setDatePressed:" destination="lhM-tS-lq5" id="83O-hV-Vzh"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -1318,6 +1320,7 @@
                         <outlet property="repsLabel" destination="yCO-fG-0yy" id="VI0-ko-59g"/>
                         <outlet property="repsTextbox" destination="zeW-YL-yjF" id="YaF-gl-XCa"/>
                         <outlet property="restTextbox" destination="dXf-nq-Wpn" id="kRc-KD-34x"/>
+                        <outlet property="setDateButton" destination="ith-Qc-osl" id="ke2-e0-TY1"/>
                         <outlet property="weightTextbox" destination="Lj5-hp-qrq" id="Bd3-06-Ti6"/>
                         <segue destination="JMi-l1-OV7" kind="unwind" identifier="unwindToExerciseID" unwindAction="unwindToExercise:" id="ZCQ-B5-oak"/>
                     </connections>

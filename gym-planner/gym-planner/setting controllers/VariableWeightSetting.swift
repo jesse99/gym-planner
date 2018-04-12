@@ -37,6 +37,11 @@ class VariableWeightController: UIViewController {
         
         breadcrumbLabel.text = breadcrumb
 
+        if UIDevice.current.name != "Jesse’s MacBook Pro" {
+            setDateButton.isEnabled = false
+            setDateButton.title = ""
+        }
+        
         if setting != nil {
             restTextbox.text = secsToStr(setting.restSecs)
             weightTextbox.text = Weight.friendlyStr(setting.weight)
@@ -80,9 +85,44 @@ class VariableWeightController: UIViewController {
             } else {
                 setting.reps = nil
             }
+            
+            if let week = weekOffset {
+                let calendar = Calendar.current
+                let date = calendar.date(byAdding: .weekOfYear, value: week, to: Date())
+                setting.forceDate(date!)
+            }
         }
         
         self.performSegue(withIdentifier: "unwindToExerciseID", sender: self)
+    }
+    
+    @IBAction func setDatePressed(_ sender: Any) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        
+        var action = UIAlertAction(title: "One Week Ago", style: .default) {_ in
+            self.weekOffset = -1
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "Two Weeks Ago", style: .default) {_ in
+            self.weekOffset = -2
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "Three Weeks Ago", style: .default) {_ in
+            self.weekOffset = -3
+        }
+        alert.addAction(action)
+
+        action = UIAlertAction(title: "Four Weeks Ago", style: .default) {_ in
+            self.weekOffset = -4
+        }
+        alert.addAction(action)
+
+        action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(action)
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func apparatusPressed(_ sender: Any) {
@@ -131,8 +171,10 @@ class VariableWeightController: UIViewController {
     @IBOutlet private var repsLabel: UILabel!
     @IBOutlet private var repsTextbox: UITextField!
     @IBOutlet private var doneButton: UIBarButtonItem!
+    @IBOutlet private var setDateButton: UIBarButtonItem!
     
     private var exercise: Exercise!
     private var setting: VariableWeightSetting!
     private var breadcrumb = ""
+    private var weekOffset: Int? = nil
 }

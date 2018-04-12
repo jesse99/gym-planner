@@ -88,7 +88,9 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
         case .right(let setting):
             if let result = BaseCyclicPlan.findCycleResult(history, 0) {
                 if !result.missed {
-                    let old = setting.weight
+                    let deloaded = doDeloadByTime()
+                    let old = deloaded?.weight ?? setting.weight
+                    
                     let w = Weight(old, setting.apparatus)
                     setting.changeWeight(w.nextWeight())
                     setting.stalls = 0
@@ -111,7 +113,9 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
         case .right(let setting):
             // We're on a cycle where the weights don't advance but we still need to indicate that
             // we've done a lift so that deload by time doesn't kick in.
-            setting.sameWeight()
+            let deloaded = doDeloadByTime()
+            let weight = deloaded?.weight ?? setting.weight
+            setting.changeWeight(weight)
         case .left(_):
             break
         }
