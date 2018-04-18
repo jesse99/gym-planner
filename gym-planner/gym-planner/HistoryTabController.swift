@@ -41,6 +41,7 @@ class HistoryTabController: UIViewController, UITableViewDataSource, UITableView
     private func reset() {
         let app = UIApplication.shared.delegate as! AppDelegate
         exerciseNames = app.program.exercises.map {$0.name}
+        exerciseNames = exerciseNames.filter {!$0.contains("-Rep Max")}
         exerciseNames.sort()
         
         tableView.reloadData()
