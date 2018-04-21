@@ -1912,10 +1912,11 @@ let builtInNotes: [String: String] = [
     
     "Standing Calf Raises": createNote(
         notes: [
+            "Use a a Smith machine or free weights.",
             "Keep knees slightly bent at all times.",
-            "Knees should be kept stationary.",
-            "Difficulty can be increased by holding dumbbells."],
-        links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/standing-calf-raises"]),
+            "Keep your back straight.",
+            "Don't allow your knees to move around."],
+        links: ["Link": "https://www.bodybuilding.com/exercises/standing-calf-raises"]),
     
     "Standing Double Abduction": createNote(
         notes: [

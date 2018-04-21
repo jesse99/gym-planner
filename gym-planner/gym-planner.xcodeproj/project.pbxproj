@@ -16,6 +16,7 @@
 		372926CD205A2CCF00608F9B /* nSuns.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372926CC205A2CCF00608F9B /* nSuns.swift */; };
 		372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14441FE708B700D8392A /* BaseHistoryController.swift */; };
 		372B14471FE7369200D8392A /* WeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14461FE7369200D8392A /* WeightedHistoryController.swift */; };
+		3730027A20898032003A1E53 /* Metallicadpa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3730027920898032003A1E53 /* Metallicadpa.swift */; };
 		3733073E1FF9EC2D00D540D0 /* MachineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733073D1FF9EC2D00D540D0 /* MachineController.swift */; };
 		373307401FFAD08D00D540D0 /* WorkoutOptionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733073F1FFAD08D00D540D0 /* WorkoutOptionsController.swift */; };
 		373A0E1B203A8DFA006CC3FA /* Gluteal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373A0E1A203A8DFA006CC3FA /* Gluteal.swift */; };
@@ -105,6 +106,7 @@
 		372926CC205A2CCF00608F9B /* nSuns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nSuns.swift; sourceTree = "<group>"; };
 		372B14441FE708B700D8392A /* BaseHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHistoryController.swift; sourceTree = "<group>"; };
 		372B14461FE7369200D8392A /* WeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightedHistoryController.swift; sourceTree = "<group>"; };
+		3730027920898032003A1E53 /* Metallicadpa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metallicadpa.swift; sourceTree = "<group>"; };
 		3733073D1FF9EC2D00D540D0 /* MachineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineController.swift; sourceTree = "<group>"; };
 		3733073F1FFAD08D00D540D0 /* WorkoutOptionsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutOptionsController.swift; sourceTree = "<group>"; };
 		373A0E1A203A8DFA006CC3FA /* Gluteal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gluteal.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				37838030204C60F2005E0FD3 /* Gorgeous.swift */,
 				377F05581FC0DDA10015D7EF /* HLM2.swift */,
 				372926C82053B4EF00608F9B /* IceCream.swift */,
+				3730027920898032003A1E53 /* Metallicadpa.swift */,
 				372926CC205A2CCF00608F9B /* nSuns.swift */,
 				376BA11A2001D57000EF804C /* Phraks.swift */,
 			);
@@ -481,6 +484,7 @@
 				37C5D18F1FC9F25400951FA8 /* Store.swift in Sources */,
 				370EFAD91FD6332E00CDE63D /* FixedSetsPlan.swift in Sources */,
 				374E1B72200AB54E0052AB0C /* Warmups.swift in Sources */,
+				3730027A20898032003A1E53 /* Metallicadpa.swift in Sources */,
 				37B3ECF31FD3818000F7D8EF /* VariableWeightSetting.swift in Sources */,
 				370EFADB1FD6450400CDE63D /* FixedWeightController.swift in Sources */,
 				377F055D1FC11E1B0015D7EF /* Either.swift in Sources */,
