@@ -1,7 +1,7 @@
 import Foundation
 
 func Metallicadpa() -> Program {
-    let warmup = Warmups(withBar: 1, firstPercent: 0.5, lastPercent: 0.9, reps: [10, 10, 5, 3])
+    let warmup = Warmups(withBar: 1, firstPercent: 0.5, lastPercent: 0.9, reps: [10, 5, 3])
     let noWarmup = Warmups(withBar: 0, firstPercent: 0.6, lastPercent: 0.9, reps: [])
     
     let exercises = [
@@ -66,7 +66,7 @@ Push/pull/legs workout for beginners by [Metallicadpa](https://www.reddit.com/r/
 
 **Notes**
 * For squat, pendlay row, bench, and OHP it's recommended to increase weights by 5 pounds each workout. For deadlift 10 pounds.
-* If you fail tp progress on a lift 3x in a row the app will do a deload by 10% for that lift.
+* If you fail tp progress on a lift 3x in a row reduce weights by 10% for that lift.
 * On the As Many Reps As Possible (AMRAP) sets (e.g. 1x5+) do as many reps as you can while maintaining good form.
 * The program calls for one rest day each week; pick whatever day is convenient for you.
 * For the push day you can superset the lateral raises with the triceps lifts.
