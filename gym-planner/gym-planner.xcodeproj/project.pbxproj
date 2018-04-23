@@ -17,6 +17,7 @@
 		372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14441FE708B700D8392A /* BaseHistoryController.swift */; };
 		372B14471FE7369200D8392A /* WeightedHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372B14461FE7369200D8392A /* WeightedHistoryController.swift */; };
 		3730027A20898032003A1E53 /* Metallicadpa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3730027920898032003A1E53 /* Metallicadpa.swift */; };
+		3730027C208D2605003A1E53 /* Phul.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3730027B208D2605003A1E53 /* Phul.swift */; };
 		3733073E1FF9EC2D00D540D0 /* MachineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733073D1FF9EC2D00D540D0 /* MachineController.swift */; };
 		373307401FFAD08D00D540D0 /* WorkoutOptionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733073F1FFAD08D00D540D0 /* WorkoutOptionsController.swift */; };
 		373A0E1B203A8DFA006CC3FA /* Gluteal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373A0E1A203A8DFA006CC3FA /* Gluteal.swift */; };
@@ -107,6 +108,7 @@
 		372B14441FE708B700D8392A /* BaseHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHistoryController.swift; sourceTree = "<group>"; };
 		372B14461FE7369200D8392A /* WeightedHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightedHistoryController.swift; sourceTree = "<group>"; };
 		3730027920898032003A1E53 /* Metallicadpa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metallicadpa.swift; sourceTree = "<group>"; };
+		3730027B208D2605003A1E53 /* Phul.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phul.swift; sourceTree = "<group>"; };
 		3733073D1FF9EC2D00D540D0 /* MachineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineController.swift; sourceTree = "<group>"; };
 		3733073F1FFAD08D00D540D0 /* WorkoutOptionsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutOptionsController.swift; sourceTree = "<group>"; };
 		373A0E1A203A8DFA006CC3FA /* Gluteal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gluteal.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				3730027920898032003A1E53 /* Metallicadpa.swift */,
 				372926CC205A2CCF00608F9B /* nSuns.swift */,
 				376BA11A2001D57000EF804C /* Phraks.swift */,
+				3730027B208D2605003A1E53 /* Phul.swift */,
 			);
 			path = programs;
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 				37452C9A1FDE540C00A3CAA6 /* HIITIntensityController.swift in Sources */,
 				373A0E1B203A8DFA006CC3FA /* Gluteal.swift in Sources */,
 				378B8E931FBFDF72004CF59B /* VariableSetsPlan.swift in Sources */,
+				3730027C208D2605003A1E53 /* Phul.swift in Sources */,
 				37B308DC1FC3BFFB00556E8F /* FontExtension.swift in Sources */,
 				37CED46E1FAE289100244ADD /* WorkoutsTabController.swift in Sources */,
 				37452C921FDDC01D00A3CAA6 /* IntensityController.swift in Sources */,

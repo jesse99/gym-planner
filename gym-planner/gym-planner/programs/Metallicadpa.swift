@@ -39,7 +39,7 @@ func Metallicadpa() -> Program {
     
     let tags: [Program.Tags] = [.beginner, .hypertrophy, .barbell, .sixDays, .unisex, .ageUnder40]
     let description = """
-Push/pull/legs workout for beginners by [Metallicadpa](https://www.reddit.com/r/Fitness/comments/37ylk5/a_linear_progression_based_ppl_program_for). The workouts are:
+Push/pull/legs workout by [Metallicadpa](https://www.reddit.com/r/Fitness/comments/37ylk5/a_linear_progression_based_ppl_program_for). The workouts are:
 
 **Pull**
 * Deadlift 1x5+/Pendlay Rows 4x5, 1x5+ (these alternate with each pull day)
