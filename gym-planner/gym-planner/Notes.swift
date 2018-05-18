@@ -883,6 +883,15 @@ let builtInNotes: [String: String] = [
             "Using only your forearms curl both dumbbells."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/hammer-curls"]),
     
+    "Hammer Strength Chest Press": createNote(
+        notes: [
+            "Adjust the seat so that the handles are just below shoulder level.",
+            "Grip the handles with palms down and with a width that keeps your arms straight.",
+            "Don't allow your wrist to bend backwards.",
+            "Retract your shoulder blades by pincing them together.",
+            "Keep your shoulder blades retracted and extend your arms out."],
+        links: ["Link": "https://www.regularityfitness.com/hammer-strength-chest-press/"]),
+    
     "Hanging Dragon Flag": createNote(
         notes: [
             "Grab a pole with both hands.",
