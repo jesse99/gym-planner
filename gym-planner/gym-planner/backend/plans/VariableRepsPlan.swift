@@ -279,6 +279,12 @@ public class VariableRepsPlan : Plan {
             if case .right(let setting) = findVariableRepsSetting(exerciseName), setting.requestedReps < maxReps {
                 var completions: [Completion] = []
                 
+                if setting.requestedReps+4 <= maxReps {
+                    completions.append(Completion(title: "Add 4 Reps",  isDefault: false,  callback: {() -> Void in self.doFinish(4)}))
+                }
+                if setting.requestedReps+3 <= maxReps {
+                    completions.append(Completion(title: "Add 3 Reps",  isDefault: false,  callback: {() -> Void in self.doFinish(3)}))
+                }
                 if setting.requestedReps+2 <= maxReps {
                     completions.append(Completion(title: "Add 2 Reps",  isDefault: false,  callback: {() -> Void in self.doFinish(2)}))
                 }

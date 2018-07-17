@@ -319,7 +319,10 @@ public class CycleRepsPlan : Plan {
                 Completion(title: "Advance by 1", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 1)}),
                 Completion(title: "Advance by 2", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 2)}),
                 Completion(title: "Advance by 3", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 3)}),
-                Completion(title: "Advance by 4", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 4)})]
+                Completion(title: "Advance by 4", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 4)}),
+                Completion(title: "Advance by 5", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 5)}),
+                Completion(title: "Advance by 6", isDefault: false, callback: {() -> Void in self.doFinish(advanceBy: 6)}),
+                ]
             return .normal(completions)
         }
     }
