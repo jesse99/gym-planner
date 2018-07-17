@@ -60,10 +60,10 @@ func Phat() -> Program {
     
     let workouts = [
         Workout("Upper Power", ["Pendlay Row", "Pullups", "Rack Chinup 1", "Dumbbell Bench", "Dips", "Dumbbell OHP 1", "Cambered Bar Curls", "Skull Crushers"], scheduled: true, optional: []),
-        Workout("Lower Power", ["Squat", "Hack Squat", "Leg Extensions 1", "Stiff-Legged Deadlift", "Leg Curls", "Standing Calf Raises", "Standing Calf Raises", "Seated Calf Raises"], scheduled: true, optional: []),
+        Workout("Lower Power", ["Squat", "Hack Squat", "Leg Extensions 1", "Stiff-Legged Deadlift", "Leg Curls", "Standing Calf Raises", "Seated Calf Raises"], scheduled: true, optional: []),
         Workout("Back and Shoulders", ["Pendlay Row (speed)", "Rack Chinup 2", "Seated Cable Row", "Dumbbell Shrug", "Close-grip Pulldown", "Dumbbell OHP 2", "Upright Row", "Lateral Raises"], scheduled: true, optional: []),
         Workout("Lower Body", ["Squat (speed)", "Hack Squat", "Leg Press", "Leg Extensions 2", "Romanian Deadlift", "Lying Leg Curls", "Seated Leg Curls", "Donkey Calf Raises", "Seated Calf Raises"], scheduled: true, optional: []),
-        Workout("Chest and Arms", ["Dumbbell Bench (speed)", "Dumbbell Bench Press",  "Incline Dumbbell Press", "Hammer Chest Press", "Incline Cable Flye", "Preacher Curls", "Concentration Curls", "Spider Curls", "Seated Triceps Press", "Triceps Pushdown", "Cable Kickbacks"], scheduled: true, optional: [])]
+        Workout("Chest and Arms", ["Dumbbell Bench (speed)", "Incline Dumbbell Press", "Hammer Chest Press", "Incline Cable Flye", "Preacher Curls", "Concentration Curls", "Spider Curls", "Seated Triceps Press", "Triceps Pushdown", "Cable Kickbacks"], scheduled: true, optional: [])]
     
     let tags: [Program.Tags] = [.intermediate, .hypertrophy, .barbell, .fiveDays, .unisex, .ageUnder40]
     let description = """

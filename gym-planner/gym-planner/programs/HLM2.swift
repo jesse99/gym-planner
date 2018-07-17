@@ -4,10 +4,18 @@ import Foundation
 typealias Cycle = BaseCyclicPlan.Cycle
 
 func HLM2() -> Program {
-    let normalWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
-    let lsquatWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1])
+    let normalSquatWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
+    let lightSquatWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1])
+    let heavySquatCycles = [
+        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
+        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
+        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
+    ]
+
+    let normalWarmup = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
     //let goodWarmup = Warmups(withBar: 0, firstPercent: 0.6, lastPercent: 0.8, reps: [5, 3])
     let latWarmup = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [5])
+    let noWarmup = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
     
     let cycles53 = [
         Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 5, at: 1.0),
@@ -18,28 +26,30 @@ func HLM2() -> Program {
         Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
         Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
     ]
-    let cyclesDead = [
-        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
-        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 3, at: 1.05),
-        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 1, at: 1.1)
-    ]
+//    let cyclesDead = [
+//        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
+//        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 3, at: 1.05),
+//        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 1, at: 1.1)
+//    ]
     
     let exercises = [
         hiit("HIIT", warmupMins: 5, highSecs: 30, lowSecs: 60, cooldownMins: 5, numCycles: 4, targetCycles: 8, targetHighSecs: 45),
 
-        barbell("Squat",          "Low bar Squat",  3, by: 5, warmups: normalWarmup,  restMins: 3.0),  // TODO: switch to masters cycle
-        barbell("Light Squat",    "Low bar Squat",  1, by: 5, percent: 0.88, of: "Squat", warmups: lsquatWarmup, restMins: 2.0),
-        barbell("Medium Squat",   "Low bar Squat",  2, by: 5, percent: 0.9, of: "Squat", warmups: normalWarmup, restMins: 3.0),
+        barbell("Squat",          "Low bar Squat",  masterCycles: heavySquatCycles, restMins: 4.0, planName: "531"),
+        barbell("Light Squat",    "Low bar Squat",  1, by: 5, percent: 0.88, of: "Squat", warmups: lightSquatWarmup, restMins: 2.0),
+        barbell("Medium Squat",   "Low bar Squat",  2, by: 5, percent: 0.9, of: "Squat", warmups: normalSquatWarmup, restMins: 3.0),
         
         barbell("Bench Press",    "Bench Press",    masterCycles: cycles531, restMins: 3.0, planName: "531"),
         barbell("Medium Bench",   "Bench Press",    2, by: 5, percent: 0.94, of: "Bench Press", warmups: normalWarmup, restMins: 3.0),
 
-        barbell("Deadlift",               "Deadlift",       masterCycles: cyclesDead, useBumpers: true, restMins: 3.5, planName: "dead"),
+        barbell("Deadlift",               "Deadlift",       1, by: 5, warmups: normalWarmup, useBumpers: true, restMins: 3.5),
+//        barbell("Deadlift",               "Deadlift",       masterCycles: cyclesDead, useBumpers: true, restMins: 3.5, planName: "dead"),
         barbell("Overhead Press",         "Overhead Press", masterCycles: cycles53, magnets: [1.25], restMins: 3.0, planName: "53"),
-        bodyWeight("Chinups",             "Chinup",         requestedReps: 12, targetReps: 50,   restMins: 2.00),
+        bodyWeight("Chinups",             "Chinup",         requestedReps: 12, targetReps: 50,   restMins: 2.5),
         //barbell("Good Morning",           "Good Morning",   3, by: 5, warmups: goodWarmup, restMins: 3.0),
-        machine("Lat Pulldown",           "Lat Pulldown",   3, minReps: 4, maxReps: 8, warmups: latWarmup, restMins: 2.0),
-        singleDumbbell("Back Extensions", "Back Extension", 3, minReps: 6, maxReps: 12, restMins: 1.5),
+        machine("Lat Pulldown",           "Lat Pulldown",   3, minReps: 4, maxReps: 8, warmups: latWarmup, restMins: 2.5),
+        singleDumbbell("Back Extensions", "Back Extension", 3, minReps: 6, maxReps: 12, restMins: 2.0),
+        dumbbell("Dumbbell Flyes",        "Dumbbell Flyes", 3, minReps: 6, maxReps: 12, warmups: noWarmup, restMins: 2.0),
 
         bodyWeight("Kneeling Front Plank",  "Front Plank",           1, minSecs: 30, maxSecs: 60),
         bodyWeight("Front Plank",           "Front Plank",           1, minSecs: 30, maxSecs: 60),
@@ -68,7 +78,7 @@ func HLM2() -> Program {
     let workouts = [
         Workout("Heavy Day",    ["Squat",        "Bench Press",    "Deadlift", "Back Extensions"], scheduled: true, optional: ["Back Extensions"]),
         Workout("Light Day",    ["Light Squat",  "Overhead Press", "Chinups",  "Lat Pulldown", "Side Plank"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Side Plank"]),
-        Workout("Medium Day",   ["Medium Squat", "Medium Bench",   "Chinups",  "Lat Pulldown", "Leg Lift Plank"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Leg Lift Plank"]),
+        Workout("Medium Day",   ["Medium Squat", "Medium Bench",   "Chinups",  "Lat Pulldown", "Dumbbell Flyes", "Leg Lift Plank"], scheduled: true, optional: ["Dumbbell Flyes", "Chinups", "Lat Pulldown", "Leg Lift Plank"]),
         Workout("HIIT",         ["HIIT"], scheduled: false),
         Workout("Mobility",     ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
 
