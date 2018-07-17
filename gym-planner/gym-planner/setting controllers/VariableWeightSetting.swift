@@ -96,6 +96,66 @@ class VariableWeightController: UIViewController {
         self.performSegue(withIdentifier: "unwindToExerciseID", sender: self)
     }
     
+    @IBAction func adjustPressed(_ sender: Any) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        
+        var action = UIAlertAction(title: "+ 20%", style: .default) {_ in
+            self.adjustWeight(0.2)
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "+ 15%", style: .default) {_ in
+            self.adjustWeight(0.15)
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "+ 10%", style: .default) {_ in
+            self.adjustWeight(0.1)
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "+ 5%", style: .default) {_ in
+            self.adjustWeight(0.05)
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "0%", style: .default) {_ in
+            self.adjustWeight(0.0)
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "- 5%", style: .default) {_ in
+            self.adjustWeight(-0.05)
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "- 10%", style: .default) {_ in
+            self.adjustWeight(-0.1)
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "- 15%", style: .default) {_ in
+            self.adjustWeight(-0.15)
+        }
+        alert.addAction(action)
+        
+        action = UIAlertAction(title: "- 20%", style: .default) {_ in
+            self.adjustWeight(-0.2)
+        }
+        alert.addAction(action)
+
+        action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(action)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func adjustWeight(_ percent: Double) {
+        let newWeight = setting.weight + setting.weight*percent
+        let info = Weight.init(newWeight, setting.apparatus).closest()
+        weightTextbox.text = Weight.friendlyStr(info.weight)
+    }
+    
     @IBAction func setDatePressed(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         
