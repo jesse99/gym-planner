@@ -10,7 +10,7 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
         let threes = [Reps(count: 3, percent: 0.70), Reps(count: 3, percent: 0.80), Reps(count: 3, percent: 0.90, amrap: true), Reps(count: 3, percent: 0.70)]
         let ones =   [Reps(count: 5, percent: 0.75), Reps(count: 3, percent: 0.85), Reps(count: 1, percent: 0.95, amrap: true), Reps(count: 5, percent: 0.75)]
         let cycles = [Cycle(warmups, fives), Cycle(warmups, threes), Cycle(warmups, ones)]
-        super.init(name, "FiveThreeOneBeginnerPlan", cycles, deloads: [1.0, 1.0, 0.95, 0.9, 0.85])
+        super.init(name, "FiveThreeOneBeginnerPlan", cycles)
     }
     
     public required init(from store: Store) {
@@ -83,8 +83,7 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
 
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let deloaded = doDeloadByTime()
-            let original = deloaded?.weight ?? setting.weight
+            let original = setting.weight
             setting.changeWeight(original)
 
             for _ in 0..<multiplier {
@@ -105,8 +104,7 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
 
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let deloaded = doDeloadByTime()
-            let original = deloaded?.weight ?? setting.weight
+            let original = setting.weight
             setting.changeWeight(original)
             
             for _ in 0..<3 {
@@ -129,8 +127,7 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
         case .right(let setting):
             // User doesn't want to change weights but a deload might have happened (and even if it didn't we want to reset the date
             // in settings so that deload by time doesn't kick in later).
-            let deloaded = doDeloadByTime()
-            let weight = deloaded?.weight ?? setting.weight
+            let weight = setting.weight
             setting.changeWeight(weight)
         case .left(_):
             break

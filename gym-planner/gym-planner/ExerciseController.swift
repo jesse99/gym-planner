@@ -109,7 +109,9 @@ class ExerciseController: UIViewController {
             progressionButton.title = ""
         }
 
-        previousLabel.text = exercise.plan.prevLabel()
+        let (label, color) = exercise.plan.prevLabel()
+        previousLabel.text = label
+        previousLabel.textColor = color
         historyLabel.text = exercise.plan.historyLabel()
 
         if case .underway = exercise.plan.state {

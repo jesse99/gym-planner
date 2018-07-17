@@ -1,6 +1,7 @@
 /// Advances reps but weight is controlled via options.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class VariableRepsPlan : Plan {
@@ -223,11 +224,11 @@ public class VariableRepsPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
+    public func prevLabel() -> (String, UIColor) {
         if let last = history.last {
-            return last.title
+            return (last.title, UIColor.black)
         } else {
-            return ""
+            return ("", UIColor.black)
         }
     }
     

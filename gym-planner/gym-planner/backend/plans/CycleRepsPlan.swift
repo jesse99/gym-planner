@@ -1,6 +1,7 @@
 /// Advances reps to a max and then advances weight.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class CycleRepsPlan : Plan {
@@ -93,7 +94,6 @@ public class CycleRepsPlan : Plan {
         self.minReps = minReps
         self.maxReps = maxReps
         self.warmups = warmups
-        self.deloads = defaultDeloads
     }
     
     public func errors() -> [String] {
@@ -132,15 +132,12 @@ public class CycleRepsPlan : Plan {
         }
     }
     
-    private let defaultDeloads: [Double] = [1.0, 1.0, 0.95, 0.9, 0.85]
-    
     public required init(from store: Store) {
         self.planName = store.getStr("name")
         self.typeName = "CycleRepsPlan"
         self.numSets = store.getInt("numSets")
         self.minReps = store.getInt("minReps")
         self.maxReps = store.getInt("maxReps")
-        self.deloads = store.getDblArray("deloads", ifMissing: defaultDeloads)
         
         if !store.hasKey("warmups") {
             let firstWarmup = store.getDbl("firstWarmup", ifMissing: 0.0)
@@ -177,7 +174,6 @@ public class CycleRepsPlan : Plan {
         store.addInt("minReps", minReps)
         store.addInt("maxReps", maxReps)
         store.addObj("warmups", warmups)
-        store.addDblArray("deloads", deloads)
 
         store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
@@ -269,14 +265,18 @@ public class CycleRepsPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
-        if let deload = deloadedWeight(), let percent = deload.percent {
-            return "Deloaded by \(percent)% (last was \(deload.weeks) weeks ago)"
-        } else {
-            return ""
+    public func prevLabel() -> (String, UIColor) {
+        var label = ""
+        var color = UIColor.black
+        let days = daysAgo(exerciseName)
+        if days >= 14 {
+            label += "Last was \(days) days ago"
+            color = UIColor.red
         }
+        
+        return (label, color)
     }
-    
+        
     public func historyLabel() -> String {
         let labels = history.map {"\($0.numReps) @ \(Weight.friendlyUnitsStr($0.getWeight()))"}
         return makeHistoryFromLabels(labels)
@@ -337,11 +337,7 @@ public class CycleRepsPlan : Plan {
     }
     
     public func currentWeight() -> Double? {
-        if let deload = deloadedWeight() {
-            return deload.weight
-        } else {
-            return nil
-        }
+        return nil
     }
     
     // Internal items
@@ -369,8 +365,7 @@ public class CycleRepsPlan : Plan {
     private func handleAdvance(_ advanceBy: Int) {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let deloaded = deloadedWeight()
-            var weight = deloaded?.weight ?? setting.weight
+            var weight = setting.weight
 
             let oldReps = sets.last!.reps
             let newReps = oldReps + advanceBy
@@ -412,27 +407,14 @@ public class CycleRepsPlan : Plan {
         os_log("weight = %.3f", type: .info, weight)
         
         sets = []
-        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-
-        let warmupSets = warmups.computeWarmups(setting.apparatus, workingSetWeight: deload.weight)
+        let warmupSets = warmups.computeWarmups(setting.apparatus, workingSetWeight: setting.weight)
         for (reps, setIndex, percent, warmupWeight) in warmupSets {
             sets.append(Set(setting.apparatus, phase: setIndex, phaseCount: warmupSets.count, numReps: reps, percent: percent, warmupWeight: warmupWeight, workingSetWeight: weight))
         }
 
         for i in 0..<numSets {
             let requested = setting.reps ?? defaultRequested
-            sets.append(Set(setting.apparatus, set: i+1, numSets: numSets, numReps: requested, maxReps: maxReps, workingSetWeight: deload.weight))
-        }
-    }
-    
-    private func deloadedWeight() -> Deload? {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            return deload
-            
-        case .left(_):
-            return nil
+            sets.append(Set(setting.apparatus, set: i+1, numSets: numSets, numReps: requested, maxReps: maxReps, workingSetWeight: setting.weight))
         }
     }
     
@@ -440,7 +422,6 @@ public class CycleRepsPlan : Plan {
     private let minReps: Int
     private let maxReps: Int
     private let warmups: Warmups
-    private let deloads: [Double]
 
     private var modifiedOn = Date.distantPast
     private var workoutName: String = ""

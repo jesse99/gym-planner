@@ -1,5 +1,6 @@
 /// Do sets for a specified amount of time.
 import Foundation
+import UIKit
 import os.log
 
 public class TimedPlan : Plan {
@@ -162,11 +163,11 @@ public class TimedPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
+    public func prevLabel() -> (String, UIColor) {
         if let result = history.last {
-            return "Previous was \(secsToStr(result.secs))"
+            return ("Previous was \(secsToStr(result.secs))", UIColor.black)
         } else {
-            return ""
+            return ("", UIColor.black)
         }
     }
     

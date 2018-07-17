@@ -1,6 +1,7 @@
 /// Advance weight after each successful workout.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class AMRAPPlan : Plan {
@@ -69,7 +70,6 @@ public class AMRAPPlan : Plan {
         self.warmups = warmups
         self.workSets = workSets
         self.workReps = workReps
-        self.deloads = [1.0, 1.0, 0.95, 0.9, 0.9, 0.85]
     }
     
     public func errors() -> [String] {
@@ -105,7 +105,6 @@ public class AMRAPPlan : Plan {
         self.typeName = "AMRAPPlan"
         self.workSets = store.getInt("workSets")
         self.workReps = store.getInt("workReps")
-        self.deloads = store.getDblArray("deloads")
         
         if !store.hasKey("warmups") {
             let firstWarmup = store.getDbl("firstWarmup")
@@ -142,7 +141,6 @@ public class AMRAPPlan : Plan {
         store.addObj("warmups", warmups)
         store.addInt("workSets", workSets)
         store.addInt("workReps", workReps)
-        store.addDblArray("deloads", deloads)
         
         store.addDate("modifiedOn", modifiedOn)
         store.addStr("workoutName", workoutName)
@@ -225,27 +223,22 @@ public class AMRAPPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
-        if let deload = deloadedWeight(), let percent = deload.percent {
-            return "Deloaded by \(percent)% (last was \(deload.weeks) weeks ago)"
-        } else {
-            return makePrevLabel(history)
+    public func prevLabel() -> (String, UIColor) {
+        var label = makePrevLabel(history)
+        var color = UIColor.black
+
+        let days = daysAgo(exerciseName)
+        if days >= 14 && !label.isEmpty {
+            label += " \(days) days ago"
+            color = UIColor.red
         }
+        
+        return (label, color)
     }
-    
+        
     public func historyLabel() -> String {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            var weights = history.map {$0.getWeight()}
-            if let deload = deloadedWeight() {
-                let info = Weight(deload.weight, setting.apparatus).closest()
-                weights.append(info.weight)
-            }
-            return makeHistoryLabel(Array(weights))
-        case .left(_):
-            break
-        }
-        return ""
+        let weights = history.map {$0.getWeight()}
+        return makeHistoryLabel(Array(weights))
     }
     
     public func current() -> Activity {
@@ -303,11 +296,7 @@ public class AMRAPPlan : Plan {
     }
     
     public func currentWeight() -> Double? {
-        if let deload = deloadedWeight() {
-            return deload.weight
-        } else {
-            return nil
-        }
+        return nil
     }
     
     // Internal items
@@ -346,8 +335,7 @@ public class AMRAPPlan : Plan {
 
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let deloaded = deloadedWeight()
-            let weight = deloaded?.weight ?? setting.weight
+            let weight = setting.weight
 
             let info = Weight(0.9*weight, setting.apparatus).closest(below: weight)
             setting.changeWeight(info.weight)
@@ -364,8 +352,7 @@ public class AMRAPPlan : Plan {
     private func handleAdvance() {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let deloaded = deloadedWeight()
-            let weight = deloaded?.weight ?? setting.weight
+            let weight = setting.weight
             
             let w = Weight(weight, setting.apparatus)
             setting.changeWeight(w.nextWeight())
@@ -385,12 +372,7 @@ public class AMRAPPlan : Plan {
     }
     
     private func buildSets(_ setting: VariableWeightSetting) {
-        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-        let weight = deload.weight
-        
-        if let percent = deload.percent {
-            os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
-        }
+        let weight = setting.weight
         os_log("weight = %.3f", type: .info, weight)
         
         sets = []
@@ -404,21 +386,9 @@ public class AMRAPPlan : Plan {
         }
     }
     
-    private func deloadedWeight() -> Deload? {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            return deload
-            
-        case .left(_):
-            return nil
-        }
-    }
-    
     private let warmups: Warmups
     private let workSets: Int
     private let workReps: Int
-    private let deloads: [Double]
     
     private var modifiedOn = Date.distantPast
     private var workoutName: String = ""

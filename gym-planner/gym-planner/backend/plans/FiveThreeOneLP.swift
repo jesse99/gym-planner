@@ -1,6 +1,7 @@
 /// 531 variant with weekly progression (from nsuns).
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class FiveThreeOneLPPlan : Plan {
@@ -101,7 +102,6 @@ public class FiveThreeOneLPPlan : Plan {
         self.typeName = "FiveThreeOneLPPlan"
         self.workSets = sets
         self.workSetPercent = workSetPercent
-        self.deloads = [1.0, 1.0, 0.95, 0.9, 0.9, 0.85]
     }
     
     public func errors() -> [String] {
@@ -143,7 +143,6 @@ public class FiveThreeOneLPPlan : Plan {
         self.typeName = "FiveThreeOneLPPlan"
         self.workSets = store.getObjArray("workSets")
         self.workSetPercent = store.getDbl("workSetPercent")
-        self.deloads = store.getDblArray("deloads")
         
         self.workoutName = store.getStr("workoutName")
         self.exerciseName = store.getStr("exerciseName")
@@ -170,7 +169,6 @@ public class FiveThreeOneLPPlan : Plan {
         store.addObj("state", state)
         store.addObjArray("workSets", workSets)
         store.addDbl("workSetPercent", workSetPercent)
-        store.addDblArray("deloads", deloads)
         
         store.addDate("modifiedOn", modifiedOn)
         store.addStr("workoutName", workoutName)
@@ -253,27 +251,22 @@ public class FiveThreeOneLPPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
-        if let deload = deloadedWeight(), let percent = deload.percent {
-            return "Deloaded by \(percent)% (last was \(deload.weeks) weeks ago)"
-        } else {
-            return makePrevLabel(history)
+    public func prevLabel() -> (String, UIColor) {
+        var label = makePrevLabel(history)
+        var color = UIColor.black
+        
+        let days = daysAgo(exerciseName)
+        if days >= 14 && !label.isEmpty {
+            label += " \(days) days ago"
+            color = UIColor.red
         }
+        
+        return (label, color)
     }
     
     public func historyLabel() -> String {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            var weights = history.map {$0.getWeight()}
-            if let deload = deloadedWeight() {
-                let info = Weight(deload.weight, setting.apparatus).closest()
-                weights.append(info.weight)
-            }
-            return makeHistoryLabel(Array(weights))
-        case .left(_):
-            break
-        }
-        return ""
+        let weights = history.map {$0.getWeight()}
+        return makeHistoryLabel(Array(weights))
     }
     
     public func current() -> Activity {
@@ -336,11 +329,7 @@ public class FiveThreeOneLPPlan : Plan {
     }
     
     public func currentWeight() -> Double? {
-        if let deload = deloadedWeight() {
-            return deload.weight
-        } else {
-            return nil
-        }
+        return nil
     }
     
     // Internal items
@@ -375,8 +364,7 @@ public class FiveThreeOneLPPlan : Plan {
     private func handleAdvance() {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            let deloaded = deloadedWeight()
-            let weight = deloaded?.weight ?? setting.weight
+            let weight = setting.weight
             
             let w = Weight(weight, setting.apparatus)
             setting.changeWeight(w.nextWeight())
@@ -396,12 +384,7 @@ public class FiveThreeOneLPPlan : Plan {
     }
     
     private func buildSets(_ setting: VariableWeightSetting) {
-        let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-        let weight = deload.weight
-        
-        if let percent = deload.percent {
-            os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
-        }
+        let weight = setting.weight
         os_log("weight = %.3f", type: .info, weight)
         
         sets = []
@@ -414,20 +397,8 @@ public class FiveThreeOneLPPlan : Plan {
         }
     }
     
-    private func deloadedWeight() -> Deload? {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            return deload
-            
-        case .left(_):
-            return nil
-        }
-    }
-    
     private let workSets: [WorkSet]
     private let workSetPercent: Double
-    private let deloads: [Double]
     
     private var modifiedOn = Date.distantPast
     private var workoutName: String = ""

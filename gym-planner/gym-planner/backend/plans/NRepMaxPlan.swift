@@ -1,6 +1,7 @@
 /// Used to find an N-rep max.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class NRepMaxPlan : Plan {
@@ -128,10 +129,10 @@ public class NRepMaxPlan : Plan {
         return "Finding \(numReps) rep max"
     }
     
-    public func prevLabel() -> String {
-        return ""
+    public func prevLabel() -> (String, UIColor) {
+        return ("", UIColor.black)
     }
-    
+        
     public func historyLabel() -> String {
         return ""
     }

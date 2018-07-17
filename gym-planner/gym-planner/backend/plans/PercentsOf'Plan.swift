@@ -1,6 +1,7 @@
 /// Plan that uses a percent of the weight from another plan.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class PercentsOfPlan : Plan {
@@ -242,11 +243,11 @@ public class PercentsOfPlan : Plan {
         return ""
     }
     
-    public func prevLabel() -> String {
+    public func prevLabel() -> (String, UIColor) {
         if let result = history.last {
-            return "Previous was \(Weight.friendlyUnitsStr(result.getWeight()))"
+            return ("Previous was \(Weight.friendlyUnitsStr(result.getWeight()))", UIColor.black)
         } else {
-            return ""
+            return ("", UIColor.black)
         }
     }
     

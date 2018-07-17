@@ -1,6 +1,7 @@
 /// Used for exercises where the user can perform as many sets as required to do a specified number of reps.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class VariableSetsPlan: Plan {
@@ -155,7 +156,7 @@ public class VariableSetsPlan: Plan {
         }
     }
     
-    public func prevLabel() -> String {
+    public func prevLabel() -> (String, UIColor) {
         func resultToStr(_ result: Result) -> String {
             let c = result.reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let r = result.reps.map {"\($0)"}
@@ -168,16 +169,16 @@ public class VariableSetsPlan: Plan {
         }
 
         if history.count == 0 {
-            return ""
+            return ("", UIColor.black)
 
         } else if history.count == 1 {
-            return "Previous was \(resultToStr(history[history.count - 1]))"
+            return ("Previous was \(resultToStr(history[history.count - 1]))", UIColor.black)
 
         } else {
-            return "Previous was \(resultToStr(history[history.count - 1])) and \(resultToStr(history[history.count - 2]))"
+            return ("Previous was \(resultToStr(history[history.count - 1])) and \(resultToStr(history[history.count - 2]))", UIColor.black)
         }
     }
-    
+        
     public func historyLabel() -> String {
         return ""
     }

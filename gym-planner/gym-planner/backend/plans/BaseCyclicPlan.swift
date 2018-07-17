@@ -1,6 +1,7 @@
 /// Base class for plans where the reps and percentages change each workout.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class BaseCyclicPlan : Plan {
@@ -190,12 +191,11 @@ public class BaseCyclicPlan : Plan {
         let cycleIndex: Int
     }
     
-    init(_ name: String, _ type: String, _ cycles: [Cycle], deloads: [Double]) {
+    init(_ name: String, _ type: String, _ cycles: [Cycle]) {
         os_log("init %@ for %@", type: .info, type, name)
         self.planName = name
         self.typeName = type
         self.cycles = cycles
-        self.deloads = deloads  // by time
     }
     
     public func errors() -> [String] {
@@ -225,8 +225,7 @@ public class BaseCyclicPlan : Plan {
         if let savedPlan = inPlan as? BaseCyclicPlan {
             return typeName == savedPlan.typeName &&
                 planName == savedPlan.planName &&
-                cycles == savedPlan.cycles &&
-                deloads == savedPlan.deloads
+                cycles == savedPlan.cycles
         } else {
             return false
         }
@@ -234,7 +233,6 @@ public class BaseCyclicPlan : Plan {
     
     public required init(from store: Store) {
         self.planName = store.getStr("name")
-        self.deloads = store.getDblArray("deloads")
         
         if store.hasKey("cycles2") {
             self.cycles = store.getObjArray("cycles2")
@@ -274,7 +272,6 @@ public class BaseCyclicPlan : Plan {
     public func save(_ store: Store) {
         store.addStr("name", planName)
         store.addObjArray("cycles2", cycles)
-        store.addDblArray("deloads", deloads)
         
         store.addStr("workoutName", workoutName)
         store.addStr("exerciseName", exerciseName)
@@ -379,14 +376,19 @@ public class BaseCyclicPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
-        if let deload = doDeloadByTime(), let percent = deload.percent {
-            return "Deloaded by \(percent)% (last was \(deload.weeks) ago)"
-        } else {
-            let index = BaseCyclicPlan.getCycle(cycles, history)
-            let results = history.filter {$0.cycleIndex == index}
-            return makePrevLabel(results)
+    public func prevLabel() -> (String, UIColor) {
+        let index = BaseCyclicPlan.getCycle(cycles, history)
+        let results = history.filter {$0.cycleIndex == index}
+        var label = makePrevLabel(results)
+        var color = UIColor.black
+
+        let days = daysAgo(exerciseName)
+        if days >= 14 && !label.isEmpty {
+            label += " \(days) days ago"
+            color = UIColor.red
         }
+        
+        return (label, color)
     }
     
     public func historyLabel() -> String {
@@ -515,12 +517,7 @@ public class BaseCyclicPlan : Plan {
     internal func getUnitWeight(_ setting: VariableWeightSetting, log: Bool) -> Double {
         var weight = setting.weight
 
-        if let deload = doDeloadByTime(), let percent = deload.percent {
-            weight = deload.weight
-            if log {
-                os_log("deloaded by %d%% (last was %d weeks ago)", type: .info, percent, deload.weeks)
-            }
-        } else if let adjustedWeight = adjustUnitWeight() {
+        if let adjustedWeight = adjustUnitWeight() {
             weight = adjustedWeight
             if log {
                 os_log("using %.3f (adjusted)", type: .info, adjustedWeight)
@@ -562,19 +559,7 @@ public class BaseCyclicPlan : Plan {
         }
     }
     
-    func doDeloadByTime() -> Deload? {
-        switch findVariableWeightSetting(exerciseName) {
-        case .right(let setting):
-            let deload = deloadByDate(setting.weight, setting.updatedWeight, deloads)
-            return deload
-            
-        case .left(_):
-            return nil
-        }
-    }
-    
     internal let cycles: [Cycle]
-    internal let deloads: [Double]
     
     internal var modifiedOn = Date.distantPast
     internal var workoutName: String = ""

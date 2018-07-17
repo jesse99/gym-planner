@@ -7,7 +7,7 @@ import os.log
 // TODO: Might want a version of this for younger people: less warmup sets, no rest on last warmup, less deload by time, less weight on medium/light days
 public class MastersBasicCyclePlan : BaseCyclicPlan {
     init(_ name: String, _ cycles: [Cycle]) {
-        super.init(name, "MastersBasicCyclePlan", cycles, deloads: [1.0, 1.0, 0.9, 0.85, 0.8])
+        super.init(name, "MastersBasicCyclePlan", cycles)
     }
     
     public required init(from store: Store) {
@@ -88,8 +88,7 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
         case .right(let setting):
             if let result = BaseCyclicPlan.findCycleResult(history, 0) {
                 if !result.missed {
-                    let deloaded = doDeloadByTime()
-                    let old = deloaded?.weight ?? setting.weight
+                    let old = setting.weight
                     
                     let w = Weight(old, setting.apparatus)
                     setting.changeWeight(w.nextWeight())
@@ -113,8 +112,7 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
         case .right(let setting):
             // We're on a cycle where the weights don't advance but we still need to indicate that
             // we've done a lift so that deload by time doesn't kick in.
-            let deloaded = doDeloadByTime()
-            let weight = deloaded?.weight ?? setting.weight
+            let weight = setting.weight
             setting.changeWeight(weight)
         case .left(_):
             break

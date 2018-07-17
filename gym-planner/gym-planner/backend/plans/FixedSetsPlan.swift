@@ -1,6 +1,7 @@
 /// Sets and reps are fixed with an optional weight (set by the user).
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class FixedSetsPlan : Plan {
@@ -169,11 +170,11 @@ public class FixedSetsPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
+    public func prevLabel() -> (String, UIColor) {
         if case let .right(weight) = findCurrentWeight(exerciseName), weight > 0.0 {
-            return makePrevLabel(history)
+            return (makePrevLabel(history), UIColor.black)
         } else {
-            return ""
+            return ("", UIColor.black)
         }
     }
     

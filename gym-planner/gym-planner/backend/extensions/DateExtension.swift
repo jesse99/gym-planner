@@ -46,6 +46,14 @@ extension Date {
         return hours
     }
     
+    func daysSinceDate(_ rhs: Date) -> Double {
+        let secs = self.startOfDay().timeIntervalSince(rhs.startOfDay())
+        let mins = secs/60.0
+        let hours = mins/60.0
+        let days = hours/24.0
+        return days
+    }
+
     func weeksSinceDate(_ rhs: Date) -> Double {
         // TODO: This and the above could be better done with NSDateComponents,
         // see https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/DatesAndTimes/Articles/dtCalendricalCalculations.html

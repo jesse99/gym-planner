@@ -403,27 +403,14 @@ public struct Weight: CustomStringConvertible {
     private let apparatus: Apparatus
 }
 
-/// Returned by deloadByDate.
-struct Deload {
-    /// The weight to use, this will be the same as the original weight if percent is nil.
-    let weight: Double
-    
-    /// Set if a deload happened.
-    let percent: Int?
-    
-    /// Number of weeks ago that the exercise was last performed.
-    let weeks: Int
-}
-
-/// deloads is a percent to apply to weight, e.g. if deloads is [1.0, 1.0, 0.9, 0.8] then
-/// if oldDate was 0 weeks ago deload by 0%
-/// if oldDate was 1 week ago deload by 0%
-/// if oldDate was 2 weeks ago deload by 10%
-/// if oldDate was 3 or more weeks ago deload by 20%
-func deloadByDate(_ weight: Double, _ oldDate: Date, _ deloads: [Double]) -> Deload {
-    let weeks = Int(Date().weeksSinceDate(oldDate))
-    let index = max(min(weeks, deloads.count - 1), 0)
-    let percent = Int(100.0*(1.0 - deloads[index]))
-    return Deload(weight: weight*deloads[index], percent: percent > 0 ? percent : nil, weeks: weeks)
+func daysAgo(_ exerciseName: String) -> Int {
+    switch findVariableWeightSetting(exerciseName) {
+    case .right(let setting):
+        let weeks = Int(Date().daysSinceDate(setting.updatedWeight))
+        return weeks
+        
+    case .left(_):
+        return 0
+    }
 }
 

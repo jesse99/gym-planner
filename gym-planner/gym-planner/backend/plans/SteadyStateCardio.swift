@@ -1,6 +1,7 @@
 /// Used for low-intensity steady state cardio (LISS).
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class SteadyStateCardioPlan : Plan {
@@ -163,8 +164,8 @@ public class SteadyStateCardioPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
-        return ""
+    public func prevLabel() -> (String, UIColor) {
+        return ("", UIColor.black)
     }
     
     public func historyLabel() -> String {

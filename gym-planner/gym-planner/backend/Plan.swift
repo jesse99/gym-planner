@@ -2,6 +2,7 @@
 /// and work sets along with the weight to use for each set. This is done with the aid of a Plan which
 /// manages details like progression, deloads, and manipulating volume and intensity across workouts.
 import Foundation
+import UIKit
 import os.log
 
 /// Used to inform a Plan of the result of an activity.
@@ -110,7 +111,7 @@ public protocol Plan: Storable {
     func sublabel() -> String
     
     /// "Previous was 125 lbs"
-    func prevLabel() -> String
+    func prevLabel() -> (String, UIColor)
     
     /// "+5 lbs, same x3, +5 lbs x4"
     func historyLabel() -> String

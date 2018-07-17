@@ -1,6 +1,7 @@
 /// Used for high intensity interval training.
 import AVFoundation // for kSystemSoundID_Vibrate
 import Foundation
+import UIKit
 import os.log
 
 public class HIITPlan : Plan {
@@ -215,8 +216,8 @@ public class HIITPlan : Plan {
         }
     }
     
-    public func prevLabel() -> String {
-        return "Target is \(targetCycles) cycles with \(targetHighSecs)s at high"
+    public func prevLabel() -> (String, UIColor) {
+        return ("Target is \(targetCycles) cycles with \(targetHighSecs)s at high", UIColor.black)
     }
     
     public func historyLabel() -> String {
