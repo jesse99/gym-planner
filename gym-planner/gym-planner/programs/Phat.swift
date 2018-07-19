@@ -26,17 +26,17 @@ func Phat() -> Program {
         machine("Seated Calf Raises",        "Seated Calf Raises",    2, by: 10, warmups: noWarmup, restMins: 2.0),
 
         // Back and Shoulders
-        barbell("Pendlay Row (speed)",    "Pendlay Row",                    6, by: 3,  warmups: speedWarmup, restMins: 1.5),
+        barbell("Pendlay Row (speed)",    "Pendlay Row",                    6, by: 5,  warmups: speedWarmup, restMins: 1.5),
         bodyWeight("Rack Chinup 2",       "Rack Chinup",                    requestedReps: 24, targetReps: 36, restMins: 2.0),
         machine("Seated Cable Row",       "Seated Cable Row",               3, minReps: 8, maxReps: 12, warmups: noWarmup, restMins: 2.0),
         dumbbell("Dumbbell Shrug",        "Dumbbell Shrug",                 2, minReps: 12, maxReps: 15, warmups: noWarmup, restMins: 2.0),
         machine("Close-grip Pulldown",    "Lat Pulldown",                   2, minReps: 15, maxReps: 20, warmups: noWarmup, restMins: 2.0),
         dumbbell("Dumbbell OHP 2",        "Dumbbell Seated Shoulder Press", 3, minReps: 8, maxReps: 12, warmups: noWarmup, restMins: 2.0),
-        barbell("Upright Row",            "Upright Row",                    2, minReps: 12, maxReps: 15,  warmups: speedWarmup, restMins: 1.5),
+        barbell("Upright Row",            "Upright Row",                    2, minReps: 12, maxReps: 15,  warmups: noWarmup, restMins: 2.0),
         dumbbell("Lateral Raises",        "Side Lateral Raise",             3, minReps: 12, maxReps: 20, warmups: noWarmup, restMins: 2.0),
 
         // Lower Body
-        barbell("Squat (speed)",          "Low bar Squat",         6, by: 3, warmups: speedWarmup, restMins: 1.5),
+        barbell("Squat (speed)",          "Low bar Squat",         6, by: 5, warmups: speedWarmup, restMins: 1.5),
         barbell("Hack Squat",             "Hack Squat",            3, by: 12, warmups: noWarmup, restMins: 2.0),
         pairedPlates("Leg Press",         "Leg Press",             2, by: 15, warmups: noWarmup, restMins: 2.0),
         machine("Leg Extensions 2",       "Leg Extensions",        3, by: 20, warmups: noWarmup, restMins: 2.0),
@@ -47,7 +47,7 @@ func Phat() -> Program {
         machine("Seated Calf Raises",     "Seated Calf Raises",    3, by: 20, warmups: noWarmup, restMins: 2.0),
 
         // Chest and Arms
-        dumbbell("Dumbbell Bench (speed)", "Dumbbell Bench Press",        6, by: 3, warmups: noWarmup, restMins: 1.5),
+        dumbbell("Dumbbell Bench (speed)", "Dumbbell Bench Press",        6, by: 5, warmups: noWarmup, restMins: 1.5),
         dumbbell("Incline Dumbbell Press", "Dumbbell Incline Press",      3, minReps: 8, maxReps: 12, warmups: noWarmup, restMins: 2.0),
         machine("Hammer Chest Press",      "Hammer Strength Chest Press", 3, minReps: 12, maxReps: 15, warmups: noWarmup, restMins: 2.0),
         machine("Incline Cable Flye",      "Incline Cable Flye",          2, minReps: 15, maxReps: 20, warmups: noWarmup, restMins: 2.0),
@@ -67,12 +67,12 @@ func Phat() -> Program {
     
     let tags: [Program.Tags] = [.intermediate, .hypertrophy, .barbell, .fiveDays, .unisex, .ageUnder40]
     let description = """
-[Power Hypertrophy Adaptive Training](http://www.simplyshredded.com/mega-feature-layne-norton-training-series-full-powerhypertrophy-routine-updated-2011.html) workout. The workouts are:
+Dr. Layne Norton's [Power Hypertrophy Adaptive Training](http://www.simplyshredded.com/mega-feature-layne-norton-training-series-full-powerhypertrophy-routine-updated-2011.html) workout. This is a give day program where three of the days are body-builder style and two of the days are focused on increasing strength. The workouts are:
 
 **Upper Power**
 * Pendlay Rows 3x5
-* Pullups 2x6-10
-* Rack Chins 2x6-10
+* Pullups 12-20
+* Rack Chins 12-20
 * Dumbbell Press 3x3-5
 * Dips 2x6-10
 * Seated Dumbbell OHP 3x6-10
@@ -89,8 +89,8 @@ func Phat() -> Program {
 * Seated Calf Raises 2x10
 
 **Back and Shoulders**
-* Pendlay Row 6x3 (speed)
-* Rack Chins 3x8-12
+* Pendlay Row 6x5 (speed)
+* Rack Chins 24-36
 * Seated Cable Row 3x8-12
 * Dumbbell Shrugs 2x12-15
 * Close-grip Pulldowns 2x15-20
@@ -99,7 +99,7 @@ func Phat() -> Program {
 * Lateral Raise 3x12-20
 
 **Lower Body**
-* Squat 6x3 (speed)
+* Squat 6x5 (speed)
 * Hack Squats 3x12
 * Leg Press 2x15
 * Leg Extensions 3x20
@@ -110,7 +110,7 @@ func Phat() -> Program {
 * Seated Calf Raises 3x20
 
 **Chest and Arms**
-* Dumbbell Press 6x3 (speed)
+* Dumbbell Press 6x5 (speed)
 * Incline Dumbbell Press 3x8-12
 * Hammer Press 3x12-15
 * Incline Cable Flyes 2x15-20
@@ -123,6 +123,7 @@ func Phat() -> Program {
 
 **Notes**
 * For the speed sets use 65-70% of the power day weights and try to perform the lifts explosively while maintaining good form.
+* Chains or bands can be helpful for the speed work.
 * Leave one to two sets in the tank.
 * Until you adjust to the workload you may want to skip some of the auxiliary exercises.
 * A deload every 6-12 weeks is recommended: spend 1-3 weeks lifting at 60-70%.
