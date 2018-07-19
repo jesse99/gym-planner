@@ -84,12 +84,12 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             let original = setting.weight
-            setting.changeWeight(original)
+            setting.changeWeight(original, byUser: false)
 
             for _ in 0..<multiplier {
                 let old = setting.weight
                 let w = Weight(old, setting.apparatus)
-                setting.changeWeight(w.nextWeight())
+                setting.changeWeight(w.nextWeight(), byUser: false)
             }
             os_log("advanced from %.3f to %.3f", type: .info, original, setting.weight)
             
@@ -105,12 +105,12 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
             let original = setting.weight
-            setting.changeWeight(original)
+            setting.changeWeight(original, byUser: false)
             
             for _ in 0..<3 {
                 let old = setting.weight
                 let w = Weight(old, setting.apparatus)
-                setting.changeWeight(w.prevWeight())
+                setting.changeWeight(w.prevWeight(), byUser: false)
             }
             os_log("deload from %.3f to %.3f", type: .info, original, setting.weight)
             
@@ -128,7 +128,7 @@ public class FiveThreeOneBeginnerPlan : BaseCyclicPlan {
             // User doesn't want to change weights but a deload might have happened (and even if it didn't we want to reset the date
             // in settings so that deload by time doesn't kick in later).
             let weight = setting.weight
-            setting.changeWeight(weight)
+            setting.changeWeight(weight, byUser: false)
         case .left(_):
             break
         }

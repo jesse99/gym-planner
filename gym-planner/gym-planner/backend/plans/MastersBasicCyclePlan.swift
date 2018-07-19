@@ -48,12 +48,18 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
     internal override func adjustUnitWeight() -> Double? {
         // doAdvance handles the case where the first cycle was missed (we just don't advance).
         // Here we handle the other cases where we ask the user to repeat what he did last time.
-        let index = BaseCyclicPlan.getCycle(cycles, history)
-        if index > 0 {
-            if let result = BaseCyclicPlan.findCycleResult(history, index), result.missed {
-                let scale = 1.0/cycles[index].maxPercent()  // mapping from maxWeight to unitWeight
-                return scale*result.getWeight()
+        switch findVariableWeightSetting(exerciseName) {
+        case .right(let setting):
+            let index = BaseCyclicPlan.getCycle(cycles, history)
+            if index > 0 {
+                if let result = BaseCyclicPlan.findCycleResult(history, index), result.missed, setting.userUpdated.compare(result.date) == .orderedAscending {
+                    let scale = 1.0/cycles[index].maxPercent()  // mapping from maxWeight to unitWeight
+                    return scale*result.getWeight()
+                }
             }
+
+        case .left(_):
+            break
         }
         return nil
     }
@@ -91,7 +97,7 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
                     let old = setting.weight
                     
                     let w = Weight(old, setting.apparatus)
-                    setting.changeWeight(w.nextWeight())
+                    setting.changeWeight(w.nextWeight(), byUser: false)
                     setting.stalls = 0
                     os_log("advanced from %.3f to %.3f", type: .info, old, setting.weight)
                     
@@ -113,7 +119,7 @@ public class MastersBasicCyclePlan : BaseCyclicPlan {
             // We're on a cycle where the weights don't advance but we still need to indicate that
             // we've done a lift so that deload by time doesn't kick in.
             let weight = setting.weight
-            setting.changeWeight(weight)
+            setting.changeWeight(weight, byUser: false)
         case .left(_):
             break
         }

@@ -337,7 +337,7 @@ public class LinearPlan : Plan {
             
             if !missed {
                 let w = Weight(weight, setting.apparatus)
-                setting.changeWeight(w.nextWeight())
+                setting.changeWeight(w.nextWeight(), byUser: false)
                 setting.stalls = 0
                 os_log("advanced from %.3f to %.3f", type: .info, weight, setting.weight)
                 
@@ -348,7 +348,7 @@ public class LinearPlan : Plan {
                 
                 if setting.stalls >= 2 {
                     let info = Weight(0.9*setting.weight, setting.apparatus).closest(below: setting.weight)
-                    setting.changeWeight(info.weight)
+                    setting.changeWeight(info.weight, byUser: false)
                     setting.stalls = 0
                     os_log("deloaded to = %.3f", type: .info, setting.weight)
                 }

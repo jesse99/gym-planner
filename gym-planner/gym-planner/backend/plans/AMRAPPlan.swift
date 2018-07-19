@@ -338,7 +338,7 @@ public class AMRAPPlan : Plan {
             let weight = setting.weight
 
             let info = Weight(0.9*weight, setting.apparatus).closest(below: weight)
-            setting.changeWeight(info.weight)
+            setting.changeWeight(info.weight, byUser: false)
             os_log("deloaded to = %.3f", type: .info, setting.weight)
             
         case .left(let err):
@@ -355,7 +355,7 @@ public class AMRAPPlan : Plan {
             let weight = setting.weight
             
             let w = Weight(weight, setting.apparatus)
-            setting.changeWeight(w.nextWeight())
+            setting.changeWeight(w.nextWeight(), byUser: false)
             os_log("advanced from %.3f to %.3f", type: .info, weight, setting.weight)
             
         case .left(let err):

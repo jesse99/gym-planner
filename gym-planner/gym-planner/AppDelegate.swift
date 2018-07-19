@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         let apparatus = Apparatus.barbell(bar: 45, collar: 0, plates: defaultPlates(), bumpers: [], magnets: [])
         let setting = VariableWeightSetting(apparatus, restSecs: 60)
         let exercise = Exercise("default exercise", "default", plan, .variableWeight(setting))
-        setting.changeWeight(100)
+        setting.changeWeight(100, byUser: false)
         runNonDefaultPlan(plan, workout, exercise, numWorkouts: numWorkouts, defaultWeight: defaultWeight)
         //        runDefaultPlan(plan, numWorkouts: 4)
     }

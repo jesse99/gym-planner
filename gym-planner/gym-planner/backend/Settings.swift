@@ -39,8 +39,9 @@ public enum Apparatus
 /// Used for exercises that use plates, or dumbbells, or machines with variable weights.
 public class VariableWeightSetting: Storable {
     var apparatus: Apparatus
-    private(set) var weight: Double  // starts out at 0.0
+    private(set) var weight: Double         // starts out at 0.0
     private(set) var updatedWeight: Date    // last time the weight was set, to either a new value or the same value and by the user or the app
+    private(set) var userUpdated: Date      // timer the user changed the weight
     var restSecs: Int
     var stalls: Int
     var reps: Int?
@@ -49,6 +50,7 @@ public class VariableWeightSetting: Storable {
         self.apparatus = apparatus
         self.weight = 0.0
         self.updatedWeight = Date()
+        self.userUpdated = Date.distantPast
         self.restSecs = restSecs
         self.stalls = 0
         self.reps = reps
@@ -79,6 +81,7 @@ public class VariableWeightSetting: Storable {
         self.apparatus = store.getObj("apparatus")
         self.weight = store.getDbl("weight")
         self.updatedWeight = store.getDate("updatedWeight")
+        self.userUpdated = store.getDate("userUpdated", ifMissing: Date.distantPast)
         self.restSecs = store.getInt("restSecs")
         self.stalls = store.getInt("stalls")
 
@@ -90,14 +93,18 @@ public class VariableWeightSetting: Storable {
         store.addObj("apparatus", apparatus)
         store.addDbl("weight", weight)
         store.addDate("updatedWeight", updatedWeight)
+        store.addDate("userUpdated", userUpdated)
         store.addInt("restSecs", restSecs)
         store.addInt("stalls", stalls)
         store.addInt("reps", reps ?? 0)
     }
     
-    func changeWeight(_ weight: Double) {
+    func changeWeight(_ weight: Double, byUser: Bool) {
         self.weight = weight;
         self.updatedWeight = Date()
+        if byUser {
+            self.userUpdated = Date()
+        }
     }
     
     /// Used to indicate that an exercise was done even though the weight didn't actually change

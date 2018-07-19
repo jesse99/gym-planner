@@ -33,7 +33,7 @@ func HLM2() -> Program {
 //    ]
     
     let exercises = [
-        hiit("HIIT", warmupMins: 5, highSecs: 30, lowSecs: 60, cooldownMins: 5, numCycles: 4, targetCycles: 8, targetHighSecs: 45),
+//        hiit("HIIT", warmupMins: 5, highSecs: 30, lowSecs: 60, cooldownMins: 5, numCycles: 4, targetCycles: 8, targetHighSecs: 45),
 
         barbell("Squat",          "Low bar Squat",  masterCycles: heavySquatCycles, restMins: 4.0, planName: "531"),
         barbell("Light Squat",    "Low bar Squat",  1, by: 5, percent: 0.88, of: "Squat", warmups: lightSquatWarmup, restMins: 2.0),
@@ -45,7 +45,7 @@ func HLM2() -> Program {
         barbell("Deadlift",               "Deadlift",       1, by: 5, warmups: normalWarmup, useBumpers: true, restMins: 3.5),
 //        barbell("Deadlift",               "Deadlift",       masterCycles: cyclesDead, useBumpers: true, restMins: 3.5, planName: "dead"),
         barbell("Overhead Press",         "Overhead Press", masterCycles: cycles53, magnets: [1.25], restMins: 3.0, planName: "53"),
-        bodyWeight("Chinups",             "Chinup",         requestedReps: 12, targetReps: 50,   restMins: 2.5),
+        bodyWeight("Chinups",             "Chinup",         requestedReps: 12, targetReps: 30,   restMins: 2.5),
         //barbell("Good Morning",           "Good Morning",   3, by: 5, warmups: goodWarmup, restMins: 3.0),
         machine("Lat Pulldown",           "Lat Pulldown",   3, minReps: 4, maxReps: 8, warmups: latWarmup, restMins: 2.5),
         singleDumbbell("Back Extensions", "Back Extension", 3, minReps: 6, maxReps: 12, restMins: 2.0),
@@ -63,24 +63,26 @@ func HLM2() -> Program {
         bodyWeight("Dragon Flag",           "Dragon Flag",           3, minReps: 1, maxReps: 8, restMins: 1.5),
         bodyWeight("Hanging Dragon Flag",   "Hanging Dragon Flag",   1, minSecs: 5, maxSecs: 20),
 
-        bodyWeight("Foam Rolling",            "IT-Band Foam Roll",         1, by: 15, restMins: 0.0),
-        bodyWeight("Shoulder Dislocates",     "Shoulder Dislocate",        1, by: 12, restMins: 0.0),
-        bodyWeight("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      1, by: 10, restMins: 0.0),
-        bodyWeight("Roll-over into V-sit",    "Roll-over into V-sit",      1, by: 15, restMins: 0.0),
-        bodyWeight("Rocking Frog Stretch",    "Rocking Frog Stretch",      1, by: 10, restMins: 0.0),
-        bodyWeight("Fire Hydrant Hip Circle", "Fire Hydrant Hip Circle",   1, by: 10, restMins: 0.0),
-        bodyWeight("Mountain Climber",        "Mountain Climber",          1, by: 10, restMins: 0.0),
-        bodyWeight("Cossack Squat",           "Cossack Squat",             1, by: 10, restMins: 0.0),
-        bodyWeight("Piriformis Stretch",      "Seated Piriformis Stretch", 2, secs: 30),
-        bodyWeight("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", 2, secs: 30)]
+//        bodyWeight("Foam Rolling",            "IT-Band Foam Roll",         1, by: 15, restMins: 0.0),
+//        bodyWeight("Shoulder Dislocates",     "Shoulder Dislocate",        1, by: 12, restMins: 0.0),
+//        bodyWeight("Bent-knee Iron Cross",    "Bent-knee Iron Cross",      1, by: 10, restMins: 0.0),
+//        bodyWeight("Roll-over into V-sit",    "Roll-over into V-sit",      1, by: 15, restMins: 0.0),
+//        bodyWeight("Rocking Frog Stretch",    "Rocking Frog Stretch",      1, by: 10, restMins: 0.0),
+//        bodyWeight("Fire Hydrant Hip Circle", "Fire Hydrant Hip Circle",   1, by: 10, restMins: 0.0),
+//        bodyWeight("Mountain Climber",        "Mountain Climber",          1, by: 10, restMins: 0.0),
+//        bodyWeight("Cossack Squat",           "Cossack Squat",             1, by: 10, restMins: 0.0),
+//        bodyWeight("Piriformis Stretch",      "Seated Piriformis Stretch", 2, secs: 30),
+//        bodyWeight("Hip Flexor Stretch",      "Rear-foot-elevated Hip Flexor Stretch", 2, secs: 30)
+    ]
     makeProgression(exercises, "Kneeling Front Plank", "Front Plank", "Side Plank", "Leg Lift Plank", "Arm & Leg Lift Front Plank", "Decline Plank", "Decline & March Plank", "Wall Plank", "Wall March Plank", "Dragon Flag", "Hanging Dragon Flag")
 
     let workouts = [
-        Workout("Heavy Day",    ["Squat",        "Bench Press",    "Deadlift", "Back Extensions"], scheduled: true, optional: ["Back Extensions"]),
-        Workout("Light Day",    ["Light Squat",  "Overhead Press", "Chinups",  "Lat Pulldown", "Side Plank"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Side Plank"]),
-        Workout("Medium Day",   ["Medium Squat", "Medium Bench",   "Chinups",  "Lat Pulldown", "Dumbbell Flyes", "Leg Lift Plank"], scheduled: true, optional: ["Dumbbell Flyes", "Chinups", "Lat Pulldown", "Leg Lift Plank"]),
-        Workout("HIIT",         ["HIIT"], scheduled: false),
-        Workout("Mobility",     ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false)]
+        Workout("Heavy Day",    ["Squat",          "Bench Press",  "Deadlift", "Back Extensions"], scheduled: true, optional: ["Back Extensions"]),
+        Workout("Light Day",    ["Overhead Press", "Light Squat",  "Chinups",  "Lat Pulldown", "Side Plank"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Side Plank"]),
+        Workout("Medium Day",   ["Medium Bench",   "Medium Squat", "Chinups",  "Lat Pulldown", "Dumbbell Flyes", "Leg Lift Plank"], scheduled: true, optional: ["Dumbbell Flyes", "Chinups", "Lat Pulldown", "Leg Lift Plank"]),
+//        Workout("HIIT",         ["HIIT"], scheduled: false),
+//        Workout("Mobility",     ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false),
+        ]
 
     let tags: [Program.Tags] = [.intermediate, .strength, .barbell, .unisex, .threeDays, .age40s, .age50s]
     let description = """

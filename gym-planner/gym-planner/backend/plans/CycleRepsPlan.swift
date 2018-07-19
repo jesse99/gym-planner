@@ -378,12 +378,12 @@ public class CycleRepsPlan : Plan {
                 while setting.reps! > maxReps {
                     setting.reps = minReps + (setting.reps! - maxReps) - 1
                     let w = Weight(weight, setting.apparatus)
-                    setting.changeWeight(w.nextWeight())
+                    setting.changeWeight(w.nextWeight(), byUser: false)
 
                     weight = setting.weight
                 }
             } else {
-                setting.changeWeight(weight)
+                setting.changeWeight(weight, byUser: false)
             }
             
             if setting.weight != oldWeight {

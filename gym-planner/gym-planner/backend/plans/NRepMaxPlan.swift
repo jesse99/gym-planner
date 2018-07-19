@@ -246,7 +246,7 @@ public class NRepMaxPlan : Plan {
     private func updateWeight() {
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
-            setting.changeWeight(weight)
+            setting.changeWeight(weight, byUser: false)
             setting.stalls = 0
             os_log("set weight to = %.3f", type: .info, setting.weight)
             

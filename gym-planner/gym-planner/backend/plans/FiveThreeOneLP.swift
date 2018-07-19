@@ -367,7 +367,7 @@ public class FiveThreeOneLPPlan : Plan {
             let weight = setting.weight
             
             let w = Weight(weight, setting.apparatus)
-            setting.changeWeight(w.nextWeight())
+            setting.changeWeight(w.nextWeight(), byUser: false)
             os_log("advanced from %.3f to %.3f", type: .info, weight, setting.weight)
                         
         case .left(let err):
