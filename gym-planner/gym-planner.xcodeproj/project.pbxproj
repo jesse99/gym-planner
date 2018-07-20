@@ -86,6 +86,7 @@
 		37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */; };
 		37E5632A20201D1B00BABB2D /* ProgramHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E5632920201D1B00BABB2D /* ProgramHelpers.swift */; };
 		37F3F11C20182E5600BF0418 /* Bootyful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F3F11B20182E5600BF0418 /* Bootyful.swift */; };
+		37F6167D2101663D00501110 /* Stopgap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6167C2101663D00501110 /* Stopgap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -182,6 +183,7 @@
 		37E1CB7A1FE231EE0090E872 /* EditNoteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteController.swift; sourceTree = "<group>"; };
 		37E5632920201D1B00BABB2D /* ProgramHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramHelpers.swift; sourceTree = "<group>"; };
 		37F3F11B20182E5600BF0418 /* Bootyful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bootyful.swift; sourceTree = "<group>"; };
+		37F6167C2101663D00501110 /* Stopgap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stopgap.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +237,7 @@
 				3730027D209010B0003A1E53 /* Phat.swift */,
 				376BA11A2001D57000EF804C /* Phraks.swift */,
 				3730027B208D2605003A1E53 /* Phul.swift */,
+				37F6167C2101663D00501110 /* Stopgap.swift */,
 			);
 			path = programs;
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 				376B5B142060B62E00832B20 /* PercentsOf'Plan.swift in Sources */,
 				37CED4AD1FB3FCED00244ADD /* SequenceExtension.swift in Sources */,
 				372B14451FE708B800D8392A /* BaseHistoryController.swift in Sources */,
+				37F6167D2101663D00501110 /* Stopgap.swift in Sources */,
 				37CED4B01FB52E2F00244ADD /* MastersBasicCyclePlan.swift in Sources */,
 				3765A3402014485B00C4C44E /* FiveThreeOneBeginner.swift in Sources */,
 				37B308DA1FC3234F00556E8F /* ExerciseController.swift in Sources */,
