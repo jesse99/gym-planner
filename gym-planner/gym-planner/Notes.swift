@@ -601,8 +601,18 @@ let builtInNotes: [String: String] = [
         notes: [
             "Position dumbbells in front of shoulders with palms facing each other.",
             "Raise dumbbells as if you were pressing them but don't lock them out.",
-            "With a slight bend in elbows lower dumbbells to sides in a wide arc."],
+            "With a slight bend in elbows lower dumbbells to sides in a wide arc.",
+            "Stop lowering the dumbbells once you feel a stretch in your chest."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/dumbbell-flyes"]),
+    
+    "Dumbbell Incline Flyes": createNote(
+        notes: [
+            "Position dumbbells in front of shoulders with palms facing each other.",
+            "Raise dumbbells as if you were pressing them but don't lock them out.",
+            "With a slight bend in elbows lower dumbbells to sides in a wide arc.",
+            "Stop lowering the dumbbells once you feel a stretch in your chest.",
+            "Shoulders should point down at the bottom and out at the top."],
+        links: ["Link": "https://www.exrx.net/WeightExercises/PectoralClavicular/DBInclineFly"]),
     
     "Dumbbell Incline Press": createNote(
         notes: [

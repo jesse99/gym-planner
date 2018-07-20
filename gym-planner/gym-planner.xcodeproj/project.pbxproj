@@ -87,6 +87,7 @@
 		37E5632A20201D1B00BABB2D /* ProgramHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E5632920201D1B00BABB2D /* ProgramHelpers.swift */; };
 		37F3F11C20182E5600BF0418 /* Bootyful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F3F11B20182E5600BF0418 /* Bootyful.swift */; };
 		37F6167D2101663D00501110 /* Stopgap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6167C2101663D00501110 /* Stopgap.swift */; };
+		37F6167F2101783B00501110 /* PPL_Stopgap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6167E2101783B00501110 /* PPL_Stopgap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +185,7 @@
 		37E5632920201D1B00BABB2D /* ProgramHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramHelpers.swift; sourceTree = "<group>"; };
 		37F3F11B20182E5600BF0418 /* Bootyful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bootyful.swift; sourceTree = "<group>"; };
 		37F6167C2101663D00501110 /* Stopgap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stopgap.swift; sourceTree = "<group>"; };
+		37F6167E2101783B00501110 /* PPL_Stopgap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPL_Stopgap.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +239,7 @@
 				3730027D209010B0003A1E53 /* Phat.swift */,
 				376BA11A2001D57000EF804C /* Phraks.swift */,
 				3730027B208D2605003A1E53 /* Phul.swift */,
+				37F6167E2101783B00501110 /* PPL_Stopgap.swift */,
 				37F6167C2101663D00501110 /* Stopgap.swift */,
 			);
 			path = programs;
@@ -537,6 +540,7 @@
 				3765A33E2013B45000C4C44E /* FiveThreeOmeBeginnerPlan.swift in Sources */,
 				377CDB0D20538CC90003819E /* SinglePlatesController.swift in Sources */,
 				37E1CB7B1FE231EE0090E872 /* EditNoteController.swift in Sources */,
+				37F6167F2101783B00501110 /* PPL_Stopgap.swift in Sources */,
 				372926CD205A2CCF00608F9B /* nSuns.swift in Sources */,
 				37452C8E1FDCA98800A3CAA6 /* SteadyStateCardio.swift in Sources */,
 				376BA11B2001D57000EF804C /* Phraks.swift in Sources */,
