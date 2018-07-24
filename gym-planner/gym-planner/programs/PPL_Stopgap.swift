@@ -37,7 +37,7 @@ func PPLStopgap4() -> Program {
         Workout("Pull", ["Pullup", "Lunge", "Bent-over Row", "Reverse Fly", "Shrug", "Curl"], scheduled: true, optional: []),
         Workout("Legs", ["Goblet Squat", "Lunge", "Single-leg Deadlift", "Calf Raise"], scheduled: true, optional: [])]
 
-    let tags: [Program.Tags] = [.beginner, .strength, .dumbbell, .fourDays, .unisex, .ageUnder40, .age50s]
+    let tags: [Program.Tags] = [.beginner, .strength, .dumbbell, .fourDays, .unisex, .ageUnder40, .age40s, .age50s]
     let description = """
 Beginner strength [program](https://www.reddit.com/r/Fitness/comments/2e79y4/dumbbell_ppl_proposed_alternative_to_dumbbell) using only dumbbells. Note that you should have a bench and a pullup bar. Not quite as effective as the programs that use barbells (especially for the lower body) but way better than nothing.
 

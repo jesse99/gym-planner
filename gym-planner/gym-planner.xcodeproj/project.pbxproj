@@ -88,6 +88,7 @@
 		37F3F11C20182E5600BF0418 /* Bootyful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F3F11B20182E5600BF0418 /* Bootyful.swift */; };
 		37F6167D2101663D00501110 /* Stopgap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6167C2101663D00501110 /* Stopgap.swift */; };
 		37F6167F2101783B00501110 /* PPL_Stopgap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6167E2101783B00501110 /* PPL_Stopgap.swift */; };
+		37F616812103C39200501110 /* RedditBW.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F616802103C39200501110 /* RedditBW.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +187,7 @@
 		37F3F11B20182E5600BF0418 /* Bootyful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bootyful.swift; sourceTree = "<group>"; };
 		37F6167C2101663D00501110 /* Stopgap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stopgap.swift; sourceTree = "<group>"; };
 		37F6167E2101783B00501110 /* PPL_Stopgap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPL_Stopgap.swift; sourceTree = "<group>"; };
+		37F616802103C39200501110 /* RedditBW.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditBW.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +242,7 @@
 				376BA11A2001D57000EF804C /* Phraks.swift */,
 				3730027B208D2605003A1E53 /* Phul.swift */,
 				37F6167E2101783B00501110 /* PPL_Stopgap.swift */,
+				37F616802103C39200501110 /* RedditBW.swift */,
 				37F6167C2101663D00501110 /* Stopgap.swift */,
 			);
 			path = programs;
@@ -554,6 +557,7 @@
 				372926C92053B4EF00608F9B /* IceCream.swift in Sources */,
 				37452C981FDE4D7B00A3CAA6 /* HIITController.swift in Sources */,
 				37CED4AA1FB1625700244ADD /* Exercise.swift in Sources */,
+				37F616812103C39200501110 /* RedditBW.swift in Sources */,
 				37B3ECF51FD38B2E00F7D8EF /* DerivedWeightController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

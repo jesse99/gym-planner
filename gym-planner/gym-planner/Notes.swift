@@ -23,7 +23,7 @@ let builtInNotes: [String: String] = [
             "Hold the ab wheel with both hands and kneel on the floor.",
             "Roll the wheel straight forward as far as you can without touching the floor with your body.",
             "Pause and slowly roll back."],
-        links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/ab-roller"]),
+        links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/ab-roller", "Video": "https://www.youtube.com/watch?v=uYBOBBv9GzY"]),
     
     "Adductor Foam Roll": createNote(
         notes: [
@@ -33,11 +33,26 @@ let builtInNotes: [String: String] = [
             "Pause on areas that are especially tender until they feel better."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/adductor"]),
     
+    "Advanced Shrimp Squat": createNote(
+        notes: [
+            "Stand straight up with your hands stretched out in front of you.",
+            "Raise one leg so that your shin is above parallel to the floor.",
+            "Squat down until your elevated leg touches down at the knee, but not at the toes.",
+            "Hold onto your elevated knee as you descend."],
+        links: ["Video": "https://www.youtube.com/watch?v=TKt0-c83GSc&feature=youtu.be&t=3m9s"]),
+    
     "Advanced Tuck Front Lever Row": createNote(
         notes: [
             "Get into a loosely tucked front level position.",
             "Pull your body up as high as possible while remaining horizontal."],
         links: ["Link": "https://www.youtube.com/watch?v=cVdb8oUGKAw", "Body Weight Rows": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/row"]),
+    
+    "Arch Hangs": createNote(
+        notes: [
+            "Hang off a pullup bar.",
+            "Bring your head and shoulders back and arch your entire body",
+            "Try to pinch your shoulder blades together and keep your elbows straight."],
+        links: ["Link": "https://www.youtube.com/watch?v=C995b3KLXS4&feature=youtu.be&t=7s"]),
     
     "Arch Hold": createNote(
         notes: [
@@ -108,6 +123,14 @@ let builtInNotes: [String: String] = [
             "Bring one foot up off the floor and to the side."],
         links: ["Video": "https://www.youtube.com/watch?v=HzUgVEAjixY"]),
     
+    "Banded Nordic Curl": createNote(
+        notes: [
+            "Kneel on the ground.",
+            "Secure a band to a support and wrap it around your chest.",
+            "Lean forward.",
+            "Keep your back straight at all times."],
+        links: ["Video": "https://www.youtube.com/watch?v=HUXS3S2xSX4"]),
+    
     "Bar Pullover": createNote(
         notes: [
             "Do a pullup and as you come up bring your legs up and spin around the bar.",
@@ -142,6 +165,14 @@ let builtInNotes: [String: String] = [
             "Slowly lower the bar back down.",
             "Avoid using your biceps."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/barbell-shrug"]),
+    
+    "Beginner Shrimp Squat": createNote(
+        notes: [
+            "Stand straight up with your hands stretched out in front of you.",
+            "Raise one leg so that your shin is parallel to the floor.",
+            "Squat down until your elevated leg touches down at the knee and at the toes.",
+            "If you're having trouble balancing you can hold onto a support."],
+        links: ["Video": "https://www.youtube.com/watch?v=TKt0-c83GSc&feature=youtu.be&t=3m9s"]),
     
     "Bench Jump": createNote(
         notes: [
@@ -255,12 +286,25 @@ let builtInNotes: [String: String] = [
             "Keeping your torso upright drop into a squat."],
         links: ["Video": "https://www.youtube.com/watch?v=HeZiiPtlcew"]),
     
+    "Body-weight Romanian Deadlift": createNote(
+        notes: [
+            "Stand up straight with one hand on your chest and another on your belly.",
+            "Keeping your back straight and your chest out, bend at the waist,"],
+        links: ["Video": "https://gfycat.com/BlueUltimateBaiji"]),
+    
     "Body-weight Squat": createNote(
         notes: [
-            "Sit back down instead of bending through the knees.",
-            "Go as low as you can, preferably until your hips are below your knees.",
-            "Keep knees out."],
-        links: ["Link": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/squat", "Body Weight Squats": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/squat"]),
+            "Hold your hands up under your chin.",
+            "With one leg squat down so that your knee touches the ground.",
+            "Keep your back straight and your chest pushed out."],
+        links: ["Link": "https://www.getstrong.fit/images/GobletSplitSquat.jpg"]),
+    
+    "Body-weight Split Squat": createNote(
+        notes: [
+            "Stand in front of a low bench.",
+            "Bring one leg backward so that your foot rests on the bench.",
+            "Keeping your torso upright drop into a squat."],
+        links: ["Video": "https://www.youtube.com/watch?v=HeZiiPtlcew"]),
     
     "Body-weight Step Up + Reverse Lunge": createNote(
         notes: [
@@ -452,6 +496,13 @@ let builtInNotes: [String: String] = [
             "Keep abs tight.",
             "Work towards doing this two minutes a day for each leg."],
         links: ["Link": "http://www.active.com/triathlon/articles/the-stretch-that-could-be-the-key-to-saving-your-knees", "Tips": "http://breakingmuscle.com/mobility-recovery/couch-stretch-small-but-important-ways-youre-doing-it-wrong", "Video": "https://www.youtube.com/watch?v=JawPBvtf7Qs"]),
+    
+    "Deadbugs": createNote(
+        notes: [
+            "Lie on your back with arms held straight up and legs forming a 90 degree angle.",
+            "Extend one arm behind you and extemnd the opposite leg out.",
+            "Keep your core braced."],
+        links: ["Link": "http://www.nick-e.com/deadbug/"]),
     
     "Deadlift": createNote(
         notes: [
@@ -863,6 +914,19 @@ let builtInNotes: [String: String] = [
             "Keep your knees out (can push them out at the bottom using your elbows)."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/goblet-squat"]),
     
+    "GMB Wrist Prep": createNote(
+        notes: [
+            "Finger Pulses: bounce fingers up and down.",
+            "Palm Pulses: palms down, fingers opened, raise wrists up and down.",
+            "Side to Side Palm Rotations: palm down, fingers opened, roll palm from side to side.",
+            "Front Facing Elbow Rotations: palm down, fingers opened, rotate arm left and right.",
+            "Side to Side Wrist Stretch: palms down facing to sides, move whole body side to side.",
+            "Rear Facing Wrist Stretch Palms Down: palms facing knees, rock your body forward and backward.",
+            "Rear Facing Wrist Stretch Palms Up: palms facing knees, rock your body forward and backward.",
+            "Rear Facing Elbow Rotations: palms down facing knees, rotate elbows left and right.",
+            "Forward Facing Wrist Stretch: palms down facing forward, rock your body forward and backward."],
+        links: ["Video": "https://www.youtube.com/watch?v=mSZWSQSSEjE"]),
+    
     "Good Morning": createNote(
         notes: [
             "Begin standing with the bar on your back as if you were doing a low bar squat.",
@@ -1043,6 +1107,14 @@ let builtInNotes: [String: String] = [
             "Arms should be straight at the bottom.",
             "Don't let your shoulders shrug up."],
         links: ["Link": "https://www.youtube.com/watch?v=tDUWmbzs154", "Body Weight Rows": "https://www.reddit.com/r/bodyweightfitness/wiki/exercises/row"]),
+    
+    "Intermediate Shrimp Squat": createNote(
+        notes: [
+            "Stand straight up with your hands stretched out in front of you.",
+            "Raise one leg so that your shin is above parallel to the floor.",
+            "Squat down until your elevated leg touches down at the knee, but not at the toes.",
+            "If you're having trouble balancing you can hold onto a support."],
+        links: ["Video": "https://www.youtube.com/watch?v=TKt0-c83GSc&feature=youtu.be&t=3m9s"]),
     
     "Inverted Row": createNote(
         notes: [
@@ -1320,6 +1392,16 @@ let builtInNotes: [String: String] = [
             "Keep your arms straight the entire time."],
         links: ["Link": "https://www.youtube.com/watch?v=8lDC4Ri9zAQ&feature=youtu.be&t=4m22s"]),
     
+    "Pallof Press": createNote(
+        notes: [
+            "Attach a band to a support.",
+            "Grab the band with both hands and turn your body to the side.",
+            "Thrust the band outwards and then back in.",
+            "Keep core braced and back straight",
+            "Chin tucked and knees slightly bent.",
+            "Arms stay tight beside ribs."],
+        links: ["Video": "https://www.youtube.com/watch?v=AH_QZLm_0-s"]),
+    
     "Parallel Bar Support": createNote(
         notes: [
             "Arms straight.",
@@ -1406,6 +1488,11 @@ let builtInNotes: [String: String] = [
             "Lift both legs, bending at the hip, high enough that your thighs leave your hands.",
             "At the same time lift your head and shoulders from the floor."],
         links: ["Link": "https://www.fourmilab.ch/hackdiet/e4/"]),
+    
+    "Pseudo Planche Pushups": createNote(
+        notes: [
+            "Pushup but with your body scooted forward."],
+        links: ["Video": "https://www.youtube.com/watch?v=Cdmg0CfMZeo"]),
     
     "Pull Through": createNote(
         notes: [
@@ -1527,7 +1614,7 @@ let builtInNotes: [String: String] = [
             "Lie on on your stomach on a high bench.",
             "Grab either handles or the sides of the bench.",
             "Keeping your legs straight raise them to parallel or a bit higher."],
-        links: ["Link": "http://www.exrx.net/WeightExercises/GluteusMaximus/BWReverseHyperextension.html"]),
+        links: ["Link": "http://www.exrx.net/WeightExercises/GluteusMaximus/BWReverseHyperextension.html", "Video": "https://www.youtube.com/watch?v=ZeRsNzFcQLQ&"]),
     
     "Reverse Plank": createNote(
         notes: [
@@ -1697,7 +1784,15 @@ let builtInNotes: [String: String] = [
             "Cross your hands over your chest.",
             "Bring your torso up as high as possible.",
             "Keep your back straight at all times."],
-        links: ["Link": "https://bretcontreras.com/nordic-ham-curl-staple-exercise-athletes/"]),
+        links: ["Link": "https://bretcontreras.com/nordic-ham-curl-staple-exercise-athletes/", "Video": "https://www.youtube.com/watch?v=d8AAPcYxPo8"]),
+    
+    "Scapular Pulls": createNote(
+        notes: [
+            "Hang down from a pullup bar.",
+            "Use your arms to lift your shoulders upwards.",
+            "Keep your elbows straight.",
+            "At the top squeeze your shoulder blades together for 3-5s and slowly lower your body back down."],
+        links: ["Video": "https://www.youtube.com/watch?v=FgYoc4O-cio&feature=youtu.be&t=1m21s"]),
     
     "Scapular Shrugs": createNote(
         notes: [
@@ -1920,6 +2015,13 @@ let builtInNotes: [String: String] = [
             "Drop down into a squat.",
             "Jump into the air as high as possible."],
         links: ["Link": "https://www.youtube.com/watch?v=CVaEhXotL7M"]),
+    
+    "Squat Sky Reaches": createNote(
+        notes: [
+            "Squat down with your arms on your knees.",
+            "Grab an ankle with one hand, clench the other arm and bring that elbow straight overhead.",
+            "Once the elbow is overhead extend the arm straight up."],
+        links: ["Video": "https://www.youtube.com/watch?v=lbozu0DPcYI&feature=youtu.be&t=42s"]),
     
     "Squat to Stand": createNote(
         notes: [
@@ -2213,6 +2315,17 @@ let builtInNotes: [String: String] = [
             "Difficulty can be increased by doing these in a plank position."],
         links: ["Link": "https://www.youtube.com/watch?v=8lDC4Ri9zAQ&feature=youtu.be&t=4m22s"]),
     
+    "Yuri's Shoulder Band": createNote(
+        notes: [
+            "Attach a band to a support at about shoulder height.",
+            "Extend an arm straight backwards and move forward until there is tension on the band.",
+            "Bring your arm in to your back so that the forearm is against your lower back.",
+            "Extend the arm straight back again.",
+            "Bring your forearm to the back of your head and then circle it around your far shoulder and then to your far elbow.",
+            "Reverse the movement so that your arm is again straight behind you.",
+            "Repeat."],
+        links: ["Video": "https://www.youtube.com/watch?v=Vwn5hSf3WEg"]),
+    
     "X-Band Walk": createNote(
         notes: [
             "Put a resistance band beneath your feet, twist it so that it forms an X, and raise it to your chest.",
@@ -2231,3 +2344,6 @@ let builtInNotes: [String: String] = [
             "Keep your head up at all times."],
         links: ["Link": "http://www.bodybuilding.com/exercises/detail/view/name/zercher-squats", "Details": "https://www.t-nation.com/training/complete-guide-to-zerchers"]),
 ]
+
+
+

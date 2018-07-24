@@ -22,7 +22,7 @@ func Stopgap() -> Program {
         Workout("A", ["Bulgarian Split Squat", "Lunge", "Floor Press", "Straight-legged Deadlift", "Chinups", "Plank", "Dips"], scheduled: true, optional: ["Dips", "Chinups", "Lunge"]),
         Workout("B", ["Bulgarian Split Squat", "Lunge", "Seated OHP", "Row", "Chinups", "Plank", "Dips"], scheduled: true, optional: ["Dips", "Chinups", "Lunge"])]
     
-    let tags: [Program.Tags] = [.beginner, .strength, .dumbbell, .threeDays, .unisex, .ageUnder40, .age50s]
+    let tags: [Program.Tags] = [.beginner, .strength, .dumbbell, .threeDays, .unisex, .ageUnder40, .age40s, .age50s]
     let description = """
 Beginner strength [program](https://www.reddit.com/r/Fitness/comments/zc0uy/a_beginner_dumbbell_program_the_dumbbell_stopgap/) using only dumbbells. Not quite as effective as the programs that use barbells (especially for the lower body) but way better than nothing. The workouts alternate between the A and B workouts and there should be rest day(s) between workouts.
 
