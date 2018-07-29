@@ -71,14 +71,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         }
     }
     
+    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+        // If there is more than one workout then,
+        if program.workouts.count > 1 {
+            // only restore if we think the user is probably still on the same workout.
+            return shouldRestoreCurrentWorkout()
+        }
+        return true
+    }
+
     func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary
+        // interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the
+        // transition to the background state. Use this method to pause ongoing tasks, disable timers, and invalidate graphics
+        // rendering callbacks. Games should use this method to pause the game.
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information
+        // to restore your application to its current state in case it is terminated later. If your application supports background execution,
+        // this method is called instead of applicationWillTerminate: when the user quits.
         saveProgram(program)
     }
 
@@ -98,10 +110,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         return true
     }
     
-    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
-        return true
-    }
-
     func saveProgram() {
         saveProgram(program)
     }
@@ -118,6 +126,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
         return program.findExercise(name)
     }
 
+    func dateWorkoutWasCompleted(_ workout: Workout) -> (Date, Bool)? {
+        func dateWorkoutWasLastCompleted() -> Date? {
+            var date: Date? = nil
+            
+            for name in workout.exercises {
+                if let exercise = program.findExercise(name), !workout.optional.contains(name) {
+                    if let completed = exercise.completed[workout.name] {
+                        if date == nil || completed.compare(date!) == .orderedDescending {
+                            date = completed
+                        }
+                    }
+                }
+            }
+            return date
+        }
+        
+        let date: Date? = dateWorkoutWasLastCompleted()
+        
+        var partial = false
+        if let latest = date {
+            let calendar = Calendar.current
+            for name in workout.exercises {
+                if let exercise = program.findExercise(name), !workout.optional.contains(name) {
+                    if let completed = exercise.completed[workout.name] {
+                        if !calendar.isDate(completed, inSameDayAs: latest) {   // this won't be exactly right if anyone is crazy enough to do workouts at midnight
+                            partial = true
+                        }
+                    } else {
+                        partial = true
+                    }
+                }
+            }
+        }
+        
+        return date !=  nil ? (date!, partial) : nil
+    }
+    
     func assert(_ predicate: Bool, _ message: String) {
         if !predicate {
             var controller = self.window?.rootViewController
@@ -152,6 +197,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FrontEnd {
     }
     
     let programPrefix = "program6-"
+    
+    private func shouldRestoreCurrentWorkout() -> Bool {
+        let now = Date.init()
+        
+        for workout in program.workouts {
+            if let candidate = dateWorkoutWasCompleted(workout) {
+                let hours = now.hoursSinceDate(candidate.0)
+                if hours < 4 {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
     
     private func loadProgram(_ name: String) -> Program? {
 //        print("-----------------------------------------")

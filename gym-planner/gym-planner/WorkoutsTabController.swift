@@ -151,7 +151,8 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
             let selectedIndex = findFirstMissingWorkout() ?? findOldestWorkout() ?? app.program.workouts.count
             var color = selectedIndex == index && todays.isEmpty ? UIColor.red : UIColor.black
 
-            if let (date, partial) = dateWorkoutWasCompleted(workout) {
+            let app = UIApplication.shared.delegate as! AppDelegate
+            if let (date, partial) = app.dateWorkoutWasCompleted(workout) {
                 let calendar = Calendar.current
                 if calendar.isDate(date, inSameDayAs: Date()) && partial {
                     cell.detailTextLabel!.text = "in progress"
@@ -214,45 +215,6 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         return todays
     }
     
-    private func dateWorkoutWasCompleted(_ workout: Workout) -> (Date, Bool)? {
-        func dateWorkoutWasLastCompleted() -> Date? {
-            var date: Date? = nil
-            
-            let app = UIApplication.shared.delegate as! AppDelegate
-            for name in workout.exercises {
-                if let exercise = app.program.findExercise(name), !workout.optional.contains(name) {
-                    if let completed = exercise.completed[workout.name] {
-                        if date == nil || completed.compare(date!) == .orderedDescending {
-                            date = completed
-                        }
-                    }
-                }
-            }
-            return date
-        }
-        
-        let date: Date? = dateWorkoutWasLastCompleted()
-        
-        var partial = false
-        if let latest = date {
-            let app = UIApplication.shared.delegate as! AppDelegate
-            let calendar = Calendar.current
-            for name in workout.exercises {
-                if let exercise = app.program.findExercise(name), !workout.optional.contains(name) {
-                    if let completed = exercise.completed[workout.name] {
-                        if !calendar.isDate(completed, inSameDayAs: latest) {   // this won't be exactly right if anyone is crazy enough to do workouts at midnight
-                            partial = true
-                        }
-                    } else {
-                        partial = true
-                    }
-                }
-            }
-        }
-        
-        return date !=  nil ? (date!, partial) : nil
-    }
-    
     private func findFirstMissingWorkout() -> Int? {
         let app = UIApplication.shared.delegate as! AppDelegate
         for (i, workout) in app.program.workouts.enumerated() {
@@ -277,7 +239,7 @@ class WorkoutsTabController: UIViewController, UITableViewDataSource, UITableVie
         let app = UIApplication.shared.delegate as! AppDelegate
         for (i, workout) in app.program.workouts.enumerated() {
             if workout.scheduled {
-                if let (candidate, _) = dateWorkoutWasCompleted(workout) {
+                if let (candidate, _) = app.dateWorkoutWasCompleted(workout) {
                     if candidate.compare(date) == .orderedAscending {
                         date = candidate
                         index = i
