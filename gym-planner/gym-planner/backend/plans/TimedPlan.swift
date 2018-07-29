@@ -157,7 +157,11 @@ public class TimedPlan : Plan {
     public func sublabel() -> String {
         switch findRestSecs(exerciseName) {
         case .right(let secs):
-            return "\(numSets) sets @ \(secsToStr(secs))"
+            if numSets == 1 {
+                return secsToStr(secs)
+            } else {
+                return "\(numSets) sets @ \(secsToStr(secs))"
+            }
         case .left(let err):
             return err
         }
