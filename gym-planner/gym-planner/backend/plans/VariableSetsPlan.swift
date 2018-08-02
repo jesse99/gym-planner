@@ -204,7 +204,14 @@ public class VariableSetsPlan: Plan {
             }
             
             let delta = setting.requestedReps - completed
-            let amount = delta > 1 ? "1-\(delta) reps\(suffix)" : "1 rep"
+            let amount: String
+            if delta > 1 {
+                amount = "1-\(delta) reps\(suffix)"
+            } else if delta == 1 {
+                amount = "1 rep"
+            } else {
+                amount = ""
+            }
             return Activity(
                 title: "Set \(reps.count + 1)",
                 subtitle: subtitle,
@@ -251,14 +258,23 @@ public class VariableSetsPlan: Plan {
         case .right(let setting):
             let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
             let delta = setting.requestedReps - completed
+            let maxItems = 20
             
             for i in 0..<delta {
-                let title = i == 0 ? "1 rep" : "\(i+1) reps"
-                options.append(Completion(title: title, isDefault: false, callback: {() -> Void in self.do_complete(i+1)}))
+                if options.count < maxItems {
+                    let title = i == 0 ? "1 rep" : "\(i+1) reps"
+                    options.append(Completion(title: title, isDefault: false, callback: {() -> Void in self.doComplete(i+1)}))
+                }
+            }
+            for i in 1...4 {
+                if options.count < maxItems {
+                    let title = "\(delta+i) reps (extra)"
+                    options.append(Completion(title: title, isDefault: false, callback: {() -> Void in self.doExtra(delta+i)}))
+                }
             }
 
         case .left(_):
-            options.append(Completion(title: "Done", isDefault: true, callback: {() -> Void in self.do_complete(100)})) // really shouldnt hit this case
+            options.append(Completion(title: "Done", isDefault: true, callback: {() -> Void in self.doComplete(100)})) // really shouldnt hit this case
         }
         
         return .normal(options)
@@ -285,7 +301,7 @@ public class VariableSetsPlan: Plan {
     }
     
     // Internal items
-    private func do_complete(_ count: Int) {
+    private func doComplete(_ count: Int) {
         modifiedOn = Date()
         reps.append(count)
         
@@ -302,10 +318,28 @@ public class VariableSetsPlan: Plan {
             } else {
                 state = .underway
             }
-
+            
         case .left(let err):
             state = .error(err)
         }
+        frontend.saveExercise(exerciseName)
+    }
+    
+    private func doExtra(_ count: Int) {
+        modifiedOn = Date()
+        reps.append(count)
+        
+        if case let .right(exercise) = findExercise(exerciseName) {
+            exercise.completed[workoutName] = Date()
+        }
+        if case let .right(setting) = findVariableRepsSetting(exerciseName) {
+            let completed = reps.reduce(0, {(sum, rep) -> Int in sum + rep})
+            setting.requestedReps = completed
+        }
+
+        state = .finished
+        addResult()
+
         frontend.saveExercise(exerciseName)
     }
     
