@@ -68,9 +68,9 @@ public class Workout: Storable {
 
 public class Program: Storable {
     public enum Tags {
-        case beginner
-        case intermediate
-        case advanced
+        case beginner       // weight is expected to increase each workout
+        case intermediate   // weight increases each week
+        case advanced       // weight takes longer than a week to increase
         
         case strength
         case hypertrophy
