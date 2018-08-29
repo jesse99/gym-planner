@@ -8,8 +8,8 @@ func HLM2() -> Program {
     let lightSquatWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1])
     let heavySquatCycles = [
         Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
-        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
-        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
+        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.04),
+        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.08)
     ]
 
     let normalWarmup = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
@@ -23,8 +23,8 @@ func HLM2() -> Program {
     ]
     let cycles531 = [
         Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
-        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.05),
-        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.1)
+        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.04),
+        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.08)
     ]
 //    let cyclesDead = [
 //        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
@@ -50,6 +50,7 @@ func HLM2() -> Program {
         machine("Lat Pulldown",           "Lat Pulldown",   3, minReps: 4, maxReps: 8, warmups: latWarmup, restMins: 2.5),
         singleDumbbell("Back Extensions", "Back Extension", 3, minReps: 6, maxReps: 12, restMins: 2.0),
         dumbbell("Dumbbell Flyes",        "Dumbbell Flyes", 3, minReps: 6, maxReps: 12, warmups: noWarmup, restMins: 2.0),
+        barbell("Static Hold",            "Static Hold",    3, by: 1, warmups: nil, restMins: 3.0),
 
         bodyWeight("Kneeling Front Plank",  "Front Plank",           1, minSecs: 30, maxSecs: 60),
         bodyWeight("Front Plank",           "Front Plank",           1, minSecs: 30, maxSecs: 60),
@@ -78,7 +79,7 @@ func HLM2() -> Program {
 
     let workouts = [
         Workout("Heavy Day",    ["Squat",          "Bench Press",  "Deadlift", "Back Extensions"], scheduled: true, optional: ["Back Extensions"]),
-        Workout("Light Day",    ["Overhead Press", "Light Squat",  "Chinups",  "Lat Pulldown", "Side Plank"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Side Plank"]),
+        Workout("Light Day",    ["Overhead Press", "Light Squat",  "Chinups",  "Lat Pulldown", "Side Plank", "Static Hold"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Side Plank", "Static Hold"]),
         Workout("Medium Day",   ["Medium Bench",   "Medium Squat", "Chinups",  "Lat Pulldown", "Dumbbell Flyes", "Leg Lift Plank"], scheduled: true, optional: ["Dumbbell Flyes", "Chinups", "Lat Pulldown", "Leg Lift Plank"]),
 //        Workout("HIIT",         ["HIIT"], scheduled: false),
 //        Workout("Mobility",     ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false),
