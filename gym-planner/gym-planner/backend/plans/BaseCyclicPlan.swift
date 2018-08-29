@@ -4,6 +4,18 @@ import Foundation
 import UIKit
 import os.log
 
+fileprivate func getWorkingSetWeight(_ apparatus: Apparatus, _ percent: Double, _ unitWeight: Double) -> Weight.Info {
+    if percent > 1.0 {
+        return Weight(percent*unitWeight, apparatus).closest(above: unitWeight)
+        
+    } else if percent < 1.0 {
+        return Weight(percent*unitWeight, apparatus).closest(below: unitWeight)
+        
+    } else {
+        return Weight(unitWeight, apparatus).closest()
+    }
+}
+
 public class BaseCyclicPlan : Plan {
     struct Reps: Storable, Equatable {
         let count: Int
@@ -124,7 +136,7 @@ public class BaseCyclicPlan : Plan {
         
         init(_ apparatus: Apparatus, phase: Int, phaseCount: Int, numReps: Int, workingPercent: Double, unitWeight: Double, amrap: Bool) {
             self.title = "Workset \(phase) of \(phaseCount)"
-            self.weight = Weight(workingPercent*unitWeight, apparatus).closest()
+            self.weight = getWorkingSetWeight(apparatus, workingPercent, unitWeight)
             self.numReps = numReps
             self.warmup = false
             self.amrap = amrap
@@ -362,9 +374,9 @@ public class BaseCyclicPlan : Plan {
                 let percent = cycle.maxPercent()
                 if percent == 1.0 {
                     return "\(sr) @ \(unitInfo.text)"
+
                 } else {
-                    let maxWeight = percent*unitWeight
-                    let maxInfo = Weight(maxWeight, setting.apparatus).closest()
+                    let maxInfo = getWorkingSetWeight(setting.apparatus, percent, unitWeight)
                     let p = String(format: "%.0f", 100.0*percent)
                     return "\(sr) @ \(maxInfo.text) (\(p)% of \(unitInfo.text))"
                 }
@@ -402,7 +414,7 @@ public class BaseCyclicPlan : Plan {
                 let cycle = cycles[index]
                 let percent = cycle.maxPercent()
                 let weight = getUnitWeight(setting, log: false)
-                let info = Weight(percent*weight, setting.apparatus).closest()
+                let info = getWorkingSetWeight(setting.apparatus, percent, weight)
                 weights.append(info.weight)
             }
             
