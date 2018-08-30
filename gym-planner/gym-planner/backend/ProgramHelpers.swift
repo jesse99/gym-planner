@@ -60,14 +60,6 @@ public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: In
     return Exercise(name, formalName, plan, .derivedWeight(setting))
 }
 
-/// MastersBasicCyclePlan
-public func barbell(_ name: String, _ formalName: String, masterCycles: [BaseCyclicPlan.Cycle], useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String) -> Exercise {
-    let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
-    let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
-    let plan = MastersBasicCyclePlan(planName, masterCycles)
-    return Exercise(name, formalName, plan, .variableWeight(setting))
-}
-
 /// FiveThreeOneBeginnerPlan
 public func barbell531Beginner(_ name: String, _ formalName: String, withBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
     var planName = planName

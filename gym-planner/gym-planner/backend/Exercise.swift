@@ -48,7 +48,6 @@ public class Exercise: Storable {
         case "FiveThreeOneLPPlan":       let p: FiveThreeOneLPPlan = store.getObj("plan"); self.plan = p
         case "CycleRepsPlan":            let p: CycleRepsPlan = store.getObj("plan"); self.plan = p
         case "LinearPlan":               let p: LinearPlan = store.getObj("plan"); self.plan = p
-        case "MastersBasicCyclePlan":    let p: MastersBasicCyclePlan = store.getObj("plan"); self.plan = p
         case "NRepMaxPlan":              let p: NRepMaxPlan = store.getObj("plan"); self.plan = p
         case "PercentOfPlan":            let p: PercentOfPlan = store.getObj("plan"); self.plan = p
         case "PercentsOfPlan":           let p: PercentsOfPlan = store.getObj("plan"); self.plan = p
