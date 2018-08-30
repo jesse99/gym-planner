@@ -41,7 +41,7 @@ public class VariableWeightSetting: Storable {
     var apparatus: Apparatus
     private(set) var weight: Double         // starts out at 0.0
     private(set) var updatedWeight: Date    // last time the weight was set, to either a new value or the same value and by the user or the app
-    private(set) var userUpdated: Date      // timer the user changed the weight
+    private(set) var userUpdated: Date      // time the user changed the weight
     var restSecs: Int
     var stalls: Int
     var reps: Int?
