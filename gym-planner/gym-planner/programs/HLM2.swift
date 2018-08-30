@@ -6,47 +6,31 @@ typealias Cycle = BaseCyclicPlan.Cycle
 func HLM2() -> Program {
     let normalSquatWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
     let lightSquatWarmup = Warmups(withBar: 3, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1])
-    let heavySquatCycles = [
-        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
-        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.04),
-        Cycle(withBar: 3, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.08)
-    ]
 
     let normalWarmup = Warmups(withBar: 2, firstPercent: 0.5, lastPercent: 0.9, reps: [5, 3, 1, 1, 1])
-    //let goodWarmup = Warmups(withBar: 0, firstPercent: 0.6, lastPercent: 0.8, reps: [5, 3])
     let latWarmup = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [5])
     let noWarmup = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
     
-    let cycles53 = [
-        Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 5, at: 1.0),
-        Cycle(withBar: 2, firstPercent: 0.6, warmups: [5, 3, 1, 1], sets: 3, reps: 3, at: 1.055)
-    ]
-    let cycles531 = [
-        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 5, at: 1.0),
-        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 3, at: 1.04),
-        Cycle(withBar: 2, firstPercent: 0.5, warmups: [5, 3, 1, 1, 1], sets: 3, reps: 1, at: 1.08)
-    ]
-//    let cyclesDead = [
-//        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 5, at: 1.0),
-//        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 3, at: 1.05),
-//        Cycle(withBar: 0, firstPercent: 0.4, warmups: [5, 3, 1, 1, 1], sets: 1, reps: 1, at: 1.1)
-//    ]
-    
     let exercises = [
-//        hiit("HIIT", warmupMins: 5, highSecs: 30, lowSecs: 60, cooldownMins: 5, numCycles: 4, targetCycles: 8, targetHighSecs: 45),
+        barbell("OHP5",         "Overhead Press", 3, by: 5, warmups: normalWarmup, magnets: [1.25], restMins: 3.0),
+        barbell("Squat5",       "Low bar Squat",  3, by: 5, warmups: normalWarmup, restMins: 4.0),
+        barbell("Bench5",       "Bench Press",    3, by: 5, warmups: normalWarmup, restMins: 3.0),
 
-        barbell("Squat",          "Low bar Squat",  masterCycles: heavySquatCycles, restMins: 4.0, planName: "531"),
-        barbell("Light Squat",    "Low bar Squat",  1, by: 5, percent: 0.88, of: "Squat", warmups: lightSquatWarmup, restMins: 2.0),
-        barbell("Medium Squat",   "Low bar Squat",  2, by: 5, percent: 0.9, of: "Squat", warmups: normalSquatWarmup, restMins: 3.0),
+        barbell("OHP3",         "Overhead Press", 3, by: 3, warmups: normalWarmup, magnets: [1.25], restMins: 3.0, afterExercise: "OHP5"),
+        barbell("Squat3",       "Low bar Squat",  3, by: 3, warmups: normalWarmup, restMins: 4.0, afterExercise: "Squat5"),
+        barbell("Bench3",       "Bench Press",    3, by: 3, warmups: normalWarmup, restMins: 3.0, afterExercise: "Bench5"),
+
+        barbell("Squat1",       "Low bar Squat",  3, by: 1, warmups: normalWarmup, restMins: 4.0, afterExercise: "Squat3"),
+        barbell("Bench1",       "Bench Press",    3, by: 1, warmups: normalWarmup, restMins: 3.0, afterExercise: "Bench3"),
         
-        barbell("Bench Press",    "Bench Press",    masterCycles: cycles531, restMins: 3.0, planName: "531"),
-        barbell("Medium Bench",   "Bench Press",    2, by: 5, percent: 0.94, of: "Bench Press", warmups: normalWarmup, restMins: 3.0),
+        barbell("Light Squat",  "Low bar Squat",  1, by: 5, percent: 0.88, of: "Squat5", warmups: lightSquatWarmup, restMins: 2.0),
+
+        barbell("Medium Squat", "Low bar Squat",  2, by: 5, percent: 0.94, of: "Squat5", warmups: normalSquatWarmup, restMins: 3.0),
+        barbell("Medium Bench", "Bench Press",    2, by: 5, percent: 0.94, of: "Bench5", warmups: normalWarmup, restMins: 3.0),
 
         barbell("Deadlift",               "Deadlift",       1, by: 5, warmups: normalWarmup, useBumpers: true, restMins: 3.5),
-//        barbell("Deadlift",               "Deadlift",       masterCycles: cyclesDead, useBumpers: true, restMins: 3.5, planName: "dead"),
-        barbell("Overhead Press",         "Overhead Press", masterCycles: cycles53, magnets: [1.25], restMins: 3.0, planName: "53"),
+
         bodyWeight("Chinups",             "Chinup",         requestedReps: 12, targetReps: 30,   restMins: 2.5),
-        //barbell("Good Morning",           "Good Morning",   3, by: 5, warmups: goodWarmup, restMins: 3.0),
         machine("Lat Pulldown",           "Lat Pulldown",   3, minReps: 4, maxReps: 8, warmups: latWarmup, restMins: 2.5),
         singleDumbbell("Back Extensions", "Back Extension", 3, minReps: 6, maxReps: 12, restMins: 2.0),
         dumbbell("Dumbbell Flyes",        "Dumbbell Flyes", 3, minReps: 6, maxReps: 12, warmups: noWarmup, restMins: 2.0),
@@ -78,11 +62,15 @@ func HLM2() -> Program {
     makeProgression(exercises, "Kneeling Front Plank", "Front Plank", "Side Plank", "Leg Lift Plank", "Arm & Leg Lift Front Plank", "Decline Plank", "Decline & March Plank", "Wall Plank", "Wall March Plank", "Dragon Flag", "Hanging Dragon Flag")
 
     let workouts = [
-        Workout("Heavy Day",    ["Squat",          "Bench Press",  "Deadlift", "Back Extensions"], scheduled: true, optional: ["Back Extensions"]),
-        Workout("Light Day",    ["Overhead Press", "Light Squat",  "Chinups",  "Lat Pulldown", "Side Plank", "Static Hold"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Side Plank", "Static Hold"]),
-        Workout("Medium Day",   ["Medium Bench",   "Medium Squat", "Chinups",  "Lat Pulldown", "Dumbbell Flyes", "Leg Lift Plank"], scheduled: true, optional: ["Dumbbell Flyes", "Chinups", "Lat Pulldown", "Leg Lift Plank"]),
-//        Workout("HIIT",         ["HIIT"], scheduled: false),
-//        Workout("Mobility",     ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false),
+        Workout("Light5", ["OHP5", "Light Squat", "Chinups", "Lat Pulldown", "Side Plank", "Static Hold"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Side Plank", "Static Hold"]),
+        Workout("Light3", ["OHP3", "Light Squat", "Chinups", "Lat Pulldown", "Side Plank", "Static Hold"], scheduled: true, optional: ["Chinups", "Lat Pulldown", "Side Plank", "Static Hold"]),
+
+        Workout("Medium", ["Medium Bench", "Medium Squat", "Chinups", "Lat Pulldown", "Dumbbell Flyes", "Leg Lift Plank"], scheduled: true, optional: ["Dumbbell Flyes", "Chinups", "Lat Pulldown", "Leg Lift Plank"]),
+
+        Workout("Heavy5", ["Squat5", "Bench5", "Deadlift", "Back Extensions"], scheduled: true, optional: ["Back Extensions"]),
+        Workout("Heavy3", ["Squat3", "Bench3", "Deadlift", "Back Extensions"], scheduled: true, optional: ["Back Extensions"]),
+        Workout("Heavy1", ["Squat1", "Bench1", "Deadlift", "Back Extensions"], scheduled: true, optional: ["Back Extensions"]),
+//      Workout("Mobility", ["Foam Rolling", "Shoulder Dislocates", "Bent-knee Iron Cross", "Roll-over into V-sit", "Rocking Frog Stretch", "Fire Hydrant Hip Circle", "Mountain Climber", "Cossack Squat", "Piriformis Stretch", "Hip Flexor Stretch"], scheduled: false),
         ]
 
     let tags: [Program.Tags] = [.advanced, .strength, .barbell, .unisex, .threeDays, .age40s, .age50s]
@@ -99,7 +87,7 @@ It should be a bit of a struggle to do all the reps.
 **Medium**
 * Squat 2x5 at 94% of heavy's 5 rep weight
 * Bench 2x5 at 94% of heavy's 5 rep weight
-* Chins up to 50 reps
+* Chins up to 30 reps
 
 These should feel like you are working hard without being in danger of missing a rep and with some energy left after each set.
 
@@ -111,7 +99,11 @@ These should feel like you are working hard without being in danger of missing a
 All the reps should be fairly easy.
 
 **Notes**
-Chinups are done with as many sets as are required, once you can do fifty add weight. Weights on the barbell routines advance unless you stall on the set with five reps.
+* Start with the Heavy5 workout.
+* Each week do a heavy, medium, and light workout cycling through the heavy and light workouts with different rep ranges.
+* Chinups are done with as many sets as are required, once you can do thirty add weight.
+* If you get stuck at a rep range keep trying to advance on the other rep ranges (that will help you progress on the other rep range).
+* Note that the app will ensure that the weights for a higher rep range are higher than those for the next lower rep range.
 """
     return Program("HLM2", workouts, exercises, tags, description)
 }

@@ -17,7 +17,7 @@ public func barbell(_ name: String, _ formalName: String, _ numSets: Int, minRep
 }
 
 /// LinearPlan
-public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
+public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: Int, warmups: Warmups? = nil, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "", afterExercise: String? = nil) -> Exercise {
     var planName = planName
     if planName == "" {
         planName = "\(numSets)x\(by)"
@@ -27,7 +27,7 @@ public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: In
     
     let apparatus = Apparatus.barbell(bar: 45.0, collar: 0.0, plates: defaultPlates(), bumpers: useBumpers ? defaultBumpers() : [], magnets: magnets)
     let setting = VariableWeightSetting(apparatus, restSecs: Int(restMins*60.0))
-    let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by)
+    let plan = LinearPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by, afterExercise: afterExercise)
     return Exercise(name, formalName, plan, .variableWeight(setting))
 }
 

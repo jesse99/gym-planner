@@ -77,13 +77,14 @@ public class LinearPlan : Plan {
         let numReps: Int
     }
     
-    init(_ name: String, _ warmups: Warmups, workSets: Int, workReps: Int) {
+    init(_ name: String, _ warmups: Warmups, workSets: Int, workReps: Int, afterExercise: String? = nil) {
         os_log("init LinearPlan for %@", type: .info, name)
         self.planName = name
         self.typeName = "LinearPlan"
         self.warmups = warmups
         self.workSets = workSets
         self.workReps = workReps
+        self.afterExercise = afterExercise
     }
     
     public func errors() -> [String] {
@@ -108,7 +109,8 @@ public class LinearPlan : Plan {
                 planName == savedPlan.planName &&
                 warmups == savedPlan.warmups &&
                 workSets == savedPlan.workSets &&
-                workReps == savedPlan.workReps
+                workReps == savedPlan.workReps &&
+                afterExercise == savedPlan.afterExercise
         } else {
             return false
         }
@@ -135,6 +137,12 @@ public class LinearPlan : Plan {
         self.setIndex = store.getInt("setIndex")
         self.state = store.getObj("state", ifMissing: .waiting)
         self.modifiedOn = store.getDate("modifiedOn", ifMissing: Date.distantPast)
+        
+        if !store.hasKey("afterExercise") {
+            self.afterExercise = nil
+        } else {
+            self.afterExercise = store.getStr("afterExercise")
+        }
 
         switch state {
         case .waiting:
@@ -162,6 +170,10 @@ public class LinearPlan : Plan {
         store.addInt("setIndex", setIndex)
         store.addDate("modifiedOn", modifiedOn)
         store.addObj("state", state)
+
+        if let name = afterExercise {
+            store.addStr("afterExercise", name)
+        }
     }
     
     // Plan methods
@@ -183,9 +195,21 @@ public class LinearPlan : Plan {
         self.workoutName = workout.name
         self.exerciseName = exerciseName
         self.modifiedOn = Date.distantPast  // user hasn't really changed anything yet
-
+        
         switch findVariableWeightSetting(exerciseName) {
         case .right(let setting):
+            if let name = afterExercise {
+                if case .right(let afterSetting) = findVariableWeightSetting(name) {
+                    if afterSetting.weight > 0.0 {
+                        let weight = afterSetting.weight
+                        let w = Weight(weight, setting.apparatus)
+                        if w.nextWeight() > setting.weight {
+                            setting.changeWeight(w.nextWeight(), byUser: false)
+                        }
+                    }
+                }
+            }
+            
             if setting.weight == 0.0 {
                 self.state = .blocked
                 return NRepMaxPlan("Rep Max", workReps: workReps)
@@ -393,4 +417,5 @@ public class LinearPlan : Plan {
     private var history: [Result] = []
     private var sets: [Set] = []
     private var setIndex = 0
+    private var afterExercise: String?
 }
