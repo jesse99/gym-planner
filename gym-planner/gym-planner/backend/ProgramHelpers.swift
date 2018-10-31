@@ -60,6 +60,19 @@ public func barbell(_ name: String, _ formalName: String, _ numSets: Int, by: In
     return Exercise(name, formalName, plan, .derivedWeight(setting))
 }
 
+public func dumbbell(_ name: String, _ formalName: String, _ numSets: Int, by: Int, percent: Double, of: String, warmups: Warmups? = nil, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
+    var planName = planName
+    if planName == "" {
+        planName = "\(Int(100*percent))% of \(of)"
+    }
+    
+    let defaultWarmups = Warmups(withBar: 0, firstPercent: 0.8, lastPercent: 0.8, reps: [])
+    
+    let setting = DerivedWeightSetting(of, restSecs: Int(restMins*60.0))
+    let plan = PercentOfPlan(planName, warmups ?? defaultWarmups, workSets: numSets, workReps: by, percent: percent)
+    return Exercise(name, formalName, plan, .derivedWeight(setting))
+}
+
 /// FiveThreeOneBeginnerPlan
 public func barbell531Beginner(_ name: String, _ formalName: String, withBar: Int = 2, useBumpers: Bool = false, magnets: [Double] = [], restMins: Double, planName: String = "") -> Exercise {
     var planName = planName

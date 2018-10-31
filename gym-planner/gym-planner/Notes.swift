@@ -749,7 +749,7 @@ let builtInNotes: [String: String] = [
     "Dumbbell Single Leg Split Squat": createNote(
         notes: [
             "Grasp dumbbells so that palms are facing inward.",
-            "Extend leg backwards and rest foot on a bench or chair.",
+            "Extend leg backwards and re st foot on a bench or chair.",
             "Squat down until rear knee is almost in contact with the floor.",
             "Return to original standing position.",
             "Difficulty can be increased by using a box or plates to prop up your front foot 2-4 inches."],

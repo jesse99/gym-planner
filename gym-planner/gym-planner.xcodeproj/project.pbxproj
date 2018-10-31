@@ -88,6 +88,7 @@
 		37F6167D2101663D00501110 /* Stopgap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6167C2101663D00501110 /* Stopgap.swift */; };
 		37F6167F2101783B00501110 /* PPL_Stopgap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6167E2101783B00501110 /* PPL_Stopgap.swift */; };
 		37F616812103C39200501110 /* RedditBW.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F616802103C39200501110 /* RedditBW.swift */; };
+		37FEBB6F21460C7F00B7162A /* HLM3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FEBB6E21460C7F00B7162A /* HLM3.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +187,7 @@
 		37F6167C2101663D00501110 /* Stopgap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stopgap.swift; sourceTree = "<group>"; };
 		37F6167E2101783B00501110 /* PPL_Stopgap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPL_Stopgap.swift; sourceTree = "<group>"; };
 		37F616802103C39200501110 /* RedditBW.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditBW.swift; sourceTree = "<group>"; };
+		37FEBB6E21460C7F00B7162A /* HLM3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLM3.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +235,7 @@
 				373A0E1A203A8DFA006CC3FA /* Gluteal.swift */,
 				37838030204C60F2005E0FD3 /* Gorgeous.swift */,
 				377F05581FC0DDA10015D7EF /* HLM2.swift */,
+				37FEBB6E21460C7F00B7162A /* HLM3.swift */,
 				372926C82053B4EF00608F9B /* IceCream.swift */,
 				3730027920898032003A1E53 /* Metallicadpa.swift */,
 				372926CC205A2CCF00608F9B /* nSuns.swift */,
@@ -481,6 +484,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37CED4A61FB15E7300244ADD /* Weight.swift in Sources */,
+				37FEBB6F21460C7F00B7162A /* HLM3.swift in Sources */,
 				374E1B76200B09890052AB0C /* BaseCyclicPlan.swift in Sources */,
 				37B3ECFB1FD48DE800F7D8EF /* TimedPlan.swift in Sources */,
 				37452C941FDDDA2A00A3CAA6 /* HIITPlan.swift in Sources */,

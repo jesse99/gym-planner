@@ -123,10 +123,7 @@ public class CycleRepsPlan : Plan {
         if let savedPlan = inPlan as? CycleRepsPlan {
             return typeName == savedPlan.typeName &&
                 planName == savedPlan.planName &&
-                numSets == savedPlan.numSets &&
-                minReps == savedPlan.minReps &&
-                maxReps == savedPlan.maxReps &&
-                warmups == savedPlan.warmups
+                numSets == savedPlan.numSets
         } else {
             return false
         }
